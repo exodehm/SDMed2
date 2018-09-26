@@ -27,30 +27,6 @@
 
 Instancia::Instancia(QString cod, QString res, QWidget *parent):codigo(cod),resumen(res),QWidget(parent)
 {
-    /*QSqlQuery consultacreartabla(bbdd);
-    Consultas cons;
-    int res;
-    consultacreartabla.exec(cons.CrearObra(codigo,resumen));
-    while (consultacreartabla.next()) {
-           res =  consultacreartabla.value(0).toInt();
-       }
-    switch (res)
-    {
-    case 0:
-        qDebug()<<"Iniciada obra con exito";
-        IniciarObra();
-        break;
-    case -1:
-        qDebug()<<"La tabla conceptos ya existe";
-        break;
-    case -2:
-        qDebug()<<"La tabla relacion ya existe";
-        break;
-    default:
-        qDebug()<<"A tomar por culo todo";
-        break;
-    };*/    
-    //IniciarObra();
     id_padre ="NULL";
     id_hijo = "0";
     cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+codigo+"',"+ id_padre + ","+ id_hijo+")";

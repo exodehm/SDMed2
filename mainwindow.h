@@ -57,12 +57,11 @@ private slots:
     void AcercaDe();
     void AcercaDeQt();
     /**********OTROS**************/
-    //void CambiarObraActual(int indice);
+    void CambiarObraActual(int indice);
     void CambiarMedCert(int indice);
     /*void NuevaCertificacion();
     void CambiarCertificacionActual(int actual);*/
 
-    void AbrirArchivo(const QString& nombrefichero);
     /*bool ActionAbrirDesdeReciente();
     void updateArchivosRecientesActions();*/
 

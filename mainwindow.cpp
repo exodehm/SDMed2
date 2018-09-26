@@ -49,8 +49,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     else
     {
         QMessageBox::warning(this,"Aviso mortal","No se puede abrir la BBDD");
-    }
-    //QObject::connect(ui->tablaPrincipal,SIGNAL(doubleClicked(QModelIndex)),modelo,SLOT(MostrarHijos(QModelIndex)));*/
+    }    
 }
 
 MainWindow::~MainWindow()
@@ -227,17 +226,6 @@ bool MainWindow::ActionAbrirBBDD()
     return true;
 }
 
-void MainWindow::AbrirArchivo(const QString &nombrefichero)
-{
-    /*MetaObra NuevaObra;
-    NuevaObra.nombrefichero = nombrefichero;
-    NuevaObra.miobra = new Instancia(nombrefichero);
-    AnadirObraAVentanaPrincipal(NuevaObra);
-    comboMedCert->setEnabled(true);
-    botonNuevaCertificacion->setEnabled(true);
-    ui->actionVer_Arbol->setEnabled(true);*/
-}
-
 bool MainWindow::ActionGuardar()
 {
 
@@ -250,7 +238,30 @@ bool MainWindow::ActionGuardarComo()
 
 void MainWindow::ActionCerrar()
 {
-
+    if (!ListaObras.empty())
+    {
+        if (ConfirmarContinuar())
+        {
+            std::list<Instancia*>::iterator obraBorrar = obraActual;
+            {
+                qDebug()<<"Borrando la obra actual-> "<<(*obraBorrar)->LeeResumen();
+                obraActual = ListaObras.erase(obraActual);
+                delete (*obraBorrar);
+                if ( obraActual == ListaObras.end() && !ListaObras.empty())
+                {
+                    obraActual = std::prev(obraActual);
+                }
+            }
+        }
+    }
+    if (ListaObras.empty())
+    {
+        ui->actionGuardar->setEnabled(false);
+        ui->actionCerrar->setEnabled(false);
+        comboMedCert->setEnabled(false);
+        botonNuevaCertificacion->setEnabled(false);
+        ui->actionVer_Arbol->setEnabled(false);
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -349,6 +360,28 @@ void MainWindow::CambiarMedCert(int indice)
     (*obraActual)->MostrarDeSegun(indice);
 }
 
+bool MainWindow::ConfirmarContinuar()
+{
+    if ((*obraActual)->Pila()->index()>0)
+    {
+        QString cadena = tr("La obra  <b>%1</b> ha sido modificada.<br>¿Quieres guardar los cambios?").arg((*obraActual)->LeeResumen());
+        int r = QMessageBox::warning(this, tr("SDMed2"),
+                                     cadena,
+                                     QMessageBox::Yes | QMessageBox::Default,
+                                     QMessageBox::No,
+                                     QMessageBox::Cancel | QMessageBox::Escape);
+        if (r == QMessageBox::Yes)
+        {
+            return ActionGuardar();
+        }
+        else if (r == QMessageBox::Cancel)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 void MainWindow::setupActions()
 {
     QObject::connect(ui->actionNuevo,SIGNAL(triggered(bool)),this,SLOT(ActionNuevo()));
@@ -386,10 +419,9 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     QObject::connect(nuevaobra.miobra,SIGNAL(CopiarM()),this,SLOT(ActionCopiar()));
     QObject::connect(nuevaobra.miobra,SIGNAL(PegarM()),this,SLOT(ActionPegar()));
     QObject::connect(nuevaobra.miobra,SIGNAL(ActivarBoton(int)),this,SLOT(ActivarDesactivarBotonesPila(int)));*/
-    //ui->tabPrincipal->addTab(nuevaobra.miobra,nuevaobra.miobra->LeeObra()->LeeResumenObra());
-    /*version provisional*/
     Instancia* NuevaObra =new Instancia(_codigo,_resumen);
     ui->actionGuardar->setEnabled(true);
+    ui->actionCerrar->setEnabled(true);
     comboMedCert->setEnabled(true);
     botonNuevaCertificacion->setEnabled(true);
     ui->actionVer_Arbol->setEnabled(true);
@@ -399,10 +431,21 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     obraActual=ListaObras.begin();
     std::advance(obraActual,ListaObras.size()-1);
     //ActivarDesactivarBotonesPila(obraActual->miobra->Pila()->index());
-    //QString leyenda = QString(tr("Creada la obra %1").arg(obraActual->miobra->LeeObra()->LeeResumenObra()));
-    /*provisional*/
-    QString leyenda = "Creada la obra %1";
+    QString leyenda = QString(tr("Creada la obra %1").arg(_resumen));
     statusBar()->showMessage(leyenda,5000);
+}
+
+void MainWindow::CambiarObraActual(int indice)
+{
+    if (!ListaObras.empty())
+    {
+        if ((unsigned int)indice<ListaObras.size())
+        {
+            obraActual=ListaObras.begin();
+            std::advance(obraActual,indice);
+            ActivarDesactivarBotonesPila((*obraActual)->Pila()->index());
+        }
+    }
 }
 
 void MainWindow::ActivarDesactivarBotonesPila(int indice)

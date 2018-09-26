@@ -663,6 +663,9 @@
    </property>
   </action>
   <action name="actionCerrar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../recursos.qrc">
      <normaloff>:/images/close.png</normaloff>:/images/close.png</iconset>

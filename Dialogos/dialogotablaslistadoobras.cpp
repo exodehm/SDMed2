@@ -31,12 +31,7 @@ DialogoTablaListadosObras::DialogoTablaListadosObras(const QList<QList<QVariant>
                 QCheckBox* itemcheck = new QCheckBox(this);
                 itemcheck->setEnabled(!listadoobrasenBBDD.at(i).at(j).toBool());
                 QObject::connect(itemcheck,SIGNAL(clicked(bool)),this,SLOT(listaNombreObrasAbrir()));
-                ui->tabla->setCellWidget(i,j,itemcheck);
-                //QTableWidgetItem *item2 = new QTableWidgetItem();
-                //item2->setCheckState(Qt::Unchecked);
-                //QObject::connect(item2->,SIGNAL(clicked()),this,SLOT(listaNombreObrasAbrir()));
-                //ui->tabla->setItem(i,j,item2);
-                //ui->tabla->setEnabled(!listadoobrasenBBDD.at(i).at(j).toBool());
+                ui->tabla->setCellWidget(i,j,itemcheck);             
             }
             else if (j==3)
             {
@@ -45,6 +40,7 @@ DialogoTablaListadosObras::DialogoTablaListadosObras(const QList<QList<QVariant>
             }
         }
     }
+    ui->tabla->resizeColumnsToContents();
     QObject::connect(this,SIGNAL(accepted()),SLOT(listaNombreObrasAbrir()));
 }
 
