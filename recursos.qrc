@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/copy.png</file>
+        <file>images/cut.png</file>
+        <file>images/paste.png</file>
+        <file>images/floppy.png</file>
+        <file>images/backward.png</file>
+        <file>images/forward.png</file>
+        <file>images/opened.png</file>
+        <file>images/new.png</file>
+        <file>images/exit.png</file>
+        <file>images/close.png</file>
+        <file>images/Adelante.png</file>
+        <file>images/Atras.png</file>
+		<file>images/deshacer.png</file>
+		<file>images/rehacer.png</file>
+		<file>images/SubirTodo.png</file>		
+		<file>images/tree.png</file>
+		<file>images/importar.png</file>
+		<file>images/exportar.png</file>
+		<file>images/database.png</file>
+    </qresource>
+</RCC>
