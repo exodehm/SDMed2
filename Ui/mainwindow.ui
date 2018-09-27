@@ -440,7 +440,7 @@
    <cursorShape>ArrowCursor</cursorShape>
   </property>
   <property name="windowTitle">
-   <string>SDMed</string>
+   <string>SDMed2</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>

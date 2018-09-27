@@ -20,22 +20,23 @@ DialogoTablaListadosObras::DialogoTablaListadosObras(const QList<QList<QVariant>
     {
         for (int j=0;j<ui->tabla->columnCount();j++)
         {
-            if (j<2)
+            if (j==eColumnas::CODIGO || j==eColumnas::RESUMEN)
             {
-                //qDebug()<<"dato: "<<listadoobrasenBBDD.at(i).at(j);
                 QTableWidgetItem* algo = new QTableWidgetItem(listadoobrasenBBDD.at(i).at(j).toString());
                 ui->tabla->setItem(i,j,algo);
             }
-            else if (j==2)
+            else if (j==eColumnas::ABRIR)
             {
                 QCheckBox* itemcheck = new QCheckBox(this);
                 itemcheck->setEnabled(!listadoobrasenBBDD.at(i).at(j).toBool());
                 QObject::connect(itemcheck,SIGNAL(clicked(bool)),this,SLOT(listaNombreObrasAbrir()));
                 ui->tabla->setCellWidget(i,j,itemcheck);             
             }
-            else if (j==3)
+            else if (j==eColumnas::BORRAR)
             {
-                QPushButton* btn_borrar = new QPushButton(tr("Borrar"));
+                QPushButton* btn_borrar = new QPushButton(tr("Borrar"));//,ui->tabla);
+                btn_borrar->setObjectName(QString("%1").arg(i));
+                QObject::connect(btn_borrar,SIGNAL(clicked(bool)),this,SLOT(Borrar()));
                 ui->tabla->setCellWidget(i,j,btn_borrar);
             }
         }
@@ -65,4 +66,14 @@ QList<QStringList> DialogoTablaListadosObras::listaNombreObrasAbrir()
         }
     }
     return listado;
+}
+
+void DialogoTablaListadosObras::Borrar()
+{
+    int fila = sender()->objectName().toInt();
+    QString codigoobra = ui->tabla->item(fila,0)->data(Qt::DisplayRole).toString();
+    QString resumenobra = ui->tabla->item(fila,1)->data(Qt::DisplayRole).toString();
+    QStringList datosobra;
+    datosobra<<codigoobra<<resumenobra;
+    emit BorrarObra(datosobra);
 }

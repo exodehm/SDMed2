@@ -6,6 +6,7 @@
 #include "./Dialogos/dialogoabout.h"
 #include "./Dialogos/dialogodatoscodigoresumen.h"
 #include "./Dialogos/dialogotablaslistadoobras.h"
+#include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
 #include <QMessageBox>
 #include <QDebug>
 #include <QLabel>
@@ -215,6 +216,7 @@ bool MainWindow::ActionImportar()
 bool MainWindow::ActionAbrirBBDD()
 {
     DialogoTablaListadosObras* cuadro = new DialogoTablaListadosObras(VerObrasEnBBDD(), this);
+    QObject::connect(cuadro,SIGNAL(BorrarObra(QStringList)),this,SLOT(BorrarBBDD(QStringList)));
     if (cuadro->exec())
     {
         foreach (QStringList l, cuadro->listaNombreObrasAbrir())
@@ -224,6 +226,23 @@ bool MainWindow::ActionAbrirBBDD()
     }
     delete cuadro;
     return true;
+}
+
+void MainWindow::BorrarBBDD(QStringList datosobra)
+{
+    DialogoBorrarBBDD* d = new DialogoBorrarBBDD(datosobra, this);
+    int res = d->exec();
+    if (res==1)//aceptar
+    {
+        if (d->Exportar())
+        {
+            ActionGuardarComo();
+            qDebug()<<"se guarda la obra";
+        }
+        QString cadenaborrartablacodigo = "SELECT borrar_obra ('"+datosobra.at(0)+"');";
+        QSqlQuery consulta;
+        consulta.exec(cadenaborrartablacodigo);
+    }
 }
 
 bool MainWindow::ActionGuardar()
@@ -277,7 +296,7 @@ void MainWindow::ActionSalir()
 
 void MainWindow::ActionCopiar()
 {
-
+    qDebug()<<"Borrar en el sitpo equivocado";
 }
 
 void MainWindow::ActionPegar()

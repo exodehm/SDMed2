@@ -17,8 +17,14 @@ public:
     explicit DialogoTablaListadosObras(const QList<QList<QVariant> > &listadoobrasenBBDD, QWidget *parent = nullptr);
     ~DialogoTablaListadosObras();
 
+    enum eColumnas{CODIGO,RESUMEN,ABRIR,BORRAR};
+
 public slots:
     QList<QStringList> listaNombreObrasAbrir();
+    void Borrar();
+
+signals:
+    void BorrarObra(QStringList datosobra);
 
 private:
     Ui::DialogoTablasListadoObras *ui;

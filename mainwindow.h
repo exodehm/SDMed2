@@ -33,6 +33,7 @@ private slots:
     void ActionNuevo();
     bool ActionImportar();
     bool ActionAbrirBBDD();
+    void BorrarBBDD(QStringList datosobra);
     bool ActionGuardar();
     bool ActionGuardarComo();
     void ActionCerrar();
