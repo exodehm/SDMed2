@@ -22,6 +22,7 @@ TablaPrincipalModel::TablaPrincipalModel(const QString &cadenaInicio, QObject *p
     LeyendasCabecera[10]=QObject::tr("ImpCert\n");
 
     hayFilaVacia=false;
+    naturalezapadre = (int)Naturaleza::CAPITULO;
     ActualizarDatos(cadenaInicio);
 }
 
@@ -188,10 +189,10 @@ int TablaPrincipalModel::FilaVacia()
 void TablaPrincipalModel::ActualizarDatos(QString cadena_consulta)
 {
     qDebug()<<"Se ejecuta la consulta"<<cadena_consulta;
-    consulta.exec(cadena_consulta);
     datos.clear();
+    consulta.exec(cadena_consulta);
     QList<DatoCelda>lineaDatos;
-    DatoCelda datoC;    
+    DatoCelda datoC;
     while (consulta.next())
     {
         for (int i=0;i<NUM_COLUMNAS;i++)
@@ -200,49 +201,16 @@ void TablaPrincipalModel::ActualizarDatos(QString cadena_consulta)
             lineaDatos[i].valor = consulta.value(i).toString();
             lineaDatos[i].color = QColor(Qt::green);
         }
-        //qDebug()<<"Fin de linea";
-        //qDebug()<<"datos size"<<lineaDatos.size();
-
-        /*for (int j=0;j<NUM_COLUMNAS;j++)
-        {
-            qDebug()<<"lineadatos at("<<j<<")"<<lineaDatos.at(j).valor;
-            qDebug()<<"lineadatos.color at("<<j<<")"<<lineaDatos.at(j).color;
-        }*/
         datos.append(lineaDatos);
         lineaDatos.clear();
     }
-    /*for (int i = 0;i<datos.size();i++)
-    {
-        for (int j=0;j<NUM_COLUMNAS;j++)
-        {
-            qDebug()<<"datos at ("<<i<<").("<<j<<")="<<datos.at(i).at(j).valor<<"\n\n";
-        }
-    }*/
-    /*for (auto it1 = consulta.begin(); it1 != consulta.end();++it1)
-    {
-        for (auto it2 = it1->begin();it2!=it1->end();++it2)
-        {
-            if (it2->dato.etipodato==datocelda::INT)
-            {
-                datoC.valor=QString::number(it2->dato.datoNumero);
-            }
-            else if (it2->dato.etipodato==datocelda::NUMERO)//aqui formateo el numero a QString
-            {
-                datoC.valor= locale.toString(it2->dato.datoNumero,'f',FactorRedondeoVisualizacion);
-            }
-            else //TEXTO
-            {
-                 datoC.valor=it2->dato.datoTexto;
-            }
-            datoC.color=Colores[it2->color];
-            lineaDatos.append(datoC);
-            //qDebug()<<"dato: "<<datoC.valor<<"--"<<datoC.color;
-        }
-        datos.append(lineaDatos);
-        lineaDatos.clear();
-    }*/
     for(int i=0; i<datos.at(0).length(); i++)
     {
+        //leo la naturaleza del concepto padre
+        if (i==tipoColumna::NATURALEZA)
+        {
+            naturalezapadre = datos.at(0).at(i).valor.toInt();
+        }
         datos[0][i].valor.prepend(LeyendasCabecera[i]);
     }
     if (datos.size()<=1)//añado una fila extra para poder insertar hijos en caso de hojas
@@ -252,4 +220,7 @@ void TablaPrincipalModel::ActualizarDatos(QString cadena_consulta)
     }
 }
 
-
+bool TablaPrincipalModel::EsPartida()
+{
+    return naturalezapadre == 7;
+}

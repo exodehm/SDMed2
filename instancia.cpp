@@ -334,8 +334,8 @@ void Instancia::RefrescarVista()
     tablaPrincipal->resizeColumnsToContents();
     /*tablaPrincipal->setCurrentIndex(indiceActual);
     tablaMediciones->resizeColumnsToContents();
-    tablaCertificaciones->resizeColumnsToContents();
-    separadorTablasMedicion->setVisible(O->EsPartida());//solo se ve si es partida(Nat == 7)
+    tablaCertificaciones->resizeColumnsToContents();*/
+    separadorTablasMedicion->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
     /*modeloArbol->layoutChanged();
     arbol->expandAll();
     arbol->resizeColumnToContents(tipoColumna::CODIGO);

@@ -4,8 +4,9 @@
 #include <map>
 #include <QIcon>
 #include <QDebug>
+#include "./defs.h"
 
-enum class Naturaleza{Sin_clasificar, Mano_de_Obra, Maquinaria, Materiales, Comp_residuo,Clasificacion_residuo, Capitulo, Partida};
+enum class Naturaleza{SIN_CLASIFICAR, MANO_DE_OBRA, MAQUINARIA, MATERIALES, COMP_RESIDUO,CLASIF_RESIDUO, CAPITULO, PARTIDA};
 using IconsMap = std::map<Naturaleza,QIcon>;
 
 class RepoIconos
@@ -16,14 +17,14 @@ private:
     {
         return
         {
-            std::make_pair(Naturaleza::Sin_clasificar, QIcon(QStringLiteral("../SDMed2/Iconos/sinclasificar.png"))),
-            std::make_pair(Naturaleza::Mano_de_Obra, QIcon(QStringLiteral("../SDMed2/Iconos/engineer.png"))),
-            std::make_pair(Naturaleza::Maquinaria, QIcon(QStringLiteral("../SDMed2/Iconos/trucking.png"))),
-            std::make_pair(Naturaleza::Materiales, QIcon(QStringLiteral("../SDMed2/Iconos/brick.png"))),
-            std::make_pair(Naturaleza::Comp_residuo, QIcon(QStringLiteral("../SDMed2/Iconos/delete.png"))),
-            std::make_pair(Naturaleza::Clasificacion_residuo, QIcon(QStringLiteral("../SDMed2/Iconos/delete.png"))),
-            std::make_pair(Naturaleza::Capitulo, QIcon(QStringLiteral("../SDMed2/Iconos/folder.png"))),
-            std::make_pair(Naturaleza::Partida, QIcon(QStringLiteral("../SDMed2/Iconos/file.png")))
+            std::make_pair(Naturaleza::SIN_CLASIFICAR, QIcon(QStringLiteral("../SDMed2/Iconos/sinclasificar.png"))),
+            std::make_pair(Naturaleza::MANO_DE_OBRA, QIcon(QStringLiteral("../SDMed2/Iconos/engineer.png"))),
+            std::make_pair(Naturaleza::MAQUINARIA, QIcon(QStringLiteral("../SDMed2/Iconos/trucking.png"))),
+            std::make_pair(Naturaleza::MATERIALES, QIcon(QStringLiteral("../SDMed2/Iconos/brick.png"))),
+            std::make_pair(Naturaleza::COMP_RESIDUO, QIcon(QStringLiteral("../SDMed2/Iconos/delete.png"))),
+            std::make_pair(Naturaleza::CLASIF_RESIDUO, QIcon(QStringLiteral("../SDMed2/Iconos/delete.png"))),
+            std::make_pair(Naturaleza::CAPITULO, QIcon(QStringLiteral("../SDMed2/Iconos/folder.png"))),
+            std::make_pair(Naturaleza::PARTIDA, QIcon(QStringLiteral("../SDMed2/Iconos/file.png")))
         };
     }
 public:
@@ -37,7 +38,7 @@ public:
         auto it = _iconos.find(type);
         if(it == _iconos.end())
         {
-            it = _iconos.find(Naturaleza::Sin_clasificar);
+            it = _iconos.find(Naturaleza::SIN_CLASIFICAR);
         }
         return it->second;
     }

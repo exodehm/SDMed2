@@ -8,6 +8,8 @@ namespace tipoColumna {
     enum  {FASE, COMENTARIO, N, LONGITUD, ANCHURA, ALTURA, FORMULA, PARCIAL, SUBTOTAL,ID};
 }
 
+//enum class Naturaleza{SIN_CLASIFICAR, MANO_DE_OBRA, MAQUINARIA, MATERIALES, COMP_RESIDUO, CLASIF_RESIDUO, CAPITULO, PARTIDA};
+
 namespace naturaleza {
 
     static const QString leyenda_nat[]={"Sin clasificar", "Mano de Obra", "Maquinaria", "Materiales", "Comp residuo", "Clasificacion residuo", "Capitulo", "Partida"};

@@ -37,6 +37,7 @@ public:
     bool HayFilaVacia();
     int FilaVacia();
     void ActualizarDatos(QString cadena_consulta);
+    bool EsPartida();
 
 public slots:
     //void MostrarHijos (QModelIndex idpadre);
@@ -48,6 +49,7 @@ private:
     int filavacia;
     QList<QList<DatoCelda>>datos;
     QSqlQuery consulta;
+    int naturalezapadre;
 };
 
 #endif // TABLAPRINCIPALMODEL_H

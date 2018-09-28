@@ -42,7 +42,6 @@ SOURCES += main.cpp\
     Modelos/tablaprincipalmodel.cpp \
     Dialogos/dialogotablaslistadoobras.cpp \
     Ficheros/abrirguardarbc3.cpp \
-    metaobra.cpp \
     Dialogos/dialogoadvertenciaborrarbbdd.cpp
 
 HEADERS  += mainwindow.h \
@@ -75,7 +74,6 @@ HEADERS  += mainwindow.h \
     defs.h \
     Dialogos/dialogotablaslistadoobras.h \
     Ficheros/abrirguardarbc3.h \
-    metaobra.h \
     Dialogos/dialogoadvertenciaborrarbbdd.h
 
 FORMS    += Ui/mainwindow.ui \
