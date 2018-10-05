@@ -70,7 +70,7 @@
           </font>
          </property>
          <property name="text">
-          <string>se va a borrar de forma definitiva</string>
+          <string>se va a borrar de forma definitiva de la BBDD</string>
          </property>
         </widget>
        </item>

@@ -13,6 +13,9 @@ public:
     int crearObra(QStringList& registroC);
     void procesarConceptos(QStringList& registroC);
     void procesarRelaciones(const QStringList& registroD);
+    void procesarMediciones (QStringList& registroM);
+    void procesarTexto(const QStringList& registroT);
+
     QString LeeCodigo() const;
     QString LeeResumen() const;
     void quitarSimbolos(QString& codigo);

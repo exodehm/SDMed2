@@ -126,7 +126,7 @@ QList<QList<QVariant>> MainWindow::VerObrasEnBBDD()
         obraabierta = false;
         listadoobras.append(obra);
         obra.clear();
-    }    
+    }
     return listadoobras;
 }
 
@@ -215,16 +215,26 @@ bool MainWindow::ActionImportar()
 
 bool MainWindow::ActionAbrirBBDD()
 {
-    DialogoTablaListadosObras* cuadro = new DialogoTablaListadosObras(VerObrasEnBBDD(), this);
-    QObject::connect(cuadro,SIGNAL(BorrarObra(QStringList)),this,SLOT(BorrarBBDD(QStringList)));
-    if (cuadro->exec())
+    QList<QList<QVariant>>ListaObrasenBDD = VerObrasEnBBDD();
+    if (ListaObrasenBDD.isEmpty())
     {
-        foreach (QStringList l, cuadro->listaNombreObrasAbrir())
-        {
-            AnadirObraAVentanaPrincipal(l.at(0),l.at(1));
-        }
+        QMessageBox::warning(this, tr("Aviso"),
+                                             tr("Actualmente no hay obras en la BBDD"),
+                                             QMessageBox::Yes | QMessageBox::Default);
     }
-    delete cuadro;
+    else
+    {
+        DialogoTablaListadosObras* cuadro = new DialogoTablaListadosObras(ListaObrasenBDD, this);
+        QObject::connect(cuadro,SIGNAL(BorrarObra(QStringList)),this,SLOT(BorrarBBDD(QStringList)));
+        if (cuadro->exec())
+        {
+            foreach (QStringList l, cuadro->listaNombreObrasAbrir())
+            {
+                AnadirObraAVentanaPrincipal(l.at(0),l.at(1));
+            }
+        }
+        delete cuadro;
+    }
     return true;
 }
 
@@ -234,14 +244,41 @@ void MainWindow::BorrarBBDD(QStringList datosobra)
     int res = d->exec();
     if (res==1)//aceptar
     {
-        if (d->Exportar())
+        QMessageBox::StandardButton respuesta;
+        auto it = ListaObras.begin();
+        foreach (Instancia* nombreobra, ListaObras)
         {
-            ActionGuardarComo();
-            qDebug()<<"se guarda la obra";
+            if (nombreobra->LeeCodigo() == datosobra.at(0))
+            {
+                respuesta = QMessageBox::question(
+                            this,
+                            tr("Aviso"),
+                            tr("La obra esta en uso. ¿Realmente desea continuar?"),
+                            QMessageBox::No | QMessageBox::Default,
+                            QMessageBox::Yes);
+                if (respuesta == QMessageBox::Yes)
+                {
+                    //primera accion, borrar la obra de la ventana principal
+                    obraActual = it;
+                    qDebug()<<"leer cifrado "<<(*it)->LeeCodigo();
+                    ActionCerrar();
+                    //segunda accion, exportar a bc3 si esta seleccionada la accion
+                    if (d->Exportar())
+                    {
+                        ActionGuardarComo();
+                        qDebug()<<"se guarda la obra";
+                    }
+                    //tercera accion, borrar la obra de la BBDD
+                    QString cadenaborrartablacodigo = "SELECT borrar_obra ('"+datosobra.at(0)+"');";
+                    qDebug()<<cadenaborrartablacodigo;
+                    QSqlQuery consulta;
+                    consulta.exec(cadenaborrartablacodigo);
+                    qDebug()<<sender();
+                }
+                break;
+            }
+            std::advance (it,1);
         }
-        QString cadenaborrartablacodigo = "SELECT borrar_obra ('"+datosobra.at(0)+"');";
-        QSqlQuery consulta;
-        consulta.exec(cadenaborrartablacodigo);
     }
 }
 

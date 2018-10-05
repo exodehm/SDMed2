@@ -1,6 +1,8 @@
+#include <QDebug>
+
 #include "MedCertModel.h"
 
-MedCertModel::MedCertModel(/*Obra *O, */int tablaorigen, QUndoStack *p, QObject* parent):tabla(tablaorigen),pila(p),QAbstractTableModel(parent)
+MedCertModel::MedCertModel(const QString& cadenaInicio, QObject* parent)
 {
     if (tabla==tipoTablaMedicion::MEDICION)
     {
@@ -19,8 +21,7 @@ MedCertModel::MedCertModel(/*Obra *O, */int tablaorigen, QUndoStack *p, QObject*
     LeyendasCabecera.append(QObject::tr("Parcial\n"));
     LeyendasCabecera.append(QObject::tr("SubTotal\n"));
     LeyendasCabecera.append(QObject::tr("Id\n"));
-
-    //miobra = O;
+    ActualizarDatos(cadenaInicio);
 }
 
 MedCertModel::~MedCertModel()
@@ -31,13 +32,20 @@ MedCertModel::~MedCertModel()
 int MedCertModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return datos.length();
+    if (hayFilaVacia)
+    {
+        return datos.size();
+    }
+    else
+    {
+        return datos.size()-1;
+    }
 }
 
 int MedCertModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return LeyendasCabecera.length();
+    return NUM_COLUMNAS;
 }
 
 QVariant MedCertModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -52,11 +60,27 @@ QVariant MedCertModel::headerData(int section, Qt::Orientation orientation, int 
     return QAbstractTableModel::headerData(section, orientation, role);
 }
 
-QVariant MedCertModel::data(const QModelIndex& indice,int role) const
+QVariant MedCertModel::data(const QModelIndex& index,int role) const
 {
-    if (!indice.isValid()) return QVariant();
+    if (!index.isValid()) return QVariant();
+    QModelIndex indice = index;
+    if (hayFilaVacia)
+    {
+        if (index.row()>=filavacia)
+        {
+            indice = this->index(index.row()-1,index.column());
+        }
+    }
+    if (hayFilaVacia && index.row()==filavacia)
+    {
+        return QVariant();
+    }
+    else
+    {
+        return datos.at(indice.row()+1).at(indice.column());
+    }
 
-    QStringList fila = datos.value(indice.row());
+    /*QStringList fila = datos.value(indice.row());
 
     if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
@@ -75,7 +99,7 @@ QVariant MedCertModel::data(const QModelIndex& indice,int role) const
         {
             return fila.value(indice.column());
         }
-    }
+    }*/
     return QVariant();
 }
 
@@ -115,7 +139,7 @@ bool MedCertModel::insertRows(int row, int count, const QModelIndex& parent)
     }
     QString cadenaundo = "Insertar lineas de medicion";
     //pila->push(new UndoInsertarLineasMedicion(miobra,this,indices,cadenaundo));
-    ActualizarDatos();
+    //ActualizarDatos();
     endInsertRows();
     return true;
 }
@@ -132,7 +156,7 @@ bool MedCertModel::removeRows(int filaInicial, int numFilas, const QModelIndex& 
     qDebug()<<"Fila donde se empieza a borrar: "<<filaInicial<<" con numero de filas: "<<numFilas;
     beginRemoveRows(QModelIndex(), filaInicial, filaInicial+numFilas-1);
     //miobra->BorrarLineasMedicion(filaInicial,numFilas);
-    ActualizarDatos();
+    //ActualizarDatos();
     endRemoveRows();
     layoutChanged();
     return true;
@@ -157,33 +181,22 @@ void MedCertModel::emitDataChanged(const QModelIndex &index)
      emit dataChanged(index, index);
 }
 
-void MedCertModel::ActualizarDatos()
+void MedCertModel::ActualizarDatos(QString cadena_consulta)
 {
+    qDebug()<<"Se ejecuta la consulta en la tabla de mecioon "<<cadena_consulta;
     datos.clear();
     //qDebug()<<"Total medicion: "<<miobra->LeeTotalMedicion(tabla);
     LeyendasCabecera[tipoColumna::PARCIAL].clear();
-    VerMedCert(datos);
-    /*if (rowCount(QModelIndex())==0 && miobra->EsPartida())
+    consulta.exec(cadena_consulta);
+    QList<QVariant> lineaDatos;
+    while (consulta.next())
     {
-        miobra->InsertarLineasVaciasMedicion(tabla,0,1);
-    }
-    VerMedCert(datos);
-    //qDebug()<<"Num liNEAS: "<<rowCount(QModelIndex());
-    QString suma=QString::number(miobra->LeeTotalMedicion(tabla),'f',2);*/
-    //LeyendasCabecera[tipoColumna::PARCIAL].append("Parcial\n").append(suma);
-}
-
-void MedCertModel::VerMedCert(QList<QStringList> &datos)
-{
-    /*std::list<LineaMedicion> lista = miobra->AristaPadre()->datoarista.LeeMedCer(tabla).LeeLista();
-    datos.clear();
-    for (auto elem : lista)*/
-    {
-        //datos.append(elem.LeeLineaMedicion());
-        /*QString dato;
-        foreach (dato, elem.LeeLineaMedicion())
+        for (int i=0;i<NUM_COLUMNAS;i++)
         {
-            qDebug()<<dato;
-        }*/
+            lineaDatos.append(consulta.value(i));
+
+        }
+        datos.append(lineaDatos);
+        lineaDatos.clear();
     }
 }

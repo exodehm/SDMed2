@@ -116,6 +116,7 @@ private:
     QString textoPartidaInicial;
 
     QString cadena_consulta_tabla_principal;
+    QString cadena_consulta_tabla_medcert;
 };
 
 #endif // INSTANCIA_H

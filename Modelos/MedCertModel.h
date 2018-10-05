@@ -1,7 +1,7 @@
 #ifndef MEDCERTMODELBASE_H
 #define MEDCERTMODELBASE_H
 
-#include <QAbstractTableModel>
+/*#include <QAbstractTableModel>
 #include <QStandardItemModel>
 #include <QClipboard>
 #include <QMimeData>
@@ -15,34 +15,37 @@
 #include <QFileDialog>
 #include <QLocale>
 #include <QModelIndex>
-#include <iostream>
+#include <iostream>*/
 
-//#include "../include/Obra.h"
 //#include "../Undo/undomedicion.h"
+#include <QModelIndex>
+#include <QtSql/QSqlQueryModel>
+#include <QtSql/QSqlQuery>
 #include "../defs.h"
 
 
 
-class MedCertModel : public QAbstractTableModel
+class MedCertModel : public QSqlQueryModel
 {
     Q_OBJECT
 
 public:
-    MedCertModel(/*Obra* O, */int tablaorigen, QUndoStack* p, QObject* parent=nullptr);
+    enum {NUM_COLUMNAS = 9};
+
+    MedCertModel(const QString& cadenaInicio, QObject* parent=nullptr);
     ~MedCertModel();
 
     int rowCount(const QModelIndex& parent) const;
     int columnCount(const QModelIndex& parent) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    QVariant data(const QModelIndex& indice,int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
     bool setData(const QModelIndex & index, const QVariant& value, int role);
 
     bool insertRows(int row, int count, const QModelIndex & parent);
     bool removeRows(int filaInicial, int numFilas, const QModelIndex& parent);
     bool filaVacia(const QStringList& linea);
-    void ActualizarDatos();
-    void VerMedCert(QList<QStringList>&datos);
+    void ActualizarDatos(QString cadena_consulta);
     void emitDataChanged(const QModelIndex &index);
     void BorrarFilas(QList<int>filas);
 
@@ -52,11 +55,13 @@ signals:
 
 
 protected:
-    //Obra* miobra;
     int tabla;
-    QUndoStack* pila;
-    QList<QStringList>datos;
+    //QUndoStack* pila;
+    QList<QList<QVariant>>datos;
     QStringList LeyendasCabecera;
+    bool hayFilaVacia;
+    int filavacia;
+    QSqlQuery consulta;
 };
 
 

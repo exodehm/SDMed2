@@ -30,6 +30,7 @@ Instancia::Instancia(QString cod, QString res, QWidget *parent):codigo(cod),resu
     id_padre ="NULL";
     id_hijo = "0";
     cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
+    cadena_consulta_tabla_medcert = "SELECT * FROM ver_mediciones('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
     pila = new QUndoStack(this);
     GenerarUI();
 }
@@ -66,12 +67,12 @@ void Instancia::GenerarUI()
     separadorTablas->addWidget(tablaPrincipal);    
 
     //tabla mediciones
-    modeloTablaMed = new MedCertModel(tipoTablaMedicion::MEDICION, pila);
+    modeloTablaMed = new MedCertModel(cadena_consulta_tabla_medcert);
     tablaMediciones =  new TablaMedCert(modeloTablaMed->columnCount(QModelIndex()));
     tablaMediciones->setObjectName("TablaMC");
     tablaMediciones->setModel(modeloTablaMed);
     //tabla certificaciones
-    modeloTablaCert = new MedCertModel(tipoTablaMedicion::CERTIFICACION, pila);
+    modeloTablaCert = new MedCertModel(cadena_consulta_tabla_medcert);
     tablaCertificaciones =  new TablaMedCert(modeloTablaCert->columnCount(QModelIndex()));
     tablaCertificaciones->setModel(modeloTablaCert);
     tablaCertificaciones->setEnabled(false);
@@ -227,6 +228,7 @@ void Instancia::Mover(int tipomovimiento)
             }
         }
         cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
+        cadena_consulta_tabla_medcert = "SELECT * FROM ver_mediciones('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
         qDebug()<<"Cadena para ver hijos: "<<cadena_consulta_tabla_principal;
         }
         break;
@@ -244,6 +246,7 @@ void Instancia::Mover(int tipomovimiento)
             id_hijo = consulta.value(0).toString();
         }
         cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
+        cadena_consulta_tabla_medcert = "SELECT * FROM ver_mediciones('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
         qDebug()<<"Bajar2: "<<cadena_consulta_tabla_principal;
         break;
     }
@@ -275,6 +278,7 @@ void Instancia::IrAInicio()
     id_padre="NULL";
     id_hijo ="0";
     cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
+    cadena_consulta_tabla_medcert = "SELECT * FROM ver_mediciones('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
     RefrescarVista();
 }
 
@@ -317,23 +321,23 @@ void Instancia::Redo()
 void Instancia::RefrescarVista()
 {
     modeloTablaP->ActualizarDatos(cadena_consulta_tabla_principal);
-    /*modeloTablaMed->ActualizarDatos();
-    modeloTablaCert->ActualizarDatos();
+    modeloTablaMed->ActualizarDatos(cadena_consulta_tabla_medcert);
+    /*modeloTablaCert->ActualizarDatos();
     //modeloArbol->ActualizarDatos();
     modeloTablaP->QuitarIndicadorFilaVacia();
     if (modeloTablaP->rowCount(QModelIndex())==0)
     {
         modeloTablaP->insertRow(0);
-    }
+    }*/
     EscribirTexto();
-    editor->Formatear();
+    /*editor->Formatear();
     GuardarTextoPartidaInicial();*/
     modeloTablaP->layoutChanged();
-    /*modeloTablaMed->layoutChanged();
-    modeloTablaCert->layoutChanged();*/
+    modeloTablaMed->layoutChanged();
+    //modeloTablaCert->layoutChanged();
     tablaPrincipal->resizeColumnsToContents();
-    /*tablaPrincipal->setCurrentIndex(indiceActual);
     tablaMediciones->resizeColumnsToContents();
+    /*tablaPrincipal->setCurrentIndex(indiceActual);    
     tablaCertificaciones->resizeColumnsToContents();*/
     separadorTablasMedicion->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
     /*modeloArbol->layoutChanged();
@@ -346,7 +350,15 @@ void Instancia::RefrescarVista()
 
 void Instancia::EscribirTexto()
 {
-   // editor->EscribeTexto(O->VerTexto());
+   QString cadenavertexto = "SELECT ver_texto('" + codigo + "'," + id_hijo+");";
+   qDebug()<<cadenavertexto;
+   consulta.exec(cadenavertexto);
+   QString descripcion;
+   while (consulta.next())
+   {
+       descripcion = consulta.value(0).toString();
+   }
+   editor->EscribeTexto(descripcion);
 }
 
 void Instancia::PosicionarTablaP(QModelIndex indice)

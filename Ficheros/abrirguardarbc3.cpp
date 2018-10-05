@@ -50,6 +50,8 @@ AbrirGuardarBC3::AbrirGuardarBC3(const QStringList &listadoBC3, bool &abierta)
         abierta = true;
         procesarConceptos(registroC);
         procesarRelaciones(registroD);
+        procesarMediciones(registroM);
+        procesarTexto(registroT);
     }
     else
     {
@@ -98,7 +100,7 @@ void AbrirGuardarBC3::procesarConceptos(QStringList &registroC)
 {
     foreach (const QString& linea, registroC)
     {
-        qDebug()<<"Registro C: "<<linea;
+        //qDebug()<<"Registro C: "<<linea;
         QStringList datos = linea.split("|");
         QString codigopartida,ud,resumen,precio,fecha,naturaleza;
         codigopartida=datos.at(0);
@@ -106,11 +108,10 @@ void AbrirGuardarBC3::procesarConceptos(QStringList &registroC)
         ud=datos.at(1);
         resumen=datos.at(2);
         precio=datos.at(3);
-        //fecha = " to_date('"+ datos.at(4) + "','DDMMYYYY')";
         fecha = datos.at(4);
         naturaleza=datos.at(5);
         QString cadenainsertar = "SELECT insertar_concepto('"+codigo+"','"+codigopartida+"','"+ud+"','"+resumen+"','"+precio+"','"+naturaleza+"','"+fecha+"');";
-        qDebug()<<"Cadena insertar: "<<cadenainsertar;
+        //qDebug()<<"Cadena insertar: "<<cadenainsertar;
         consulta.exec(cadenainsertar);
     }
 }
@@ -141,21 +142,62 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
         QStringList relaciones = resto.split("\\");
         for (int i=0; i<nHijos; i++)
         {
-            qDebug()<<"Vuelta "<<i<<nHijos<<" - "<<relaciones.size()<<"Num hjijos: "<<nHijos;
+            //qDebug()<<"Vuelta "<<i<<nHijos<<" - "<<relaciones.size()<<"Num hjijos: "<<nHijos;
             for (int j=0;j<3;j++)
             {
                 registros[j] = relaciones.first();
                 relaciones.pop_front();
             }
-            qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0];
-            float cant =  registros[2].toFloat();
-            qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0]<<"Cantidad: "<<registros[2];
+            //qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0];
+            //qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0]<<"Cantidad: "<<registros[2];
             QString cadenainsertar = "SELECT insertar_partida('"+ codigo + \
                     +"','"+padre+"','"+registros[0]+"','"+registros[2]+"','"+QString::number(i)+"');" ;
 
-            qDebug()<<"Cadena insertar: "<<cadenainsertar;
+            //qDebug()<<"Cadena insertar: "<<cadenainsertar;
             consulta.exec(cadenainsertar);
         }
+    }
+}
+
+void AbrirGuardarBC3::procesarMediciones(QStringList &registroM)
+{
+    foreach (const QString &linea, registroM)
+    {
+        QStringList datos = linea.split("|");
+        QStringList padrehijo = datos.at(0).split("\\");
+        QString padre = padrehijo.at(0);
+        quitarSimbolos(padre);
+        QString hijo = padrehijo.at(1);
+        QStringList medicion = datos.at(3).split("\\");
+        int lineasmedicion = medicion.size()/6;
+        QString conceptos[6];
+        //qDebug()<<"Padre: "<<padre<<"hijo: "<<hijo;
+        QString cadenainsertarmedicion;
+        for (int i=0;i<lineasmedicion;i++)
+        {
+            for (int j=0;j<6;j++)
+            {
+                conceptos[j]= medicion.first();
+                medicion.pop_front();               
+            }
+            //qDebug()<<"Insertar "<<conceptos[0]<<"','"<<conceptos[1]<<"','"<<conceptos[2]<<"','"<<conceptos[3]<<"','"<<conceptos[4]<<"','"<<conceptos[5]<<";";
+            cadenainsertarmedicion = "SELECT insertar_medicion('"+codigo+"','"+padre+"','"+hijo+"',"+conceptos[0]+",'"+conceptos[1]+"',"+conceptos[2]+","+conceptos[3]+","+conceptos[4]+","+conceptos[5]+");";
+            //qDebug()<<"cadena insertar medicion"<<cadenainsertarmedicion;
+            consulta.exec(cadenainsertarmedicion);
+        }
+    }
+}
+
+void AbrirGuardarBC3::procesarTexto(const QStringList& registroT)
+{
+    QString linea;
+    foreach (linea, registroT)
+    {
+        QStringList datos = linea.split("|");
+        QString codigotexto = datos.at(0);
+        codigotexto.remove('#');
+        QString cadenainsertartexto = "SELECT insertar_texto('"+ codigo + "','"+codigotexto+"','"+datos.at(1)+"');";
+        consulta.exec(cadenainsertartexto);
     }
 }
 
