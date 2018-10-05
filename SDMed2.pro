@@ -42,7 +42,8 @@ SOURCES += main.cpp\
     Modelos/tablaprincipalmodel.cpp \
     Dialogos/dialogotablaslistadoobras.cpp \
     Ficheros/abrirguardarbc3.cpp \
-    Dialogos/dialogoadvertenciaborrarbbdd.cpp
+    Dialogos/dialogoadvertenciaborrarbbdd.cpp \
+    Modelos/Modelobase.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -74,7 +75,8 @@ HEADERS  += mainwindow.h \
     defs.h \
     Dialogos/dialogotablaslistadoobras.h \
     Ficheros/abrirguardarbc3.h \
-    Dialogos/dialogoadvertenciaborrarbbdd.h
+    Dialogos/dialogoadvertenciaborrarbbdd.h \
+    Modelos/Modelobase.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \

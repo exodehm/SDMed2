@@ -1,5 +1,6 @@
 #include "instancia.h"
 #include "consultas.h"
+#include "./Modelos/Modelobase.h"
 #include "./Modelos/tablaprincipalmodel.h"
 #include "./Modelos/MedCertModel.h"
 #include "./Modelos/TreeModel.h"
@@ -56,16 +57,14 @@ void Instancia::GenerarUI()
     arbol->setVisible(false);*/
     //arbol provisional hasta arreglar el otro
     arbol = new QTableView;
-
     separadorTablas = new QSplitter(Qt::Vertical);
-
     //tabla principal
+    //modeloTablaP = new TablaPrincipalModel(cadena_consulta_tabla_principal);
     modeloTablaP = new TablaPrincipalModel(cadena_consulta_tabla_principal);
     tablaPrincipal = new TablaPrincipal(modeloTablaP->columnCount(QModelIndex()));        
     tablaPrincipal->setObjectName("TablaP");
     tablaPrincipal->setModel(modeloTablaP);
-    separadorTablas->addWidget(tablaPrincipal);    
-
+    separadorTablas->addWidget(tablaPrincipal);
     //tabla mediciones
     modeloTablaMed = new MedCertModel(cadena_consulta_tabla_medcert);
     tablaMediciones =  new TablaMedCert(modeloTablaMed->columnCount(QModelIndex()));
@@ -322,23 +321,23 @@ void Instancia::RefrescarVista()
 {
     modeloTablaP->ActualizarDatos(cadena_consulta_tabla_principal);
     modeloTablaMed->ActualizarDatos(cadena_consulta_tabla_medcert);
-    /*modeloTablaCert->ActualizarDatos();
+    modeloTablaCert->ActualizarDatos(cadena_consulta_tabla_medcert);
     //modeloArbol->ActualizarDatos();
-    modeloTablaP->QuitarIndicadorFilaVacia();
+    /*modeloTablaP->QuitarIndicadorFilaVacia();
     if (modeloTablaP->rowCount(QModelIndex())==0)
     {
         modeloTablaP->insertRow(0);
     }*/
-    EscribirTexto();
+    EscribirTexto();    
+    tablaPrincipal->resizeColumnsToContents();
+    tablaMediciones->resizeColumnsToContents();
+    tablaCertificaciones->resizeColumnsToContents();
     /*editor->Formatear();
     GuardarTextoPartidaInicial();*/
     modeloTablaP->layoutChanged();
     modeloTablaMed->layoutChanged();
-    //modeloTablaCert->layoutChanged();
-    tablaPrincipal->resizeColumnsToContents();
-    tablaMediciones->resizeColumnsToContents();
-    /*tablaPrincipal->setCurrentIndex(indiceActual);    
-    tablaCertificaciones->resizeColumnsToContents();*/
+    //modeloTablaCert->layoutChanged();    
+    //tablaPrincipal->setCurrentIndex(indiceActual);
     separadorTablasMedicion->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
     /*modeloArbol->layoutChanged();
     arbol->expandAll();

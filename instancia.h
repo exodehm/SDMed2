@@ -15,6 +15,7 @@
 class QUndoStack;
 class QSplitter;
 class MedCertModel;
+class ModeloBase;
 
 class Instancia : public QWidget
 {
@@ -85,9 +86,10 @@ signals:
 private:
     QHeaderView* cabeceraTablaP;
     //modelos
-    TablaPrincipalModel* modeloTablaP;
-    MedCertModel* modeloTablaMed;
-    MedCertModel* modeloTablaCert;
+    //TablaPrincipalModel* modeloTablaP;
+    ModeloBase* modeloTablaP;
+    ModeloBase* modeloTablaMed;
+    ModeloBase* modeloTablaCert;
     //TreeModel* modeloArbol;
 
     QVBoxLayout* lienzoGlobal;

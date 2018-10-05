@@ -1,6 +1,5 @@
 #include "dialogotablaslistadoobras.h"
 #include "ui_dialogotablaslistadoobras.h"
-#include "metaobra.h"
 #include <QTableWidgetItem>
 #include <QtSql/QSqlQuery>
 #include <QPushButton>
