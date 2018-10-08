@@ -26,23 +26,23 @@
 
 #include <QtSql/QSqlQuery>
 
-Instancia::Instancia(QString cod, QString res, QWidget *parent):codigo(cod),resumen(res),QWidget(parent)
+Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resumen(res),QWidget(parent)
 {
     id_padre ="NULL";
     id_hijo = "0";
-    cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
-    cadena_consulta_tabla_medcert = "SELECT * FROM ver_mediciones('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
+    cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+tabla+"',"+ id_padre + ","+ id_hijo+")";
+    cadena_consulta_tabla_medcert = "SELECT * FROM ver_mediciones('"+tabla+"',"+ id_padre + ","+ id_hijo+")";
     pila = new QUndoStack(this);
     GenerarUI();
 }
 
 Instancia::~Instancia()
 {   
-    /*delete modeloTablaP;
+    delete modeloTablaP;
     delete modeloTablaMed;
     delete modeloTablaCert;
-    delete modeloArbol;
-    delete editor;*/
+    //delete modeloArbol;
+    delete editor;
 }
 
 void Instancia::GenerarUI()
@@ -59,19 +59,18 @@ void Instancia::GenerarUI()
     arbol = new QTableView;
     separadorTablas = new QSplitter(Qt::Vertical);
     //tabla principal
-    //modeloTablaP = new TablaPrincipalModel(cadena_consulta_tabla_principal);
-    modeloTablaP = new TablaPrincipalModel(cadena_consulta_tabla_principal);
+    modeloTablaP = new TablaPrincipalModel(cadena_consulta_tabla_principal, pila);
     tablaPrincipal = new TablaPrincipal(modeloTablaP->columnCount(QModelIndex()));        
     tablaPrincipal->setObjectName("TablaP");
     tablaPrincipal->setModel(modeloTablaP);
     separadorTablas->addWidget(tablaPrincipal);
     //tabla mediciones
-    modeloTablaMed = new MedCertModel(cadena_consulta_tabla_medcert);
+    modeloTablaMed = new MedCertModel(cadena_consulta_tabla_medcert, pila);
     tablaMediciones =  new TablaMedCert(modeloTablaMed->columnCount(QModelIndex()));
     tablaMediciones->setObjectName("TablaMC");
     tablaMediciones->setModel(modeloTablaMed);
     //tabla certificaciones
-    modeloTablaCert = new MedCertModel(cadena_consulta_tabla_medcert);
+    modeloTablaCert = new MedCertModel(cadena_consulta_tabla_medcert, pila);
     tablaCertificaciones =  new TablaMedCert(modeloTablaCert->columnCount(QModelIndex()));
     tablaCertificaciones->setModel(modeloTablaCert);
     tablaCertificaciones->setEnabled(false);
@@ -103,7 +102,7 @@ void Instancia::GenerarUI()
 
     /************signals y slots*****************/
     QObject::connect(tablaPrincipal,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(BajarNivel()));
-    QObject::connect(tablaPrincipal->CabeceraDeTabla(),SIGNAL(sectionDoubleClicked(int)),this,SLOT(SubirNivel()));
+    QObject::connect(tablaPrincipal->CabeceraDeTabla(),SIGNAL(sectionDoubleClicked(int)),this,SLOT(SubirNivel()));    
     //QObject::connect(tablaPrincipal,SIGNAL(clicked(QModelIndex)),this,SLOT(PosicionarTablaP(QModelIndex)));
     //QObject::connect(tablaPrincipal,SIGNAL(CambiaFila(QModelIndex)),this,SLOT(PosicionarTablaP(QModelIndex)));
     //QObject::connect(tablaMediciones,SIGNAL(CambiaFila(QModelIndex)),this,SLOT(PosicionarTablaM(QModelIndex)));
@@ -115,15 +114,15 @@ void Instancia::GenerarUI()
 
    // QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
     //QObject::connect(separadorTablasMedicion,SIGNAL(currentChanged(int)),this,SLOT(CambiarEntreMedicionYCertificacion(int)));
-    //QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(ActivarDesactivarUndoRedo(int)));
-    //QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
+    QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(ActivarDesactivarUndoRedo(int)));
+    QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
    //QObject::connect(editor->LeeEditor(),SIGNAL(GuardaTexto()),this,SLOT(GuardarTextoPartida()));
     //QObject::connect(editor,SIGNAL(GuardaTexto()),this,SLOT(GuardarTextoPartida()));
 }
 
-const QString& Instancia::LeeCodigo() const
+const QString& Instancia::LeeTabla() const
 {
-    return codigo;
+    return tabla;
 }
 
 const QString& Instancia::LeeResumen() const
@@ -203,66 +202,78 @@ void Instancia::BajarNivel()
 void Instancia::Mover(int tipomovimiento)
 {
     //GuardarTextoPartidaInicial();
+    QString cadenamover;
     switch (tipomovimiento)
     {
+    case movimiento::INICIO:
+    {
+        id_padre="NULL";
+        id_hijo ="0";
+        break;
+    }
     case movimiento::ARRIBA:
     {
         if (id_padre!="NULL")
         {
-        qDebug()<<"padre:  "<<id_padre<<" - hijo: "<<id_hijo;
-        if (id_padre=="0")
-        {
-            id_padre="NULL";
-            id_hijo ="0";
-        }
-        else
-        {
-            id_hijo = id_padre;
-            QString cadena_arriba = "SELECT id_padre FROM \""+ codigo + "_Relacion\" WHERE id_hijo = "+ id_padre + ";";
-            qDebug()<<"CAdena para averiguar el padre: "<<cadena_arriba;
-            consulta.exec(cadena_arriba);
-            while (consulta.next())
+            if (id_padre=="0")
             {
-                id_padre = consulta.value(0).toString();
+                id_padre="NULL";
+                id_hijo ="0";
             }
-        }
-        cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
-        cadena_consulta_tabla_medcert = "SELECT * FROM ver_mediciones('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
-        qDebug()<<"Cadena para ver hijos: "<<cadena_consulta_tabla_principal;
+            else
+            {
+                id_hijo = id_padre;
+                cadenamover = "SELECT id_padre FROM \""+ tabla + "_Relacion\" WHERE id_hijo = "+ id_padre + ";";
+                consulta.exec(cadenamover);
+                while (consulta.next())
+                {
+                    id_padre = consulta.value(0).toString();
+                }
+            }
         }
         break;
     }
     case movimiento::ABAJO:
     {
         QString cod = tablaPrincipal->model()->index(tablaPrincipal->currentIndex().row(),0).data().toString();
-        qDebug()<<cod;
         id_padre=id_hijo;
-        QString consultabajar = "SELECT id FROM \""+codigo+"_Conceptos\" WHERE codigo='"+cod+"';";
-        consulta.exec(consultabajar);
-        qDebug()<<"Bajar1: "<<consultabajar;
+        cadenamover = "SELECT id FROM \""+tabla+"_Conceptos\" WHERE codigo='"+cod+"';";
+        consulta.exec(cadenamover);
         while (consulta.next())
         {
             id_hijo = consulta.value(0).toString();
         }
-        cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
-        cadena_consulta_tabla_medcert = "SELECT * FROM ver_mediciones('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
-        qDebug()<<"Bajar2: "<<cadena_consulta_tabla_principal;
         break;
     }
     case movimiento::DERECHA:
     {
-        //O->Siguiente();
+        cadenamover = "SELECT id_hijo FROM \"" + tabla + "_Relacion\" WHERE id_padre = "\
+                + id_padre + " AND posicion = (SELECT posicion from \""+ \
+                tabla + "_Relacion\" WHERE id_padre = " + id_padre + " AND id_hijo = " + id_hijo +")+ 1;";
+        consulta.exec(cadenamover);
+        while (consulta.next())
+        {
+            id_hijo = consulta.value(0).toString();
+        }
         break;
     }
     case movimiento::IZQUIERDA:
     {
-        //O->Anterior();
+        cadenamover = "SELECT id_hijo FROM \"" + tabla + "_Relacion\" WHERE id_padre = "\
+                + id_padre + " AND posicion = (SELECT posicion from \""+ \
+                tabla + "_Relacion\" WHERE id_padre = " + id_padre + " AND id_hijo = " + id_hijo +")- 1;";
+        consulta.exec(cadenamover);
+        while (consulta.next())
+        {
+            id_hijo = consulta.value(0).toString();
+        }
         break;
     }
     default:
         break;
     }
-    modeloTablaP->QuitarIndicadorFilaVacia();
+    cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+tabla+"',"+ id_padre + ","+ id_hijo+")";
+    cadena_consulta_tabla_medcert = "SELECT * FROM ver_mediciones('"+tabla+"',"+ id_padre + ","+ id_hijo+")";
     tablaPrincipal->clearSelection();
     RefrescarVista();
 }
@@ -270,15 +281,6 @@ void Instancia::Mover(int tipomovimiento)
 void Instancia::VerArbol()
 {
     //arbol->setVisible(!arbol->isVisible());
-}
-
-void Instancia::IrAInicio()
-{
-    id_padre="NULL";
-    id_hijo ="0";
-    cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
-    cadena_consulta_tabla_medcert = "SELECT * FROM ver_mediciones('"+codigo+"',"+ id_padre + ","+ id_hijo+")";
-    RefrescarVista();
 }
 
 void Instancia::TablaSeleccionarTodo(QWidget* widgetactivo)
@@ -307,14 +309,12 @@ void Instancia::TablaDeseleccionarTodo(QWidget* widgetactivo)
 
 void Instancia::Undo()
 {
-    /*qDebug()<<"Undo en: "<<O->LeeResumenObra();
-    pila->undo();*/
+    pila->undo();
 }
 
 void Instancia::Redo()
 {
-  /*  qDebug()<<"Redo en: "<<O->LeeResumenObra();
-    pila->redo();*/
+    pila->redo();
 }
 
 void Instancia::RefrescarVista()
@@ -349,7 +349,7 @@ void Instancia::RefrescarVista()
 
 void Instancia::EscribirTexto()
 {
-   QString cadenavertexto = "SELECT ver_texto('" + codigo + "'," + id_hijo+");";
+   QString cadenavertexto = "SELECT ver_texto('" + tabla + "'," + id_hijo+");";
    qDebug()<<cadenavertexto;
    consulta.exec(cadenavertexto);
    QString descripcion;

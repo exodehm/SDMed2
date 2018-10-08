@@ -8,7 +8,7 @@
 #include <QtSql/QSqlError>
 #include <QDebug>
 
-ModeloBase::ModeloBase(const QString &cadenaInicio, QObject *parent):consulta(cadenaInicio),QSqlQueryModel(parent)
+ModeloBase::ModeloBase(const QString &cadenaInicio, QUndoStack *p, QObject *parent):consulta(cadenaInicio),pila(p), QSqlQueryModel(parent)
 {
     hayFilaVacia=false;
     naturalezapadre = (int)Naturaleza::CAPITULO;
@@ -151,11 +151,6 @@ Qt::ItemFlags ModeloBase::flags(const QModelIndex &index) const
     return  QAbstractItemModel::flags(index);
 }
 
-bool ModeloBase::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-
-}
-
 bool ModeloBase::insertRows(int row, int count, const QModelIndex &parent)
 {
     Q_UNUSED(parent);
@@ -197,10 +192,9 @@ int ModeloBase::FilaVacia()
 
 void ModeloBase::ActualizarDatos(QString cadena_consulta)
 {
-    qDebug()<<"NU;_COLUMNAS "<<NUM_COLUMNAS;
+    hayFilaVacia = false;
     datos.clear();
-    LeyendasCabecera[tipoColumna::PARCIAL].clear();
-    qDebug()<<"Consulta: "<<cadena_consulta;
+    //qDebug()<<"Consulta: "<<cadena_consulta;
     consulta.exec(cadena_consulta);
     QList<QVariant> lineaDatos;
     while (consulta.next())
@@ -212,21 +206,7 @@ void ModeloBase::ActualizarDatos(QString cadena_consulta)
         datos.append(lineaDatos);
         lineaDatos.clear();
     }
-    if (!datos.isEmpty())
-    {
-        for(int i=0; i<datos.at(0).length(); i++)
-        {
-            //leo la naturaleza del concepto padre
-            qDebug()<<"i: "<<i;
-            if (i==tipoColumna::NATURALEZA)
-            {
-                naturalezapadre = datos.at(0).at(i).toInt();
-            }
-            QString datocabecera =datos.at(0).at(i).toString();
-            datocabecera.prepend(LeyendasCabecera[i]);
-            datos[0][i] = static_cast<QVariant>(datocabecera);
-        }
-    }
+    PrepararCabecera(datos);
     if (datos.size()<=1)//añado una fila extra para poder insertar hijos en caso de hojas
     {
         hayFilaVacia = true;

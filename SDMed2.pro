@@ -43,7 +43,8 @@ SOURCES += main.cpp\
     Dialogos/dialogotablaslistadoobras.cpp \
     Ficheros/abrirguardarbc3.cpp \
     Dialogos/dialogoadvertenciaborrarbbdd.cpp \
-    Modelos/Modelobase.cpp
+    Modelos/Modelobase.cpp \
+    Undo/undoeditarprincipal.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -76,7 +77,8 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogotablaslistadoobras.h \
     Ficheros/abrirguardarbc3.h \
     Dialogos/dialogoadvertenciaborrarbbdd.h \
-    Modelos/Modelobase.h
+    Modelos/Modelobase.h \
+    Undo/undoeditarprincipal.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \

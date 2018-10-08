@@ -7,7 +7,7 @@
 #include <QtSql/QSqlError>
 #include <QDebug>
 
-MedCertModel::MedCertModel(const QString &cadenaInicio, QObject *parent):ModeloBase(cadenaInicio, parent)
+MedCertModel::MedCertModel(const QString &cadenaInicio, QUndoStack *p,QObject *parent):ModeloBase(cadenaInicio, p, parent)
 {
     NUM_COLUMNAS = 9;
     //if (tabla==tipoTablaMedicion::MEDICION)
@@ -35,7 +35,26 @@ MedCertModel::~MedCertModel()
     qDebug()<<"Destructor modelo MedCertModel";
 }
 
+bool MedCertModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+
+}
+
 bool MedCertModel::EsPartida()
 {
 
+}
+
+void MedCertModel::PrepararCabecera(QList<QList<QVariant> > &datos)
+{
+    //if (!datos.isEmpty())
+    {
+        QList<QVariant>cabecera;
+        for (int i=0;i<LeyendasCabecera.size();i++)
+        {
+            //qDebug()<<"cabecera: "<<static_cast<QVariant>(LeyendasCabecera[i]);
+            cabecera.append(static_cast<QVariant>(LeyendasCabecera[i]));
+        }
+        datos.prepend(cabecera);
+    }
 }

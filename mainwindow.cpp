@@ -116,8 +116,8 @@ QList<QList<QVariant>> MainWindow::VerObrasEnBBDD()
         bool obraabierta = false;
         for (auto elem : ListaObras)
         {
-            qDebug()<<"Listado de obras abiertas: "<<elem->LeeCodigo()<<"<-->"<<elem->LeeResumen();
-            if (nombrecodigo == elem->LeeCodigo())
+            qDebug()<<"Listado de obras abiertas: "<<elem->LeeTabla()<<"<-->"<<elem->LeeResumen();
+            if (nombrecodigo == elem->LeeTabla())
             {
                 obraabierta = true;
             }            
@@ -248,7 +248,7 @@ void MainWindow::BorrarBBDD(QStringList datosobra)
         auto it = ListaObras.begin();
         foreach (Instancia* nombreobra, ListaObras)
         {
-            if (nombreobra->LeeCodigo() == datosobra.at(0))
+            if (nombreobra->LeeTabla() == datosobra.at(0))
             {
                 respuesta = QMessageBox::question(
                             this,
@@ -260,7 +260,6 @@ void MainWindow::BorrarBBDD(QStringList datosobra)
                 {
                     //primera accion, borrar la obra de la ventana principal
                     obraActual = it;
-                    qDebug()<<"leer cifrado "<<(*it)->LeeCodigo();
                     ActionCerrar();
                     //segunda accion, exportar a bc3 si esta seleccionada la accion
                     if (d->Exportar())
@@ -348,29 +347,41 @@ void MainWindow::ActionCortar()
 
 void MainWindow::ActionUndo()
 {
-
+    if (HayObra())
+    {
+        (*obraActual)->Undo();
+    }
 }
 
 void MainWindow::ActionRedo()
 {
-
+    if (HayObra())
+    {
+        (*obraActual)->Redo();
+    }
 }
 
 void MainWindow::ActionAdelante()
 {
-
+    if (HayObra())
+    {
+        (*obraActual)->Mover(movimiento::DERECHA);
+    }
 }
 
 void MainWindow::ActionAtras()
 {
-
+    if (HayObra())
+    {
+        (*obraActual)->Mover(movimiento::IZQUIERDA);
+    }
 }
 
 void MainWindow::ActionInicio()
 {
     if (HayObra())
     {
-        (*obraActual)->IrAInicio();
+        (*obraActual)->Mover(movimiento::INICIO);
     }
 }
 
@@ -473,9 +484,8 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     /*QObject::connect(nuevaobra.miobra,SIGNAL(CopiarP()),this,SLOT(ActionCopiar()));
     QObject::connect(nuevaobra.miobra,SIGNAL(PegarP()),this,SLOT(ActionPegar()));
     QObject::connect(nuevaobra.miobra,SIGNAL(CopiarM()),this,SLOT(ActionCopiar()));
-    QObject::connect(nuevaobra.miobra,SIGNAL(PegarM()),this,SLOT(ActionPegar()));
-    QObject::connect(nuevaobra.miobra,SIGNAL(ActivarBoton(int)),this,SLOT(ActivarDesactivarBotonesPila(int)));*/
-    Instancia* NuevaObra =new Instancia(_codigo,_resumen);
+    QObject::connect(nuevaobra.miobra,SIGNAL(PegarM()),this,SLOT(ActionPegar()));*/
+    Instancia* NuevaObra =new Instancia(_codigo,_resumen,this);
     ui->actionGuardar->setEnabled(true);
     ui->actionCerrar->setEnabled(true);
     comboMedCert->setEnabled(true);
@@ -489,6 +499,7 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     //ActivarDesactivarBotonesPila(obraActual->miobra->Pila()->index());
     QString leyenda = QString(tr("Creada la obra %1").arg(_resumen));
     statusBar()->showMessage(leyenda,5000);
+    QObject::connect(NuevaObra,SIGNAL(ActivarBoton(int)),this,SLOT(ActivarDesactivarBotonesPila(int)));
 }
 
 void MainWindow::CambiarObraActual(int indice)

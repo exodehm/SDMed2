@@ -21,7 +21,7 @@ namespace tipoTablaMedicion {
 }
 
 namespace movimiento {
-    enum {ARRIBA, ABAJO, IZQUIERDA, DERECHA};
+    enum {INICIO, ARRIBA, ABAJO, IZQUIERDA, DERECHA};
 }
 
 namespace precio {

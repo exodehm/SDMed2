@@ -37,7 +37,7 @@ public:
     void VerArbol();
     void AjustarPresupuesto(float cantidades[2]);
 
-    const QString& LeeCodigo() const;
+    const QString& LeeTabla() const;
     const QString& LeeResumen() const;
 
     //int TipoFichero(TEXTO nombrefichero);
@@ -45,8 +45,7 @@ public:
 public slots:
 
     void SubirNivel();
-    void BajarNivel();
-    void IrAInicio();
+    void BajarNivel();    
 
     void TablaSeleccionarTodo(QWidget* widgetactivo);
     void TablaDeseleccionarTodo(QWidget* widgetactivo);
@@ -113,7 +112,7 @@ private:
 
     QString id_padre,id_hijo;
     QSqlQuery consulta;
-    QString codigo,resumen;
+    QString tabla,resumen;
 
     QString textoPartidaInicial;
 

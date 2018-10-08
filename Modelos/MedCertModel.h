@@ -10,10 +10,13 @@ class MedCertModel : public ModeloBase
 
 public:
 
-    MedCertModel(const QString& cadenaInicio, QObject* parent=nullptr);
+    MedCertModel(const QString& cadenaInicio, QUndoStack *p, QObject* parent=nullptr);
     ~MedCertModel();
 
+    bool setData(const QModelIndex & index, const QVariant& value, int role);
+
     bool EsPartida();
+    void PrepararCabecera(QList<QList<QVariant>>&datos);
 };
 
 
