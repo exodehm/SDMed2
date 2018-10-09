@@ -8,7 +8,7 @@ class TablaPrincipalModel : public ModeloBase
     Q_OBJECT
 public:
 
-    TablaPrincipalModel(const QString& cadenaInicio, QUndoStack *p, QObject* parent=nullptr);
+    TablaPrincipalModel(const QString &tabla, const QString& cadenaInicio, QUndoStack *p, QObject* parent=nullptr);
     ~TablaPrincipalModel();
 
     bool setData(const QModelIndex & index, const QVariant& value, int role);

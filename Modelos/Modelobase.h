@@ -13,7 +13,7 @@ class ModeloBase: public QSqlQueryModel
 
 public:
 
-    ModeloBase(const QString& cadenaInicio, QUndoStack* p, QObject* parent=nullptr);
+    ModeloBase(const QString& tabla, const QString& cadenaInicio, QUndoStack* p, QObject* parent=nullptr);
     ~ModeloBase();
     bool esColumnaNumerica(int columna) const;
     void QuitarIndicadorFilaVacia();
@@ -46,6 +46,7 @@ protected:
     QSqlQuery consulta;
     int naturalezapadre;
     QUndoStack* pila;
+    QString tabla;
 };
 
 #endif // MODELOBASE_H

@@ -8,7 +8,7 @@
 #include <QtSql/QSqlError>
 #include <QDebug>
 
-TablaPrincipalModel::TablaPrincipalModel(const QString &cadenaInicio, QUndoStack *p, QObject *parent):ModeloBase(cadenaInicio, p, parent)
+TablaPrincipalModel::TablaPrincipalModel(const QString &tabla, const QString &cadenaInicio, QUndoStack *p, QObject *parent):ModeloBase(tabla, cadenaInicio, p, parent)
 {
     NUM_COLUMNAS = 11;
     LeyendasCabecera.append(tr("Código\n"));
@@ -41,8 +41,13 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
             //EditarCodigo(index,value);
             break;
         case tipoColumna::NATURALEZA:
-            qDebug()<<"editando naturaleza: "<<value.toString();
-            //EditarNaturaleza(index,value);
+        {
+            QString descripcion = "Editar resumen con el codigo: ";
+            QModelIndex indice = index;
+            indice = this->index(index.row(),index.column()-1);//la columna de la tabla donde esta el codigo
+            pila->push(new UndoEditarNaturaleza(tabla, indice.data().toString(),QString(),index.data(), value, descripcion));
+            return true;
+        }
             break;
         case tipoColumna::UD:
             qDebug()<<"editando unidad";
@@ -50,19 +55,30 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
             break;
         case tipoColumna::RESUMEN:
         {
-            qDebug()<<"editando resumen";
-            QString descripcion = "Editar resumen";
-            pila->push(new UndoEditarPrincipal(index.data().toString(), value.toString(), descripcion));
+            QString descripcion = "Editar resumen con el codigo: ";
+            QModelIndex indice = index;
+            indice = this->index(index.row(),index.column()-3);//la columna de la tabla donde esta el codigo
+            pila->push(new UndoEditarResumen(tabla, indice.data().toString(),QString(),index.data(), value, descripcion));
             return true;
         }
             break;
         case tipoColumna::CANPRES:
-            qDebug()<<"editando cantidad";
-            //EditarCantidad(index,value);
+        {
+            /*QString descripcion = "Editar precio con el codigo: ";
+            QModelIndex indice = index;
+            indice = this->index(index.row(),index.column()-5);//la columna de la tabla donde esta el codigo
+            pila->push(new UndoEditarPrecio(tabla, indice.data().toString(),QString(),index.data(), value, descripcion));*/
+            return true;
+        }
             break;
         case tipoColumna::PRPRES:
-            qDebug()<<"editando precio";
-            //EditarPrecio(index, value);
+        {
+            QString descripcion = "Editar precio con el codigo: ";
+            QModelIndex indice = index;
+            indice = this->index(index.row(),index.column()-7);//la columna de la tabla donde esta el codigo
+            pila->push(new UndoEditarPrecio(tabla, indice.data().toString(),QString(),index.data(), value, descripcion));
+            return true;
+        }
             break;
         default:
             break;
@@ -72,11 +88,9 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
     return false;
 }
 
-
-
 bool TablaPrincipalModel::EsPartida()
 {
-    return naturalezapadre == 7;
+    return naturalezapadre == static_cast<int>(Naturaleza::PARTIDA);
 }
 
 void TablaPrincipalModel::PrepararCabecera(QList<QList<QVariant> > &datos)

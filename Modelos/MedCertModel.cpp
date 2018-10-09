@@ -7,7 +7,7 @@
 #include <QtSql/QSqlError>
 #include <QDebug>
 
-MedCertModel::MedCertModel(const QString &cadenaInicio, QUndoStack *p,QObject *parent):ModeloBase(cadenaInicio, p, parent)
+MedCertModel::MedCertModel(const QString &tabla, const QString &cadenaInicio, QUndoStack *p, QObject *parent):ModeloBase(tabla, cadenaInicio, p, parent)
 {
     NUM_COLUMNAS = 9;
     //if (tabla==tipoTablaMedicion::MEDICION)

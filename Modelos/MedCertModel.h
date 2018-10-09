@@ -10,7 +10,7 @@ class MedCertModel : public ModeloBase
 
 public:
 
-    MedCertModel(const QString& cadenaInicio, QUndoStack *p, QObject* parent=nullptr);
+    MedCertModel(const QString &tabla, const QString& cadenaInicio, QUndoStack *p, QObject* parent=nullptr);
     ~MedCertModel();
 
     bool setData(const QModelIndex & index, const QVariant& value, int role);

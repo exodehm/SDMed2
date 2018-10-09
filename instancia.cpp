@@ -59,18 +59,18 @@ void Instancia::GenerarUI()
     arbol = new QTableView;
     separadorTablas = new QSplitter(Qt::Vertical);
     //tabla principal
-    modeloTablaP = new TablaPrincipalModel(cadena_consulta_tabla_principal, pila);
+    modeloTablaP = new TablaPrincipalModel(tabla, cadena_consulta_tabla_principal, pila);
     tablaPrincipal = new TablaPrincipal(modeloTablaP->columnCount(QModelIndex()));        
     tablaPrincipal->setObjectName("TablaP");
     tablaPrincipal->setModel(modeloTablaP);
     separadorTablas->addWidget(tablaPrincipal);
     //tabla mediciones
-    modeloTablaMed = new MedCertModel(cadena_consulta_tabla_medcert, pila);
+    modeloTablaMed = new MedCertModel(tabla, cadena_consulta_tabla_medcert, pila);
     tablaMediciones =  new TablaMedCert(modeloTablaMed->columnCount(QModelIndex()));
     tablaMediciones->setObjectName("TablaMC");
     tablaMediciones->setModel(modeloTablaMed);
     //tabla certificaciones
-    modeloTablaCert = new MedCertModel(cadena_consulta_tabla_medcert, pila);
+    modeloTablaCert = new MedCertModel(tabla, cadena_consulta_tabla_medcert, pila);
     tablaCertificaciones =  new TablaMedCert(modeloTablaCert->columnCount(QModelIndex()));
     tablaCertificaciones->setModel(modeloTablaCert);
     tablaCertificaciones->setEnabled(false);
