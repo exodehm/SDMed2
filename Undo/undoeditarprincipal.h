@@ -59,4 +59,19 @@ public:
     void redo();
 };
 
+
+/*************CANTIDAD**************/
+
+
+class UndoEditarCantidad : public UndoEditarPrincipal
+{
+public:
+    UndoEditarCantidad (QString tabla, QString cod_padre, QString cod_hijo,
+                       QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion);
+
+    void undo();
+    void redo();
+};
+
+
 #endif // UNDOEDITARPRINCIPAL_H

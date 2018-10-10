@@ -142,18 +142,18 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
         QStringList relaciones = resto.split("\\");
         for (int i=0; i<nHijos; i++)
         {
-            //qDebug()<<"Vuelta "<<i<<nHijos<<" - "<<relaciones.size()<<"Num hjijos: "<<nHijos;
+            qDebug()<<"Vuelta "<<i<<nHijos<<" - "<<relaciones.size()<<"Num hjijos: "<<nHijos;
             for (int j=0;j<3;j++)
             {
                 registros[j] = relaciones.first();
                 relaciones.pop_front();
             }
-            //qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0];
-            //qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0]<<"Cantidad: "<<registros[2];
+            qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0];
+            qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0]<<"Cantidad: "<<registros[2];
             QString cadenainsertar = "SELECT insertar_partida('"+ codigo + \
-                    +"','"+padre+"','"+registros[0]+"','"+registros[2]+"','"+QString::number(i)+"');" ;
+                    +"','"+padre+"','"+registros[0]+"','',NULL,'"+registros[2]+"','"+QString::number(i)+"');" ;
 
-            //qDebug()<<"Cadena insertar: "<<cadenainsertar;
+            qDebug()<<"Cadena insertar: "<<cadenainsertar;
             consulta.exec(cadenainsertar);
         }
     }
@@ -178,11 +178,15 @@ void AbrirGuardarBC3::procesarMediciones(QStringList &registroM)
             for (int j=0;j<6;j++)
             {
                 conceptos[j]= medicion.first();
-                medicion.pop_front();               
+                medicion.pop_front();
+                if (conceptos[j].isEmpty())
+                {
+                    conceptos[j]="NULL";
+                }
             }
-            //qDebug()<<"Insertar "<<conceptos[0]<<"','"<<conceptos[1]<<"','"<<conceptos[2]<<"','"<<conceptos[3]<<"','"<<conceptos[4]<<"','"<<conceptos[5]<<";";
+            qDebug()<<"Insertar "<<conceptos[0]<<"','"<<conceptos[1]<<"','"<<conceptos[2]<<"','"<<conceptos[3]<<"','"<<conceptos[4]<<"','"<<conceptos[5]<<";";
             cadenainsertarmedicion = "SELECT insertar_medicion('"+codigo+"','"+padre+"','"+hijo+"',"+conceptos[0]+",'"+conceptos[1]+"',"+conceptos[2]+","+conceptos[3]+","+conceptos[4]+","+conceptos[5]+");";
-            //qDebug()<<"cadena insertar medicion"<<cadenainsertarmedicion;
+            qDebug()<<"cadena insertar medicion"<<cadenainsertarmedicion;
             consulta.exec(cadenainsertarmedicion);
         }
     }

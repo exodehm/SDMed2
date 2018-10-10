@@ -34,6 +34,9 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
 {
     if (index.isValid() && (role == Qt::EditRole /*|| role == Qt::DisplayRole*/) && value.toString()!=index.data().toString())
     {
+        QString codpadre = datos.at(0).at(tipoColumna::CODIGO).toString();
+        QString codhijo = this->index(index.row(),tipoColumna::CODIGO).data().toString();
+        codpadre.remove(LeyendasCabecera[0]);
         switch (index.column())
         {
         case tipoColumna::CODIGO:
@@ -43,9 +46,7 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
         case tipoColumna::NATURALEZA:
         {
             QString descripcion = "Editar resumen con el codigo: ";
-            QModelIndex indice = index;
-            indice = this->index(index.row(),index.column()-1);//la columna de la tabla donde esta el codigo
-            pila->push(new UndoEditarNaturaleza(tabla, indice.data().toString(),QString(),index.data(), value, descripcion));
+            pila->push(new UndoEditarNaturaleza(tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
         }
             break;
@@ -56,27 +57,21 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
         case tipoColumna::RESUMEN:
         {
             QString descripcion = "Editar resumen con el codigo: ";
-            QModelIndex indice = index;
-            indice = this->index(index.row(),index.column()-3);//la columna de la tabla donde esta el codigo
-            pila->push(new UndoEditarResumen(tabla, indice.data().toString(),QString(),index.data(), value, descripcion));
+            pila->push(new UndoEditarResumen(tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
         }
             break;
         case tipoColumna::CANPRES:
         {
-            /*QString descripcion = "Editar precio con el codigo: ";
-            QModelIndex indice = index;
-            indice = this->index(index.row(),index.column()-5);//la columna de la tabla donde esta el codigo
-            pila->push(new UndoEditarPrecio(tabla, indice.data().toString(),QString(),index.data(), value, descripcion));*/
+            QString descripcion = "Editar precio con el codigo: ";
+            pila->push(new UndoEditarCantidad(tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
         }
             break;
         case tipoColumna::PRPRES:
         {
             QString descripcion = "Editar precio con el codigo: ";
-            QModelIndex indice = index;
-            indice = this->index(index.row(),index.column()-7);//la columna de la tabla donde esta el codigo
-            pila->push(new UndoEditarPrecio(tabla, indice.data().toString(),QString(),index.data(), value, descripcion));
+            pila->push(new UndoEditarPrecio(tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
         }
             break;
