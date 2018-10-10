@@ -51,8 +51,11 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
         }
             break;
         case tipoColumna::UD:
-            qDebug()<<"editando unidad";
-            //EditarUnidad(index,value.toString());
+        {
+            QString descripcion = "Editar ud con el codigo: ";
+            pila->push(new UndoEditarUnidad(tabla, codpadre, codhijo, index.data(), value, descripcion));
+            return true;
+        }
             break;
         case tipoColumna::RESUMEN:
         {

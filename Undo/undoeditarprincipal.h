@@ -74,4 +74,18 @@ public:
 };
 
 
+/*************UNIDAD**************/
+
+
+class UndoEditarUnidad : public UndoEditarPrincipal
+{
+public:
+    UndoEditarUnidad (QString tabla, QString cod_padre, QString cod_hijo,
+                       QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion);
+
+    void undo();
+    void redo();
+};
+
+
 #endif // UNDOEDITARPRINCIPAL_H

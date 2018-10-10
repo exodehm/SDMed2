@@ -89,3 +89,24 @@ void UndoEditarCantidad::redo()
     qDebug()<<cadenaconsulta;
     consulta.exec(cadenaconsulta);
 }
+
+
+/************UNIDAD*******************/
+UndoEditarUnidad::UndoEditarUnidad(QString tabla, QString cod_padre, QString cod_hijo,
+                                         QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion):
+    UndoEditarPrincipal(tabla,cod_padre,cod_hijo,dato_antiguo,dato_nuevo,descripcion)
+{
+}
+
+void UndoEditarUnidad::undo()
+{
+    QString cadenaconsulta = "SELECT modificar_unidad('" +tabla+ "','" +codigohijo+ "','" +datoAntiguo.toString()+ "');";
+    consulta.exec(cadenaconsulta);
+}
+
+void UndoEditarUnidad::redo()
+{
+    QString cadenaconsulta = "SELECT modificar_unidad('" +tabla+ "','" +codigohijo+ "','" +datoNuevo.toString()+ "');";
+    qDebug()<<cadenaconsulta;
+    consulta.exec(cadenaconsulta);
+}
