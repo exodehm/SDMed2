@@ -8,6 +8,26 @@ UndoEditarPrincipal::UndoEditarPrincipal(QString tabla, QString cod_padre, QStri
     qDebug()<<"Descripcion: "<<descripcion;
 }
 
+/************UNIDAD*******************/
+UndoEditarUnidad::UndoEditarUnidad(QString tabla, QString cod_padre, QString cod_hijo,
+                                         QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion):
+    UndoEditarPrincipal(tabla,cod_padre,cod_hijo,dato_antiguo,dato_nuevo,descripcion)
+{
+}
+
+void UndoEditarUnidad::undo()
+{
+    QString cadenaconsulta = "SELECT modificar_unidad('" +tabla+ "','" +codigohijo+ "','" +datoAntiguo.toString()+ "');";
+    consulta.exec(cadenaconsulta);
+}
+
+void UndoEditarUnidad::redo()
+{
+    QString cadenaconsulta = "SELECT modificar_unidad('" +tabla+ "','" +codigohijo+ "','" +datoNuevo.toString()+ "');";
+    qDebug()<<cadenaconsulta;
+    consulta.exec(cadenaconsulta);
+}
+
 /************RESUMEN*******************/
 UndoEditarResumen::UndoEditarResumen(QString tabla, QString cod_padre, QString cod_hijo,
                                          QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion):
@@ -75,38 +95,51 @@ UndoEditarCantidad::UndoEditarCantidad(QString tabla, QString cod_padre, QString
                                          QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion):
     UndoEditarPrincipal(tabla,cod_padre,cod_hijo,dato_antiguo,dato_nuevo,descripcion)
 {
+    QString cadenaGuardarLineasMediciom = "SELECT * from ver_lineas_medicion('"+tabla+"','"+cod_padre+"','"+cod_hijo+"');";
+    //qDebug()<<cadenaGuardarLineasMediciom;
+    consulta.exec(cadenaGuardarLineasMediciom);
+    QList<QVariant>linea;
+    while (consulta.next()) {
+        for (int i=0;i<6;i++)
+        {
+            //qDebug()<<consulta.value(i);
+            linea.append(consulta.value(i));
+        }
+        lineasMedicion.append(linea);
+        linea.clear();
+    }
 }
 
 void UndoEditarCantidad::undo()
 {
-    QString cadenaconsulta = "SELECT modificar_cantidad('" +tabla+ "','" +codigopadre + "','" +codigohijo+ "'," + datoAntiguo.toString()+ ");";
-    consulta.exec(cadenaconsulta);
+    if (lineasMedicion.isEmpty())//si no hay medicion guardada pongo el antiguo valor
+    {
+        QString cadenaconsulta = "SELECT modificar_cantidad('" +tabla+ "','" +codigopadre + "','" +codigohijo+ "'," + datoAntiguo.toString()+ ");";
+        consulta.exec(cadenaconsulta);
+    }
+    else//si la hay, repongo la medicion
+    {
+        foreach (const QList<QVariant>&linea, lineasMedicion)
+        {
+            QString cadenainsertarlineasmedicion = "SELECT insertar_medicion('"+ tabla +"','"+ codigopadre +"','"+\
+                    codigohijo+"','"+linea.at(0).toString()+\
+                    "','"+ linea.at(1).toString()+\
+                    "','"+ linea.at(2).toString()+\
+                    "','"+ linea.at(3).toString()+\
+                    "','"+ linea.at(4).toString()+\
+                    "','"+ linea.at(5).toString()+"');";
+            qDebug()<<cadenainsertarlineasmedicion;
+            consulta.exec(cadenainsertarlineasmedicion);
+        }
+    }
 }
 
 void UndoEditarCantidad::redo()
-{
+{   
+    QString cadenaborrarlineasmedicion = "SELECT borrar_lineas_medicion('"+tabla+"','"+codigopadre+"','"+codigohijo+"');";
+    qDebug()<<"cadenaborrarlineasmedicion"<<cadenaborrarlineasmedicion;
+    consulta.exec(cadenaborrarlineasmedicion);
     QString cadenaconsulta = "SELECT modificar_cantidad('" +tabla+ "','" +codigopadre + "','" +codigohijo+ "'," + datoNuevo.toString()+ ");";
-    qDebug()<<cadenaconsulta;
-    consulta.exec(cadenaconsulta);
-}
-
-
-/************UNIDAD*******************/
-UndoEditarUnidad::UndoEditarUnidad(QString tabla, QString cod_padre, QString cod_hijo,
-                                         QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion):
-    UndoEditarPrincipal(tabla,cod_padre,cod_hijo,dato_antiguo,dato_nuevo,descripcion)
-{
-}
-
-void UndoEditarUnidad::undo()
-{
-    QString cadenaconsulta = "SELECT modificar_unidad('" +tabla+ "','" +codigohijo+ "','" +datoAntiguo.toString()+ "');";
-    consulta.exec(cadenaconsulta);
-}
-
-void UndoEditarUnidad::redo()
-{
-    QString cadenaconsulta = "SELECT modificar_unidad('" +tabla+ "','" +codigohijo+ "','" +datoNuevo.toString()+ "');";
     qDebug()<<cadenaconsulta;
     consulta.exec(cadenaconsulta);
 }

@@ -44,7 +44,8 @@ SOURCES += main.cpp\
     Ficheros/abrirguardarbc3.cpp \
     Dialogos/dialogoadvertenciaborrarbbdd.cpp \
     Modelos/Modelobase.cpp \
-    Undo/undoeditarprincipal.cpp
+    Undo/undoeditarprincipal.cpp \
+    Dialogos/dialogosuprimirmedicion.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -78,7 +79,8 @@ HEADERS  += mainwindow.h \
     Ficheros/abrirguardarbc3.h \
     Dialogos/dialogoadvertenciaborrarbbdd.h \
     Modelos/Modelobase.h \
-    Undo/undoeditarprincipal.h
+    Undo/undoeditarprincipal.h \
+    Dialogos/dialogosuprimirmedicion.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \

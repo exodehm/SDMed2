@@ -4,8 +4,9 @@
 #include <map>
 #include <QIcon>
 #include <QDebug>
+#include "./defs.h"
 
-enum class Naturaleza{SIN_CLASIFICAR, MANO_DE_OBRA, MAQUINARIA, MATERIALES, COMP_RESIDUO,CLASIF_RESIDUO, CAPITULO, PARTIDA};
+//enum class Naturaleza{SIN_CLASIFICAR, MANO_DE_OBRA, MAQUINARIA, MATERIALES, COMP_RESIDUO,CLASIF_RESIDUO, CAPITULO, PARTIDA};
 using IconsMap = std::map<Naturaleza,QIcon>;
 
 class RepoIconos

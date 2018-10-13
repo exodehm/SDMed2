@@ -2,7 +2,7 @@
 #include "./Undo/undoeditarprincipal.h"
 #include "consultas.h"
 #include "../defs.h"
-#include "../iconos.h"
+#include "./Dialogos/dialogosuprimirmedicion.h"
 
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
@@ -67,6 +67,21 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
         case tipoColumna::CANPRES:
         {
             QString descripcion = "Editar precio con el codigo: ";
+            QString cadenahaymediciones = "SELECT hay_medicion ('"+ tabla + "','" + codpadre + "','" + codhijo+"');";
+            consulta.exec(cadenahaymediciones);
+            bool hayMedicion;
+            while (consulta.next())
+            {
+                hayMedicion = consulta.value(0).toBool();
+            }
+            if (hayMedicion)
+            {
+                DialogoSuprimirMedicion* d = new DialogoSuprimirMedicion(tabla);
+                if (d->exec()==QDialog::Rejected || d->Suprimir()==false)
+                {
+                    return false;
+                }
+            }
             pila->push(new UndoEditarCantidad(tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
         }

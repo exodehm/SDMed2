@@ -170,7 +170,7 @@ void AbrirGuardarBC3::procesarMediciones(QStringList &registroM)
         QString hijo = padrehijo.at(1);
         QStringList medicion = datos.at(3).split("\\");
         int lineasmedicion = medicion.size()/6;
-        QString conceptos[6];
+        QString conceptos[6];//TIPO[0]/COMENTARIO{ # ID_BIM }[1]/UNIDADES[2]/LONGITUD[3]/LATITUD[4]/ALTURA[5]
         //qDebug()<<"Padre: "<<padre<<"hijo: "<<hijo;
         QString cadenainsertarmedicion;
         for (int i=0;i<lineasmedicion;i++)
