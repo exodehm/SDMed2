@@ -19,8 +19,20 @@ protected:
 };
 
 
-/*************UNIDAD**************/
+/*************CODIGO**************/
 
+class UndoEditarCodigo : public UndoEditarPrincipal
+{
+public:
+    UndoEditarCodigo (QString tabla, QString cod_padre, QString cod_hijo,
+                       QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion);
+
+    void undo();
+    void redo();
+};
+
+
+/*************UNIDAD**************/
 
 class UndoEditarUnidad : public UndoEditarPrincipal
 {
@@ -35,7 +47,6 @@ public:
 
 /*************RESUMEN**************/
 
-
 class UndoEditarResumen : public UndoEditarPrincipal
 {
 public:
@@ -49,7 +60,6 @@ public:
 
 /*************NATURALEZA**************/
 
-
 class UndoEditarNaturaleza : public UndoEditarPrincipal
 {
 public:
@@ -60,22 +70,7 @@ public:
     void redo();
 };
 
-/*************PRECIO**************/
-
-
-class UndoEditarPrecio : public UndoEditarPrincipal
-{
-public:
-    UndoEditarPrecio (QString tabla, QString cod_padre, QString cod_hijo,
-                       QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion);
-
-    void undo();
-    void redo();
-};
-
-
 /*************CANTIDAD**************/
-
 
 class UndoEditarCantidad : public UndoEditarPrincipal
 {
@@ -90,5 +85,21 @@ protected:
     QList<QList<QVariant>>lineasMedicion;
 };
 
+
+/*************PRECIO**************/
+
+class UndoEditarPrecio : public UndoEditarPrincipal
+{
+public:
+    UndoEditarPrecio (QString tabla, QString cod_padre, QString cod_hijo,
+                       QVariant dato_antiguo, QVariant dato_nuevo, int opc, QVariant descripcion);
+
+    void undo();
+    void redo();
+
+private:
+    int opcion;
+    QList<QList<QVariant>>partidas;
+};
 
 #endif // UNDOEDITARPRINCIPAL_H

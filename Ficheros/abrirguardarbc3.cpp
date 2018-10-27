@@ -148,10 +148,9 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
                 registros[j] = relaciones.first();
                 relaciones.pop_front();
             }
-            qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0];
             qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0]<<"Cantidad: "<<registros[2];
             QString cadenainsertar = "SELECT insertar_partida('"+ codigo + \
-                    +"','"+padre+"','"+registros[0]+"','',NULL,'"+registros[2]+"','"+QString::number(i)+"');" ;
+                    +"','"+padre+"','"+registros[0]+"','"+QString::number(i)+"','','',NULL,"+registros[2]+");" ;
 
             qDebug()<<"Cadena insertar: "<<cadenainsertar;
             consulta.exec(cadenainsertar);

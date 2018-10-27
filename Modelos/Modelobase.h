@@ -32,6 +32,7 @@ public:
     void ActualizarDatos(QString cadena_consulta);
     virtual bool EsPartida()=0;
     virtual void PrepararCabecera(QList<QList<QVariant>>&datos)=0;
+    virtual void BorrarFilas(QList<int>filas)=0;
 
 public slots:
     //void MostrarHijos (QModelIndex idpadre);

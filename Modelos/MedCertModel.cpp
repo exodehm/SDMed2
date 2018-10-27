@@ -58,3 +58,9 @@ void MedCertModel::PrepararCabecera(QList<QList<QVariant> > &datos)
         datos.prepend(cabecera);
     }
 }
+
+void MedCertModel::BorrarFilas(QList<int> filas)
+{
+    foreach (const int& i, filas)
+    qDebug()<<"Borrar Fila en tabla de mediciones: "<<i;
+}

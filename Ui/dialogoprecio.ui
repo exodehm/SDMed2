@@ -43,7 +43,7 @@
      <item>
       <widget class="QRadioButton" name="radioButton_Ajustar">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="text">
         <string>Ajustar</string>

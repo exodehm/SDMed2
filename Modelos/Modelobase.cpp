@@ -167,7 +167,7 @@ bool ModeloBase::insertRows(int row, int count, const QModelIndex &parent)
 
 bool ModeloBase::removeRows(int filaInicial, int numFilas, const QModelIndex &parent)
 {
-
+    qDebug()<<"Remove rows en modelo base";
 }
 
 bool ModeloBase::HayFilaVacia()
@@ -201,7 +201,17 @@ void ModeloBase::ActualizarDatos(QString cadena_consulta)
     {
         for (int i=0;i<NUM_COLUMNAS;i++)
         {
-            lineaDatos.append(consulta.value(i));
+            //qDebug()<<"CONSULTA.VALUE["<<i<<"] "<<consulta.value(i);
+            if (consulta.value(i).type()==QVariant::Double)
+            {
+                float numero = consulta.value(i).toDouble();
+                QString numeroletra = QString::number(numero, 'f', 2);
+                lineaDatos.append(static_cast<QVariant>(numeroletra));
+            }
+            else
+            {
+                lineaDatos.append(consulta.value(i));
+            }
         }
         datos.append(lineaDatos);
         lineaDatos.clear();

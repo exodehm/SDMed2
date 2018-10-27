@@ -12,9 +12,12 @@ public:
     ~TablaPrincipalModel();
 
     bool setData(const QModelIndex & index, const QVariant& value, int role);
+    bool removeRows(int fila, int numFilas, const QModelIndex& parent);
 
     bool EsPartida();
     void PrepararCabecera(QList<QList<QVariant>>&datos);
+
+    void BorrarFilas(QList<int>filas);
 
 public slots:
     //void MostrarHijos (QModelIndex idpadre);

@@ -17,6 +17,8 @@ public:
 
     bool EsPartida();
     void PrepararCabecera(QList<QList<QVariant>>&datos);
+
+    void BorrarFilas(QList<int>filas);
 };
 
 

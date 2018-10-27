@@ -22,17 +22,21 @@ bool Filter::eventFilter(QObject *obj, QEvent* event)
             {
                 if (tabla->selectionModel()->isRowSelected(indice.row(),QModelIndex()))//si hay alguna fila seleccionada
                 {
-                    //table->model()->removeRows(table->selectionModel()->selectedRows().first().row(),table->selectionModel()->selectedRows().size());
-                    tabla->setUpdatesEnabled(false);
-                    QModelIndexList indexes = tabla->selectionModel()->selectedIndexes();
+                    //tabla->model()->removeRows(tabla->selectionModel()->selectedRows().first().row(),tabla->selectionModel()->selectedRows().size());
+                    //tabla->setUpdatesEnabled(false);
+                    QModelIndexList indices = tabla->selectionModel()->selectedIndexes();
                     QList<int> listaIndices;                    
-                    foreach (QModelIndex i, indexes)
+                    foreach (QModelIndex i, indices)
                     {
                         if (!listaIndices.contains(i.row()))
                             listaIndices.prepend(i.row());//pongo prepend para borrar de atras a adelante de la lista de medicion
                     }
                     qSort(listaIndices);
-                    tabla->BorrarFilas(listaIndices);
+                    ModeloBase* modelo = qobject_cast<ModeloBase*>(tabla->model());
+                    if (modelo)
+                    {
+                        modelo->BorrarFilas(listaIndices);
+                    }
                     tabla->setUpdatesEnabled(true);
                 }
                 else

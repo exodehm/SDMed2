@@ -44,5 +44,9 @@ namespace tipoFichero {
     enum{NOVALIDO, SEG, BC3};
 }
 
+namespace partidasSQL{
+    enum{CODIGOPADRE, CODIGOHIJO, POSICION, UNIDAD, RESUMEN, DESCRIPCION, PRECIO, CANTIDAD, NATURALEZA, FECHA};
+}
+
 
 #endif // DEFS_H

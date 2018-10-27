@@ -1,8 +1,10 @@
 #include "tablaprincipalmodel.h"
 #include "./Undo/undoeditarprincipal.h"
+#include "./Undo/undoinsertarprincipal.h"
 #include "consultas.h"
 #include "../defs.h"
 #include "./Dialogos/dialogosuprimirmedicion.h"
+#include "../Dialogos/dialogoprecio.h"
 
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
@@ -40,8 +42,18 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
         switch (index.column())
         {
         case tipoColumna::CODIGO:
-            qDebug()<<"editando código";
-            //EditarCodigo(index,value);
+            if (index.data().isNull())//cuando este en una fila vacia se insertara una nueva partida
+            {
+                QString descripcion = "Insertar nueva partida con el codigo: ";
+                pila->push(new UndoInsertarPartidas(tabla, codpadre, value, index.row(),descripcion));
+                return true;
+            }
+            else
+            {
+                QString descripcion = "Editar codigo con el codigo: ";
+                pila->push(new UndoEditarCodigo(tabla, codpadre, codhijo, index.data(), value, descripcion));
+                return true;
+            }            
             break;
         case tipoColumna::NATURALEZA:
         {
@@ -66,7 +78,7 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
             break;
         case tipoColumna::CANPRES:
         {
-            QString descripcion = "Editar precio con el codigo: ";
+            QString descripcion = "Editar cantidad con el codigo: ";
             QString cadenahaymediciones = "SELECT hay_medicion ('"+ tabla + "','" + codpadre + "','" + codhijo+"');";
             consulta.exec(cadenahaymediciones);
             bool hayMedicion;
@@ -89,7 +101,43 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
         case tipoColumna::PRPRES:
         {
             QString descripcion = "Editar precio con el codigo: ";
-            pila->push(new UndoEditarPrecio(tabla, codpadre, codhijo, index.data(), value, descripcion));
+            QString cadenahaydescompuesto = "SELECT hay_descomposicion ('"+ tabla + "','" + codhijo+"');";
+            consulta.exec(cadenahaydescompuesto);
+            bool hayDescompuesto;
+            while (consulta.next())
+            {
+                hayDescompuesto = consulta.value(0).toBool();
+            }
+            if (hayDescompuesto)
+            {
+                DialogoPrecio* d = new DialogoPrecio(tabla);
+                if (d->exec()==QDialog::Rejected || d->Respuesta()==0)
+                {
+                    return false;
+                }
+                else
+                {
+                    switch (d->Respuesta())
+                    {
+                    case precio::BLOQUEAR:
+                        qDebug()<<"Bloquear precio";
+                        break;
+                    case precio::AJUSTAR:
+                        qDebug()<<"Ajustar precio";
+                        break;
+                    case precio::SUPRIMIR:
+                        pila->push(new UndoEditarPrecio(tabla, codpadre, codhijo, index.data(), value, precio::SUPRIMIR, descripcion));
+                        break;
+                    default:
+                        return false;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                pila->push(new UndoEditarPrecio(tabla, codpadre, codhijo, index.data(), value, precio::MODIFICAR, descripcion));
+            }
             return true;
         }
             break;
@@ -101,6 +149,26 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
     return false;
 }
 
+bool TablaPrincipalModel::removeRows(int fila, int numFilas, const QModelIndex& parent)
+{
+    Q_UNUSED(parent);
+    beginRemoveRows(QModelIndex(), fila, fila+numFilas-1);
+    qDebug()<<"Borrar Fila en tabla principal: "<<fila;
+    qDebug()<<datos.at(fila).at(0);
+    //QStringList partidasparaborrar;
+    //partidasparaborrar.append(datos.at(0).at(0));//codigo padre
+    //miobra->PosicionarAristaActual(filaInicial);
+    //miobra->BorrarPartida();
+    //ActualizarDatos(miobra->LeeDescompuesto());
+    /*if (rowCount(QModelIndex())==0)
+    {
+        insertRow(0);
+    }*/
+    endRemoveRows();
+    //layoutChanged();
+    return true;
+}
+
 bool TablaPrincipalModel::EsPartida()
 {
     return naturalezapadre == static_cast<int>(Naturaleza::PARTIDA);
@@ -108,7 +176,7 @@ bool TablaPrincipalModel::EsPartida()
 
 void TablaPrincipalModel::PrepararCabecera(QList<QList<QVariant> > &datos)
 {
-    //if (!datos.isEmpty())
+    if (!datos.isEmpty())
     {     for(int i=0; i<datos.at(0).length(); i++)
         {
             //leo la naturaleza del concepto padre
@@ -121,4 +189,18 @@ void TablaPrincipalModel::PrepararCabecera(QList<QList<QVariant> > &datos)
             datos[0][i] = static_cast<QVariant>(datocabecera);
         }
     }
+}
+
+void TablaPrincipalModel::BorrarFilas(QList<int> filas)
+{
+    QStringList partidasborrar;
+    QString codpadre = datos.at(0).at(0).toString();
+    codpadre.remove("Código\n");
+    partidasborrar.append(codpadre);
+    foreach (const int& i, filas)
+    {
+        //removeRows(i,1,QModelIndex());
+        partidasborrar.append(datos.at(i+1).at(0).toString());//añado 1 por la cabecera
+    }
+    pila->push(new UndoBorrarPartidas(tabla,partidasborrar,QVariant()));
 }

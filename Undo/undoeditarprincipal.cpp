@@ -1,5 +1,29 @@
 #include "undoeditarprincipal.h"
+#include "./defs.h"
 #include <QDebug>
+
+
+/************CODIGO*******************/
+UndoEditarCodigo::UndoEditarCodigo(QString tabla, QString cod_padre, QString cod_hijo,
+                                         QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion):
+    UndoEditarPrincipal(tabla,cod_padre,cod_hijo,dato_antiguo,dato_nuevo,descripcion)
+{
+}
+//EN ESTE CASO SOLO NOS INTERESA EL codigohijo y el datoNuevo
+void UndoEditarCodigo::undo()
+{
+    QString cadenaconsulta = "SELECT modificar_codigo('" +tabla+ "','" +datoNuevo.toString()+ "','" +codigohijo+ "');";
+    qDebug()<<cadenaconsulta;
+    consulta.exec(cadenaconsulta);
+}
+
+void UndoEditarCodigo::redo()
+{
+    QString cadenaconsulta = "SELECT modificar_codigo('" +tabla+ "','" +codigohijo+ "','" +datoNuevo.toString()+ "');";
+    qDebug()<<cadenaconsulta;
+    consulta.exec(cadenaconsulta);
+}
+
 
 UndoEditarPrincipal::UndoEditarPrincipal(QString tabla, QString cod_padre, QString cod_hijo,
                                          QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion):
@@ -69,27 +93,6 @@ void UndoEditarNaturaleza::redo()
 }
 
 
-/************PRECIO*******************/
-UndoEditarPrecio::UndoEditarPrecio(QString tabla, QString cod_padre, QString cod_hijo,
-                                         QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion):
-    UndoEditarPrincipal(tabla,cod_padre,cod_hijo,dato_antiguo,dato_nuevo,descripcion)
-{
-}
-
-void UndoEditarPrecio::undo()
-{
-    QString cadenaconsulta = "SELECT modificar_precio('" +tabla+ "','" +codigohijo+ "'," +datoAntiguo.toString()+ ");";
-    consulta.exec(cadenaconsulta);
-}
-
-void UndoEditarPrecio::redo()
-{
-    QString cadenaconsulta = "SELECT modificar_precio('" +tabla+ "','" +codigohijo+ "'," +datoNuevo.toString()+ ");";
-    qDebug()<<cadenaconsulta;
-    consulta.exec(cadenaconsulta);
-}
-
-
 /************CANTIDAD*******************/
 UndoEditarCantidad::UndoEditarCantidad(QString tabla, QString cod_padre, QString cod_hijo,
                                          QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion):
@@ -142,4 +145,80 @@ void UndoEditarCantidad::redo()
     QString cadenaconsulta = "SELECT modificar_cantidad('" +tabla+ "','" +codigopadre + "','" +codigohijo+ "'," + datoNuevo.toString()+ ");";
     qDebug()<<cadenaconsulta;
     consulta.exec(cadenaconsulta);
+}
+
+/************PRECIO*******************/
+UndoEditarPrecio::UndoEditarPrecio(QString tabla, QString cod_padre, QString cod_hijo,
+                                         QVariant dato_antiguo, QVariant dato_nuevo, int opc, QVariant descripcion):
+    opcion(opc), UndoEditarPrincipal(tabla,cod_padre,cod_hijo,dato_antiguo,dato_nuevo,descripcion)
+{
+}
+
+void UndoEditarPrecio::undo()
+{
+    QString cadenaconsulta;
+    switch (opcion)
+    {
+    case precio::SUPRIMIR:
+    {
+        qDebug()<<"restablecer lo borrado";
+        QString cadenaconsulta;
+        for (int i = 0;i<partidas.size();i++)
+        {
+            cadenaconsulta = "SELECT insertar_partida('"+tabla+ "','" +\
+                    partidas.at(i).at(partidasSQL::CODIGOPADRE).toString()+"','" +\
+                    partidas.at(i).at(partidasSQL::CODIGOHIJO).toString()+ "','"+\
+                    partidas.at(i).at(partidasSQL::POSICION).toString()+ "','"+\
+                    partidas.at(i).at(partidasSQL::UNIDAD).toString()+ "','"+\
+                    partidas.at(i).at(partidasSQL::RESUMEN).toString()+ "','"+\
+                    partidas.at(i).at(partidasSQL::DESCRIPCION).toString()+ "','"+\
+                    partidas.at(i).at(partidasSQL::PRECIO).toString()+ "','"+\
+                    partidas.at(i).at(partidasSQL::CANTIDAD).toString()+ "','"+\
+                    partidas.at(i).at(partidasSQL::NATURALEZA).toString()+ "','"+\
+                    partidas.at(i).at(partidasSQL::FECHA).toString()+"');";
+            qDebug()<<cadenaconsulta;
+            consulta.exec(cadenaconsulta);           
+        }
+    }
+        break;
+    case precio::MODIFICAR:
+        cadenaconsulta= "SELECT modificar_precio('" +tabla+ "','" +codigohijo+ "'," +datoAntiguo.toString()+ ");";
+        qDebug()<<cadenaconsulta;
+        break;
+    }
+    consulta.exec(cadenaconsulta);
+}
+
+void UndoEditarPrecio::redo()
+{
+    QString cadenaconsulta;
+    switch (opcion)
+    {
+    case precio::SUPRIMIR:
+    {
+        //primer paso-->borrar el descompuesto
+        cadenaconsulta = "SELECT * from borrar_descompuesto('"+tabla+"','"+codigohijo+"');";
+        qDebug()<<"Cadena suprimir descompuesto: "<<cadenaconsulta;
+        consulta.exec(cadenaconsulta);
+        QList<QVariant>linea;
+        while (consulta.next())
+        {
+            for (int i=0;i<10;i++)
+            {
+                linea.append(consulta.value(i));
+            }
+            partidas.append(linea);
+            linea.clear();
+        }
+        //segundo paso-->cambiar el precio
+        cadenaconsulta = "SELECT modificar_precio('"+tabla+"','"+codigohijo+"','"+datoNuevo.toString()+"');";
+        consulta.exec(cadenaconsulta);
+        break;
+    }
+    case precio::MODIFICAR:
+        cadenaconsulta= "SELECT modificar_precio('" +tabla+ "','" +codigohijo+ "'," +datoNuevo.toString()+ ");";
+        qDebug()<<cadenaconsulta;
+        consulta.exec(cadenaconsulta);
+        break;
+    }    
 }

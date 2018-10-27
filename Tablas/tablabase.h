@@ -31,8 +31,7 @@ public:
     QHeaderView* CabeceraDeTabla();
     int limiteIzquierdo;
     int limiteDerecho;
-    void PonerDelegadoOriginal(int columna);
-    void BorrarFilas(QList<int>indices);
+    void PonerDelegadoOriginal(int columna);    
 
 private slots:
     void Bloquear(int columna);

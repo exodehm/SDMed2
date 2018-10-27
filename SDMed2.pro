@@ -45,7 +45,9 @@ SOURCES += main.cpp\
     Dialogos/dialogoadvertenciaborrarbbdd.cpp \
     Modelos/Modelobase.cpp \
     Undo/undoeditarprincipal.cpp \
-    Dialogos/dialogosuprimirmedicion.cpp
+    Dialogos/dialogosuprimirmedicion.cpp \
+    Dialogos/dialogoprecio.cpp \
+    Undo/undoinsertarprincipal.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -80,7 +82,9 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogoadvertenciaborrarbbdd.h \
     Modelos/Modelobase.h \
     Undo/undoeditarprincipal.h \
-    Dialogos/dialogosuprimirmedicion.h
+    Dialogos/dialogosuprimirmedicion.h \
+    Dialogos/dialogoprecio.h \
+    Undo/undoinsertarprincipal.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
