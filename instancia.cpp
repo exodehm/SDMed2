@@ -30,8 +30,6 @@ Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resum
 {
     id_padre ="NULL";
     id_hijo = "0";
-    cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+tabla+"',"+ id_padre + ","+ id_hijo+")";
-    cadena_consulta_tabla_medcert = "SELECT * FROM ver_mediciones('"+tabla+"',"+ id_padre + ","+ id_hijo+")";
     pila = new QUndoStack(this);
     GenerarUI();
 }
@@ -59,21 +57,25 @@ void Instancia::GenerarUI()
     arbol = new QTableView;
     separadorTablas = new QSplitter(Qt::Vertical);
     //tabla principal
-    modeloTablaP = new TablaPrincipalModel(tabla, cadena_consulta_tabla_principal, pila);
+    modeloTablaP = new TablaPrincipalModel(tabla, id_padre, id_hijo, pila);
     tablaPrincipal = new TablaPrincipal(modeloTablaP->columnCount(QModelIndex()));        
     tablaPrincipal->setObjectName("TablaP");
     tablaPrincipal->setModel(modeloTablaP);
     separadorTablas->addWidget(tablaPrincipal);
     //tabla mediciones
-    modeloTablaMed = new MedCertModel(tabla, cadena_consulta_tabla_medcert, pila);
-    tablaMediciones =  new TablaMedCert(modeloTablaMed->columnCount(QModelIndex()));
+    modeloTablaMed = new MedCertModel(tabla, id_padre, id_hijo, pila);
+    tablaMediciones = new TablaMedCert(modeloTablaMed->columnCount(QModelIndex()));
     tablaMediciones->setObjectName("TablaMC");
     tablaMediciones->setModel(modeloTablaMed);
+    //en principio la columna de id es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
+    tablaMediciones->setColumnHidden(tipoColumna::ID,true);
     //tabla certificaciones
-    modeloTablaCert = new MedCertModel(tabla, cadena_consulta_tabla_medcert, pila);
+    modeloTablaCert = new MedCertModel(tabla, id_padre, id_hijo, pila);
     tablaCertificaciones =  new TablaMedCert(modeloTablaCert->columnCount(QModelIndex()));
     tablaCertificaciones->setModel(modeloTablaCert);
     tablaCertificaciones->setEnabled(false);
+    //igual pasa con las id de la tabla de certificaciones
+    tablaCertificaciones->setColumnHidden(tipoColumna::ID,true);
     //tab para las tablas de mediciones y certificaciones
     separadorTablasMedicion = new QTabWidget;
     separadorTablasMedicion->addTab(tablaMediciones,QString(tr("Medicion")));
@@ -272,8 +274,6 @@ void Instancia::Mover(int tipomovimiento)
     default:
         break;
     }
-    cadena_consulta_tabla_principal = "SELECT * FROM ver_hijos('"+tabla+"',"+ id_padre + ","+ id_hijo+")";
-    cadena_consulta_tabla_medcert = "SELECT * FROM ver_mediciones('"+tabla+"',"+ id_padre + ","+ id_hijo+")";
     tablaPrincipal->clearSelection();
     RefrescarVista();
 }
@@ -319,9 +319,9 @@ void Instancia::Redo()
 
 void Instancia::RefrescarVista()
 {
-    modeloTablaP->ActualizarDatos(cadena_consulta_tabla_principal);
-    modeloTablaMed->ActualizarDatos(cadena_consulta_tabla_medcert);
-    modeloTablaCert->ActualizarDatos(cadena_consulta_tabla_medcert);
+    modeloTablaP->ActualizarDatos(id_padre, id_hijo);
+    modeloTablaMed->ActualizarDatos(id_padre,id_hijo);
+    modeloTablaCert->ActualizarDatos(id_padre, id_hijo);
     //modeloArbol->ActualizarDatos();
     /*modeloTablaP->QuitarIndicadorFilaVacia();
     if (modeloTablaP->rowCount(QModelIndex())==0)

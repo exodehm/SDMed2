@@ -113,11 +113,6 @@ private:
     QString id_padre,id_hijo;
     QSqlQuery consulta;
     QString tabla,resumen;
-
-    QString textoPartidaInicial;
-
-    QString cadena_consulta_tabla_principal;
-    QString cadena_consulta_tabla_medcert;
 };
 
 #endif // INSTANCIA_H

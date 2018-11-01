@@ -10,7 +10,8 @@
 #include <QtSql/QSqlError>
 #include <QDebug>
 
-TablaPrincipalModel::TablaPrincipalModel(const QString &tabla, const QString &cadenaInicio, QUndoStack *p, QObject *parent):ModeloBase(tabla, cadenaInicio, p, parent)
+TablaPrincipalModel::TablaPrincipalModel(const QString &tabla, const QString &idpadre, const QString &idhijo, QUndoStack *p, QObject *parent):
+    ModeloBase(tabla, idpadre, idhijo, p, parent)
 {
     NUM_COLUMNAS = 11;
     LeyendasCabecera.append(tr("Código\n"));
@@ -24,7 +25,7 @@ TablaPrincipalModel::TablaPrincipalModel(const QString &tabla, const QString &ca
     LeyendasCabecera.append(tr("PrCert\n"));
     LeyendasCabecera.append(tr("ImpPres\n"));
     LeyendasCabecera.append(tr("ImpCert\n"));
-    ActualizarDatos(cadenaInicio);
+    ActualizarDatos(id_padre, id_hijo);
 }
 
 TablaPrincipalModel::~TablaPrincipalModel()
@@ -195,7 +196,7 @@ void TablaPrincipalModel::BorrarFilas(QList<int> filas)
 {
     QStringList partidasborrar;
     QString codpadre = datos.at(0).at(0).toString();
-    codpadre.remove("Código\n");
+    codpadre.remove(LeyendasCabecera[0]);
     partidasborrar.append(codpadre);
     foreach (const int& i, filas)
     {
@@ -203,4 +204,40 @@ void TablaPrincipalModel::BorrarFilas(QList<int> filas)
         partidasborrar.append(datos.at(i+1).at(0).toString());//añado 1 por la cabecera
     }
     pila->push(new UndoBorrarPartidas(tabla,partidasborrar,QVariant()));
+}
+
+void TablaPrincipalModel::ActualizarDatos(QString padre, QString hijo)
+{
+    hayFilaVacia = false;
+    datos.clear();
+    id_padre=padre;
+    id_hijo=hijo;
+    QString cadena_consulta = "SELECT * FROM ver_hijos('"+tabla+"',"+ id_padre + ","+ id_hijo+")";
+    consulta.exec(cadena_consulta);
+    QList<QVariant> lineaDatos;
+    while (consulta.next())
+    {
+        for (int i=0;i<NUM_COLUMNAS;i++)
+        {
+            //qDebug()<<"CONSULTA.VALUE["<<i<<"] "<<consulta.value(i);
+            if (consulta.value(i).type()==QVariant::Double)
+            {
+                float numero = consulta.value(i).toDouble();
+                QString numeroletra = QString::number(numero, 'f', 2);
+                lineaDatos.append(static_cast<QVariant>(numeroletra));
+            }
+            else
+            {
+                lineaDatos.append(consulta.value(i));
+            }
+        }
+        datos.append(lineaDatos);
+        lineaDatos.clear();
+    }
+    PrepararCabecera(datos);
+    if (datos.size()<=1)//añado una fila extra para poder insertar hijos en caso de hojas
+    {
+        hayFilaVacia = true;
+        filavacia=0;
+    }
 }

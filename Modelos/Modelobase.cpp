@@ -8,7 +8,8 @@
 #include <QtSql/QSqlError>
 #include <QDebug>
 
-ModeloBase::ModeloBase(const QString &tabla, const QString &cadenaInicio, QUndoStack *p, QObject *parent):tabla(tabla), consulta(cadenaInicio), pila(p), QSqlQueryModel(parent)
+ModeloBase::ModeloBase(const QString &tabla, const QString &idpadre, const QString &idhijo, QUndoStack *p, QObject *parent):
+    tabla(tabla), id_padre(idpadre),id_hijo(idhijo),consulta(idpadre), pila(p), QSqlQueryModel(parent)
 {
     hayFilaVacia=false;
     naturalezapadre = (int)Naturaleza::CAPITULO;
@@ -190,7 +191,7 @@ int ModeloBase::FilaVacia()
 }
 
 
-void ModeloBase::ActualizarDatos(QString cadena_consulta)
+/*void ModeloBase::ActualizarDatos(QString cadena_consulta)
 {
     hayFilaVacia = false;
     datos.clear();
@@ -201,7 +202,7 @@ void ModeloBase::ActualizarDatos(QString cadena_consulta)
     {
         for (int i=0;i<NUM_COLUMNAS;i++)
         {
-            //qDebug()<<"CONSULTA.VALUE["<<i<<"] "<<consulta.value(i);
+            qDebug()<<"CONSULTA.VALUE["<<i<<"] "<<consulta.value(i);
             if (consulta.value(i).type()==QVariant::Double)
             {
                 float numero = consulta.value(i).toDouble();
@@ -222,4 +223,10 @@ void ModeloBase::ActualizarDatos(QString cadena_consulta)
         hayFilaVacia = true;
         filavacia=0;
     }
+}*/
+
+void ModeloBase::ActualizarIds(QString idpadre, QString idhijo)
+{
+    id_padre=idpadre;
+    id_hijo=idhijo;
 }

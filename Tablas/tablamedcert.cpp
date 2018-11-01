@@ -19,7 +19,7 @@ TablaMedCert::TablaMedCert(int nColumnas, QWidget *parent): TablaBase(nColumnas,
     setItemDelegateForColumn(tipoColumna::PARCIAL,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumna::SUBTOTAL,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumna::FASE,dlgCB);
-    setItemDelegateForColumn(tipoColumna::ID,dlgCB);
+    setItemDelegateForColumn(tipoColumna::ID,dlgCB);    
 
     QObject::connect(cabeceraHorizontal, SIGNAL(sectionClicked(int)), this,SLOT(Bloquear(int)));
 }

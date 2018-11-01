@@ -13,7 +13,7 @@ class ModeloBase: public QSqlQueryModel
 
 public:
 
-    ModeloBase(const QString& tabla, const QString& cadenaInicio, QUndoStack* p, QObject* parent=nullptr);
+    ModeloBase(const QString& tabla, const QString& idpadre, const QString& idhijo, QUndoStack* p, QObject* parent=nullptr);
     ~ModeloBase();
     bool esColumnaNumerica(int columna) const;
     void QuitarIndicadorFilaVacia();
@@ -29,10 +29,11 @@ public:
 
     bool HayFilaVacia();
     int FilaVacia();
-    void ActualizarDatos(QString cadena_consulta);
+    virtual void ActualizarDatos(QString padre, QString hijo)=0;
     virtual bool EsPartida()=0;
     virtual void PrepararCabecera(QList<QList<QVariant>>&datos)=0;
     virtual void BorrarFilas(QList<int>filas)=0;
+    void ActualizarIds(QString idpadre, QString idhijo);
 
 public slots:
     //void MostrarHijos (QModelIndex idpadre);
@@ -48,6 +49,7 @@ protected:
     int naturalezapadre;
     QUndoStack* pila;
     QString tabla;
+    QString id_padre,id_hijo;
 };
 
 #endif // MODELOBASE_H
