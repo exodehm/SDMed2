@@ -28,8 +28,8 @@
 
 Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resumen(res),QWidget(parent)
 {
-    id_padre ="NULL";
-    id_hijo = "0";
+    codigopadre ="";
+    codigohijo = cod;
     pila = new QUndoStack(this);
     GenerarUI();
 }
@@ -57,20 +57,20 @@ void Instancia::GenerarUI()
     arbol = new QTableView;
     separadorTablas = new QSplitter(Qt::Vertical);
     //tabla principal
-    modeloTablaP = new TablaPrincipalModel(tabla, id_padre, id_hijo, pila);
-    tablaPrincipal = new TablaPrincipal(modeloTablaP->columnCount(QModelIndex()));        
+    modeloTablaP = new TablaPrincipalModel(tabla, codigopadre, codigohijo, pila);
+    tablaPrincipal = new TablaPrincipal(modeloTablaP->columnCount(QModelIndex()));
     tablaPrincipal->setObjectName("TablaP");
     tablaPrincipal->setModel(modeloTablaP);
     separadorTablas->addWidget(tablaPrincipal);
     //tabla mediciones
-    modeloTablaMed = new MedCertModel(tabla, id_padre, id_hijo, pila);
+    modeloTablaMed = new MedCertModel(tabla, codigopadre, codigohijo, pila);
     tablaMediciones = new TablaMedCert(modeloTablaMed->columnCount(QModelIndex()));
     tablaMediciones->setObjectName("TablaMC");
     tablaMediciones->setModel(modeloTablaMed);
     //en principio la columna de id es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
     tablaMediciones->setColumnHidden(tipoColumna::ID,true);
     //tabla certificaciones
-    modeloTablaCert = new MedCertModel(tabla, id_padre, id_hijo, pila);
+    modeloTablaCert = new MedCertModel(tabla, codigopadre, codigohijo, pila);
     tablaCertificaciones =  new TablaMedCert(modeloTablaCert->columnCount(QModelIndex()));
     tablaCertificaciones->setModel(modeloTablaCert);
     tablaCertificaciones->setEnabled(false);
@@ -104,21 +104,21 @@ void Instancia::GenerarUI()
 
     /************signals y slots*****************/
     QObject::connect(tablaPrincipal,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(BajarNivel()));
-    QObject::connect(tablaPrincipal->CabeceraDeTabla(),SIGNAL(sectionDoubleClicked(int)),this,SLOT(SubirNivel()));    
+    QObject::connect(tablaPrincipal->CabeceraDeTabla(),SIGNAL(sectionDoubleClicked(int)),this,SLOT(SubirNivel()));
     //QObject::connect(tablaPrincipal,SIGNAL(clicked(QModelIndex)),this,SLOT(PosicionarTablaP(QModelIndex)));
     //QObject::connect(tablaPrincipal,SIGNAL(CambiaFila(QModelIndex)),this,SLOT(PosicionarTablaP(QModelIndex)));
     //QObject::connect(tablaMediciones,SIGNAL(CambiaFila(QModelIndex)),this,SLOT(PosicionarTablaM(QModelIndex)));
     //QObject::connect(modeloTablaMed,SIGNAL(Posicionar(QModelIndex)),this,SLOT(PosicionarTablaM(QModelIndex)));
-   // QObject::connect(tablaPrincipal,SIGNAL(CopiarContenido()),this,SLOT(CopiarPartidasTablaP()));
+    // QObject::connect(tablaPrincipal,SIGNAL(CopiarContenido()),this,SLOT(CopiarPartidasTablaP()));
     //QObject::connect(tablaPrincipal,SIGNAL(PegarContenido()),this,SLOT(PegarPartidasTablaP()));
     //QObject::connect(tablaMediciones,SIGNAL(CopiarContenido()),this,SLOT(CopiarMedicionTablaM()));
-   // QObject::connect(tablaMediciones,SIGNAL(PegarContenido()),this,SLOT(PegarMedicionTablaM()));
+    // QObject::connect(tablaMediciones,SIGNAL(PegarContenido()),this,SLOT(PegarMedicionTablaM()));
 
-   // QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
+    // QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
     //QObject::connect(separadorTablasMedicion,SIGNAL(currentChanged(int)),this,SLOT(CambiarEntreMedicionYCertificacion(int)));
     QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(ActivarDesactivarUndoRedo(int)));
     QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
-   //QObject::connect(editor->LeeEditor(),SIGNAL(GuardaTexto()),this,SLOT(GuardarTextoPartida()));
+    //QObject::connect(editor->LeeEditor(),SIGNAL(GuardaTexto()),this,SLOT(GuardarTextoPartida()));
     //QObject::connect(editor,SIGNAL(GuardaTexto()),this,SLOT(GuardarTextoPartida()));
 }
 
@@ -209,27 +209,22 @@ void Instancia::Mover(int tipomovimiento)
     {
     case movimiento::INICIO:
     {
-        id_padre="NULL";
-        id_hijo ="0";
+        codigopadre="";
+        codigohijo ="0";
         break;
     }
     case movimiento::ARRIBA:
     {
-        if (id_padre!="NULL")
+        if (!codigopadre.isEmpty())
         {
-            if (id_padre=="0")
             {
-                id_padre="NULL";
-                id_hijo ="0";
-            }
-            else
-            {
-                id_hijo = id_padre;
-                cadenamover = "SELECT id_padre FROM \""+ tabla + "_Relacion\" WHERE id_hijo = "+ id_padre + ";";
+                codigohijo = codigopadre;
+                cadenamover = "SELECT codpadre FROM \""+ tabla + "_Relacion\" WHERE codhijo = '"+ codigopadre + "';";
+                qDebug()<<cadenamover;
                 consulta.exec(cadenamover);
                 while (consulta.next())
                 {
-                    id_padre = consulta.value(0).toString();
+                    codigopadre = consulta.value(0).toString();
                 }
             }
         }
@@ -238,36 +233,34 @@ void Instancia::Mover(int tipomovimiento)
     case movimiento::ABAJO:
     {
         QString cod = tablaPrincipal->model()->index(tablaPrincipal->currentIndex().row(),0).data().toString();
-        id_padre=id_hijo;
-        cadenamover = "SELECT id FROM \""+tabla+"_Conceptos\" WHERE codigo='"+cod+"';";
-        consulta.exec(cadenamover);
-        while (consulta.next())
+        if (!cod.isEmpty())
         {
-            id_hijo = consulta.value(0).toString();
+            codigopadre=codigohijo;
+            codigohijo = cod;
         }
         break;
     }
     case movimiento::DERECHA:
     {
         cadenamover = "SELECT id_hijo FROM \"" + tabla + "_Relacion\" WHERE id_padre = "\
-                + id_padre + " AND posicion = (SELECT posicion from \""+ \
-                tabla + "_Relacion\" WHERE id_padre = " + id_padre + " AND id_hijo = " + id_hijo +")+ 1;";
+                + codigopadre + " AND posicion = (SELECT posicion from \""+ \
+                tabla + "_Relacion\" WHERE id_padre = " + codigopadre + " AND id_hijo = " + codigohijo +")+ 1;";
         consulta.exec(cadenamover);
         while (consulta.next())
         {
-            id_hijo = consulta.value(0).toString();
+            codigohijo = consulta.value(0).toString();
         }
         break;
     }
     case movimiento::IZQUIERDA:
     {
         cadenamover = "SELECT id_hijo FROM \"" + tabla + "_Relacion\" WHERE id_padre = "\
-                + id_padre + " AND posicion = (SELECT posicion from \""+ \
-                tabla + "_Relacion\" WHERE id_padre = " + id_padre + " AND id_hijo = " + id_hijo +")- 1;";
+                + codigopadre + " AND posicion = (SELECT posicion from \""+ \
+                tabla + "_Relacion\" WHERE id_padre = " + codigopadre + " AND id_hijo = " + codigohijo +")- 1;";
         consulta.exec(cadenamover);
         while (consulta.next())
         {
-            id_hijo = consulta.value(0).toString();
+            codigohijo = consulta.value(0).toString();
         }
         break;
     }
@@ -285,7 +278,7 @@ void Instancia::VerArbol()
 
 void Instancia::TablaSeleccionarTodo(QWidget* widgetactivo)
 {
-   /* if (widgetactivo->objectName()=="TablaP")
+    /* if (widgetactivo->objectName()=="TablaP")
     {
         tablaPrincipal->selectAll();
     }
@@ -297,7 +290,7 @@ void Instancia::TablaSeleccionarTodo(QWidget* widgetactivo)
 
 void Instancia::TablaDeseleccionarTodo(QWidget* widgetactivo)
 {
-   /* if (widgetactivo->objectName()=="TablaP")
+    /* if (widgetactivo->objectName()=="TablaP")
     {
         tablaPrincipal->clearSelection();
     }
@@ -319,16 +312,16 @@ void Instancia::Redo()
 
 void Instancia::RefrescarVista()
 {
-    modeloTablaP->ActualizarDatos(id_padre, id_hijo);
-    modeloTablaMed->ActualizarDatos(id_padre,id_hijo);
-    modeloTablaCert->ActualizarDatos(id_padre, id_hijo);
+    modeloTablaP->ActualizarDatos(codigopadre, codigohijo);
+    modeloTablaMed->ActualizarDatos(codigopadre,codigohijo);
+    modeloTablaCert->ActualizarDatos(codigopadre, codigohijo);
     //modeloArbol->ActualizarDatos();
     /*modeloTablaP->QuitarIndicadorFilaVacia();
     if (modeloTablaP->rowCount(QModelIndex())==0)
     {
         modeloTablaP->insertRow(0);
     }*/
-    EscribirTexto();    
+    EscribirTexto();
     tablaPrincipal->resizeColumnsToContents();
     tablaMediciones->resizeColumnsToContents();
     tablaCertificaciones->resizeColumnsToContents();
@@ -336,7 +329,7 @@ void Instancia::RefrescarVista()
     GuardarTextoPartidaInicial();*/
     modeloTablaP->layoutChanged();
     modeloTablaMed->layoutChanged();
-    //modeloTablaCert->layoutChanged();    
+    //modeloTablaCert->layoutChanged();
     //tablaPrincipal->setCurrentIndex(indiceActual);
     separadorTablasMedicion->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
     /*modeloArbol->layoutChanged();
@@ -349,20 +342,20 @@ void Instancia::RefrescarVista()
 
 void Instancia::EscribirTexto()
 {
-   QString cadenavertexto = "SELECT ver_texto('" + tabla + "'," + id_hijo+");";
-   qDebug()<<cadenavertexto;
-   consulta.exec(cadenavertexto);
-   QString descripcion;
-   while (consulta.next())
-   {
-       descripcion = consulta.value(0).toString();
-   }
-   editor->EscribeTexto(descripcion);
+    QString cadenavertexto = "SELECT ver_texto('" + tabla + "','" + codigohijo+"');";
+    qDebug()<<cadenavertexto;
+    consulta.exec(cadenavertexto);
+    QString descripcion;
+    while (consulta.next())
+    {
+        descripcion = consulta.value(0).toString();
+    }
+    editor->EscribeTexto(descripcion);
 }
 
 void Instancia::PosicionarTablaP(QModelIndex indice)
 {
-   /* int linea = indice.row();
+    /* int linea = indice.row();
     if (modeloTablaP->HayFilaVacia())
     {
         if (linea > modeloTablaP->FilaVacia())
@@ -381,7 +374,7 @@ void Instancia::PosicionarTablaM(QModelIndex indice)
 
 void Instancia::GuardarTextoPartidaInicial()
 {
-   /* if (!O->EsPartidaVacia())
+    /* if (!O->EsPartidaVacia())
     {
         textoPartidaInicial = editor->LeeContenidoConFormato();
         //qDebug()<<"textoPartidaActual"<<textoPartidaInicial;
@@ -397,7 +390,7 @@ void Instancia::GuardarTextoPartida()
         if (tabla)
         {
             QString cadenaundo = ("Cambiar texto de partida a " + editor->LeeContenido());
-            pila->push(new UndoEditarTexto(O,modeloTablaP, QModelIndex(), textoPartidaInicial, editor->LeeContenidoConFormato(), cadenaundo));            
+            pila->push(new UndoEditarTexto(O,modeloTablaP, QModelIndex(), textoPartidaInicial, editor->LeeContenidoConFormato(), cadenaundo));
         }
     }*/
 }
@@ -409,7 +402,7 @@ void Instancia::GuardarTextoPartida()
 
 void Instancia::CopiarPartidasTablaP()
 {
-   // emit CopiarP();
+    // emit CopiarP();
 }
 
 void Instancia::CopiarMedicionTablaM()
@@ -522,7 +515,7 @@ void Instancia::CopiarMedicionPortapapeles(const QModelIndexList& lista)
             textoACopiar.append(modeloTablaMed->data(index).toString());
             textoACopiar.append('\t');
         }
-    }    
+    }
     textoACopiar.replace(",",".");
     int i=0, n=0;
     while (i<textoACopiar.size())
@@ -574,7 +567,7 @@ void Instancia::CambiarEntreMedicionYCertificacion(int n)
 
 void Instancia::GuardarBC3(QString filename)
 {
-   /* QFile ficheroBC3(filename);
+    /* QFile ficheroBC3(filename);
     if (ficheroBC3.open(QIODevice::WriteOnly|QIODevice::Text))
     {
         AbrirGuardarBC3* bc3 =  new AbrirGuardarBC3;

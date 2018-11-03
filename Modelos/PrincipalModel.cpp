@@ -191,6 +191,7 @@ bool PrincipalModel::insertRows(int row, int count, const QModelIndex & parent)
 void PrincipalModel::BorrarFilas(QList<int> filas)
 {
     QString cadenaundo = "Borrar filas";
+    qDebug()<<"Borra filas en tabla principal";
     //pila->push(new UndoBorrarPartidas(miobra,this,filas,cadenaundo));
 }
 

@@ -41,6 +41,7 @@ bool Filter::eventFilter(QObject *obj, QEvent* event)
                 }
                 else
                 {
+                    qDebug()<<"Borrandoooo datoooos";
                     tabla->model()->setData(tabla->currentIndex(),"",Qt::EditRole);//solo si hay una celda seleccionada
                 }
                 return true;

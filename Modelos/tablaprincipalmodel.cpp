@@ -212,7 +212,8 @@ void TablaPrincipalModel::ActualizarDatos(QString padre, QString hijo)
     datos.clear();
     id_padre=padre;
     id_hijo=hijo;
-    QString cadena_consulta = "SELECT * FROM ver_hijos('"+tabla+"',"+ id_padre + ","+ id_hijo+")";
+    QString cadena_consulta = "SELECT * FROM ver_hijos('"+tabla+"','"+ id_padre+"','"+ id_hijo+"')";
+    qDebug()<<cadena_consulta;
     consulta.exec(cadena_consulta);
     QList<QVariant> lineaDatos;
     while (consulta.next())

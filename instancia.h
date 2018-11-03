@@ -110,7 +110,7 @@ private:
 
     QUndoStack* pila;
 
-    QString id_padre,id_hijo;
+    QString codigopadre,codigohijo;
     QSqlQuery consulta;
     QString tabla,resumen;
 };

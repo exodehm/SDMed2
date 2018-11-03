@@ -153,7 +153,7 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
                     +"','"+padre+"','"+registros[0]+"','"+QString::number(i)+"','','',NULL,"+registros[2]+");" ;
 
             qDebug()<<"Cadena insertar: "<<cadenainsertar;
-            consulta.exec(cadenainsertar);
+            consulta.exec(cadenainsertar);            
         }
     }
 }

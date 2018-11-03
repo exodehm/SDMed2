@@ -32,3 +32,24 @@ void UndoEditarMedicion::redo()
     consulta.exec(cadena);
 }
 
+
+UndoBorrarLineasMedicion::UndoBorrarLineasMedicion(const QList<QList<QVariant> > &lineas, QVariant descripcion):
+    datos(lineas)
+{    
+    qDebug()<<descripcion;
+}
+
+void UndoBorrarLineasMedicion::undo()
+{
+
+}
+
+void UndoBorrarLineasMedicion::redo()
+{
+    foreach (const QList<QVariant>&d, datos)
+    {
+        QString cadenaborrar = "SELECT borrar_linea_medicion('"+d.at(0).toString()+"','"+d.at(10).toString()+"');";
+        qDebug()<<cadenaborrar;
+        consulta.exec(cadenaborrar);
+    }
+}

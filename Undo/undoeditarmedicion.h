@@ -23,4 +23,18 @@ private:
 
 };
 
+class UndoBorrarLineasMedicion : public QUndoCommand
+{
+public:
+    UndoBorrarLineasMedicion(const QList<QList<QVariant>>&lineas,QVariant descripcion);
+
+    void undo();
+    void redo();
+
+private:
+    QSqlQuery consulta;
+    QList<QList<QVariant>>datos;
+
+};
+
 #endif // UNDOEDITARMEDICION_H
