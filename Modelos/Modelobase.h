@@ -33,6 +33,7 @@ public:
     virtual bool EsPartida()=0;
     virtual void PrepararCabecera(QList<QList<QVariant>>&datos)=0;
     virtual void BorrarFilas(QList<int>filas)=0;
+    virtual void InsertarFila(int fila)=0;
     void ActualizarIds(QString idpadre, QString idhijo);
 
 public slots:
@@ -49,7 +50,7 @@ protected:
     int naturalezapadre;
     QUndoStack* pila;
     QString tabla;
-    QString id_padre,id_hijo;
+    QString codigopadre,codigohijo;
 };
 
 #endif // MODELOBASE_H

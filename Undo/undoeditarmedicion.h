@@ -23,18 +23,33 @@ private:
 
 };
 
+/*************BORRAR LINEA MEDICION******************/
 class UndoBorrarLineasMedicion : public QUndoCommand
 {
 public:
-    UndoBorrarLineasMedicion(const QList<QList<QVariant>>&lineas,QVariant descripcion);
+    UndoBorrarLineasMedicion(const QString& nombretabla,const QList<QString>&idsborrar,QVariant descripcion);
+
+    void undo();
+    void redo();
+
+private:    
+    QString tabla, cadenaborrar;
+    QList<QString>ids;
+    QSqlQuery consulta;
+};
+
+/*************INSERTAR LINEA MEDICION******************/
+class UndoInsertarLineaMedicion : public QUndoCommand
+{
+public:
+    UndoInsertarLineaMedicion(const QString& nombretabla,const QString& codpadre, const QString& codhijo, const int pos, QVariant descripcion);
 
     void undo();
     void redo();
 
 private:
+    QString tabla, codigopadre, codigohijo;
+    int posicion;
     QSqlQuery consulta;
-    QList<QList<QVariant>>datos;
-
 };
-
 #endif // UNDOEDITARMEDICION_H

@@ -19,6 +19,7 @@ public:
     void PrepararCabecera(QList<QList<QVariant>>&datos);
 
     void BorrarFilas(QList<int>filas);
+    void InsertarFila(int fila);
     void ActualizarDatos(QString padre, QString hijo);
 };
 

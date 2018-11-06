@@ -210,7 +210,7 @@ void Instancia::Mover(int tipomovimiento)
     case movimiento::INICIO:
     {
         codigopadre="";
-        codigohijo ="0";
+        codigohijo =tabla;
         break;
     }
     case movimiento::ARRIBA:
@@ -242,9 +242,9 @@ void Instancia::Mover(int tipomovimiento)
     }
     case movimiento::DERECHA:
     {
-        cadenamover = "SELECT id_hijo FROM \"" + tabla + "_Relacion\" WHERE id_padre = "\
-                + codigopadre + " AND posicion = (SELECT posicion from \""+ \
-                tabla + "_Relacion\" WHERE id_padre = " + codigopadre + " AND id_hijo = " + codigohijo +")+ 1;";
+        cadenamover = "SELECT codhijo FROM \"" + tabla + "_Relacion\" WHERE codpadre = '"\
+                + codigopadre + "' AND posicion = (SELECT posicion FROM \""+ \
+                tabla + "_Relacion\" WHERE codpadre = '" + codigopadre + "' AND codhijo = '" + codigohijo +"')+ 1;";
         consulta.exec(cadenamover);
         while (consulta.next())
         {
@@ -254,9 +254,9 @@ void Instancia::Mover(int tipomovimiento)
     }
     case movimiento::IZQUIERDA:
     {
-        cadenamover = "SELECT id_hijo FROM \"" + tabla + "_Relacion\" WHERE id_padre = "\
-                + codigopadre + " AND posicion = (SELECT posicion from \""+ \
-                tabla + "_Relacion\" WHERE id_padre = " + codigopadre + " AND id_hijo = " + codigohijo +")- 1;";
+        cadenamover = "SELECT codhijo FROM \"" + tabla + "_Relacion\" WHERE codpadre = '"\
+                + codigopadre + "' AND posicion = (SELECT posicion FROM \""+ \
+                tabla + "_Relacion\" WHERE codpadre = '" + codigopadre + "' AND codhijo = '" + codigohijo +"')- 1;";
         consulta.exec(cadenamover);
         while (consulta.next())
         {

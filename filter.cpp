@@ -206,7 +206,11 @@ bool Filter::eventFilter(QObject *obj, QEvent* event)
                     {
                         tabla->selectRow(tabla->currentIndex().row());
                     }
-                    tabla->model()->insertRows(indice.row(),tabla->selectionModel()->selectedRows().size());
+                    ModeloBase* modelo = qobject_cast<ModeloBase*>(tabla->model());
+                    if (modelo)
+                    {
+                        modelo->InsertarFila(indice.row());
+                    }
                     QModelIndex ind = tabla->model()->index(indice.row(),tabla->limiteIzquierdo);
                     tabla->setCurrentIndex(ind);
                     return true;

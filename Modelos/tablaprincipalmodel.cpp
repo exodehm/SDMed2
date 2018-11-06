@@ -25,7 +25,7 @@ TablaPrincipalModel::TablaPrincipalModel(const QString &tabla, const QString &id
     LeyendasCabecera.append(tr("PrCert\n"));
     LeyendasCabecera.append(tr("ImpPres\n"));
     LeyendasCabecera.append(tr("ImpCert\n"));
-    ActualizarDatos(id_padre, id_hijo);
+    ActualizarDatos(codigopadre, codigohijo);
 }
 
 TablaPrincipalModel::~TablaPrincipalModel()
@@ -206,13 +206,18 @@ void TablaPrincipalModel::BorrarFilas(QList<int> filas)
     pila->push(new UndoBorrarPartidas(tabla,partidasborrar,QVariant()));
 }
 
+void TablaPrincipalModel::InsertarFila(int fila)
+{
+    insertRows(fila,1,QModelIndex());
+}
+
 void TablaPrincipalModel::ActualizarDatos(QString padre, QString hijo)
 {
     hayFilaVacia = false;
     datos.clear();
-    id_padre=padre;
-    id_hijo=hijo;
-    QString cadena_consulta = "SELECT * FROM ver_hijos('"+tabla+"','"+ id_padre+"','"+ id_hijo+"')";
+    codigopadre=padre;
+    codigohijo=hijo;
+    QString cadena_consulta = "SELECT * FROM ver_hijos('"+tabla+"','"+ codigopadre+"','"+ codigohijo+"')";
     qDebug()<<cadena_consulta;
     consulta.exec(cadena_consulta);
     QList<QVariant> lineaDatos;

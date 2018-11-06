@@ -9,7 +9,7 @@
 #include <QDebug>
 
 ModeloBase::ModeloBase(const QString &tabla, const QString &idpadre, const QString &idhijo, QUndoStack *p, QObject *parent):
-    tabla(tabla), id_padre(idpadre),id_hijo(idhijo),consulta(idpadre), pila(p), QSqlQueryModel(parent)
+    tabla(tabla), codigopadre(idpadre),codigohijo(idhijo),consulta(idpadre), pila(p), QSqlQueryModel(parent)
 {
     hayFilaVacia=false;
     naturalezapadre = (int)Naturaleza::CAPITULO;
@@ -227,6 +227,6 @@ int ModeloBase::FilaVacia()
 
 void ModeloBase::ActualizarIds(QString idpadre, QString idhijo)
 {
-    id_padre=idpadre;
-    id_hijo=idhijo;
+    codigopadre=idpadre;
+    codigohijo=idhijo;
 }

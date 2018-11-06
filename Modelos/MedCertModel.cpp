@@ -29,7 +29,7 @@ MedCertModel::MedCertModel(const QString &tabla, const QString &idpadre, const Q
     LeyendasCabecera.append(QObject::tr("Parcial\n"));
     LeyendasCabecera.append(QObject::tr("SubTotal\n"));
     LeyendasCabecera.append(QObject::tr("Id\n"));
-    ActualizarDatos(id_padre,id_hijo);
+    ActualizarDatos(codigopadre,codigohijo);
 }
 
 MedCertModel::~MedCertModel()
@@ -42,7 +42,7 @@ bool MedCertModel::setData(const QModelIndex &index, const QVariant &value, int 
     if (index.isValid() && (role == Qt::EditRole /*|| role == Qt::DisplayRole*/) && value.toString()!=index.data().toString())
     {
         QString descripcion ="Cambio el valor de "+ index.data().toString()+" a "+value.toString()+" en la linea: "+datos.at(index.row()+1).at(tipoColumna::ID).toString();
-        pila->push(new UndoEditarMedicion(tabla,id_padre,id_hijo,index.data(),value,
+        pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,index.data(),value,
                                       datos.at(index.row()+1).at(tipoColumna::ID).toString(),index.column(),
                                       QVariant(descripcion)));
     }
@@ -70,58 +70,31 @@ void MedCertModel::PrepararCabecera(QList<QList<QVariant> > &datos)
 
 void MedCertModel::BorrarFilas(QList<int> filas)
 {
-    //guardo los datos de las filas que voy a borrar
-    //estos datos los saco de la lista de datos. De esta lista solo me interesan los indices:
-    //1:comentario
-    //2:ud
-    //3:longitud
-    //4:latitud
-    //5:altura
-    //6:formula
-    //9: id de la linea en la tabla
-    //ademas he de suministrar la tabla, la id del padre y la id del hijo
-    QList<QList<QVariant>>datosborrar;
+    QList<QString>idsBorrar;
     foreach (const int& i, filas)
-    {
-        QList<QVariant>datosborrarlinea;
-        //añado la tabla y los idpadre e idhijo
-        datosborrarlinea.append(tabla);
-        datosborrarlinea.append(id_padre);
-        datosborrarlinea.append(id_hijo);
-        //el tipo
-        if (datos.at(i+1).at(tipoColumna::SUBTOTAL).toString()!="0.00")
-        {
-            datosborrarlinea.append(1);
-        }
-        else if (!datos.at(i+1).at(tipoColumna::FORMULA).toString().isEmpty())
-        {
-            datosborrarlinea.append(3);
-        }
-        else
-        {
-            datosborrarlinea.append(0);
-        }
-        for (int j=0;j<NUM_COLUMNAS;j++)
-        {
-            if (j!=0 && j!=7 && j!=8)//descarto los indices 0,7 y 8
-            {
-                datosborrarlinea.append(datos.at(i+1).at(j));
-            }
-        }
-        datosborrar.append(datosborrarlinea);
+    {        
+        idsBorrar.append(datos.at(i+1).at(9).toString());
+        qDebug()<<"ID: "<<(datos.at(i+1).at(9));
     }
     QString desc="Undo borrar lineas medicion";
     QVariant V(desc);
-    pila->push(new UndoBorrarLineasMedicion(datosborrar,V));
+    pila->push(new UndoBorrarLineasMedicion(tabla,idsBorrar,V));
+}
+
+void MedCertModel::InsertarFila(int fila)
+{
+    QString desc="Insertar linea medicion";
+    QVariant V(desc);
+    pila->push(new UndoInsertarLineaMedicion(tabla,codigopadre,codigohijo,fila,V));
 }
 
 void MedCertModel::ActualizarDatos(QString padre, QString hijo)
 {
     hayFilaVacia = false;
     datos.clear();
-    id_padre=padre;
-    id_hijo=hijo;
-    QString cadena_consulta = "SELECT * FROM ver_mediciones('"+tabla+"','"+ id_padre + "','"+ id_hijo+"')";
+    codigopadre=padre;
+    codigohijo=hijo;
+    QString cadena_consulta = "SELECT * FROM ver_mediciones('"+tabla+"','"+ codigopadre + "','"+ codigohijo+"')";
     qDebug()<<cadena_consulta;
     consulta.exec(cadena_consulta);
     QList<QVariant> lineaDatos;

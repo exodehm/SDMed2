@@ -183,8 +183,8 @@ void AbrirGuardarBC3::procesarMediciones(QStringList &registroM)
                     conceptos[j]="NULL";
                 }
             }
-            qDebug()<<"Insertar "<<conceptos[0]<<"','"<<conceptos[1]<<"','"<<conceptos[2]<<"','"<<conceptos[3]<<"','"<<conceptos[4]<<"','"<<conceptos[5]<<";";
-            cadenainsertarmedicion = "SELECT insertar_medicion('"+codigo+"','"+padre+"','"+hijo+"',"+conceptos[0]+",'"+conceptos[1]+"',"+conceptos[2]+","+conceptos[3]+","+conceptos[4]+","+conceptos[5]+");";
+            qDebug()<<"Insertar "<<conceptos[0]<<"','"<<conceptos[1]<<"','"<<conceptos[2]<<"','"<<conceptos[3]<<"','"<<conceptos[4]<<"','"<<conceptos[5]<<"en la posicion: "<<i;
+            cadenainsertarmedicion = "SELECT insertar_medicion('"+codigo+"','"+padre+"','"+hijo+"','"+QString::number(i)+"',"+conceptos[0]+",'"+conceptos[1]+"',"+conceptos[2]+","+conceptos[3]+","+conceptos[4]+","+conceptos[5]+");";
             qDebug()<<"cadena insertar medicion"<<cadenainsertarmedicion;
             consulta.exec(cadenainsertarmedicion);
         }
