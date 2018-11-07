@@ -45,6 +45,13 @@ bool MedCertModel::setData(const QModelIndex &index, const QVariant &value, int 
         pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,index.data(),value,
                                       datos.at(index.row()+1).at(tipoColumna::ID).toString(),index.column(),
                                       QVariant(descripcion)));
+        return true;
+    }
+    //cuando estoy en una fila extra (la ultima o cuando no hay medicion)
+    if (index.row() == datos.size()-1)
+    {
+        InsertarFila(index.row());
+        return true;
     }
     return false;
 }
@@ -55,17 +62,14 @@ bool MedCertModel::EsPartida()
 }
 
 void MedCertModel::PrepararCabecera(QList<QList<QVariant> > &datos)
-{
-    if (!datos.isEmpty())
+{    
+    QList<QVariant>cabecera;
+    for (int i=0;i<LeyendasCabecera.size();i++)
     {
-        QList<QVariant>cabecera;
-        for (int i=0;i<LeyendasCabecera.size();i++)
-        {
-            //qDebug()<<"cabecera: "<<static_cast<QVariant>(LeyendasCabecera[i]);
-            cabecera.append(static_cast<QVariant>(LeyendasCabecera[i]));
-        }
-        datos.prepend(cabecera);
+        //qDebug()<<"cabecera: "<<static_cast<QVariant>(LeyendasCabecera[i]);
+        cabecera.append(static_cast<QVariant>(LeyendasCabecera[i]));
     }
+    datos.prepend(cabecera);
 }
 
 void MedCertModel::BorrarFilas(QList<int> filas)
