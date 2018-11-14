@@ -48,7 +48,8 @@ SOURCES += main.cpp\
     Dialogos/dialogosuprimirmedicion.cpp \
     Dialogos/dialogoprecio.cpp \
     Undo/undoinsertarprincipal.cpp \
-    Undo/undoeditarmedicion.cpp
+    Undo/undoeditarmedicion.cpp \
+    Ficheros/exportar.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -86,7 +87,8 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogosuprimirmedicion.h \
     Dialogos/dialogoprecio.h \
     Undo/undoinsertarprincipal.h \
-    Undo/undoeditarmedicion.h
+    Undo/undoeditarmedicion.h \
+    Ficheros/exportar.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \

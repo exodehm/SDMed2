@@ -16,6 +16,7 @@ class DialogoTablaListadosObras : public QDialog
 public:
     explicit DialogoTablaListadosObras(const QList<QList<QVariant> > &listadoobrasenBBDD, QWidget *parent = nullptr);
     ~DialogoTablaListadosObras();
+    void CargarDatos();
 
     enum eColumnas{CODIGO,RESUMEN,ABRIR,BORRAR};
 

@@ -97,7 +97,7 @@ QList<QList<QVariant>> MainWindow::VerObrasEnBBDD()
     QSqlQuery consultacodigos;
     QSqlQuery consultaresumenes;
     QString cadenaconsultacodigos = "SELECT table_name FROM INFORMATION_SCHEMA.TABLES \
-            WHERE TABLE_SCHEMA = 'public' AND table_name like '%_Conceptos%';";
+            WHERE TABLE_SCHEMA = 'public' AND table_name like '%\\_Conceptos';";
     consultacodigos.exec (cadenaconsultacodigos);
     while (consultacodigos.next())
     {
@@ -238,7 +238,7 @@ bool MainWindow::ActionAbrirBBDD()
     return true;
 }
 
-void MainWindow::BorrarBBDD(QStringList datosobra)
+bool MainWindow::BorrarBBDD(QStringList datosobra)
 {
     DialogoBorrarBBDD* d = new DialogoBorrarBBDD(datosobra, this);
     int res = d->exec();
@@ -256,39 +256,79 @@ void MainWindow::BorrarBBDD(QStringList datosobra)
                             tr("La obra esta en uso. ¿Realmente desea continuar?"),
                             QMessageBox::No | QMessageBox::Default,
                             QMessageBox::Yes);
-                if (respuesta == QMessageBox::Yes)
+                if (respuesta == QMessageBox::No)
                 {
-                    //primera accion, borrar la obra de la ventana principal
-                    obraActual = it;
-                    ActionCerrar();
-                    //segunda accion, exportar a bc3 si esta seleccionada la accion
-                    if (d->Exportar())
-                    {
-                        ActionGuardarComo();
-                        qDebug()<<"se guarda la obra";
-                    }
-                    //tercera accion, borrar la obra de la BBDD
-                    QString cadenaborrartablacodigo = "SELECT borrar_obra ('"+datosobra.at(0)+"');";
-                    qDebug()<<cadenaborrartablacodigo;
-                    QSqlQuery consulta;
-                    consulta.exec(cadenaborrartablacodigo);
-                    qDebug()<<sender();
+                    return false;
                 }
-                break;
             }
-            std::advance (it,1);
+        }
+        //primera accion, borrar la obra de la ventana principal
+        obraActual = it;
+        ActionCerrar();
+        //segunda accion, exportar a bc3 si esta seleccionada la accion
+        if (d->Exportar())
+        {
+            ActionGuardarComo(datosobra.at(0));
+            qDebug()<<"se guarda la obra";
+        }
+        //tercera accion, borrar la obra de la BBDD
+        QString cadenaborrartablacodigo = "SELECT borrar_obra ('"+datosobra.at(0)+"');";
+        qDebug()<<cadenaborrartablacodigo;
+        QSqlQuery consulta;
+        consulta.exec(cadenaborrartablacodigo);
+        qDebug()<<sender();
+        std::advance (it,1);
+    }
+    return true;
+}
+
+bool MainWindow::ActionGuardarComo(QString nombreobra)
+{
+    QFileDialog d(this,tr("Guardar fichero"),QDir::homePath(),tr("Archivos BC3 (*.bc3);;Archivos XLS (*.xls)"));
+    d.selectFile(nombreobra);
+    if (d.exec())
+    {
+        QString fileName = d.selectedFiles()[0];
+        if (fileName.isEmpty())
+        {
+            return false;
+        }
+        else
+        {
+            QString extension = d.selectedNameFilter();
+            extension = extension.right(5);
+            extension = extension.left(4);
+            if (fileName.right(4)==".bc3" || fileName.right(4)==".xls")
+            {
+                fileName=fileName.left(fileName.size()-4);
+            }
+            return GuardarObra(fileName + extension);
         }
     }
+    return false;
 }
 
-bool MainWindow::ActionGuardar()
+bool MainWindow::GuardarObra(QString nombreFichero)
 {
-
-}
-
-bool MainWindow::ActionGuardarComo()
-{
-
+    bool toReturn=false;
+    QString extension = nombreFichero.right(4);
+    if (extension == ".bc3" || extension == ".BC3")
+    {
+        //obraActual->miobra->GuardarBC3(nombreFichero);
+        qDebug()<<"Guardada la obra "<<nombreFichero<<" con exito";
+        toReturn = true;
+    }
+    if (extension == ".xls" || extension == ".XLS")
+    {
+        //obraActual->miobra->GuardarSEG(nombreFichero);
+        qDebug()<<"Guardando en formato xls";
+        toReturn = true;
+    }
+    if (*obraActual)
+    {
+        (*obraActual)->Pila()->clear();
+    }
+    return toReturn;
 }
 
 void MainWindow::ActionCerrar()
@@ -439,7 +479,7 @@ bool MainWindow::ConfirmarContinuar()
                                      QMessageBox::Cancel | QMessageBox::Escape);
         if (r == QMessageBox::Yes)
         {
-            return ActionGuardar();
+            return ActionGuardarComo((*obraActual)->LeeTabla());
         }
         else if (r == QMessageBox::Cancel)
         {

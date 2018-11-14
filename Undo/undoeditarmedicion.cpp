@@ -68,21 +68,27 @@ void UndoBorrarLineasMedicion::redo()
 UndoInsertarLineaMedicion::UndoInsertarLineaMedicion(const QString& nombretabla, const QString &codpadre, const QString &codhijo, const int pos, QVariant descripcion):
     tabla(nombretabla),codigopadre(codpadre),codigohijo(codhijo),posicion(pos)
 {
+    QString cadenainsertar = "SELECT insertar_medicion('"+tabla+"','"+codigopadre+"','"+codigohijo+"','"+QString::number(posicion)+"')";
+    qDebug()<<cadenainsertar;
+    consulta.exec(cadenainsertar);
+    while (consulta.next())
+    {
+        id = consulta.value(0).toString();
+    }
+    cadenaid="{"+id+"}";
+    QString cadenaborrarfilas = "SELECT borrar_lineas_medicion('"+tabla+"','"+cadenaid+"')";
+    consulta.exec(cadenaborrarfilas);
     qDebug()<<descripcion;
 }
 
 void UndoInsertarLineaMedicion::undo()
 {
-    //QString cadenaborrarfilas = "SELECT borrar_lineas_medicion('"+tabla+"','"+cadenaborrar+"','t')";
-    //qDebug()<<cadenaborrarfilas;
-    //consulta.exec(cadenaborrarfilas);
-
+    QString cadenaborrarfilas = "SELECT borrar_lineas_medicion('"+tabla+"','"+cadenaid+"')";
+    consulta.exec(cadenaborrarfilas);
 }
 
 void UndoInsertarLineaMedicion::redo()
 {
-
-    QString cadenaborrarfilas = "SELECT insertar_medicion('"+tabla+"','"+codigopadre+"','"+codigohijo+"','"+QString::number(posicion)+"')";
-    qDebug()<<cadenaborrarfilas;
+    QString cadenaborrarfilas = "SELECT borrar_lineas_medicion('"+tabla+"','"+cadenaid+"','t')";
     consulta.exec(cadenaborrarfilas);
 }

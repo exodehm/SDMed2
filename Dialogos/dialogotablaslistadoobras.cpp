@@ -49,6 +49,11 @@ DialogoTablaListadosObras::~DialogoTablaListadosObras()
     delete ui;
 }
 
+void DialogoTablaListadosObras::CargarDatos()
+{
+
+}
+
 QList<QStringList> DialogoTablaListadosObras::listaNombreObrasAbrir()
 {
     QList<QStringList> listado;
@@ -75,4 +80,5 @@ void DialogoTablaListadosObras::Borrar()
     QStringList datosobra;
     datosobra<<codigoobra<<resumenobra;
     emit BorrarObra(datosobra);
+    ui->tabla->removeRow(fila);
 }

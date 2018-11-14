@@ -48,7 +48,7 @@ public:
     void redo();
 
 private:
-    QString tabla, codigopadre, codigohijo;
+    QString tabla, codigopadre, codigohijo, id, cadenaid;
     int posicion;
     QSqlQuery consulta;
 };

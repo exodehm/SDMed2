@@ -33,9 +33,9 @@ private slots:
     void ActionNuevo();
     bool ActionImportar();
     bool ActionAbrirBBDD();
-    void BorrarBBDD(QStringList datosobra);
-    bool ActionGuardar();
-    bool ActionGuardarComo();
+    bool BorrarBBDD(QStringList datosobra);    
+    bool ActionGuardarComo(QString nombreobra);
+    bool GuardarObra(QString nombreFichero);
     void ActionCerrar();
     void ActionSalir();
     void ActionCopiar();
@@ -88,7 +88,6 @@ private:
 
     bool ConfirmarContinuar();
     void AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen);
-    bool GuardarObra(QString nombreFichero);
 
     bool HayObra();
     //combo ver medicion/certificacion
