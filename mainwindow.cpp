@@ -3,6 +3,7 @@
 
 #include "instancia.h"
 #include "./Ficheros/abrirguardarbc3.h"
+#include "./Ficheros/exportar.h"
 #include "./Dialogos/dialogoabout.h"
 #include "./Dialogos/dialogodatoscodigoresumen.h"
 #include "./Dialogos/dialogotablaslistadoobras.h"
@@ -268,7 +269,7 @@ bool MainWindow::BorrarBBDD(QStringList datosobra)
         //segunda accion, exportar a bc3 si esta seleccionada la accion
         if (d->Exportar())
         {
-            ActionGuardarComo(datosobra.at(0));
+            Exportar(datosobra.at(0));
             qDebug()<<"se guarda la obra";
         }
         //tercera accion, borrar la obra de la BBDD
@@ -282,10 +283,17 @@ bool MainWindow::BorrarBBDD(QStringList datosobra)
     return true;
 }
 
-bool MainWindow::ActionGuardarComo(QString nombreobra)
+bool MainWindow::Exportar(QString nombrefichero)
 {
     QFileDialog d(this,tr("Guardar fichero"),QDir::homePath(),tr("Archivos BC3 (*.bc3);;Archivos XLS (*.xls)"));
-    d.selectFile(nombreobra);
+    if (!nombrefichero.isEmpty())
+    {
+        d.selectFile(nombrefichero);
+    }
+    if (*obraActual)
+    {
+        d.selectFile((*obraActual)->LeeTabla());
+    }
     if (d.exec())
     {
         QString fileName = d.selectedFiles()[0];
@@ -303,7 +311,7 @@ bool MainWindow::ActionGuardarComo(QString nombreobra)
                 fileName=fileName.left(fileName.size()-4);
             }
             return GuardarObra(fileName + extension);
-        }
+        }        
     }
     return false;
 }
@@ -314,7 +322,7 @@ bool MainWindow::GuardarObra(QString nombreFichero)
     QString extension = nombreFichero.right(4);
     if (extension == ".bc3" || extension == ".BC3")
     {
-        //obraActual->miobra->GuardarBC3(nombreFichero);
+        ExportarBC3 exportador((*obraActual)->LeeTabla(),nombreFichero);
         qDebug()<<"Guardada la obra "<<nombreFichero<<" con exito";
         toReturn = true;
     }
@@ -356,6 +364,7 @@ void MainWindow::ActionCerrar()
         comboMedCert->setEnabled(false);
         botonNuevaCertificacion->setEnabled(false);
         ui->actionVer_Arbol->setEnabled(false);
+        ui->actionExportar->setEnabled(false);
     }
 }
 
@@ -479,7 +488,7 @@ bool MainWindow::ConfirmarContinuar()
                                      QMessageBox::Cancel | QMessageBox::Escape);
         if (r == QMessageBox::Yes)
         {
-            return ActionGuardarComo((*obraActual)->LeeTabla());
+            return Exportar();
         }
         else if (r == QMessageBox::Cancel)
         {
@@ -493,10 +502,11 @@ void MainWindow::setupActions()
 {
     QObject::connect(ui->actionNuevo,SIGNAL(triggered(bool)),this,SLOT(ActionNuevo()));
     QObject::connect(ui->actionImportar,SIGNAL(triggered(bool)),this,SLOT(ActionImportar()));
+    QObject::connect(ui->actionExportar,SIGNAL(triggered(bool)),this,SLOT(Exportar()));
     QObject::connect(ui->actionAbrirBBDD,SIGNAL(triggered(bool)),this,SLOT(ActionAbrirBBDD()));
     QObject::connect(ui->actionCerrar,SIGNAL(triggered(bool)),this,SLOT(ActionCerrar()));
     QObject::connect(ui->actionGuardar,SIGNAL(triggered(bool)),this,SLOT(ActionGuardar()));
-    QObject::connect(ui->actionGuardar_como,SIGNAL(triggered(bool)),this,SLOT(ActionGuardarComo()));
+    QObject::connect(ui->actionGuardar_como,SIGNAL(triggered(bool)),this,SLOT(Exportar()));
     QObject::connect(ui->action_Salir, SIGNAL(triggered(bool)),this, SLOT(ActionSalir()));
     QObject::connect(ui->actionCopiar,SIGNAL(triggered(bool)),this,SLOT(ActionCopiar()));
     QObject::connect(ui->actionCortar,SIGNAL(triggered(bool)),this,SLOT(ActionCortar()));
@@ -528,6 +538,7 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     Instancia* NuevaObra =new Instancia(_codigo,_resumen,this);
     ui->actionGuardar->setEnabled(true);
     ui->actionCerrar->setEnabled(true);
+    ui->actionExportar->setEnabled(true);
     comboMedCert->setEnabled(true);
     botonNuevaCertificacion->setEnabled(true);
     ui->actionVer_Arbol->setEnabled(true);

@@ -5,10 +5,11 @@
 #include <QFile>
 
 
-class Exportar
+
+class ExportarBC3
 {
 public:
-    Exportar(const QString& tabla);
+    ExportarBC3(const QString& _tabla, const QString nombrefichero);
 
     void Escribir(QFile& fichero);
     void EscribirRegistroV(QString& cadena);
@@ -21,6 +22,9 @@ public:
     bool esRaiz(const QString &S);
     void quitarSimbolos(QString &codigo);
     void escribirAlmohadilla(QString &cadena);
+
+private:
+    QString tabla;
 };
 
 #endif // EXPORTAR_H

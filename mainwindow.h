@@ -28,14 +28,17 @@ public:
     QString CodigoBC3(const QString& nombrefichero);
     QList<QList<QVariant> > VerObrasEnBBDD();
 
+
 private slots:
     /*********MENU***************/
     void ActionNuevo();
     bool ActionImportar();
     bool ActionAbrirBBDD();
-    bool BorrarBBDD(QStringList datosobra);    
-    bool ActionGuardarComo(QString nombreobra);
+    bool BorrarBBDD(QStringList datosobra);
+    //bool Guardar();
+    bool Exportar(QString nombreFichero=QString());
     bool GuardarObra(QString nombreFichero);
+    //void ExportarBC3();
     void ActionCerrar();
     void ActionSalir();
     void ActionCopiar();

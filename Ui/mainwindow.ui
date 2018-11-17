@@ -980,6 +980,9 @@
    </property>
   </action>
   <action name="actionExportar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../recursos.qrc">
      <normaloff>:/images/exportar.png</normaloff>:/images/exportar.png</iconset>
