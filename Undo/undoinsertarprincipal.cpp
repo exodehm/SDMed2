@@ -62,22 +62,18 @@ void UndoBorrarPartidas::undo()
 void UndoBorrarPartidas::redo()
 {
     QString cadenaborrar;
-    foreach (const QString& codigohijo, codigoshijos)
+    QString arrayscodigoshijos;
+    int i=0;
+    for (auto elem : codigoshijos)
     {
-        //cadenaborrar = "SELECT * FROM borrar_descompuesto('"+tabla+"','"+codigopadre+"','"+codigohijo+"');";
-        cadenaborrar = "SELECT * FROM borrar_descompuesto('"+tabla+"','"+codigohijo+"');";
-        qDebug()<<cadenaborrar;
-        consulta.exec(cadenaborrar);
-        QList<QVariant>datoslinea;
-        while (consulta.next())
+        arrayscodigoshijos.append(elem);
+        if (i<codigoshijos.size()-1)
         {
-            for (int i=0;i<10;i++)
-            {
-                qDebug()<<consulta.value(i);
-                datoslinea.append(consulta.value(i));
-            }
-            partidas.append(datoslinea);
-            datoslinea.clear();
+            arrayscodigoshijos.append(",");
         }
+        i++;
     }
+    qDebug()<<arrayscodigoshijos;
+    cadenaborrar = "SELECT * FROM borrar_hijos('"+tabla+"','"+codigopadre+"','"+arrayscodigoshijos+"');";
+    consulta.exec(cadenaborrar);
 }

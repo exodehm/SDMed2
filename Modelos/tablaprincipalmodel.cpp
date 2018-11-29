@@ -117,22 +117,8 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
                     return false;
                 }
                 else
-                {
-                    switch (d->Respuesta())
-                    {
-                    case precio::BLOQUEAR:
-                        qDebug()<<"Bloquear precio";
-                        break;
-                    case precio::AJUSTAR:
-                        qDebug()<<"Ajustar precio";
-                        break;
-                    case precio::SUPRIMIR:
-                        pila->push(new UndoEditarPrecio(tabla, codpadre, codhijo, index.data(), value, precio::SUPRIMIR, descripcion));
-                        break;
-                    default:
-                        return false;
-                        break;
-                    }
+                {           
+                    pila->push(new UndoEditarPrecio(tabla, codpadre, codhijo, index.data(), value, d->Respuesta(), descripcion));
                 }
             }
             else
