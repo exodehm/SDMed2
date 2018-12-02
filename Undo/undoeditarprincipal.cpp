@@ -165,7 +165,7 @@ void UndoEditarPrecio::undo()
 void UndoEditarPrecio::redo()
 {
     QString cadenaconsulta;
-    cadenaconsulta = "SELECT modificar_precio('"+tabla+"','"+codigopadre+"','"+codigohijo+ "','" +datoNuevo.toString()+"','"+QString::number(opcion)+"');";
+    cadenaconsulta = "SELECT modificar_precio('"+tabla+"','"+codigopadre+"','"+codigohijo+ "','" +datoNuevo.toString()+"','"+QString::number(opcion)+"','t');";
     qDebug()<<cadenaconsulta;
     consulta.exec(cadenaconsulta);
 }

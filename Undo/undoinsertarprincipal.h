@@ -35,8 +35,7 @@ public:
 private:
     QSqlQuery consulta;
     QString tabla, codigopadre;
-    QStringList codigoshijos;
-    QList<QList<QVariant>>partidas;
+    QStringList codigoshijos;    
 };
 
 #endif // UNDOINSERTARPRINCIPAL_H

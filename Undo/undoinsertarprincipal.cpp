@@ -13,7 +13,7 @@ UndoInsertarPartidas::UndoInsertarPartidas(QString tablaactual, QString cod_padr
 
 void UndoInsertarPartidas::undo()
 {
-    QString cadenaborrar = "SELECT borrar('"+tabla+"','"+codigopadre+"','"+nuevocodigo+"');";
+    QString cadenaborrar = "SELECT borrar_hijos('"+tabla+"','"+codigopadre+"','"+nuevocodigo+"','f');";
     qDebug()<<cadenaborrar;
     consulta.exec(cadenaborrar);
 }
@@ -38,26 +38,11 @@ UndoBorrarPartidas::UndoBorrarPartidas(QString tablaactual, QStringList codigos,
 
 void UndoBorrarPartidas::undo()
 {
-    qDebug()<<"restablecer lo borrado con "<<partidas.size()<<" partidas primarias borradas";
     QString cadenaconsulta;
-    for (int i = 0;i<partidas.size();i++)
-    {
-        cadenaconsulta = "SELECT insertar_partida('"+tabla+ "','" +\
-                partidas.at(i).at(partidasSQL::CODIGOPADRE).toString()+"','" +\
-                partidas.at(i).at(partidasSQL::CODIGOHIJO).toString()+ "','"+\
-                partidas.at(i).at(partidasSQL::POSICION).toString()+ "','"+\
-                partidas.at(i).at(partidasSQL::UNIDAD).toString()+ "','"+\
-                partidas.at(i).at(partidasSQL::RESUMEN).toString()+ "','"+\
-                partidas.at(i).at(partidasSQL::DESCRIPCION).toString()+ "','"+\
-                partidas.at(i).at(partidasSQL::PRECIO).toString()+ "','"+\
-                partidas.at(i).at(partidasSQL::CANTIDAD).toString()+ "','"+\
-                partidas.at(i).at(partidasSQL::NATURALEZA).toString()+ "','"+\
-                partidas.at(i).at(partidasSQL::FECHA).toString()+"');";
-        qDebug()<<cadenaconsulta;
-        consulta.exec(cadenaconsulta);
-    }
+    cadenaconsulta = "SELECT restaurar_lineas_principal('"+tabla+"')";
+    qDebug()<<cadenaconsulta;
+    consulta.exec(cadenaconsulta);
 }
-
 
 void UndoBorrarPartidas::redo()
 {
@@ -74,6 +59,7 @@ void UndoBorrarPartidas::redo()
         i++;
     }
     qDebug()<<arrayscodigoshijos;
-    cadenaborrar = "SELECT * FROM borrar_hijos('"+tabla+"','"+codigopadre+"','"+arrayscodigoshijos+"');";
+    cadenaborrar = "SELECT borrar_hijos('"+tabla+"','"+codigopadre+"','"+arrayscodigoshijos+"');";
+    qDebug()<<cadenaborrar;
     consulta.exec(cadenaborrar);
 }
