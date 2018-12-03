@@ -39,20 +39,23 @@ MedCertModel::~MedCertModel()
 
 bool MedCertModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (index.isValid() && (role == Qt::EditRole /*|| role == Qt::DisplayRole*/) && value.toString()!=index.data().toString())
-    {
-        QString descripcion ="Cambio el valor de "+ index.data().toString()+" a "+value.toString()+" en la linea: "+datos.at(index.row()+1).at(tipoColumna::ID).toString();
-        pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,index.data(),value,
-                                      datos.at(index.row()+1).at(tipoColumna::ID).toString(),index.column(),
-                                      QVariant(descripcion)));
-        return true;
-    }
+    qDebug()<<"Set data mediciones en "<<index.row()<<" con datos de "<<datos.size();
     //cuando estoy en una fila extra (la ultima o cuando no hay medicion)
     if (index.row() == datos.size()-1)
     {
+        QString descripcion ="Añado fila extra y edito";
+        qDebug()<<descripcion;
         InsertarFila(index.row());
+    }
+    if (index.isValid() && (role == Qt::EditRole /*|| role == Qt::DisplayRole*/) && value.toString()!=index.data().toString())
+    {
+        QString descripcion ="Cambio el valor de "+ index.data().toString()+" a "+value.toString()+" en la linea: "+datos.at(index.row()+1).at(tipoColumna::ID).toString();
+        qDebug()<<descripcion;
+        pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,index.data(),value,
+         datos.at(index.row()+1).at(tipoColumna::ID).toString(),index.column(), QVariant(descripcion)));
         return true;
     }
+    qDebug()<<"Set data mediciones1";
     return false;
 }
 
@@ -87,7 +90,8 @@ void MedCertModel::BorrarFilas(QList<int> filas)
 
 void MedCertModel::InsertarFila(int fila)
 {
-    QString desc="Insertar linea medicion";
+    QString desc="Insertar linea medicion en fila: "+fila;
+    qDebug()<<desc;
     QVariant V(desc);
     pila->push(new UndoInsertarLineaMedicion(tabla,codigopadre,codigohijo,fila,V));
 }
@@ -127,5 +131,4 @@ void MedCertModel::ActualizarDatos(QString padre, QString hijo)
         hayFilaVacia = true;
         filavacia=0;
     }
-
 }

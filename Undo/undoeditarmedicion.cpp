@@ -83,12 +83,13 @@ UndoInsertarLineaMedicion::UndoInsertarLineaMedicion(const QString& nombretabla,
 
 void UndoInsertarLineaMedicion::undo()
 {
-    QString cadenaborrarfilas = "SELECT borrar_lineas_medicion('"+tabla+"','"+cadenaid+"')";
+    QString cadenaborrarfilas = "SELECT borrar_lineas_medicion('"+tabla+"','"+cadenaid+"','t')";
     consulta.exec(cadenaborrarfilas);
 }
 
 void UndoInsertarLineaMedicion::redo()
 {
-    QString cadenaborrarfilas = "SELECT borrar_lineas_medicion('"+tabla+"','"+cadenaid+"','t')";
-    consulta.exec(cadenaborrarfilas);
+    QString cadenainsertar = "SELECT insertar_medicion('"+tabla+"','"+codigopadre+"','"+codigohijo+"','"+QString::number(posicion)+"')";
+    qDebug()<<"cadena insertar"<<cadenainsertar;
+    consulta.exec(cadenainsertar);
 }
