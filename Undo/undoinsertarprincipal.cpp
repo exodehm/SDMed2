@@ -39,7 +39,7 @@ UndoBorrarPartidas::UndoBorrarPartidas(QString tablaactual, QStringList codigos,
 void UndoBorrarPartidas::undo()
 {
     QString cadenaconsulta;
-    cadenaconsulta = "SELECT restaurar_lineas_principal('"+tabla+"')";
+    cadenaconsulta = "SELECT restaurar_lineas_borradas('"+tabla+"')";
     qDebug()<<cadenaconsulta;
     consulta.exec(cadenaconsulta);
 }
