@@ -39,9 +39,9 @@ void DelegadoNumerosTablaPrincipal::paint( QPainter *painter,const QStyleOptionV
         painter->drawText(option.rect, Qt::AlignRight | Qt::AlignVCenter,index.data().toString());
         painter->restore();
     }
-    else
+    else*/
     {
         DelegadoNumerosBase::paint(painter, option, index);
-    }*/
+    }
 }
 

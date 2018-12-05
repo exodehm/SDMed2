@@ -46,6 +46,7 @@ protected:
     bool hayFilaVacia;
     int filavacia;
     QList<QList<QVariant>>datos;
+    QList<QList<QVariant>>datoscolor;
     QSqlQuery consulta;
     int naturalezapadre;
     QUndoStack* pila;

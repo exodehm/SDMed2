@@ -36,7 +36,6 @@ SOURCES += main.cpp\
     iconos.cpp \
     filter.cpp \
     Modelos/MedCertModel.cpp \
-    Modelos/PrincipalModel.cpp \
     Modelos/treeitem.cpp \
     Modelos/TreeModel.cpp \
     Modelos/tablaprincipalmodel.cpp \
@@ -74,7 +73,6 @@ HEADERS  += mainwindow.h \
     iconos.h \
     filter.h \
     Modelos/MedCertModel.h \
-    Modelos/PrincipalModel.h \
     Modelos/treeitem.h \
     Modelos/TreeModel.h \
     Modelos/tablaprincipalmodel.h \

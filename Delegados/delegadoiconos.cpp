@@ -1,11 +1,13 @@
 #include "delegadoiconos.h"
 #include "./iconos.h"
+#include "./defs.h"
 #include <QPainter>
 
 DelegadoIconos::DelegadoIconos(QObject *parent):DelegadoBase(parent)
 {
     indiceCombo=0;
     leyendas.append(tr("Sin clasificar"));
+    //leyendas.append(tr(naturaleza::leyenda_nat[0]));
     leyendas.append(tr("Mano de obra"));
     leyendas.append(tr("Maquinaria"));
     leyendas.append(tr("Materiales"));
@@ -55,6 +57,7 @@ void DelegadoIconos::setModelData(QWidget *editor, QAbstractItemModel *model, co
 
 QSize DelegadoIconos::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED (index);
     return option.rect.size();
 }
 

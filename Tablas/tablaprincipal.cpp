@@ -5,11 +5,11 @@ TablaPrincipal::TablaPrincipal(int nColumnas, QWidget *parent): TablaBase(nColum
     limiteIzquierdo=tipoColumna::CODIGO;
     limiteDerecho=tipoColumna::IMPPRES;
 
-    //celdaBloqueada[tipoColumna::CODIGO]=true;
+    celdaBloqueada[tipoColumna::CODIGO]=true;
     celdaBloqueada[tipoColumna::PORCERTPRES]=true;
     celdaBloqueada[tipoColumna::IMPPRES]=true;
     celdaBloqueada[tipoColumna::IMPCERT]=true;
-    /*setItemDelegateForColumn(tipoColumna::CODIGO,dlgBA);
+    setItemDelegateForColumn(tipoColumna::CODIGO,dlgBA);
     setItemDelegateForColumn(tipoColumna::UD,dlgBA);
     setItemDelegateForColumn(tipoColumna::RESUMEN,dlgBA);
     setItemDelegateForColumn(tipoColumna::CANPRES,dlgNumTablaP);
@@ -18,7 +18,7 @@ TablaPrincipal::TablaPrincipal(int nColumnas, QWidget *parent): TablaBase(nColum
     setItemDelegateForColumn(tipoColumna::PRCERT,dlgNumTablaP);
     setItemDelegateForColumn(tipoColumna::PORCERTPRES,dlgNumTablaP);
     setItemDelegateForColumn(tipoColumna::IMPPRES,dlgCB);
-    setItemDelegateForColumn(tipoColumna::IMPCERT,dlgCB);*/
+    setItemDelegateForColumn(tipoColumna::IMPCERT,dlgCB);
 
     dlgIco= new DelegadoIconos;
     setItemDelegateForColumn(tipoColumna::NATURALEZA,dlgIco);
