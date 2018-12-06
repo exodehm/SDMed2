@@ -241,8 +241,7 @@ void PrincipalModel::ActualizarDatos(QString padre, QString hijo)
     {
         for (int i=0;i<NUM_COLUMNAS;i++)
         {
-                lineaDatosColor.append(consulta.value(i));
-                qDebug()<<"CONSULTA.VALUE["<<i<<"] "<<consulta.value(i);
+                lineaDatosColor.append(consulta.value(i));                
         }
         datoscolor.append(lineaDatosColor);
         lineaDatosColor.clear();
