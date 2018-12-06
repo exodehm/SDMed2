@@ -1,5 +1,5 @@
 #include "Modelobase.h"
-#include "tablaprincipalmodel.h"
+#include "PrincipalModel.h"
 #include "consultas.h"
 #include "../defs.h"
 #include "../iconos.h"

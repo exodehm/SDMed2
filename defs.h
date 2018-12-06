@@ -33,7 +33,7 @@ namespace codigo {
 }
 
 namespace color {
-    enum {NORMAL,BLOQUEADO,DESCOMPUESTO};
+    enum {NODEFINIDO,NORMAL,BLOQUEADO,DESCOMPUESTO};
 }
 
 namespace datocelda {

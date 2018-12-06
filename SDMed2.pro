@@ -38,7 +38,6 @@ SOURCES += main.cpp\
     Modelos/MedCertModel.cpp \
     Modelos/treeitem.cpp \
     Modelos/TreeModel.cpp \
-    Modelos/tablaprincipalmodel.cpp \
     Dialogos/dialogotablaslistadoobras.cpp \
     Ficheros/abrirguardarbc3.cpp \
     Dialogos/dialogoadvertenciaborrarbbdd.cpp \
@@ -48,7 +47,8 @@ SOURCES += main.cpp\
     Dialogos/dialogoprecio.cpp \
     Undo/undoinsertarprincipal.cpp \
     Undo/undoeditarmedicion.cpp \
-    Ficheros/exportar.cpp
+    Ficheros/exportar.cpp \
+    Modelos/PrincipalModel.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -75,7 +75,6 @@ HEADERS  += mainwindow.h \
     Modelos/MedCertModel.h \
     Modelos/treeitem.h \
     Modelos/TreeModel.h \
-    Modelos/tablaprincipalmodel.h \
     defs.h \
     Dialogos/dialogotablaslistadoobras.h \
     Ficheros/abrirguardarbc3.h \
@@ -86,7 +85,8 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogoprecio.h \
     Undo/undoinsertarprincipal.h \
     Undo/undoeditarmedicion.h \
-    Ficheros/exportar.h
+    Ficheros/exportar.h \
+    Modelos/PrincipalModel.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \

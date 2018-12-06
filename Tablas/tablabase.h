@@ -15,7 +15,7 @@
 #include "../Delegados/delegadonumerostablaprincipal.h"
 #include "../Delegados/delegadonumerostablamedcert.h"
 //#include "../Modelos/MedCertModel.h"
-#include "../Modelos/tablaprincipalmodel.h"
+#include "../Modelos/PrincipalModel.h"
 #include "../filter.h"
 
 class Filter;

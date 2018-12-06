@@ -1,4 +1,4 @@
-#include "tablaprincipalmodel.h"
+#include "PrincipalModel.h"
 #include "./Undo/undoeditarprincipal.h"
 #include "./Undo/undoinsertarprincipal.h"
 #include "consultas.h"
@@ -10,7 +10,7 @@
 #include <QtSql/QSqlError>
 #include <QDebug>
 
-TablaPrincipalModel::TablaPrincipalModel(const QString &tabla, const QString &idpadre, const QString &idhijo, QUndoStack *p, QObject *parent):
+PrincipalModel::PrincipalModel(const QString &tabla, const QString &idpadre, const QString &idhijo, QUndoStack *p, QObject *parent):
     ModeloBase(tabla, idpadre, idhijo, p, parent)
 {
     NUM_COLUMNAS = 11;
@@ -28,12 +28,12 @@ TablaPrincipalModel::TablaPrincipalModel(const QString &tabla, const QString &id
     ActualizarDatos(codigopadre, codigohijo);
 }
 
-TablaPrincipalModel::~TablaPrincipalModel()
+PrincipalModel::~PrincipalModel()
 {
     qDebug()<<"Destructor modelo PrincipalModel";
 }
 
-bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (index.isValid() && (role == Qt::EditRole /*|| role == Qt::DisplayRole*/) && value.toString()!=index.data().toString())
     {
@@ -136,7 +136,7 @@ bool TablaPrincipalModel::setData(const QModelIndex &index, const QVariant &valu
     return false;
 }
 
-bool TablaPrincipalModel::removeRows(int fila, int numFilas, const QModelIndex& parent)
+bool PrincipalModel::removeRows(int fila, int numFilas, const QModelIndex& parent)
 {
     Q_UNUSED(parent);
     beginRemoveRows(QModelIndex(), fila, fila+numFilas-1);
@@ -156,12 +156,12 @@ bool TablaPrincipalModel::removeRows(int fila, int numFilas, const QModelIndex& 
     return true;
 }
 
-bool TablaPrincipalModel::EsPartida()
+bool PrincipalModel::EsPartida()
 {
     return naturalezapadre == static_cast<int>(Naturaleza::PARTIDA);
 }
 
-void TablaPrincipalModel::PrepararCabecera(QList<QList<QVariant> > &datos)
+void PrincipalModel::PrepararCabecera(QList<QList<QVariant> > &datos)
 {
     if (!datos.isEmpty())
     {     for(int i=0; i<datos.at(0).length(); i++)
@@ -178,7 +178,7 @@ void TablaPrincipalModel::PrepararCabecera(QList<QList<QVariant> > &datos)
     }
 }
 
-void TablaPrincipalModel::BorrarFilas(QList<int> filas)
+void PrincipalModel::BorrarFilas(QList<int> filas)
 {
     QStringList partidasborrar;
     QString codpadre = datos.at(0).at(0).toString();
@@ -192,12 +192,12 @@ void TablaPrincipalModel::BorrarFilas(QList<int> filas)
     pila->push(new UndoBorrarPartidas(tabla,partidasborrar,QVariant()));
 }
 
-void TablaPrincipalModel::InsertarFila(int fila)
+void PrincipalModel::InsertarFila(int fila)
 {
     insertRows(fila,1,QModelIndex());
 }
 
-void TablaPrincipalModel::ActualizarDatos(QString padre, QString hijo)
+void PrincipalModel::ActualizarDatos(QString padre, QString hijo)
 {
     hayFilaVacia = false;
     datos.clear();
@@ -241,20 +241,22 @@ void TablaPrincipalModel::ActualizarDatos(QString padre, QString hijo)
     {
         for (int i=0;i<NUM_COLUMNAS;i++)
         {
-            //qDebug()<<"CONSULTA.VALUE["<<i<<"] "<<consulta.value(i);
-            /*if (consulta.value(i).type()==QVariant::Double)
-            {
-                float numero = consulta.value(i).toDouble();
-                QString numeroletra = QString::number(numero, 'f', 2);
-                lineaDatos.append(static_cast<QVariant>(numeroletra));
-            }
-            else*/
-            {
                 lineaDatosColor.append(consulta.value(i));
                 qDebug()<<"CONSULTA.VALUE["<<i<<"] "<<consulta.value(i);
-            }
         }
         datoscolor.append(lineaDatosColor);
         lineaDatosColor.clear();
+    }
+}
+
+int PrincipalModel::LeeColor(int fila, int columna)
+{
+    if (fila>datoscolor.size()-1)
+    {
+        return 0;
+    }
+    else
+    {
+        return datoscolor.at(fila).at(columna).toInt();
     }
 }

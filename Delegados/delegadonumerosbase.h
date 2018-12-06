@@ -20,8 +20,9 @@ public:
     QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
     QString displayText(const QVariant & value, const QLocale & locale) const;
 
-private:
+protected:
     QRegExp* rx;
+    QColor colores[4];
 };
 
 #endif // DELEGADONUMEROSBASE_H

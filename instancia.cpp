@@ -1,7 +1,7 @@
 #include "instancia.h"
 #include "consultas.h"
 #include "./Modelos/Modelobase.h"
-#include "./Modelos/tablaprincipalmodel.h"
+#include "./Modelos/PrincipalModel.h"
 #include "./Modelos/MedCertModel.h"
 #include "./Modelos/TreeModel.h"
 
@@ -57,7 +57,7 @@ void Instancia::GenerarUI()
     arbol = new QTableView;
     separadorTablas = new QSplitter(Qt::Vertical);
     //tabla principal
-    modeloTablaP = new TablaPrincipalModel(tabla, codigopadre, codigohijo, pila);
+    modeloTablaP = new PrincipalModel(tabla, codigopadre, codigohijo, pila);
     tablaPrincipal = new TablaPrincipal(modeloTablaP->columnCount(QModelIndex()));
     tablaPrincipal->setObjectName("TablaP");
     tablaPrincipal->setModel(modeloTablaP);

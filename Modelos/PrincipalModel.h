@@ -1,15 +1,15 @@
-#ifndef TABLAPRINCIPALMODEL_H
-#define TABLAPRINCIPALMODEL_H
+#ifndef PRINCIPALMODEL_H
+#define PRINCIPALMODEL_H
 
 #include "./Modelos/Modelobase.h"
 
-class TablaPrincipalModel : public ModeloBase
+class PrincipalModel : public ModeloBase
 {
     Q_OBJECT
 public:
 
-    TablaPrincipalModel(const QString &tabla, const QString& idpadre, const QString &idhijo, QUndoStack *p, QObject* parent=nullptr);
-    ~TablaPrincipalModel();
+    PrincipalModel(const QString &tabla, const QString& idpadre, const QString &idhijo, QUndoStack *p, QObject* parent=nullptr);
+    ~PrincipalModel();
 
     bool setData(const QModelIndex & index, const QVariant& value, int role);
     bool removeRows(int fila, int numFilas, const QModelIndex& parent);
@@ -21,8 +21,10 @@ public:
     void InsertarFila(int fila);
     void ActualizarDatos(QString padre, QString hijo);
 
+    int LeeColor(int fila, int columna);
+
 public slots:
     //void MostrarHijos (QModelIndex idpadre);
 };
 
-#endif // TABLAPRINCIPALMODEL_H
+#endif // PRINCIPALMODEL_H
