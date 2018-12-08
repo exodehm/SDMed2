@@ -1,11 +1,12 @@
 #include "treeitem.h"
 
+#include <QDebug>
+
 TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent)
 {
     m_parentItem = parent;
     m_itemData = data;
 }
-#include <QDebug>
 
 TreeItem::~TreeItem()
 {

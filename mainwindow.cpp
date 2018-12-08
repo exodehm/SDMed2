@@ -436,7 +436,10 @@ void MainWindow::ActionInicio()
 
 void MainWindow::ActionVerArbol()
 {
-
+    if (HayObra())
+    {
+        (*obraActual)->VerArbol();
+    }
 }
 
 void MainWindow::ActionSeleccionarTodo()
@@ -456,7 +459,6 @@ void MainWindow::ActionAjustarPresupuesto()
 
 void MainWindow::AcercaDe()
 {
-    qDebug()<<"acerca de ";
     DialogoAbout *d = new DialogoAbout(this);
     d->show();
 }

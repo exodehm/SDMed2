@@ -2,19 +2,19 @@
 #define TREEMODEL_H
 
 #include <QAbstractItemModel>
-
+#include <QtSql/QSqlQuery>
 #include "./treeitem.h"
-//#include "../include/Obra.h"
 #include "../defs.h"
 #include "../iconos.h"
 
+class QUndoStack;
 
 class TreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    explicit TreeModel(/*Obra* O, */QObject *parent = nullptr);
+    explicit TreeModel(const QString &tabla, QUndoStack *p, QObject* parent=nullptr);
       ~TreeModel();
 
       QVariant data(const QModelIndex &index, int role) const override;
@@ -25,15 +25,12 @@ public:
       int rowCount(const QModelIndex &parent = QModelIndex()) const override;
       int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
-      //void ActualizarDatos();
+      void ActualizarDatos(const QString &tabla);
 
   private:
-      //Obra* obra;
-      TreeItem *rootItem;
-      std::list<std::pair<TreeItem*,int>>listaitems;
+      TreeItem *rootItem;      
+      QSqlQuery consulta;     
 
-      //void setupModelData(Obra *obra, TreeItem *&parent);
-      //TreeItem* CrearItem(pNodo nodo, TreeItem *&parent);
 };
 
 #endif // TREEMODEL_H

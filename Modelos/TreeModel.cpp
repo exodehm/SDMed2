@@ -1,8 +1,10 @@
 #include "TreeModel.h"
 
-TreeModel::TreeModel(/*Obra *O, */QObject *parent) : /*obra(O),*/ QAbstractItemModel(parent),rootItem(nullptr)
+#include <QSqlRecord>
+
+TreeModel::TreeModel(const QString &tabla, QUndoStack *p, QObject *parent):QAbstractItemModel(parent),rootItem(nullptr)
 {
-    //ActualizarDatos();
+    ActualizarDatos(tabla);
 }
 
 TreeModel::~TreeModel()
@@ -104,61 +106,52 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int rol
     return QVariant();
 }
 
-/*void TreeModel::setupModelData(Obra* obra, TreeItem *&parent)
-{
-    std::list<std::pair<pNodo, int>>listado = obra->VerArbol();
-    auto iterador = listaitems.begin();
-    for (auto elem:listado)
-    {
-        qDebug()<<elem.second<<" - "<<elem.first->datonodo.LeeCodigo();
-        TreeItem* unItem;
-        if (elem.second == 1)//primer nivel
-        {            
-            unItem = CrearItem(elem.first,parent);
-        }
-        else if (elem.second>iterador->second)
-        {
-            unItem = CrearItem(elem.first,(*iterador).first);
-        }
-        else //cuando el nivel del siguiente elemento es menor o igual que el anterior
-        {
-            auto iterador2 = listaitems.end();
-            while(elem.second<=iterador2->second)
-            {
-                iterador2--;
-            }           
-            unItem = CrearItem(elem.first,(*iterador2).first);
-        }
-        std::pair <TreeItem*, int> pareja(unItem,elem.second);
-        listaitems.push_back(pareja);
-        iterador++;
-    }
-}*/
-
-/*void TreeModel::ActualizarDatos()
+void TreeModel::ActualizarDatos(const QString &tabla)
 {
     if (rootItem)
     {
-        listaitems.clear();
-        delete rootItem;
-    }    
+        rootItem = nullptr;
+    }
+    TreeItem* itemsuperior;
+    int nivel=0;
+    int nivelanterior=0;
+    //cabecera
     QList<QVariant> rootData;
-    rootData << tr("Código")<<tr("Nat.")<<tr("Ud.")<<tr("Resumen");
+    rootData << tr("Código")<<tr("Nat.")<<tr("Ud.")<<tr("Resumen")<<tr("Precio");
     rootItem = new TreeItem(rootData);
-    QList<QVariant> ObraData;
-    ObraData<<obra->LeeCodigoObra()<<"6"<<"  "<<obra->LeeResumenObra();
-    TreeItem* primerItem = new TreeItem(ObraData,rootItem);
-    rootItem->appendChild(primerItem);
-    std::pair <TreeItem*, int> pareja(primerItem,0);
-    listaitems.push_back(pareja);
-    setupModelData(obra, primerItem);
-}*/
-
-/*TreeItem* TreeModel::CrearItem(pNodo nodo, TreeItem *&parent)
-{
-    QList<QVariant> itemdata;
-    itemdata<<nodo->datonodo.LeeCodigo()<<nodo->datonodo.LeeNat()<<nodo->datonodo.LeeUd()<<nodo->datonodo.LeeResumen();
-    TreeItem* item = new TreeItem(itemdata,parent);
-    parent->appendChild(item);
-    return item;
-}*/
+    //datos
+    QString consultaArbol = "SELECT * FROM recorrer_principal ('"+tabla+"');";
+    qDebug()<<consultaArbol;
+    consulta.exec(consultaArbol);
+    QSqlRecord rec = consulta.record();
+    while (consulta.next())
+    {
+        QList<QVariant> ObraData;
+        ObraData<<consulta.value(rec.indexOf("codigo"))\
+               <<consulta.value(rec.indexOf("naturaleza"))\
+              <<consulta.value(rec.indexOf("ud"))\
+             <<consulta.value(rec.indexOf("resumen"))\
+            <<consulta.value(rec.indexOf("preciomed"));
+        nivelanterior = nivel;
+        nivel = consulta.value(rec.indexOf("nivel")).toInt();
+        if (nivel == 0)//primer elemento
+        {
+            TreeItem* unItem = new TreeItem(ObraData,rootItem);
+            rootItem->appendChild(unItem);
+            itemsuperior = unItem;
+            nivelanterior=nivel;
+        }
+        else
+        {
+            int subirnivel = nivelanterior-nivel+1;
+            for (int i=0;i<subirnivel;i++)
+            {
+                itemsuperior = itemsuperior->parentItem();
+            }
+            TreeItem* unItem = new TreeItem(ObraData,itemsuperior);
+            itemsuperior->appendChild(unItem);
+            itemsuperior = unItem;
+            nivelanterior=nivel;
+        }
+    }
+}

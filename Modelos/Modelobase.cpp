@@ -8,8 +8,8 @@
 #include <QtSql/QSqlError>
 #include <QDebug>
 
-ModeloBase::ModeloBase(const QString &tabla, const QString &idpadre, const QString &idhijo, QUndoStack *p, QObject *parent):
-    tabla(tabla), codigopadre(idpadre),codigohijo(idhijo),consulta(idpadre), pila(p), QSqlQueryModel(parent)
+ModeloBase::ModeloBase(const QString &tabla, const QString &codigopadre, const QString &codigohijo, QUndoStack *p, QObject *parent):
+    tabla(tabla), codigopadre(codigopadre),codigohijo(codigohijo),consulta(codigopadre), pila(p), QSqlQueryModel(parent)
 {
     hayFilaVacia=false;
     naturalezapadre = (int)Naturaleza::CAPITULO;

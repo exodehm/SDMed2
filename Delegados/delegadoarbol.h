@@ -4,7 +4,6 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QDebug>
-//#include "./Modelos/treeitem.h"
 #include "./defs.h"
 #include "./Codificacion.h"
 

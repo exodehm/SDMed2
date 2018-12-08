@@ -16,6 +16,8 @@ class QUndoStack;
 class QSplitter;
 class MedCertModel;
 class ModeloBase;
+class TreeModel;
+class VistaArbol;
 
 class Instancia : public QWidget
 {
@@ -89,7 +91,7 @@ private:
     ModeloBase* modeloTablaP;
     ModeloBase* modeloTablaMed;
     ModeloBase* modeloTablaCert;
-    //TreeModel* modeloArbol;
+    TreeModel* modeloArbol;
 
     QVBoxLayout* lienzoGlobal;
 
@@ -103,8 +105,7 @@ private:
     TablaBase* tablaMediciones;
     TablaBase* tablaCertificaciones;
     Editor* editor;
-    //VistaArbol* arbol;
-    QTableView* arbol;//<----he puesto una tabla porvisional hasta arreglar el arbol!!!!!!!!!!!!!!!1
+    VistaArbol* arbol;
 
     QModelIndex indiceActual;
 

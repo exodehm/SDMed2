@@ -8,8 +8,8 @@
 #include <QtSql/QSqlError>
 #include <QDebug>
 
-MedCertModel::MedCertModel(const QString &tabla, const QString &idpadre, const QString &idhijo, QUndoStack *p, QObject *parent):
-    ModeloBase(tabla, idpadre, idhijo, p, parent)
+MedCertModel::MedCertModel(const QString &tabla, const QString &codigopadre, const QString &codigohijo, QUndoStack *p, QObject *parent):
+    ModeloBase(tabla, codigopadre, codigohijo, p, parent)
 {
     NUM_COLUMNAS = 10;
     //if (tabla==tipoTablaMedicion::MEDICION)

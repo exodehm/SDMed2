@@ -13,7 +13,7 @@ class ModeloBase: public QSqlQueryModel
 
 public:
 
-    ModeloBase(const QString& tabla, const QString& idpadre, const QString& idhijo, QUndoStack* p, QObject* parent=nullptr);
+    ModeloBase(const QString& tabla, const QString& codigopadre, const QString& codigohijo, QUndoStack* p, QObject* parent=nullptr);
     ~ModeloBase();
     bool esColumnaNumerica(int columna) const;
     void QuitarIndicadorFilaVacia();

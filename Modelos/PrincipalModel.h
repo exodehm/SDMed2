@@ -8,7 +8,7 @@ class PrincipalModel : public ModeloBase
     Q_OBJECT
 public:
 
-    PrincipalModel(const QString &tabla, const QString& idpadre, const QString &idhijo, QUndoStack *p, QObject* parent=nullptr);
+    PrincipalModel(const QString &tabla, const QString& codigopadre, const QString &codigohijo, QUndoStack *p, QObject* parent=nullptr);
     ~PrincipalModel();
 
     bool setData(const QModelIndex & index, const QVariant& value, int role);

@@ -1,4 +1,5 @@
 #include "delegadoarbol.h"
+#include "./Modelos/treeitem.h"
 
 DelegadoArbol::DelegadoArbol(QObject *parent):QStyledItemDelegate(parent)
 {
@@ -10,20 +11,20 @@ DelegadoArbol::DelegadoArbol(QObject *parent):QStyledItemDelegate(parent)
     colorFondoPartida = new QBrush(QColor(Qt::lightGray));
     colorFondoSimples = new QBrush(QColor(Qt::black));
 
-    fuenteCapitulo = new QFont("Arial",11);
+    fuenteCapitulo = new QFont("Arial",10);
     fuenteCapitulo->setItalic(true);
     fuenteCapitulo->setBold(true);
 
-    fuentePartida = new QFont("Arial",11);
+    fuentePartida = new QFont("Arial",10);
 
-    fuenteSimples = new QFont("Arial",10);
+    fuenteSimples = new QFont("Arial",9);
 
 
 }
 
 void DelegadoArbol::paint( QPainter *painter,const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    /*if (index.isValid())
+    if (index.isValid())
     {
         TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
         int naturaleza = item->data(tipoColumna::NATURALEZA).toInt();//columna 1 == naturaleza
@@ -57,6 +58,6 @@ void DelegadoArbol::paint( QPainter *painter,const QStyleOptionViewItem &option,
             break;
         }
     }
-    else*/
+    else
         QStyledItemDelegate::paint(painter,option,index);
 }

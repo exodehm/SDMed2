@@ -49,12 +49,10 @@ void Instancia::GenerarUI()
     separadorPrincipal = new QSplitter(Qt::Horizontal);
 
     //arbol
-    /*modeloArbol = new TreeModel(O);
+    modeloArbol = new TreeModel(tabla, pila);
     arbol = new VistaArbol;
     arbol->setModel(modeloArbol);
-    arbol->setVisible(false);*/
-    //arbol provisional hasta arreglar el otro
-    arbol = new QTableView;
+    arbol->setVisible(false);
     separadorTablas = new QSplitter(Qt::Vertical);
     //tabla principal
     modeloTablaP = new PrincipalModel(tabla, codigopadre, codigohijo, pila);
@@ -92,11 +90,12 @@ void Instancia::GenerarUI()
     separadorPrincipal->addWidget(arbol);
     lienzoGlobal->addWidget(separadorPrincipal);
 
-    /*arbol->expandAll();
+    arbol->expandAll();
     arbol->resizeColumnToContents(tipoColumna::CODIGO);
     arbol->resizeColumnToContents(tipoColumna::NATURALEZA);
     arbol->resizeColumnToContents(tipoColumna::UD);
-    arbol->resizeColumnToContents(tipoColumna::RESUMEN);*/
+    arbol->resizeColumnToContents(tipoColumna::RESUMEN);
+    arbol->resizeColumnToContents(tipoColumna::IMPPRES);
 
     RefrescarVista();
     MostrarDeSegun(0);
@@ -273,7 +272,7 @@ void Instancia::Mover(int tipomovimiento)
 
 void Instancia::VerArbol()
 {
-    //arbol->setVisible(!arbol->isVisible());
+    arbol->setVisible(!arbol->isVisible());
 }
 
 void Instancia::TablaSeleccionarTodo(QWidget* widgetactivo)
