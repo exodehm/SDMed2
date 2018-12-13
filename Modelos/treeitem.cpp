@@ -10,7 +10,7 @@ TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent)
 
 TreeItem::~TreeItem()
 {
-    qDebug()<<"Borrando los treeitemes";
+    //qDebug()<<"Borrando los treeitemes";
     qDeleteAll(m_childItems);
 }
 

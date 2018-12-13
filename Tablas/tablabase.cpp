@@ -59,7 +59,7 @@ void TablaBase::Bloquear(int columna)
     }
 }
 
-void TablaBase::Copiar()
+/*void TablaBase::Copiar()
 {
     qDebug()<<sender()->parent();
     /*TablaBase* tabla = qobject_cast<TablaBase*>(sender()->parent());
@@ -72,8 +72,9 @@ void TablaBase::Copiar()
     {
         emit CopiarPartidas();
     }*/
+    /*qDebug()<<"emit copiar contenido";
     emit CopiarContenido();
-}
+}*/
 
 void TablaBase::Pegar()
 {

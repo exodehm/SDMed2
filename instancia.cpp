@@ -39,7 +39,7 @@ Instancia::~Instancia()
     delete modeloTablaP;
     delete modeloTablaMed;
     delete modeloTablaCert;
-    //delete modeloArbol;
+    delete modeloArbol;
     delete editor;
 }
 
@@ -98,8 +98,7 @@ void Instancia::GenerarUI()
     arbol->resizeColumnToContents(tipoColumna::IMPPRES);
 
     RefrescarVista();
-    MostrarDeSegun(0);
-    //O->cambiarEntreMedYCert(MedCert::MEDICION);
+    MostrarDeSegun(0);    
 
     /************signals y slots*****************/
     QObject::connect(tablaPrincipal,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(BajarNivel()));
@@ -108,9 +107,11 @@ void Instancia::GenerarUI()
     //QObject::connect(tablaPrincipal,SIGNAL(CambiaFila(QModelIndex)),this,SLOT(PosicionarTablaP(QModelIndex)));
     //QObject::connect(tablaMediciones,SIGNAL(CambiaFila(QModelIndex)),this,SLOT(PosicionarTablaM(QModelIndex)));
     //QObject::connect(modeloTablaMed,SIGNAL(Posicionar(QModelIndex)),this,SLOT(PosicionarTablaM(QModelIndex)));
-    // QObject::connect(tablaPrincipal,SIGNAL(CopiarContenido()),this,SLOT(CopiarPartidasTablaP()));
+    QObject::connect(tablaPrincipal,SIGNAL(Copiar()),this,SLOT(Copiar()));
+    QObject::connect(tablaMediciones,SIGNAL(Copiar()),this,SLOT(Copiar()));
+    QObject::connect(tablaPrincipal,SIGNAL(CopiarFilas(QList<int>)),this,SLOT(CopiarPartidas(QList<int>)));
     //QObject::connect(tablaPrincipal,SIGNAL(PegarContenido()),this,SLOT(PegarPartidasTablaP()));
-    //QObject::connect(tablaMediciones,SIGNAL(CopiarContenido()),this,SLOT(CopiarMedicionTablaM()));
+    QObject::connect(tablaMediciones,SIGNAL(CopiarFilas()),this,SLOT(CopiarMedicionTablaM()));
     // QObject::connect(tablaMediciones,SIGNAL(PegarContenido()),this,SLOT(PegarMedicionTablaM()));
 
     // QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
@@ -321,22 +322,52 @@ void Instancia::RefrescarVista()
         modeloTablaP->insertRow(0);
     }*/
     EscribirTexto();
-    tablaPrincipal->resizeColumnsToContents();
-    tablaMediciones->resizeColumnsToContents();
-    tablaCertificaciones->resizeColumnsToContents();
+
     /*editor->Formatear();
     GuardarTextoPartidaInicial();*/
     modeloTablaP->layoutChanged();
     modeloTablaMed->layoutChanged();
+    tablaPrincipal->resizeColumnsToContents();
+    tablaMediciones->resizeColumnsToContents();
+    tablaCertificaciones->resizeColumnsToContents();
     //modeloTablaCert->layoutChanged();
     //tablaPrincipal->setCurrentIndex(indiceActual);
     separadorTablasMedicion->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
-    /*modeloArbol->layoutChanged();
-    arbol->expandAll();
+    //modeloArbol->layoutChanged();
+    /*arbol->expandAll();
     arbol->resizeColumnToContents(tipoColumna::CODIGO);
     arbol->resizeColumnToContents(tipoColumna::NATURALEZA);
     arbol->resizeColumnToContents(tipoColumna::UD);
     arbol->resizeColumnToContents(tipoColumna::RESUMEN);*/
+}
+
+void Instancia::Copiar()
+{
+    QWidget* w = qApp->focusWidget();
+    TablaBase* tabla = qobject_cast<TablaBase*>(w);
+    if(tabla)
+    {
+        QModelIndex indice = tabla->currentIndex();
+        if (tabla->selectionModel()->isRowSelected(indice.row(),QModelIndex()))//si hay alguna fila seleccionada
+        {
+            QModelIndexList indices = tabla->selectionModel()->selectedIndexes();
+            QList<int> listaIndices;
+            foreach (QModelIndex i, indices)
+            {
+                if (!listaIndices.contains(i.row()))
+                    listaIndices.append(i.row());
+            }
+            qSort(listaIndices);
+            for (auto elem:listaIndices)
+                qDebug()<<"Borrar los indices: "<<elem;
+            qDebug()<<tabla->model();
+            ModeloBase* modelo = qobject_cast<ModeloBase*>(tabla->model());
+            if (modelo)
+            {
+                modelo->Copiar(listaIndices);
+            }
+        }
+    }
 }
 
 void Instancia::EscribirTexto()
@@ -399,34 +430,27 @@ void Instancia::GuardarTextoPartida()
    return textoPartidaInicial;
 }*/
 
-void Instancia::CopiarPartidasTablaP()
-{
-    // emit CopiarP();
-}
-
 void Instancia::CopiarMedicionTablaM()
 {
     //emit CopiarM();
+    qDebug()<<"Copiar partidas M en instancia";
 }
 
-/*void Instancia::CopiarPartidas(std::list<std::pair<pArista, pNodo>>&listaNodosCopiarPegar)
+void Instancia::CopiarPartidas(const QList<int>&indices)
 {
-    //en esta funcion creo una lista de int para almacenar los indices de las lineas seleccionadas de la tabla
-    //con esta lista de indices y las lista de nodos seleccionados me voy a la funcion Obra::CopiarPartidas
-    listaNodosCopiarPegar.clear();
-    QItemSelectionModel *selecmodel = tablaPrincipal->selectionModel();
-    QModelIndexList selectedRowsIndexesList = selecmodel->selectedIndexes();
-    CopiarPartidasPortapapeles(selectedRowsIndexesList);
-    QList<int> listaIndices;
-    foreach (const QModelIndex &i, selectedRowsIndexesList)
+    qDebug()<<"Copiar partidas en Instancia";
+    /*QStringList partidasborrar;
+    QString codpadre = datos.at(0).at(0).toString();
+    codpadre.remove(LeyendasCabecera[0]);
+    partidasborrar.append(codpadre);
+    foreach (const int& i, filas)
     {
-        if (!listaIndices.contains(i.row()))
-            listaIndices.append(i.row());
-    }
-    qSort(listaIndices);
-    O->CopiarPartidas(listaNodosCopiarPegar, listaIndices);
-    selecmodel->clearSelection();
-}*/
+        //removeRows(i,1,QModelIndex());
+        partidasborrar.append(datos.at(i+1).at(0).toString());//añado 1 por la cabecera
+    }*/
+    //CopiarPartidasPortapapeles(selectedRowsIndexesList);
+    //selecmodel->clearSelection();
+}
 
 void Instancia::CopiarPartidasPortapapeles(const QModelIndexList &lista)
 {
@@ -562,30 +586,6 @@ void Instancia::Certificar()
 void Instancia::CambiarEntreMedicionYCertificacion(int n)
 {
     //O->cambiarEntreMedYCert(n);
-}
-
-void Instancia::GuardarBC3(QString filename)
-{
-    /* QFile ficheroBC3(filename);
-    if (ficheroBC3.open(QIODevice::WriteOnly|QIODevice::Text))
-    {
-        AbrirGuardarBC3* bc3 =  new AbrirGuardarBC3;
-        bc3->Escribir(ficheroBC3,O);
-        ficheroBC3.close();
-        delete bc3;
-    }*/
-}
-
-void Instancia::GuardarSEG(QString filename)
-{
-    /*QFile ficheroSEG(filename);
-    if (ficheroSEG.open(QIODevice::WriteOnly))
-    {
-        AbrirGuardarSEG* seg = new AbrirGuardarSEG;
-        seg->Escribir(ficheroSEG,O);
-        ficheroSEG.close();
-        delete seg;
-    }*/
 }
 
 /*PrincipalModel* Instancia::ModeloTablaPrincipal()

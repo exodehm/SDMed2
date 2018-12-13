@@ -17,11 +17,13 @@ public:
     bool EsPartida();
     void PrepararCabecera(QList<QList<QVariant>>&datos);
 
-    void BorrarFilas(QList<int>filas);
+    void BorrarFilas(const QList<int>&filas);
     void InsertarFila(int fila);
     void ActualizarDatos(QString padre, QString hijo);
 
     int LeeColor(int fila, int columna);
+
+    void Copiar(const QList<int> &filas);
 
 public slots:
     //void MostrarHijos (QModelIndex idpadre);

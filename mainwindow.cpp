@@ -381,7 +381,7 @@ void MainWindow::ActionSalir()
 
 void MainWindow::ActionCopiar()
 {
-    qDebug()<<"Borrar en el sitpo equivocado";
+    (*obraActual)->Copiar();
 }
 
 void MainWindow::ActionPegar()
@@ -507,7 +507,7 @@ void MainWindow::setupActions()
     QObject::connect(ui->actionExportar,SIGNAL(triggered(bool)),this,SLOT(Exportar()));
     QObject::connect(ui->actionAbrirBBDD,SIGNAL(triggered(bool)),this,SLOT(ActionAbrirBBDD()));
     QObject::connect(ui->actionCerrar,SIGNAL(triggered(bool)),this,SLOT(ActionCerrar()));
-    QObject::connect(ui->actionGuardar,SIGNAL(triggered(bool)),this,SLOT(ActionGuardar()));
+    //QObject::connect(ui->actionGuardar,SIGNAL(triggered(bool)),this,SLOT(ActionGuardar()));
     QObject::connect(ui->actionGuardar_como,SIGNAL(triggered(bool)),this,SLOT(Exportar()));
     QObject::connect(ui->action_Salir, SIGNAL(triggered(bool)),this, SLOT(ActionSalir()));
     QObject::connect(ui->actionCopiar,SIGNAL(triggered(bool)),this,SLOT(ActionCopiar()));
@@ -533,10 +533,6 @@ void MainWindow::setupActions()
 
 void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
 {
-    /*QObject::connect(nuevaobra.miobra,SIGNAL(CopiarP()),this,SLOT(ActionCopiar()));
-    QObject::connect(nuevaobra.miobra,SIGNAL(PegarP()),this,SLOT(ActionPegar()));
-    QObject::connect(nuevaobra.miobra,SIGNAL(CopiarM()),this,SLOT(ActionCopiar()));
-    QObject::connect(nuevaobra.miobra,SIGNAL(PegarM()),this,SLOT(ActionPegar()));*/
     Instancia* NuevaObra =new Instancia(_codigo,_resumen,this);
     ui->actionGuardar->setEnabled(true);
     ui->actionCerrar->setEnabled(true);
@@ -553,6 +549,10 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     QString leyenda = QString(tr("Creada la obra %1").arg(_resumen));
     statusBar()->showMessage(leyenda,5000);
     QObject::connect(NuevaObra,SIGNAL(ActivarBoton(int)),this,SLOT(ActivarDesactivarBotonesPila(int)));
+    QObject::connect(NuevaObra,SIGNAL(CopiarP()),this,SLOT(ActionCopiar()));
+    QObject::connect(NuevaObra,SIGNAL(PegarP()),this,SLOT(ActionPegar()));
+    QObject::connect(NuevaObra,SIGNAL(CopiarM()),this,SLOT(ActionCopiar()));
+    QObject::connect(NuevaObra,SIGNAL(PegarM()),this,SLOT(ActionPegar()));
 }
 
 void MainWindow::CambiarObraActual(int indice)

@@ -32,9 +32,10 @@ public:
     virtual void ActualizarDatos(QString padre, QString hijo)=0;
     virtual bool EsPartida()=0;
     virtual void PrepararCabecera(QList<QList<QVariant>>&datos)=0;
-    virtual void BorrarFilas(QList<int>filas)=0;
+    virtual void BorrarFilas(const QList<int>&filas)=0;
     virtual void InsertarFila(int fila)=0;
-    void ActualizarIds(QString idpadre, QString idhijo);
+    virtual void Copiar(const QList<int> &filas)=0;
+    //void ActualizarIds(QString idpadre, QString idhijo);
 
 public slots:
     //void MostrarHijos (QModelIndex idpadre);

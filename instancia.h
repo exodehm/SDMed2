@@ -59,9 +59,9 @@ public slots:
     void Redo();
     void RefrescarVista();
 
-    void CopiarPartidasTablaP();
+    void Copiar();
     void CopiarMedicionTablaM();
-    //void CopiarPartidas(std::list<std::pair<pArista, pNodo> > &listaNodosCopiarPegar);
+    void CopiarPartidas(const QList<int>&indices);
     void PegarPartidasTablaP();
     void PegarMedicionTablaM();
     //void PegarPartidas(const Obra::ListaAristasNodos &listaNodosCopiarPegar);
@@ -71,9 +71,7 @@ public slots:
     //void PegarMedicion(const Medicion& ListaMedicion);
     void Certificar();
     void CambiarEntreMedicionYCertificacion(int n);    
-    void GuardarBC3(QString filename);
-    void GuardarSEG(QString filename);
-    void ActivarDesactivarUndoRedo(int indice);    
+    void ActivarDesactivarUndoRedo(int indice);
     void GuardarTextoPartidaInicial();
     void GuardarTextoPartida();
 

@@ -716,6 +716,9 @@
    <property name="text">
     <string>Copiar</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
    <property name="shortcutContext">
     <enum>Qt::WidgetShortcut</enum>
    </property>

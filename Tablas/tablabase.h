@@ -31,14 +31,14 @@ public:
     QHeaderView* CabeceraDeTabla();
     int limiteIzquierdo;
     int limiteDerecho;
-    void PonerDelegadoOriginal(int columna);    
+    void PonerDelegadoOriginal(int columna);
 
 private slots:
     void Bloquear(int columna);
 
 
 public slots:    
-    void Copiar();
+
     void Pegar();
     void Certificar();
 
@@ -48,10 +48,9 @@ public slots:
     virtual void MostrarMenuLateralTabla(QPoint pos)=0;
 
 signals:
-    void CambiaFila(QModelIndex ind);
-    /*void CopiarPartidas();
-    void CopiarMedicion();*/
-    void CopiarContenido();
+    void Copiar();
+    void CambiaFila(QModelIndex ind);    
+    void CopiarFilas(QList<int>indices);
     void PegarContenido();
     void CertificarLineasMedicion();    
 

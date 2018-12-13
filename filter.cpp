@@ -242,15 +242,7 @@ bool Filter::eventFilter(QObject *obj, QEvent* event)
             {
                 if (ke->modifiers()==Qt::ControlModifier)
                 {
-                    /*if (tabla->objectName()=="TablaP")
-                    {
-                        emit tabla->CopiarPartidas();
-                    }
-                    else
-                    {
-                        emit tabla->CopiarMedicion();
-                    }*/
-                    emit tabla->CopiarContenido();
+                    emit tabla->Copiar();
                     return true;
                 }
                 break;

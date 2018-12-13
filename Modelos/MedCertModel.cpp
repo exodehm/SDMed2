@@ -75,7 +75,12 @@ void MedCertModel::PrepararCabecera(QList<QList<QVariant> > &datos)
     datos.prepend(cabecera);
 }
 
-void MedCertModel::BorrarFilas(QList<int> filas)
+void MedCertModel::Copiar(const QList<int>& filas)
+{
+
+}
+
+void MedCertModel::BorrarFilas(const QList<int>& filas)
 {
     QList<QString>idsBorrar;
     foreach (const int& i, filas)

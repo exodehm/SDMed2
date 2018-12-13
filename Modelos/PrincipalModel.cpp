@@ -178,7 +178,7 @@ void PrincipalModel::PrepararCabecera(QList<QList<QVariant> > &datos)
     }
 }
 
-void PrincipalModel::BorrarFilas(QList<int> filas)
+void PrincipalModel::BorrarFilas(const QList<int> &filas)
 {
     QStringList partidasborrar;
     QString codpadre = datos.at(0).at(0).toString();
@@ -258,4 +258,9 @@ int PrincipalModel::LeeColor(int fila, int columna)
     {
         return datoscolor.at(fila).at(columna).toInt();
     }
+}
+
+void PrincipalModel::Copiar(const QList<int> &filas)
+{
+    qDebug()<<"Copiar en el modelo";
 }

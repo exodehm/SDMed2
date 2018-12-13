@@ -57,3 +57,9 @@ void TablaMedCert::MostrarMenuLateralTabla(QPoint pos)
     QObject::connect(AccionCertificar, SIGNAL(triggered()), this, SLOT(Certificar()));
     menu->popup(cabeceraVertical->viewport()->mapToGlobal(pos));
 }
+
+/*void TablaMedCert::Copiar()
+{
+    qDebug()<<"Copiar en tabla de mediciones";
+    //emit CopiarMediciones();
+}*/

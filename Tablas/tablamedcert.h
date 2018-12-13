@@ -14,6 +14,10 @@ public:
 public slots:
     void MostrarMenuCabecera(QPoint pos);
     void MostrarMenuLateralTabla(QPoint pos);
+    //void Copiar();
+
+signals:
+    //void CopiarMediciones();
 
 };
 

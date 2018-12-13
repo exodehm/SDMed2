@@ -190,43 +190,8 @@ int ModeloBase::FilaVacia()
     }
 }
 
-
-/*void ModeloBase::ActualizarDatos(QString cadena_consulta)
-{
-    hayFilaVacia = false;
-    datos.clear();
-    //qDebug()<<"Consulta: "<<cadena_consulta;
-    consulta.exec(cadena_consulta);
-    QList<QVariant> lineaDatos;
-    while (consulta.next())
-    {
-        for (int i=0;i<NUM_COLUMNAS;i++)
-        {
-            qDebug()<<"CONSULTA.VALUE["<<i<<"] "<<consulta.value(i);
-            if (consulta.value(i).type()==QVariant::Double)
-            {
-                float numero = consulta.value(i).toDouble();
-                QString numeroletra = QString::number(numero, 'f', 2);
-                lineaDatos.append(static_cast<QVariant>(numeroletra));
-            }
-            else
-            {
-                lineaDatos.append(consulta.value(i));
-            }
-        }
-        datos.append(lineaDatos);
-        lineaDatos.clear();
-    }
-    PrepararCabecera(datos);
-    if (datos.size()<=1)//añado una fila extra para poder insertar hijos en caso de hojas
-    {
-        hayFilaVacia = true;
-        filavacia=0;
-    }
-}*/
-
-void ModeloBase::ActualizarIds(QString idpadre, QString idhijo)
+/*void ModeloBase::ActualizarIds(QString idpadre, QString idhijo)
 {
     codigopadre=idpadre;
     codigohijo=idhijo;
-}
+}*/
