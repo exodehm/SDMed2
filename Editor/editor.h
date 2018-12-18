@@ -11,9 +11,8 @@
 #include <QDebug>
 
 #include "ui_editor.h"
-#include "micustomtextedit.h"
 
-#include "filter.h"
+//#include "filter.h"
 
 class Filter;
 
@@ -29,9 +28,7 @@ public:
     bool HayCambios();
     QString LeeContenido() const;
     QString LeeContenidoConFormato() const;
-    void Formatear();
-
-    void focusOutEvent(QFocusEvent* event);
+    void Formatear();   
 
 protected:
     void setupActions();
@@ -60,14 +57,13 @@ signals:
 
 private:
 
-    MiCustomTextEdit* textEdit;
     QLabel *mStatLabel;
     QFont fuenteActual;
     QColor colorFondo;
     QColor colorLetra;
     bool cursivas;
     bool negrita;
-    Filter* filtro;
+    //Filter* filtro;
 };
 
 #endif

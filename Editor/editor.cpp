@@ -3,8 +3,7 @@
 
 Editor::Editor(QWidget *parent): QMainWindow(parent)
 {
-    setupUi(this);
-    textEdit= new MiCustomTextEdit(this);
+    setupUi(this);    
     setCentralWidget(textEdit);
     setupActions();
     this->setWindowFlags(this->windowFlags() & ~Qt::Window); //opcionalmente editor->setWindowFlags(Qt::Widget) ?
@@ -13,8 +12,8 @@ Editor::Editor(QWidget *parent): QMainWindow(parent)
 	updateStats();    
     cursivas=false;
     negrita=false;    
-    filtro = new Filter;
-    installEventFilter(filtro);
+    //filtro = new Filter;
+    //installEventFilter(filtro);
     Formatear();
 
     QObject::connect (textEdit, SIGNAL(textChanged()), this, SLOT(updateStats()));
@@ -201,11 +200,4 @@ void Editor::Formatear()
     colorLetra = QColor(Qt::black);
     textEdit->setTextColor(colorLetra);
     textEdit->setTextBackgroundColor(colorFondo);
-}
-
-void Editor::focusOutEvent(QFocusEvent* event)
-{
-    qDebug()<<"Focus out del editor: "<<event->type();
-    emit GuardaTexto();
-    Formatear();
 }

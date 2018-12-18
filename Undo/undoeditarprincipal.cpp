@@ -1,6 +1,7 @@
 #include "undoeditarprincipal.h"
 #include "./defs.h"
 #include <QDebug>
+#include <QTextDocument>
 
 
 UndoEditarPrincipal::UndoEditarPrincipal(QString tabla, QString cod_padre, QString cod_hijo,
@@ -69,8 +70,6 @@ void UndoEditarResumen::redo()
     QString cadenaconsulta = "SELECT modificar_resumen('" +tabla+ "','" +codigohijo+ "','" +datoNuevo.toString()+ "');";
     consulta.exec(cadenaconsulta);
 }
-
-
 
 /************NATURALEZA*******************/
 UndoEditarNaturaleza::UndoEditarNaturaleza(QString tabla, QString cod_padre, QString cod_hijo,
@@ -166,6 +165,36 @@ void UndoEditarPrecio::redo()
 {
     QString cadenaconsulta;
     cadenaconsulta = "SELECT modificar_precio('"+tabla+"','"+codigopadre+"','"+codigohijo+ "','" +datoNuevo.toString()+"','"+QString::number(opcion)+"','t');";
+    qDebug()<<cadenaconsulta;
+    consulta.exec(cadenaconsulta);
+}
+
+/************TEXTO*******************/
+UndoEditarTexto::UndoEditarTexto(const QString &tabla, const QString &cod_padre, const QString &cod_hijo, const QString &_textoantiguo,
+                                         const QString &_textonuevo, const QVariant &descripcion):
+    textoantiguo(_textoantiguo), textonuevo(_textonuevo),
+    UndoEditarPrincipal(tabla, cod_padre, cod_hijo, QVariant(), QVariant(),descripcion)
+{
+    QTextDocument temp;
+    temp.setHtml(textoantiguo);
+    textoantiguoplano = temp.toPlainText();
+    temp.setHtml(textonuevo);
+    textonuevoplano = temp.toPlainText();
+    //para escapar las comillas para la cadena de texto
+    textoantiguo.replace("'","''");
+    textonuevo.replace("'","''");
+}
+
+void UndoEditarTexto::undo()
+{
+    QString cadenaconsulta = "SELECT modificar_texto('" +tabla+ "','" +codigohijo+ "','" +textoantiguoplano+ "','"+textoantiguo+"');";
+    qDebug()<<cadenaconsulta;
+    consulta.exec(cadenaconsulta);
+}
+
+void UndoEditarTexto::redo()
+{
+    QString cadenaconsulta = "SELECT modificar_texto('" +tabla+ "','" +codigohijo+ "','" +textonuevoplano+ "','"+textonuevo+"');";
     qDebug()<<cadenaconsulta;
     consulta.exec(cadenaconsulta);
 }

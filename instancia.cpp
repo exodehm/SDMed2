@@ -10,6 +10,8 @@
 #include "./Editor/editor.h"
 #include "./Tablas/vistaarbol.h"
 
+#include "./Undo/undoeditarprincipal.h"
+
 #include <QDebug>
 #include <QHeaderView>
 #include <QKeyEvent>
@@ -111,7 +113,7 @@ void Instancia::GenerarUI()
     QObject::connect(tablaMediciones,SIGNAL(Copiar()),this,SLOT(Copiar()));
     QObject::connect(tablaPrincipal,SIGNAL(CopiarFilas(QList<int>)),this,SLOT(CopiarPartidas(QList<int>)));
     //QObject::connect(tablaPrincipal,SIGNAL(PegarContenido()),this,SLOT(PegarPartidasTablaP()));
-    QObject::connect(tablaMediciones,SIGNAL(CopiarFilas()),this,SLOT(CopiarMedicionTablaM()));
+    //QObject::connect(tablaMediciones,SIGNAL(CopiarFilas()),this,SLOT(CopiarMedicionTablaM()));
     // QObject::connect(tablaMediciones,SIGNAL(PegarContenido()),this,SLOT(PegarMedicionTablaM()));
 
     // QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
@@ -204,6 +206,7 @@ void Instancia::BajarNivel()
 void Instancia::Mover(int tipomovimiento)
 {
     //GuardarTextoPartidaInicial();
+    GuardarTextoPartida();
     QString cadenamover;
     switch (tipomovimiento)
     {
@@ -320,11 +323,10 @@ void Instancia::RefrescarVista()
     if (modeloTablaP->rowCount(QModelIndex())==0)
     {
         modeloTablaP->insertRow(0);
-    }*/
+    }*/    
     EscribirTexto();
-
-    /*editor->Formatear();
-    GuardarTextoPartidaInicial();*/
+    //editor->Formatear();
+    GuardarTextoPartidaInicial();
     modeloTablaP->layoutChanged();
     modeloTablaMed->layoutChanged();
     tablaPrincipal->resizeColumnsToContents();
@@ -404,25 +406,23 @@ void Instancia::PosicionarTablaM(QModelIndex indice)
 
 void Instancia::GuardarTextoPartidaInicial()
 {
-    /* if (!O->EsPartidaVacia())
-    {
+        qDebug()<<"textoPartidaActual"<<textoPartidaInicial;
         textoPartidaInicial = editor->LeeContenidoConFormato();
-        //qDebug()<<"textoPartidaActual"<<textoPartidaInicial;
-    }*/
 }
 
 void Instancia::GuardarTextoPartida()
 {
-    /*qDebug()<<QApplication::focusWidget();
+    qDebug()<<"Fucnion GuardarTextoPArtida()"<<editor->LeeContenido();
     if (editor->HayCambios())
     {
-        TablaBase* tabla = qobject_cast<TablaBase*>(QApplication::focusWidget());
-        if (tabla)
+        //TablaBase* tabla = qobject_cast<TablaBase*>(QApplication::focusWidget());
+        //if (tabla)
         {
             QString cadenaundo = ("Cambiar texto de partida a " + editor->LeeContenido());
-            pila->push(new UndoEditarTexto(O,modeloTablaP, QModelIndex(), textoPartidaInicial, editor->LeeContenidoConFormato(), cadenaundo));
+            qDebug()<<cadenaundo;            
+            pila->push(new UndoEditarTexto(tabla, codigopadre, codigohijo, textoPartidaInicial,editor->LeeContenidoConFormato(),QVariant(cadenaundo)));
         }
-    }*/
+    }
 }
 
 /*TEXTO Instancia::TextoPartidaInicial()

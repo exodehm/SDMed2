@@ -102,4 +102,20 @@ private:
     QList<QList<QVariant>>partidas;
 };
 
+
+/***************TEXTO********************/
+class UndoEditarTexto : public UndoEditarPrincipal
+{
+public:
+    UndoEditarTexto (const QString& tabla, const QString& cod_padre, const QString& cod_hijo, const QString& _textoantiguo, const QString& _textonuevo,
+                       const QVariant &descripcion);
+
+    void undo();
+    void redo();
+
+private:
+    QString textonuevo, textonuevoplano;
+    QString textoantiguo, textoantiguoplano;
+};
+
 #endif // UNDOEDITARPRINCIPAL_H

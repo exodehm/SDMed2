@@ -25,7 +25,6 @@ SOURCES += main.cpp\
     Tablas/vistaarbol.cpp \
     Tablas/tablabase.cpp \
     Editor/editor.cpp \
-    Editor/micustomtextedit.cpp \
     Delegados/delegadoarbol.cpp \
     Delegados/delegadobase.cpp \
     Delegados/delegadocolumnasbloqueadas.cpp \
@@ -62,7 +61,6 @@ HEADERS  += mainwindow.h \
     Tablas/tablaprincipal.h \
     Tablas/vistaarbol.h \
     Editor/editor.h \
-    Editor/micustomtextedit.h \
     Delegados/delegadoarbol.h \
     Delegados/delegadobase.h \
     Delegados/delegadocolumnasbloqueadas.h \

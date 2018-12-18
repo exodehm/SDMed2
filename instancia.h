@@ -85,7 +85,6 @@ signals:
 private:
     QHeaderView* cabeceraTablaP;
     //modelos
-    //TablaPrincipalModel* modeloTablaP;
     ModeloBase* modeloTablaP;
     ModeloBase* modeloTablaMed;
     ModeloBase* modeloTablaCert;
@@ -112,6 +111,7 @@ private:
     QString codigopadre,codigohijo;
     QSqlQuery consulta;
     QString tabla,resumen;
+    QString textoPartidaInicial;
 };
 
 #endif // INSTANCIA_H
