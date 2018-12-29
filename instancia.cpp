@@ -32,6 +32,7 @@ Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resum
 {
     codigopadre ="";
     codigohijo = cod;
+    ruta.append(cod);
     pila = new QUndoStack(this);
     GenerarUI();
 }
@@ -85,6 +86,7 @@ void Instancia::GenerarUI()
 
     //editor
     editor = new Editor;//(separadorTablas);
+    editor->EscribirRuta(ruta);
     separadorTablas->addWidget(editor);
 
     //añado el separador al layout
@@ -221,6 +223,7 @@ void Instancia::Mover(int tipomovimiento)
         if (!codigopadre.isEmpty())
         {
             {
+                ruta.pop_back();
                 codigohijo = codigopadre;
                 cadenamover = "SELECT codpadre FROM \""+ tabla + "_Relacion\" WHERE codhijo = '"+ codigopadre + "';";
                 qDebug()<<cadenamover;
@@ -240,11 +243,13 @@ void Instancia::Mover(int tipomovimiento)
         {
             codigopadre=codigohijo;
             codigohijo = cod;
+            ruta.append(codigohijo);
         }
         break;
     }
     case movimiento::DERECHA:
     {
+        ruta.pop_back();
         cadenamover = "SELECT codhijo FROM \"" + tabla + "_Relacion\" WHERE codpadre = '"\
                 + codigopadre + "' AND posicion = (SELECT posicion FROM \""+ \
                 tabla + "_Relacion\" WHERE codpadre = '" + codigopadre + "' AND codhijo = '" + codigohijo +"')+ 1;";
@@ -253,10 +258,12 @@ void Instancia::Mover(int tipomovimiento)
         {
             codigohijo = consulta.value(0).toString();
         }
+        ruta.append(codigohijo);
         break;
     }
     case movimiento::IZQUIERDA:
     {
+        ruta.pop_back();
         cadenamover = "SELECT codhijo FROM \"" + tabla + "_Relacion\" WHERE codpadre = '"\
                 + codigopadre + "' AND posicion = (SELECT posicion FROM \""+ \
                 tabla + "_Relacion\" WHERE codpadre = '" + codigopadre + "' AND codhijo = '" + codigohijo +"')- 1;";
@@ -265,6 +272,7 @@ void Instancia::Mover(int tipomovimiento)
         {
             codigohijo = consulta.value(0).toString();
         }
+        ruta.append(codigohijo);
         break;
     }
     default:
@@ -318,13 +326,14 @@ void Instancia::RefrescarVista()
     modeloTablaP->ActualizarDatos(codigopadre, codigohijo);
     modeloTablaMed->ActualizarDatos(codigopadre,codigohijo);
     modeloTablaCert->ActualizarDatos(codigopadre, codigohijo);
-    //modeloArbol->ActualizarDatos();
+    modeloArbol->ActualizarDatos(tabla);
     /*modeloTablaP->QuitarIndicadorFilaVacia();
     if (modeloTablaP->rowCount(QModelIndex())==0)
     {
         modeloTablaP->insertRow(0);
     }*/    
     EscribirTexto();
+    editor->EscribirRuta(ruta);
     //editor->Formatear();
     GuardarTextoPartidaInicial();
     modeloTablaP->layoutChanged();
@@ -335,12 +344,12 @@ void Instancia::RefrescarVista()
     //modeloTablaCert->layoutChanged();
     //tablaPrincipal->setCurrentIndex(indiceActual);
     separadorTablasMedicion->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
-    //modeloArbol->layoutChanged();
-    /*arbol->expandAll();
+    modeloArbol->layoutChanged();
+    arbol->expandAll();
     arbol->resizeColumnToContents(tipoColumna::CODIGO);
     arbol->resizeColumnToContents(tipoColumna::NATURALEZA);
     arbol->resizeColumnToContents(tipoColumna::UD);
-    arbol->resizeColumnToContents(tipoColumna::RESUMEN);*/
+    arbol->resizeColumnToContents(tipoColumna::RESUMEN);
 }
 
 void Instancia::Copiar()

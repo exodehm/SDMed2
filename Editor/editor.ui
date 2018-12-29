@@ -29,13 +29,17 @@
    <property name="focusPolicy">
     <enum>Qt::StrongFocus</enum>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QTextEdit" name="textEdit"/>
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="BarraEstado"/>
+  <widget class="QStatusBar" name="BarraEstado">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+  </widget>
   <widget class="QToolBar" name="BarraHerramientas">
    <property name="focusPolicy">
     <enum>Qt::StrongFocus</enum>

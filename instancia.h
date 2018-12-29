@@ -112,6 +112,8 @@ private:
     QSqlQuery consulta;
     QString tabla,resumen;
     QString textoPartidaInicial;
+
+    QStringList ruta;
 };
 
 #endif // INSTANCIA_H

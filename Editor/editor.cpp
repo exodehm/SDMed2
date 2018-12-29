@@ -1,4 +1,3 @@
-
 #include "editor.h"
 
 Editor::Editor(QWidget *parent): QMainWindow(parent)
@@ -8,14 +7,15 @@ Editor::Editor(QWidget *parent): QMainWindow(parent)
     setupActions();
     this->setWindowFlags(this->windowFlags() & ~Qt::Window); //opcionalmente editor->setWindowFlags(Qt::Widget) ?
 	mStatLabel = new QLabel;
-	BarraEstado->addPermanentWidget(mStatLabel);	
-	updateStats();    
+    ruta = new QLabel;
+    BarraEstado->addWidget(ruta);
+    BarraEstado->addPermanentWidget(mStatLabel);
+    updateStats();
     cursivas=false;
     negrita=false;    
     //filtro = new Filter;
     //installEventFilter(filtro);
     Formatear();
-
     QObject::connect (textEdit, SIGNAL(textChanged()), this, SLOT(updateStats()));
 }
 
@@ -200,4 +200,17 @@ void Editor::Formatear()
     colorLetra = QColor(Qt::black);
     textEdit->setTextColor(colorLetra);
     textEdit->setTextBackgroundColor(colorFondo);
+}
+
+
+void Editor::EscribirRuta(QStringList listadoruta)
+{
+    QString nombre;
+    foreach (const QString& r, listadoruta)
+    {
+        nombre.append(r);
+        nombre.append('\\');
+    }
+    qDebug()<<"lA RUTA ES: "<<nombre;
+    ruta->setText(nombre);
 }

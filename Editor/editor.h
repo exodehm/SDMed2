@@ -28,7 +28,8 @@ public:
     bool HayCambios();
     QString LeeContenido() const;
     QString LeeContenidoConFormato() const;
-    void Formatear();   
+    void Formatear();
+    void EscribirRuta(QStringList listadoruta);
 
 protected:
     void setupActions();
@@ -58,6 +59,7 @@ signals:
 private:
 
     QLabel *mStatLabel;
+    QLabel *ruta;
     QFont fuenteActual;
     QColor colorFondo;
     QColor colorLetra;

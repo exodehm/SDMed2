@@ -263,4 +263,17 @@ int PrincipalModel::LeeColor(int fila, int columna)
 void PrincipalModel::Copiar(const QList<int> &filas)
 {
     qDebug()<<"Copiar en el modelo";
+    QString listahijos;
+    for (int i=0;i<filas.size();i++)
+    {
+       listahijos.append(datos.at(filas.at(i)+1).at(0).toString());
+       if (i<filas.size()-1)
+       {
+           listahijos.append(",");
+       }
+    }
+    qDebug()<<"lista hijos: "<<listahijos;
+    QString cadenacopiar = "SELECT copiar('"+tabla+"','{"+ listahijos+"}')";
+    qDebug()<<cadenacopiar;
+    consulta.exec(cadenacopiar);
 }
