@@ -68,6 +68,7 @@ void UndoEditarResumen::undo()
 void UndoEditarResumen::redo()
 {
     QString cadenaconsulta = "SELECT modificar_resumen('" +tabla+ "','" +codigohijo+ "','" +datoNuevo.toString()+ "');";
+    qDebug()<<cadenaconsulta;
     consulta.exec(cadenaconsulta);
 }
 

@@ -211,6 +211,5 @@ void Editor::EscribirRuta(QStringList listadoruta)
         nombre.append(r);
         nombre.append('\\');
     }
-    qDebug()<<"lA RUTA ES: "<<nombre;
     ruta->setText(nombre);
 }

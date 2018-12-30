@@ -32,7 +32,7 @@ Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resum
 {
     codigopadre ="";
     codigohijo = cod;
-    ruta.append(cod);
+    ruta<<codigopadre<<codigohijo;
     pila = new QUndoStack(this);
     GenerarUI();
 }
@@ -121,9 +121,7 @@ void Instancia::GenerarUI()
     // QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
     //QObject::connect(separadorTablasMedicion,SIGNAL(currentChanged(int)),this,SLOT(CambiarEntreMedicionYCertificacion(int)));
     QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(ActivarDesactivarUndoRedo(int)));
-    QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
-    //QObject::connect(editor->LeeEditor(),SIGNAL(GuardaTexto()),this,SLOT(GuardarTextoPartida()));
-    //QObject::connect(editor,SIGNAL(GuardaTexto()),this,SLOT(GuardarTextoPartida()));
+    QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));   
 }
 
 const QString& Instancia::LeeTabla() const
@@ -159,55 +157,17 @@ void Instancia::MostrarDeSegun(int indice)
 }
 
 void Instancia::SubirNivel()
-{   
-    qDebug()<<"Subir nivel";
-    /*GuardarTextoPartida();
-    GuardarTextoPartidaInicial();
-    QString cadenaundo = tr("Subir nivel");
-    //pila->push(new UndoMover(movimiento::ARRIBA,this,cadenaundo));
-    O->SubirNivel();
-    modeloTablaP->QuitarIndicadorFilaVacia();
-    RefrescarVista(QModelIndex(),QModelIndex());*/
+{
     Mover(movimiento::ARRIBA);
 }
 
 void Instancia::BajarNivel()
 {
-    qDebug()<<"Bajar nivel";
-    /*Q_UNUSED (indice);
-    GuardarTextoPartidaInicial();
-    GuardarTextoPartidaModificada();
-    QString cadenaundo = tr("Bajar nivel");
-    //pila->push(new UndoMover(movimiento::ABAJO, this,cadenaundo));
-    O->BajarNivel();
-    RefrescarVista(QModelIndex(),QModelIndex());*/
     Mover(movimiento::ABAJO);
 }
 
-/*void Instancia::Avanzar()
-{
-    GuardarTextoPartida();
-    GuardarTextoPartidaInicial();
-    QString cadenaundo = tr("Avanzar");
-    //pila->push(new UndoMover(movimiento::DERECHA,this,cadenaundo));
-    O->Siguiente();
-    RefrescarVista(QModelIndex(),QModelIndex());
-}*/
-
-/*void Instancia::Retroceder()
-{
-    GuardarTextoPartida();
-    GuardarTextoPartidaInicial();
-    QString cadenaundo = tr("Retroceder");
-    //pila->push(new UndoMover(movimiento::IZQUIERDA,this,cadenaundo));
-    O->Anterior();
-    RefrescarVista(QModelIndex(),QModelIndex());
-}
-*/
-
 void Instancia::Mover(int tipomovimiento)
 {
-    //GuardarTextoPartidaInicial();
     GuardarTextoPartida();
     QString cadenamover;
     switch (tipomovimiento)
@@ -216,6 +176,8 @@ void Instancia::Mover(int tipomovimiento)
     {
         codigopadre="";
         codigohijo =tabla;
+        ruta.clear();
+        ruta<<codigopadre<<codigohijo;
         break;
     }
     case movimiento::ARRIBA:
@@ -225,13 +187,7 @@ void Instancia::Mover(int tipomovimiento)
             {
                 ruta.pop_back();
                 codigohijo = codigopadre;
-                cadenamover = "SELECT codpadre FROM \""+ tabla + "_Relacion\" WHERE codhijo = '"+ codigopadre + "';";
-                qDebug()<<cadenamover;
-                consulta.exec(cadenamover);
-                while (consulta.next())
-                {
-                    codigopadre = consulta.value(0).toString();
-                }
+                codigopadre = ruta.at(ruta.size()-2);
             }
         }
         break;
@@ -289,26 +245,20 @@ void Instancia::VerArbol()
 
 void Instancia::TablaSeleccionarTodo(QWidget* widgetactivo)
 {
-    /* if (widgetactivo->objectName()=="TablaP")
+    TablaBase* tabla = qobject_cast<TablaBase*>(widgetactivo);
+    if (tabla)
     {
-        tablaPrincipal->selectAll();
+        tabla->selectAll();
     }
-    else if (widgetactivo->objectName()=="TablaMC")
-    {
-        tablaMediciones->selectAll();
-    }*/
 }
 
 void Instancia::TablaDeseleccionarTodo(QWidget* widgetactivo)
 {
-    /* if (widgetactivo->objectName()=="TablaP")
+    TablaBase* tabla = qobject_cast<TablaBase*>(widgetactivo);
+    if (tabla)
     {
-        tablaPrincipal->clearSelection();
+        tabla->clearSelection();
     }
-    else if (widgetactivo->objectName()=="TablaMC")
-    {
-        tablaMediciones->clearSelection();
-    }*/
 }
 
 void Instancia::Undo()
@@ -326,7 +276,7 @@ void Instancia::RefrescarVista()
     modeloTablaP->ActualizarDatos(codigopadre, codigohijo);
     modeloTablaMed->ActualizarDatos(codigopadre,codigohijo);
     modeloTablaCert->ActualizarDatos(codigopadre, codigohijo);
-    modeloArbol->ActualizarDatos(tabla);
+    //modeloArbol->ActualizarDatos(tabla);
     /*modeloTablaP->QuitarIndicadorFilaVacia();
     if (modeloTablaP->rowCount(QModelIndex())==0)
     {
@@ -344,12 +294,12 @@ void Instancia::RefrescarVista()
     //modeloTablaCert->layoutChanged();
     //tablaPrincipal->setCurrentIndex(indiceActual);
     separadorTablasMedicion->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
-    modeloArbol->layoutChanged();
+    /*modeloArbol->layoutChanged();
     arbol->expandAll();
     arbol->resizeColumnToContents(tipoColumna::CODIGO);
     arbol->resizeColumnToContents(tipoColumna::NATURALEZA);
     arbol->resizeColumnToContents(tipoColumna::UD);
-    arbol->resizeColumnToContents(tipoColumna::RESUMEN);
+    arbol->resizeColumnToContents(tipoColumna::RESUMEN);*/
 }
 
 void Instancia::Copiar()
@@ -377,14 +327,14 @@ void Instancia::Copiar()
             {
                 modelo->Copiar(listaIndices);
             }
-        }
+        }        
     }
 }
 
 void Instancia::EscribirTexto()
 {
     QString cadenavertexto = "SELECT ver_texto('" + tabla + "','" + codigohijo+"');";
-    qDebug()<<cadenavertexto;
+    //qDebug()<<cadenavertexto;
     consulta.exec(cadenavertexto);
     QString descripcion;
     while (consulta.next())
@@ -415,29 +365,21 @@ void Instancia::PosicionarTablaM(QModelIndex indice)
 
 void Instancia::GuardarTextoPartidaInicial()
 {
-        qDebug()<<"textoPartidaActual"<<textoPartidaInicial;
-        textoPartidaInicial = editor->LeeContenidoConFormato();
+    //qDebug()<<"textoPartidaActual"<<textoPartidaInicial;
+    textoPartidaInicial = editor->LeeContenidoConFormato();
 }
 
 void Instancia::GuardarTextoPartida()
 {
-    qDebug()<<"Fucnion GuardarTextoPArtida()"<<editor->LeeContenido();
+    //qDebug()<<"Fucnion GuardarTextoPArtida()"<<editor->LeeContenido();
     if (editor->HayCambios())
     {
-        //TablaBase* tabla = qobject_cast<TablaBase*>(QApplication::focusWidget());
-        //if (tabla)
-        {
-            QString cadenaundo = ("Cambiar texto de partida a " + editor->LeeContenido());
-            qDebug()<<cadenaundo;            
-            pila->push(new UndoEditarTexto(tabla, codigopadre, codigohijo, textoPartidaInicial,editor->LeeContenidoConFormato(),QVariant(cadenaundo)));
-        }
+        QString cadenaundo = ("Cambiar texto de partida a " + editor->LeeContenido());
+        //qDebug()<<cadenaundo;
+        pila->push(new UndoEditarTexto(tabla, codigopadre, codigohijo, textoPartidaInicial,editor->LeeContenidoConFormato(),QVariant(cadenaundo)));
+
     }
 }
-
-/*TEXTO Instancia::TextoPartidaInicial()
-{
-   return textoPartidaInicial;
-}*/
 
 void Instancia::CopiarMedicionTablaM()
 {
@@ -605,18 +547,4 @@ void Instancia::CambiarEntreMedicionYCertificacion(int n)
 /*TablaBase* Instancia::LeeTablaPrincipal()
 {
     return tablaPrincipal;
-}*/
-
-/*int Instancia::TipoFichero(TEXTO nombrefichero)
-{
-    nombrefichero=nombrefichero.toLower();
-    if (nombrefichero.endsWith(".bc3"))
-    {
-        return tipoFichero::BC3;
-    }
-    else if (nombrefichero.endsWith(".seg"))
-    {
-        return tipoFichero::SEG;
-    }
-    else return tipoFichero::NOVALIDO;
 }*/
