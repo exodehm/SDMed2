@@ -43,6 +43,7 @@ bool Filter::eventFilter(QObject *obj, QEvent* event)
                 {
                     tabla->model()->setData(tabla->currentIndex(),"",Qt::EditRole);//solo si hay una celda seleccionada
                 }
+                tabla->clearSelection();
                 return true;
                 break;
             }
