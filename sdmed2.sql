@@ -5,7 +5,7 @@
 -- Dumped from database version 9.5.14
 -- Dumped by pg_dump version 9.5.14
 
--- Started on 2019-01-08 13:41:43 CET
+-- Started on 2019-01-08 16:56:50 CET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -2365,17 +2365,11 @@ CREATE FUNCTION public.ver_texto(nombretabla character varying, cod character va
     LANGUAGE plpgsql
     AS $$
 DECLARE
-tablaconceptos character varying;
+tablaconceptos character varying := nombretabla||'_Conceptos';
 str_null_case character varying;
 texto_partida text;
 BEGIN
-tablaconceptos := nombretabla||'_Conceptos';
-IF (cod = '') IS NOT FALSE THEN
-	str_null_case := 'codigo IS NULL';
-ELSE
-	str_null_case := 'codigo = '||quote_literal(cod);
-END IF;
-EXECUTE FORMAT ('SELECT descripcionhtml FROM %I WHERE %s',tablaconceptos,str_null_case) INTO texto_partida;
+EXECUTE FORMAT ('SELECT descripcionhtml FROM %I WHERE codigo = %L',tablaconceptos,cod) INTO texto_partida;
 return texto_partida;
 END;
 $$;
@@ -2846,7 +2840,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2019-01-08 13:41:43 CET
+-- Completed on 2019-01-08 16:56:50 CET
 
 --
 -- PostgreSQL database dump complete
