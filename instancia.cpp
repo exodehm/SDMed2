@@ -206,9 +206,7 @@ void Instancia::Mover(int tipomovimiento)
     case movimiento::DERECHA:
     {
         ruta.pop_back();
-        cadenamover = "SELECT codhijo FROM \"" + tabla + "_Relacion\" WHERE codpadre = '"\
-                + codigopadre + "' AND posicion = (SELECT posicion FROM \""+ \
-                tabla + "_Relacion\" WHERE codpadre = '" + codigopadre + "' AND codhijo = '" + codigohijo +"')+ 1;";
+        cadenamover = "SELECT ver_siguiente('"+ tabla + "','"+ codigopadre + "','"+ codigohijo+"')";
         consulta.exec(cadenamover);
         while (consulta.next())
         {
@@ -220,9 +218,7 @@ void Instancia::Mover(int tipomovimiento)
     case movimiento::IZQUIERDA:
     {
         ruta.pop_back();
-        cadenamover = "SELECT codhijo FROM \"" + tabla + "_Relacion\" WHERE codpadre = '"\
-                + codigopadre + "' AND posicion = (SELECT posicion FROM \""+ \
-                tabla + "_Relacion\" WHERE codpadre = '" + codigopadre + "' AND codhijo = '" + codigohijo +"')- 1;";
+        cadenamover = "SELECT ver_anterior('"+ tabla + "','"+ codigopadre + "','"+ codigohijo+"')";
         consulta.exec(cadenamover);
         while (consulta.next())
         {
