@@ -7,6 +7,6 @@ VistaArbol::VistaArbol(QWidget *parent):QTreeView(parent)
     setItemDelegateForColumn(tipoColumna::RESUMEN,delegado);
     setColumnWidth(tipoColumna::NATURALEZA,10);
     setColumnWidth(tipoColumna::CODIGO,10);
-    //setItemDelegate(delegado);
+    //setItemDelegate(delegado);    
 }
 

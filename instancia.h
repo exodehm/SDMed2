@@ -74,6 +74,7 @@ public slots:
     void ActivarDesactivarUndoRedo(int indice);
     void GuardarTextoPartidaInicial();
     void GuardarTextoPartida();
+    void SincronizarArbolTablal();
 
 signals:
     void CopiarP();

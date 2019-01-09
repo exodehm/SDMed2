@@ -121,7 +121,8 @@ void Instancia::GenerarUI()
     // QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
     //QObject::connect(separadorTablasMedicion,SIGNAL(currentChanged(int)),this,SLOT(CambiarEntreMedicionYCertificacion(int)));
     QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(ActivarDesactivarUndoRedo(int)));
-    QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));   
+    QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
+    QObject::connect(arbol,SIGNAL(clicked(QModelIndex)),this,SLOT(SincronizarArbolTablal()));
 }
 
 const QString& Instancia::LeeTabla() const
@@ -374,6 +375,39 @@ void Instancia::GuardarTextoPartida()
         //qDebug()<<cadenaundo;
         pila->push(new UndoEditarTexto(tabla, codigopadre, codigohijo, textoPartidaInicial,editor->LeeContenidoConFormato(),QVariant(cadenaundo)));
 
+    }
+}
+
+void Instancia::SincronizarArbolTablal()
+{
+    TreeItem * mi_item = static_cast<TreeItem*>(arbol->currentIndex().internalPointer());
+    if (mi_item && mi_item->parentItem()!=nullptr)
+    {
+        codigohijo = mi_item->data(0).toString();
+        ruta.clear();
+        ruta.append(codigohijo);
+        //evito la cabecera del arbol que no forma parte de la estructura de datos y la susituyo por una cadena nula
+        if (mi_item->parentItem()->parentItem()!=nullptr)
+        {
+            codigopadre = mi_item->parentItem()->data(0).toString();
+        }
+        else
+        {
+            codigopadre = "";
+        }
+        while (mi_item->parentItem()!= nullptr)
+        {
+            if (mi_item->parentItem()->parentItem()!=nullptr)
+            {
+                ruta.push_front(mi_item->parentItem()->data(0).toString());
+            }
+            else
+            {
+                ruta.push_front("");
+            }
+            mi_item = mi_item->parentItem();
+        }
+        RefrescarVista();
     }
 }
 
