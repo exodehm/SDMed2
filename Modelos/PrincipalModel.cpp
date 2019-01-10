@@ -272,8 +272,9 @@ void PrincipalModel::Copiar(const QList<int> &filas)
            listahijos.append(",");
        }
     }
-    qDebug()<<"lista hijos: "<<listahijos;
-    QString cadenacopiar = "SELECT copiar('"+tabla+"','{"+ listahijos+"}')";
+    QString codpadre = datos.at(0).at(0).toString();
+    codpadre.remove(LeyendasCabecera[0]);
+    QString cadenacopiar = "SELECT copiar_hijos('"+tabla+"','"+codpadre +"','"+ listahijos+"')";
     qDebug()<<cadenacopiar;
     consulta.exec(cadenacopiar);
 }

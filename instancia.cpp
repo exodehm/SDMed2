@@ -113,7 +113,7 @@ void Instancia::GenerarUI()
     //QObject::connect(modeloTablaMed,SIGNAL(Posicionar(QModelIndex)),this,SLOT(PosicionarTablaM(QModelIndex)));
     QObject::connect(tablaPrincipal,SIGNAL(Copiar()),this,SLOT(Copiar()));
     QObject::connect(tablaMediciones,SIGNAL(Copiar()),this,SLOT(Copiar()));
-    QObject::connect(tablaPrincipal,SIGNAL(CopiarFilas(QList<int>)),this,SLOT(CopiarPartidas(QList<int>)));
+    //QObject::connect(tablaPrincipal,SIGNAL(CopiarFilas(QList<int>)),this,SLOT(CopiarPartidas(QList<int>)));
     //QObject::connect(tablaPrincipal,SIGNAL(PegarContenido()),this,SLOT(PegarPartidasTablaP()));
     //QObject::connect(tablaMediciones,SIGNAL(CopiarFilas()),this,SLOT(CopiarMedicionTablaM()));
     // QObject::connect(tablaMediciones,SIGNAL(PegarContenido()),this,SLOT(PegarMedicionTablaM()));
@@ -317,14 +317,15 @@ void Instancia::Copiar()
             }
             qSort(listaIndices);
             for (auto elem:listaIndices)
-                qDebug()<<"Borrar los indices: "<<elem;
-            qDebug()<<tabla->model();
+                qDebug()<<"Copiar los indices: "<<elem;
+            qDebug()<<tabla->model();            
             ModeloBase* modelo = qobject_cast<ModeloBase*>(tabla->model());
             if (modelo)
             {
                 modelo->Copiar(listaIndices);
             }
-        }        
+            CopiarElementosTablaPortapapeles(indices, tabla);
+        }
     }
 }
 
@@ -433,15 +434,15 @@ void Instancia::CopiarPartidas(const QList<int>&indices)
     //selecmodel->clearSelection();
 }
 
-void Instancia::CopiarPartidasPortapapeles(const QModelIndexList &lista)
-{
-    /*QString textoACopiar;
+void Instancia::CopiarElementosTablaPortapapeles(const QModelIndexList &lista, TablaBase *tabla)
+{   
+    QString textoACopiar;
     for(int i = 0; i < lista.size(); i++)
     {
         //if (i!=0 && (i-10)%10!=0 && (i-9)%9!=0) //excluyo de los datos a copiar la primera y ultima columna (Fase e Id)
         {
             QModelIndex index = lista.at(i);
-            textoACopiar.append(modeloTablaP->data(index).toString());
+            textoACopiar.append(tabla->model()->data(index).toString());
             textoACopiar.append('\t');
         }
     }
@@ -461,8 +462,7 @@ void Instancia::CopiarPartidasPortapapeles(const QModelIndexList &lista)
         i++;
     }
     QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setText(textoACopiar);*/
-
+    clipboard->setText(textoACopiar);
 }
 
 void Instancia::PegarPartidasTablaP()
@@ -508,36 +508,6 @@ void Instancia::PegarMedicionTablaM()
     selecmodel->clearSelection();
 }*/
 
-void Instancia::CopiarMedicionPortapapeles(const QModelIndexList& lista)
-{
-    /*QString textoACopiar;
-    for(int i = 0; i < lista.size(); i++)
-    {
-        if (i!=0 && (i-10)%10!=0 && (i-9)%9!=0) //excluyo de los datos a copiar la primera y ultima columna (Fase e Id)
-        {
-            QModelIndex index = lista.at(i);
-            textoACopiar.append(modeloTablaMed->data(index).toString());
-            textoACopiar.append('\t');
-        }
-    }
-    textoACopiar.replace(",",".");
-    int i=0, n=0;
-    while (i<textoACopiar.size())
-    {
-        if (textoACopiar.at(i)=='\t')
-        {
-            n++;
-        }
-        if (n==8)
-        {
-            textoACopiar.replace(i,1,'\n');
-            n=0;
-        }
-        i++;
-    }
-    QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setText(textoACopiar);    */
-}
 
 /*void Instancia::PegarMedicion(const Medicion& ListaMedicion)
 {    

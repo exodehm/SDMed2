@@ -1,17 +1,9 @@
 #ifndef INSTANCIA_H
 #define INSTANCIA_H
 
-//#include <QWidget>
-
-/*#include "./Ficheros/abrirguardar.h"
-#include "./Ficheros/abrirguardarbc3.h"
-#include "./Ficheros/abrirguardarseg.h"*/
-
-
-//#include "./Undo/undoajustarpresupuesto.h"
-
 #include "filter.h"
 #include "defs.h"
+
 class QUndoStack;
 class QSplitter;
 class MedCertModel;
@@ -29,11 +21,6 @@ public:
 
     void GenerarUI();
     void EscribirTexto();    
-    /*TEXTO TextoPartidaInicial();
-
-    PrincipalModel* ModeloTablaPrincipal();
-    TablaBase* LeeTablaPrincipal();*/
-
     QUndoStack* Pila();
     void Mover(int tipomovimiento);
     void VerArbol();
@@ -41,8 +28,6 @@ public:
 
     const QString& LeeTabla() const;
     const QString& LeeResumen() const;
-
-    //int TipoFichero(TEXTO nombrefichero);
 
 public slots:
 
@@ -64,9 +49,8 @@ public slots:
     void CopiarPartidas(const QList<int>&indices);
     void PegarPartidasTablaP();
     void PegarMedicionTablaM();
-    //void PegarPartidas(const Obra::ListaAristasNodos &listaNodosCopiarPegar);
-    void CopiarMedicionPortapapeles(const QModelIndexList &lista);
-    void CopiarPartidasPortapapeles(const QModelIndexList &lista);
+    //void PegarPartidas(const Obra::ListaAristasNodos &listaNodosCopiarPegar);    
+    void CopiarElementosTablaPortapapeles(const QModelIndexList &lista, TablaBase* tabla);
     //void CopiarMedicion(Medicion& listaMedicionCopiarPegar);
     //void PegarMedicion(const Medicion& ListaMedicion);
     void Certificar();

@@ -14,9 +14,10 @@ public slots:
     void MostrarMenuCabecera(QPoint pos);
     void MostrarMenuLateralTabla(QPoint pos);
     //void Copiar();
+    void CopiarPartidas();
 
 signals:
-    void CopiarPartidas();
+
 };
 
 #endif // TABLAPRINCIPAL_H
