@@ -19,5 +19,6 @@
 		<file>images/importar.png</file>
 		<file>images/exportar.png</file>
 		<file>images/database.png</file>
+		<file>images/imprimir.png</file>
     </qresource>
 </RCC>

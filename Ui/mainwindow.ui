@@ -576,6 +576,9 @@
    <addaction name="menu"/>
   </widget>
   <widget class="QToolBar" name="BarraPrincipal">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -586,6 +589,7 @@
    <addaction name="actionAbrirBBDD"/>
    <addaction name="actionImportar"/>
    <addaction name="actionExportar"/>
+   <addaction name="actionImprimir"/>
    <addaction name="actionGuardar"/>
    <addaction name="actionCerrar"/>
   </widget>
@@ -995,6 +999,24 @@
    </property>
    <property name="toolTip">
     <string>ExportarBC3</string>
+   </property>
+  </action>
+  <action name="actionImprimir">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../recursos.qrc">
+     <normaloff>:/images/imprimir.png</normaloff>:/images/imprimir.png</iconset>
+   </property>
+   <property name="text">
+    <string>Imprimir</string>
+   </property>
+   <property name="toolTip">
+    <string>Imprimir</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>

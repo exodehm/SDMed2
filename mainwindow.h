@@ -38,6 +38,7 @@ private slots:
     //bool Guardar();
     bool Exportar(QString nombreFichero=QString());
     bool GuardarObra(QString nombreFichero);
+    void ActionImprimir();
     //void ExportarBC3();
     void ActionCerrar();
     void ActionSalir();

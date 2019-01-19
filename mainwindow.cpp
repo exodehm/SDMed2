@@ -15,6 +15,7 @@
 #include <QPushButton>
 #include <QUndoStack>
 #include <QFileDialog>
+#include <QProcess>
 
 
 
@@ -339,6 +340,16 @@ bool MainWindow::GuardarObra(QString nombreFichero)
     return toReturn;
 }
 
+void MainWindow::ActionImprimir()
+{
+    QString program = "soffice ";
+    QStringList arguments;
+    arguments << " \"/home/david/Trabajo/Informes/Nicolas Alhendin/Piso Torremolinos/\"" << "Portada.odt";
+    foreach (const QString& S, arguments)
+        program.append(S);
+    QProcess::startDetached(program);
+}
+
 void MainWindow::ActionCerrar()
 {
     if (!ListaObras.empty())
@@ -365,6 +376,7 @@ void MainWindow::ActionCerrar()
         botonNuevaCertificacion->setEnabled(false);
         ui->actionVer_Arbol->setEnabled(false);
         ui->actionExportar->setEnabled(false);
+        ui->actionImprimir->setEnabled(false);
     }
 }
 
@@ -508,6 +520,7 @@ void MainWindow::setupActions()
     QObject::connect(ui->actionAbrirBBDD,SIGNAL(triggered(bool)),this,SLOT(ActionAbrirBBDD()));
     QObject::connect(ui->actionCerrar,SIGNAL(triggered(bool)),this,SLOT(ActionCerrar()));
     //QObject::connect(ui->actionGuardar,SIGNAL(triggered(bool)),this,SLOT(ActionGuardar()));
+    QObject::connect(ui->actionImprimir,SIGNAL(triggered(bool)),this,SLOT(ActionImprimir()));
     QObject::connect(ui->actionGuardar_como,SIGNAL(triggered(bool)),this,SLOT(Exportar()));
     QObject::connect(ui->action_Salir, SIGNAL(triggered(bool)),this, SLOT(ActionSalir()));
     QObject::connect(ui->actionCopiar,SIGNAL(triggered(bool)),this,SLOT(ActionCopiar()));
@@ -537,6 +550,7 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     ui->actionGuardar->setEnabled(true);
     ui->actionCerrar->setEnabled(true);
     ui->actionExportar->setEnabled(true);
+    ui->actionImprimir->setEnabled(true);
     comboMedCert->setEnabled(true);
     botonNuevaCertificacion->setEnabled(true);
     ui->actionVer_Arbol->setEnabled(true);
