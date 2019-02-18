@@ -45,6 +45,7 @@ public slots:
     void RefrescarVista();
 
     void Copiar();
+    void Pegar();
     void CopiarMedicionTablaM();
     void CopiarPartidas(const QList<int>&indices);
     void PegarPartidasTablaP();

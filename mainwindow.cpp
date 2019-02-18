@@ -8,6 +8,9 @@
 #include "./Dialogos/dialogodatoscodigoresumen.h"
 #include "./Dialogos/dialogotablaslistadoobras.h"
 #include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
+
+#include "pyrun.h"
+
 #include <QMessageBox>
 #include <QDebug>
 #include <QLabel>
@@ -15,8 +18,6 @@
 #include <QPushButton>
 #include <QUndoStack>
 #include <QFileDialog>
-#include <QProcess>
-
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -114,7 +115,7 @@ QList<QList<QVariant>> MainWindow::VerObrasEnBBDD()
         {
             obra.append(consultaresumenes.value(0));
         }
-        //ahora vemos si la obra esta abierta
+        //ahora vemos si la obra esta abierta     
         bool obraabierta = false;
         for (auto elem : ListaObras)
         {
@@ -128,7 +129,7 @@ QList<QList<QVariant>> MainWindow::VerObrasEnBBDD()
         obraabierta = false;
         listadoobras.append(obra);
         obra.clear();
-    }
+    }    
     return listadoobras;
 }
 
@@ -219,7 +220,7 @@ bool MainWindow::ActionAbrirBBDD()
 {
     QList<QList<QVariant>>ListaObrasenBDD = VerObrasEnBBDD();
     if (ListaObrasenBDD.isEmpty())
-    {
+    {        
         QMessageBox::warning(this, tr("Aviso"),
                                              tr("Actualmente no hay obras en la BBDD"),
                                              QMessageBox::Yes | QMessageBox::Default);
@@ -237,6 +238,7 @@ bool MainWindow::ActionAbrirBBDD()
         }
         delete cuadro;
     }
+
     return true;
 }
 
@@ -341,13 +343,9 @@ bool MainWindow::GuardarObra(QString nombreFichero)
 }
 
 void MainWindow::ActionImprimir()
-{
-    QString program = "soffice ";
-    QStringList arguments;
-    arguments << " \"/home/david/Trabajo/Informes/Nicolas Alhendin/Piso Torremolinos/\"" << "Portada.odt";
-    foreach (const QString& S, arguments)
-        program.append(S);
-    QProcess::startDetached(program);
+{   
+    PyRun* pyRun = new PyRun();
+    delete pyRun;
 }
 
 void MainWindow::ActionCerrar()
@@ -388,17 +386,22 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
 void MainWindow::ActionSalir()
 {
+    db.close();
     qApp->quit();
 }
 
 void MainWindow::ActionCopiar()
 {
     (*obraActual)->Copiar();
+    ui->actionPegar->setEnabled(true);
 }
 
 void MainWindow::ActionPegar()
 {
-
+    if (HayObra())
+    {
+        (*obraActual)->Pegar();
+    }
 }
 
 void MainWindow::ActionCortar()

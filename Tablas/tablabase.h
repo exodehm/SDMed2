@@ -39,7 +39,6 @@ private slots:
 
 public slots:    
 
-    void Pegar();
     void Certificar();
 
     void SeleccionarTodo();
@@ -49,6 +48,7 @@ public slots:
 
 signals:
     void Copiar();
+    void Pegar();
     void CambiaFila(QModelIndex ind);    
     void CopiarFilas(QList<int>indices);
     void PegarContenido();

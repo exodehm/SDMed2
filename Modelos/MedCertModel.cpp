@@ -80,6 +80,11 @@ void MedCertModel::Copiar(const QList<int>& filas)
 
 }
 
+void MedCertModel::Pegar()
+{
+
+}
+
 void MedCertModel::BorrarFilas(const QList<int>& filas)
 {
     QList<QString>idsBorrar;

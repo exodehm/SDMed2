@@ -38,4 +38,20 @@ private:
     QStringList codigoshijos;    
 };
 
+/****************PEGAR DEL PORTAPAPELES***************/
+
+class UndoPegarPartidas : public QUndoCommand
+{
+public:
+    UndoPegarPartidas (QString tablaactual, QString codigopadre, QVariant descripcion);
+
+    void undo();
+    void redo();
+
+private:
+    QSqlQuery consulta;
+    QString tabla, codigopadre, nodosinsertados;
+    bool esPrimerRedo;
+};
+
 #endif // UNDOINSERTARPRINCIPAL_H

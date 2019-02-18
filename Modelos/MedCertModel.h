@@ -18,6 +18,7 @@ public:
     bool EsPartida();
     void PrepararCabecera(QList<QList<QVariant>>&datos);
     void Copiar(const QList<int> &filas);
+    void Pegar();
     void BorrarFilas(const QList<int> &filas);
     void InsertarFila(int fila);
     void ActualizarDatos(QString padre, QString hijo);

@@ -260,7 +260,7 @@ bool Filter::eventFilter(QObject *obj, QEvent* event)
             {
                 if (ke->modifiers()==Qt::ControlModifier)
                 {
-                    emit tabla->PegarContenido();
+                    emit tabla->Pegar();
                     return true;
                 }
                 break;

@@ -76,11 +76,11 @@ void TablaBase::Bloquear(int columna)
     emit CopiarContenido();
 }*/
 
-void TablaBase::Pegar()
+/*void TablaBase::Pegar()
 {
     qDebug()<<sender()->parent();    
     emit PegarContenido();
-}
+}*/
 
 void TablaBase::SeleccionarTodo()
 {

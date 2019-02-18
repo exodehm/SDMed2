@@ -264,6 +264,7 @@ void PrincipalModel::Copiar(const QList<int> &filas)
 {
     qDebug()<<"Copiar en el modelo";
     QString listahijos;
+    listahijos.append("{");
     for (int i=0;i<filas.size();i++)
     {
        listahijos.append(datos.at(filas.at(i)+1).at(0).toString());
@@ -272,9 +273,19 @@ void PrincipalModel::Copiar(const QList<int> &filas)
            listahijos.append(",");
        }
     }
+    listahijos.append("}");
     QString codpadre = datos.at(0).at(0).toString();
     codpadre.remove(LeyendasCabecera[0]);
-    QString cadenacopiar = "SELECT copiar_hijos('"+tabla+"','"+codpadre +"','"+ listahijos+"')";
+    QString cadenacopiar = "SELECT copiar('"+tabla+"','"+codpadre +"','"+ listahijos+"')";
     qDebug()<<cadenacopiar;
     consulta.exec(cadenacopiar);
+}
+
+void PrincipalModel::Pegar()
+{
+    //nodo padre bajo el cual se pegaran los nodos
+    QString codpadre = datos.at(0).at(0).toString();
+    codpadre.remove(LeyendasCabecera[0]);
+    //por ultimo llamo a la funcion
+    pila->push(new UndoPegarPartidas(tabla,codpadre,QVariant()));
 }

@@ -63,3 +63,44 @@ void UndoBorrarPartidas::redo()
     qDebug()<<cadenaborrar;
     consulta.exec(cadenaborrar);
 }
+
+
+/************PEGAR PARTIDAS*****************/
+
+
+UndoPegarPartidas::UndoPegarPartidas(QString tablaactual, QString codigopadre, QVariant descripcionn):
+    tabla(tablaactual),codigopadre(codigopadre)
+{
+    Q_UNUSED(descripcionn);
+    esPrimerRedo = true;
+}
+
+void UndoPegarPartidas::undo()
+{
+    QString cadenaborrar = "SELECT borrar_hijos('"+tabla+"','"+codigopadre+"','"+nodosinsertados+"','1');";
+    qDebug()<<cadenaborrar;
+    consulta.exec(cadenaborrar);
+}
+
+void UndoPegarPartidas::redo()
+{
+    if (esPrimerRedo == true)
+    {
+        esPrimerRedo = false;
+        QString cadenaconsulta = "SELECT pegar('"+tabla+"','"+codigopadre+"')";
+        qDebug()<<cadenaconsulta;
+        consulta.exec(cadenaconsulta);        
+        while (consulta.next())
+        {
+            nodosinsertados = consulta.value(0).toString();
+            qDebug()<<"Los nodos chachi son: "<<nodosinsertados;
+        }
+    }
+    else
+    {
+        QString cadenaconsulta = "SELECT restaurar_lineas_borradas('"+tabla+"','1')";
+        qDebug()<<cadenaconsulta;
+        consulta.exec(cadenaconsulta);
+    }
+}
+

@@ -728,6 +728,9 @@
    </property>
   </action>
   <action name="actionCortar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../recursos.qrc">
      <normaloff>:/images/cut.png</normaloff>:/images/cut.png</iconset>
@@ -740,6 +743,9 @@
    </property>
   </action>
   <action name="actionPegar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../recursos.qrc">
      <normaloff>:/images/paste.png</normaloff>:/images/paste.png</iconset>

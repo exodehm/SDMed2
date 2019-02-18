@@ -114,9 +114,9 @@ void Instancia::GenerarUI()
     QObject::connect(tablaPrincipal,SIGNAL(Copiar()),this,SLOT(Copiar()));
     QObject::connect(tablaMediciones,SIGNAL(Copiar()),this,SLOT(Copiar()));
     //QObject::connect(tablaPrincipal,SIGNAL(CopiarFilas(QList<int>)),this,SLOT(CopiarPartidas(QList<int>)));
-    //QObject::connect(tablaPrincipal,SIGNAL(PegarContenido()),this,SLOT(PegarPartidasTablaP()));
+    QObject::connect(tablaPrincipal,SIGNAL(Pegar()),this,SLOT(Pegar()));
     //QObject::connect(tablaMediciones,SIGNAL(CopiarFilas()),this,SLOT(CopiarMedicionTablaM()));
-    // QObject::connect(tablaMediciones,SIGNAL(PegarContenido()),this,SLOT(PegarMedicionTablaM()));
+    QObject::connect(tablaMediciones,SIGNAL(Pegar()),this,SLOT(Pegar()));
 
     // QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
     //QObject::connect(separadorTablasMedicion,SIGNAL(currentChanged(int)),this,SLOT(CambiarEntreMedicionYCertificacion(int)));
@@ -325,6 +325,21 @@ void Instancia::Copiar()
                 modelo->Copiar(listaIndices);
             }
             CopiarElementosTablaPortapapeles(indices, tabla);
+            tabla->selectionModel()->clearSelection();
+        }         
+    }
+}
+
+void Instancia::Pegar()
+{
+    QWidget* w = qApp->focusWidget();
+    TablaBase* tabla = qobject_cast<TablaBase*>(w);
+    if(tabla)
+    {
+        ModeloBase* modelo = qobject_cast<ModeloBase*>(tabla->model());
+        if (modelo)
+        {
+            modelo->Pegar();
         }
     }
 }

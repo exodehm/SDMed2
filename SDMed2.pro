@@ -47,7 +47,8 @@ SOURCES += main.cpp\
     Undo/undoinsertarprincipal.cpp \
     Undo/undoeditarmedicion.cpp \
     Ficheros/exportar.cpp \
-    Modelos/PrincipalModel.cpp
+    Modelos/PrincipalModel.cpp \
+    pyrun.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -84,7 +85,9 @@ HEADERS  += mainwindow.h \
     Undo/undoinsertarprincipal.h \
     Undo/undoeditarmedicion.h \
     Ficheros/exportar.h \
-    Modelos/PrincipalModel.h
+    Modelos/PrincipalModel.h \
+    python_wrapper.h \
+    pyrun.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
@@ -106,3 +109,7 @@ RESOURCES += \
     recursos.qrc \
     Editor/iconosEditor.qrc \
     iconos.qrc
+
+LIBS += -L /usr/local/lib/python3.5 -lpython3.5m
+INCLUDEPATH += /usr/include/python3.5m
+DEPENDPATH +=  /usr/include/python3.5m
