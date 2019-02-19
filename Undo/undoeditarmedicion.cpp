@@ -58,7 +58,7 @@ void UndoBorrarLineasMedicion::undo()
 void UndoBorrarLineasMedicion::redo()
 {
 
-    QString cadenaborrarfilas = "SELECT borrar_lineas_medicion('"+tabla+"','"+cadenaborrar+"','t','t')";
+    QString cadenaborrarfilas = "SELECT borrar_lineas_medicion('"+tabla+"','"+cadenaborrar+"',0,'t','t')";
     qDebug()<<cadenaborrarfilas;
     consulta.exec(cadenaborrarfilas);
 }
