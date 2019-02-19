@@ -336,10 +336,12 @@ void Instancia::Pegar()
     TablaBase* tabla = qobject_cast<TablaBase*>(w);
     if(tabla)
     {
+        QModelIndex indice = tabla->currentIndex();
+        int fila = indice.row();
         ModeloBase* modelo = qobject_cast<ModeloBase*>(tabla->model());
         if (modelo)
         {
-            modelo->Pegar();
+            modelo->Pegar(fila);
         }
     }
 }

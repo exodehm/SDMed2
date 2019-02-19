@@ -43,7 +43,7 @@ private:
 class UndoPegarPartidas : public QUndoCommand
 {
 public:
-    UndoPegarPartidas (QString tablaactual, QString codigopadre, QVariant descripcion);
+    UndoPegarPartidas (QString tablaactual, QString codigopadre, int _fila, QVariant descripcion);
 
     void undo();
     void redo();
@@ -52,6 +52,7 @@ private:
     QSqlQuery consulta;
     QString tabla, codigopadre, nodosinsertados;
     bool esPrimerRedo;
+    QString fila;
 };
 
 #endif // UNDOINSERTARPRINCIPAL_H

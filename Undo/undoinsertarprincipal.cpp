@@ -68,11 +68,12 @@ void UndoBorrarPartidas::redo()
 /************PEGAR PARTIDAS*****************/
 
 
-UndoPegarPartidas::UndoPegarPartidas(QString tablaactual, QString codigopadre, QVariant descripcionn):
+UndoPegarPartidas::UndoPegarPartidas(QString tablaactual, QString codigopadre, int _fila, QVariant descripcionn):
     tabla(tablaactual),codigopadre(codigopadre)
 {
     Q_UNUSED(descripcionn);
     esPrimerRedo = true;
+    fila = QString::number(_fila);
 }
 
 void UndoPegarPartidas::undo()
@@ -87,13 +88,12 @@ void UndoPegarPartidas::redo()
     if (esPrimerRedo == true)
     {
         esPrimerRedo = false;
-        QString cadenaconsulta = "SELECT pegar('"+tabla+"','"+codigopadre+"')";
+        QString cadenaconsulta = "SELECT pegar('"+tabla+"','"+codigopadre+"','"+fila+"')";
         qDebug()<<cadenaconsulta;
         consulta.exec(cadenaconsulta);        
         while (consulta.next())
         {
-            nodosinsertados = consulta.value(0).toString();
-            qDebug()<<"Los nodos chachi son: "<<nodosinsertados;
+            nodosinsertados = consulta.value(0).toString();            
         }
     }
     else

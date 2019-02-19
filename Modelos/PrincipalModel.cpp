@@ -281,11 +281,11 @@ void PrincipalModel::Copiar(const QList<int> &filas)
     consulta.exec(cadenacopiar);
 }
 
-void PrincipalModel::Pegar()
+void PrincipalModel::Pegar(int fila)
 {
     //nodo padre bajo el cual se pegaran los nodos
     QString codpadre = datos.at(0).at(0).toString();
     codpadre.remove(LeyendasCabecera[0]);
     //por ultimo llamo a la funcion
-    pila->push(new UndoPegarPartidas(tabla,codpadre,QVariant()));
+    pila->push(new UndoPegarPartidas(tabla,codpadre,fila,QVariant()));
 }

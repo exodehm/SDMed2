@@ -35,7 +35,7 @@ public:
     virtual void BorrarFilas(const QList<int>&filas)=0;
     virtual void InsertarFila(int fila)=0;
     virtual void Copiar(const QList<int> &filas)=0;
-    virtual void Pegar()=0;
+    virtual void Pegar(int fila)=0;
     //void ActualizarIds(QString idpadre, QString idhijo);
 
 public slots:

@@ -24,7 +24,7 @@ public:
     int LeeColor(int fila, int columna);
 
     void Copiar(const QList<int> &filas);
-    void Pegar();
+    void Pegar(int fila);
 
 public slots:
     //void MostrarHijos (QModelIndex idpadre);

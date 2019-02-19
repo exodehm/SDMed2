@@ -80,7 +80,7 @@ void MedCertModel::Copiar(const QList<int>& filas)
 
 }
 
-void MedCertModel::Pegar()
+void MedCertModel::Pegar(int fila)
 {
 
 }
