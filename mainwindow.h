@@ -64,8 +64,8 @@ private slots:
     /**********OTROS**************/
     void CambiarObraActual(int indice);
     void CambiarMedCert(int indice);
-    /*void NuevaCertificacion();
-    void CambiarCertificacionActual(int actual);*/
+    void NuevaCertificacion();
+    //void CambiarCertificacionActual(int actual);
 
     /*bool ActionAbrirDesdeReciente();
     void updateArchivosRecientesActions();*/

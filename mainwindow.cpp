@@ -8,6 +8,7 @@
 #include "./Dialogos/dialogodatoscodigoresumen.h"
 #include "./Dialogos/dialogotablaslistadoobras.h"
 #include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
+#include "./Dialogos/dialogonuevacertificacion.h"
 
 #include "pyrun.h"
 
@@ -515,6 +516,27 @@ bool MainWindow::ConfirmarContinuar()
     return true;
 }
 
+void MainWindow::NuevaCertificacion()
+{
+    DialogoNuevaCertificacion d;
+    if (d.exec())
+    {
+        /*if ((*obraActual)->anadirCertificacion(d.LeeFecha()))
+        {
+            qDebug()<<"Nueva certificacion añadida con exito";
+            int nuevacert = obraActual->miobra->LeeObra()->verNumCertificaciones();
+            comboCertificacionActual->addItem(QString::number(nuevacert));
+            comboCertificacionActual->setCurrentIndex(nuevacert-1);
+        }
+        else
+        {
+            QMessageBox::warning(this, tr("Aviso"),
+                                           tr("La fecha ha de ser posterior a la de la última certificación"),
+                                 QMessageBox::Ok);
+        }*/
+    }
+}
+
 void MainWindow::setupActions()
 {
     QObject::connect(ui->actionNuevo,SIGNAL(triggered(bool)),this,SLOT(ActionNuevo()));
@@ -542,7 +564,7 @@ void MainWindow::setupActions()
     QObject::connect(ui->actionAcerca_de,SIGNAL(triggered(bool)),this,SLOT(AcercaDe()));
     QObject::connect(ui->actionAcerca_de_Qt,SIGNAL(triggered(bool)),this,SLOT(AcercaDeQt()));
     QObject::connect(comboMedCert,SIGNAL(currentIndexChanged(int)),this,SLOT(CambiarMedCert(int)));
-    //QObject::connect(botonNuevaCertificacion,SIGNAL(pressed()),this,SLOT(NuevaCertificacion()));
+    QObject::connect(botonNuevaCertificacion,SIGNAL(pressed()),this,SLOT(NuevaCertificacion()));
     //QObject::connect(comboCertificacionActual,SIGNAL(currentIndexChanged(int)),this,SLOT(CambiarCertificacionActual(int)));
 }
 

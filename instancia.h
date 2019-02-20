@@ -50,10 +50,7 @@ public slots:
     void CopiarPartidas(const QList<int>&indices);
     void PegarPartidasTablaP();
     void PegarMedicionTablaM();
-    //void PegarPartidas(const Obra::ListaAristasNodos &listaNodosCopiarPegar);    
     void CopiarElementosTablaPortapapeles(const QModelIndexList &lista, TablaBase* tabla);
-    //void CopiarMedicion(Medicion& listaMedicionCopiarPegar);
-    //void PegarMedicion(const Medicion& ListaMedicion);
     void Certificar();
     void CambiarEntreMedicionYCertificacion(int n);    
     void ActivarDesactivarUndoRedo(int indice);

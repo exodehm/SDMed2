@@ -492,48 +492,6 @@ void Instancia::PegarMedicionTablaM()
     emit PegarM();
 }
 
-/*void Instancia::PegarPartidas(const Obra::ListaAristasNodos &listaNodosCopiarPegar)
-{
-    qDebug()<<"Pegar partidas";
-    QModelIndex indice = tablaPrincipal->currentIndex();
-    qDebug()<<indice.row();
-    bool insertarAlFinal=false;
-    if (modeloTablaP->HayFilaVacia() && indice.row()==modeloTablaP->FilaVacia())
-    {
-        insertarAlFinal=true;
-    }
-    QString cadenaundo = "Pegar partidas";
-    //O->Pegar(listaNodosCopiarPegar,insertarAlFinal);
-    pila->push(new UndoPegarPartidas(O,modeloTablaP,indice,listaNodosCopiarPegar, insertarAlFinal,cadenaundo));
-    RefrescarVista();
-}*/
-
-/*void Instancia::CopiarMedicion(Medicion& listaMedicionCopiarPegar)
-{
-   listaMedicionCopiarPegar.BorrarMedicion();
-    QItemSelectionModel *selecmodel = tablaMediciones->selectionModel();
-    QModelIndexList selectedRowsIndexesList = selecmodel->selectedIndexes();
-    CopiarMedicionPortapapeles(selectedRowsIndexesList);
-    QList<int> listaIndices;
-    foreach (const QModelIndex &i, selectedRowsIndexesList)
-    {
-        if (!listaIndices.contains(i.row()))
-            listaIndices.append(i.row());
-    }
-    qSort(listaIndices);
-    O->CopiarMedicion(listaMedicionCopiarPegar, listaIndices);
-    selecmodel->clearSelection();
-}*/
-
-
-/*void Instancia::PegarMedicion(const Medicion& ListaMedicion)
-{    
-    QModelIndex indice = tablaMediciones->currentIndex();
-    QString cadenaundo = tr("Pegar lineas de medicion");
-    pila->push(new UndoPegarLineasMedicion(O,indice.row(),ListaMedicion,cadenaundo));
-    RefrescarVista();
-}*/
-
 void Instancia::ActivarDesactivarUndoRedo(int indice)
 {
     ActivarBoton(indice);

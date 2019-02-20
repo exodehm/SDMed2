@@ -48,7 +48,8 @@ SOURCES += main.cpp\
     Undo/undoeditarmedicion.cpp \
     Ficheros/exportar.cpp \
     Modelos/PrincipalModel.cpp \
-    pyrun.cpp
+    pyrun.cpp \
+    Dialogos/dialogonuevacertificacion.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -87,7 +88,8 @@ HEADERS  += mainwindow.h \
     Ficheros/exportar.h \
     Modelos/PrincipalModel.h \
     python_wrapper.h \
-    pyrun.h
+    pyrun.h \
+    Dialogos/dialogonuevacertificacion.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
@@ -99,7 +101,8 @@ FORMS    += Ui/mainwindow.ui \
     Ui/dialogodatoscodigoresumen.ui \
     Editor/editor.ui \
     Ui/dialogotablaslistadoobras.ui \
-    Ui/dialogoadvertenciaborrarbbdd.ui
+    Ui/dialogoadvertenciaborrarbbdd.ui \
+    Ui/dialogonuevacertificacion.ui
 
 QT += sql
 
