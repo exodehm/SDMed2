@@ -42,9 +42,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->CertBar->addWidget(labelVerMedCert);
         ui->CertBar->addWidget(comboMedCert);
         //seccion annadir nueva certificacion
-        botonNuevaCertificacion = new QPushButton(tr("Añadir Certificación"));
-        botonNuevaCertificacion->setEnabled(false);
-        ui->CertBar->addWidget(botonNuevaCertificacion);
+        botonCertificaciones = new QPushButton(tr("Certificaciones"));
+        botonCertificaciones->setEnabled(false);
+        ui->CertBar->addWidget(botonCertificaciones);
         //seccion certificacion actual
         labelCertificacionActual = new QLabel(tr("Cert. actual"));
         manejoCertificaciones = new ComboCertificaciones;
@@ -374,7 +374,7 @@ void MainWindow::ActionCerrar()
         ui->actionGuardar->setEnabled(false);
         ui->actionCerrar->setEnabled(false);
         comboMedCert->setEnabled(false);
-        botonNuevaCertificacion->setEnabled(false);
+        botonCertificaciones->setEnabled(false);
         manejoCertificaciones->setEnabled(false);
         ui->actionVer_Arbol->setEnabled(false);
         ui->actionExportar->setEnabled(false);
@@ -551,7 +551,7 @@ void MainWindow::setupActions()
     QObject::connect(ui->actionAcerca_de,SIGNAL(triggered(bool)),this,SLOT(AcercaDe()));
     QObject::connect(ui->actionAcerca_de_Qt,SIGNAL(triggered(bool)),this,SLOT(AcercaDeQt()));
     QObject::connect(comboMedCert,SIGNAL(currentIndexChanged(int)),this,SLOT(CambiarMedCert(int)));
-    QObject::connect(botonNuevaCertificacion,SIGNAL(pressed()),this,SLOT(NuevaCertificacion()));
+    QObject::connect(botonCertificaciones,SIGNAL(pressed()),this,SLOT(NuevaCertificacion()));
     //QObject::connect(comboCertificacionActual,SIGNAL(currentIndexChanged(int)),this,SLOT(CambiarCertificacionActual(int)));
 }
 
@@ -564,7 +564,7 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     ui->actionExportar->setEnabled(true);
     ui->actionImprimir->setEnabled(true);
     comboMedCert->setEnabled(true);
-    botonNuevaCertificacion->setEnabled(true);
+    botonCertificaciones->setEnabled(true);
     manejoCertificaciones->setEnabled(true);
     manejoCertificaciones->ActualizarDatos(_codigo);
 

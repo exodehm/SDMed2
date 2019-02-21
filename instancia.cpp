@@ -13,7 +13,7 @@
 
 #include "./Undo/undoeditarprincipal.h"
 
-#include "./Dialogos/dialogonuevacertificacion.h"
+#include "./Dialogos/dialogocertificaciones.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -471,7 +471,7 @@ void Instancia::CopiarElementosTablaPortapapeles(const QModelIndexList &lista, T
 
 void Instancia::AnadirCertificacion()
 {
-    DialogoNuevaCertificacion d;
+    DialogoCertificaciones d(tabla);
     if (d.exec())
     {
         QString cadenanuevacertificacion = "SELECT anadir_certificacion('"+ tabla + "','" + d.LeeFecha() + "')";

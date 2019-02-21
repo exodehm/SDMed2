@@ -1,5 +1,5 @@
 #include "dialogoadvertenciaborrarbbdd.h"
-#include "ui_dialogoborrarbbdd.h"
+#include "ui_dialogoadvertenciaborrarbbdd.h"
 
 DialogoBorrarBBDD::DialogoBorrarBBDD(QStringList datos, QWidget *parent) :
     QDialog(parent),

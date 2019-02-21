@@ -49,8 +49,8 @@ SOURCES += main.cpp\
     Ficheros/exportar.cpp \
     Modelos/PrincipalModel.cpp \
     pyrun.cpp \
-    Dialogos/dialogonuevacertificacion.cpp \
-    Tablas/combocertificaciones.cpp
+    Tablas/combocertificaciones.cpp \
+    Dialogos/dialogocertificaciones.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -90,8 +90,8 @@ HEADERS  += mainwindow.h \
     Modelos/PrincipalModel.h \
     python_wrapper.h \
     pyrun.h \
-    Dialogos/dialogonuevacertificacion.h \
-    Tablas/combocertificaciones.h
+    Tablas/combocertificaciones.h \
+    Dialogos/dialogocertificaciones.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
@@ -104,7 +104,7 @@ FORMS    += Ui/mainwindow.ui \
     Editor/editor.ui \
     Ui/dialogotablaslistadoobras.ui \
     Ui/dialogoadvertenciaborrarbbdd.ui \
-    Ui/dialogonuevacertificacion.ui
+    Ui/dialogocertificaciones.ui
 
 QT += sql
 

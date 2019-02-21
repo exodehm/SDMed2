@@ -5,7 +5,7 @@
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 #include <QDebug>
-#include <QStandardItemModel>
+
 
 ComboCertificaciones::ComboCertificaciones()
 {
@@ -14,7 +14,7 @@ ComboCertificaciones::ComboCertificaciones()
 
 void ComboCertificaciones::ActualizarDatos(QString tabla)
 {
-    QString cadenaconsultacertificaciones = "SELECT fecha from \"" + tabla + "_Certificaciones" + "\" ORDER BY num_certificacion";
+    /*QString cadenaconsultacertificaciones = "SELECT fecha from \"" + tabla + "_Certificaciones" + "\" ORDER BY num_certificacion";
     qDebug()<<cadenaconsultacertificaciones;
     QSqlQuery consulta;
     consulta.exec(cadenaconsultacertificaciones);
@@ -33,27 +33,5 @@ void ComboCertificaciones::ActualizarDatos(QString tabla)
         //model->setItem(fila,1,itemcheck);
         fila++;
     }
-    this->setModel(model);
+    this->setModel(model);*/
 }
-/*for (int j=0;j<ui->tabla->columnCount();j++)
-{
-    if (j==eColumnas::CODIGO || j==eColumnas::RESUMEN)
-    {
-        QTableWidgetItem* algo = new QTableWidgetItem(listadoobrasenBBDD.at(i).at(j).toString());
-        ui->tabla->setItem(i,j,algo);
-    }
-    else if (j==eColumnas::ABRIR)
-    {
-        QCheckBox* itemcheck = new QCheckBox(this);
-        itemcheck->setEnabled(!listadoobrasenBBDD.at(i).at(j).toBool());
-        QObject::connect(itemcheck,SIGNAL(clicked(bool)),this,SLOT(listaNombreObrasAbrir()));
-        ui->tabla->setCellWidget(i,j,itemcheck);
-    }
-    else if (j==eColumnas::BORRAR)
-    {
-        QPushButton* btn_borrar = new QPushButton(tr("Borrar"));//,ui->tabla);
-        btn_borrar->setObjectName(QString("%1").arg(i));
-        QObject::connect(btn_borrar,SIGNAL(clicked(bool)),this,SLOT(Borrar()));
-        ui->tabla->setCellWidget(i,j,btn_borrar);
-    }
-}*/

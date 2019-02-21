@@ -100,7 +100,7 @@ private:
     QLabel* labelVerMedCert;
     QComboBox* comboMedCert;
     //boton nueva certificacion
-    QPushButton* botonNuevaCertificacion;
+    QPushButton* botonCertificaciones;
     //combo certificacion actual
     QLabel* labelCertificacionActual;
     ComboCertificaciones* manejoCertificaciones;
