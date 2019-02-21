@@ -16,6 +16,7 @@ class QComboBox;
 class QLabel;
 class QComboBox;
 class QPushButton;
+class ComboCertificaciones;
 
 class MainWindow : public QMainWindow
 {
@@ -102,7 +103,7 @@ private:
     QPushButton* botonNuevaCertificacion;
     //combo certificacion actual
     QLabel* labelCertificacionActual;
-    QComboBox* comboCertificacionActual;
+    ComboCertificaciones* manejoCertificaciones;
 
     QDir ruta;
     //listas para copiar y pegar

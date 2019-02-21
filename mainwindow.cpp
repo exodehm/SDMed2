@@ -8,7 +8,8 @@
 #include "./Dialogos/dialogodatoscodigoresumen.h"
 #include "./Dialogos/dialogotablaslistadoobras.h"
 #include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
-#include "./Dialogos/dialogonuevacertificacion.h"
+
+#include "./Tablas/combocertificaciones.h"
 
 #include "pyrun.h"
 
@@ -46,9 +47,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->CertBar->addWidget(botonNuevaCertificacion);
         //seccion certificacion actual
         labelCertificacionActual = new QLabel(tr("Cert. actual"));
-        comboCertificacionActual = new QComboBox;
+        manejoCertificaciones = new ComboCertificaciones;
+        manejoCertificaciones->setEnabled(false);
         ui->CertBar->addWidget(labelCertificacionActual);
-        ui->CertBar->addWidget(comboCertificacionActual);
+        ui->CertBar->addWidget(manejoCertificaciones);
         setupActions();
     }
     else
@@ -373,6 +375,7 @@ void MainWindow::ActionCerrar()
         ui->actionCerrar->setEnabled(false);
         comboMedCert->setEnabled(false);
         botonNuevaCertificacion->setEnabled(false);
+        manejoCertificaciones->setEnabled(false);
         ui->actionVer_Arbol->setEnabled(false);
         ui->actionExportar->setEnabled(false);
         ui->actionImprimir->setEnabled(false);
@@ -518,23 +521,7 @@ bool MainWindow::ConfirmarContinuar()
 
 void MainWindow::NuevaCertificacion()
 {
-    DialogoNuevaCertificacion d;
-    if (d.exec())
-    {
-        /*if ((*obraActual)->anadirCertificacion(d.LeeFecha()))
-        {
-            qDebug()<<"Nueva certificacion añadida con exito";
-            int nuevacert = obraActual->miobra->LeeObra()->verNumCertificaciones();
-            comboCertificacionActual->addItem(QString::number(nuevacert));
-            comboCertificacionActual->setCurrentIndex(nuevacert-1);
-        }
-        else
-        {
-            QMessageBox::warning(this, tr("Aviso"),
-                                           tr("La fecha ha de ser posterior a la de la última certificación"),
-                                 QMessageBox::Ok);
-        }*/
-    }
+    (*obraActual)->AnadirCertificacion();
 }
 
 void MainWindow::setupActions()
@@ -578,6 +565,9 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     ui->actionImprimir->setEnabled(true);
     comboMedCert->setEnabled(true);
     botonNuevaCertificacion->setEnabled(true);
+    manejoCertificaciones->setEnabled(true);
+    manejoCertificaciones->ActualizarDatos(_codigo);
+
     ui->actionVer_Arbol->setEnabled(true);
     ui->tabPrincipal->addTab(NuevaObra,_resumen);
     ui->tabPrincipal->setCurrentIndex(ui->tabPrincipal->currentIndex()+1);
@@ -603,6 +593,7 @@ void MainWindow::CambiarObraActual(int indice)
             obraActual=ListaObras.begin();
             std::advance(obraActual,indice);
             ActivarDesactivarBotonesPila((*obraActual)->Pila()->index());
+            manejoCertificaciones->ActualizarDatos((*obraActual)->LeeTabla());
         }
     }
 }

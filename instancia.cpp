@@ -1,5 +1,6 @@
 #include "instancia.h"
 #include "consultas.h"
+
 #include "./Modelos/Modelobase.h"
 #include "./Modelos/PrincipalModel.h"
 #include "./Modelos/MedCertModel.h"
@@ -11,6 +12,8 @@
 #include "./Tablas/vistaarbol.h"
 
 #include "./Undo/undoeditarprincipal.h"
+
+#include "./Dialogos/dialogonuevacertificacion.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -435,22 +438,6 @@ void Instancia::CopiarMedicionTablaM()
     qDebug()<<"Copiar partidas M en instancia";
 }
 
-void Instancia::CopiarPartidas(const QList<int>&indices)
-{
-    qDebug()<<"Copiar partidas en Instancia";
-    /*QStringList partidasborrar;
-    QString codpadre = datos.at(0).at(0).toString();
-    codpadre.remove(LeyendasCabecera[0]);
-    partidasborrar.append(codpadre);
-    foreach (const int& i, filas)
-    {
-        //removeRows(i,1,QModelIndex());
-        partidasborrar.append(datos.at(i+1).at(0).toString());//añado 1 por la cabecera
-    }*/
-    //CopiarPartidasPortapapeles(selectedRowsIndexesList);
-    //selecmodel->clearSelection();
-}
-
 void Instancia::CopiarElementosTablaPortapapeles(const QModelIndexList &lista, TablaBase *tabla)
 {   
     QString textoACopiar;
@@ -480,6 +467,27 @@ void Instancia::CopiarElementosTablaPortapapeles(const QModelIndexList &lista, T
     }
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(textoACopiar);
+}
+
+void Instancia::AnadirCertificacion()
+{
+    DialogoNuevaCertificacion d;
+    if (d.exec())
+    {
+        QString cadenanuevacertificacion = "SELECT anadir_certificacion('"+ tabla + "','" + d.LeeFecha() + "')";
+        consulta.exec(cadenanuevacertificacion);
+        bool resultado;
+        while (consulta.next())
+        {
+            resultado = consulta.value(0).toBool();
+        }
+        if (resultado == false)
+        {
+            QMessageBox::warning(this, tr("Aviso"),
+                                           tr("La fecha ha de ser posterior a la de la última certificación"),
+                                 QMessageBox::Ok);
+        }
+    }
 }
 
 void Instancia::PegarPartidasTablaP()
