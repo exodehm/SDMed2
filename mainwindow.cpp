@@ -522,7 +522,6 @@ void MainWindow::NuevaCertificacion()
 
 void MainWindow::CambiarLabelCertificacionActual(QStringList certActual)
 {
-    qDebug()<<"Certificacion actual hola hola= "<<certActual;
     labelCertificacionActual[1]->clear();
     QString label = " <strong><b>";
     label.append(certActual.at(0));

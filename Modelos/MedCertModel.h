@@ -19,10 +19,9 @@ public:
     void PrepararCabecera(QList<QList<QVariant>>&datos);
     void Copiar(const QList<int> &filas);
     void Pegar(int fila);
-    void BorrarFilas(const QList<int> &filas);
+    void BorrarFilas(const QList<int> &filas);    
     void InsertarFila(int fila);
     void ActualizarDatos(QString padre, QString hijo);
 };
-
 
 #endif // MEDCERTMODELBASE_H

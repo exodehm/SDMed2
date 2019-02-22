@@ -4,6 +4,7 @@
 #include "./Modelos/Modelobase.h"
 #include "./Modelos/PrincipalModel.h"
 #include "./Modelos/MedCertModel.h"
+#include "./Modelos/CertificacionModel.h"
 #include "./Modelos/TreeModel.h"
 
 #include "./Tablas/tablaprincipal.h"
@@ -74,7 +75,7 @@ void Instancia::GenerarUI()
     //en principio la columna de id es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
     tablaMediciones->setColumnHidden(tipoColumna::ID,true);
     //tabla certificaciones
-    modeloTablaCert = new MedCertModel(tabla, codigopadre, codigohijo, pila);
+    modeloTablaCert = new CertificacionModel(tabla, codigopadre, codigohijo, pila);
     tablaCertificaciones =  new TablaMedCert(modeloTablaCert->columnCount(QModelIndex()));
     tablaCertificaciones->setModel(modeloTablaCert);
     tablaCertificaciones->setEnabled(false);
@@ -121,7 +122,7 @@ void Instancia::GenerarUI()
     //QObject::connect(tablaMediciones,SIGNAL(CopiarFilas()),this,SLOT(CopiarMedicionTablaM()));
     QObject::connect(tablaMediciones,SIGNAL(Pegar()),this,SLOT(Pegar()));
 
-    // QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
+    QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
     //QObject::connect(separadorTablasMedicion,SIGNAL(currentChanged(int)),this,SLOT(CambiarEntreMedicionYCertificacion(int)));
     QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(ActivarDesactivarUndoRedo(int)));
     QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
@@ -501,9 +502,29 @@ void Instancia::ActivarDesactivarUndoRedo(int indice)
 
 void Instancia::Certificar()
 {
-    /*Medicion listaParaCertificar;
-    CopiarMedicion(listaParaCertificar);
-    O->Certificar(listaParaCertificar);*/
+    QWidget* w = qApp->focusWidget();
+    TablaBase* tabla = qobject_cast<TablaBase*>(w);
+    if(tabla)
+    {
+        QModelIndex indice = tabla->currentIndex();
+        if (tabla->selectionModel()->isRowSelected(indice.row(),QModelIndex()))//si hay alguna fila seleccionada
+        {
+            QModelIndexList indices = tabla->selectionModel()->selectedIndexes();
+            QList<int> listaIndices;
+            foreach (QModelIndex i, indices)
+            {
+                if (!listaIndices.contains(i.row()))
+                    listaIndices.append(i.row());
+            }
+            qSort(listaIndices);
+            CertificacionModel* modelo = qobject_cast<CertificacionModel*>(modeloTablaCert);
+            if (modelo)
+            {
+                modelo->Certificar(listaIndices);
+            }
+            tabla->selectionModel()->clearSelection();
+        }
+    }
 }
 
 void Instancia::CambiarEntreMedicionYCertificacion(int n)
