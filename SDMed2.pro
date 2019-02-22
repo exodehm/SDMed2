@@ -49,7 +49,6 @@ SOURCES += main.cpp\
     Ficheros/exportar.cpp \
     Modelos/PrincipalModel.cpp \
     pyrun.cpp \
-    Tablas/combocertificaciones.cpp \
     Dialogos/dialogocertificaciones.cpp
 
 HEADERS  += mainwindow.h \
@@ -90,7 +89,6 @@ HEADERS  += mainwindow.h \
     Modelos/PrincipalModel.h \
     python_wrapper.h \
     pyrun.h \
-    Tablas/combocertificaciones.h \
     Dialogos/dialogocertificaciones.h
 
 FORMS    += Ui/mainwindow.ui \

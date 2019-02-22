@@ -11,12 +11,15 @@ class DialogoCertificaciones;
 
 class DialogoCertificaciones : public QDialog
 {
+    enum tipoColumna{NUM_CERTIFICACION,FECHA,BORRAR,ACTUAL};
+
     Q_OBJECT
 
 public:
     explicit DialogoCertificaciones(QString tabla, QWidget *parent = 0);
     ~DialogoCertificaciones();
     QString LeeFecha();
+    QStringList CertificacionActual();
 
 private slots:
     void cambiaDia(int d);
@@ -26,13 +29,15 @@ private slots:
     void insertarNuevaCertificacion();
     void borrarCertificacion();
     void actualizarTabla();
+    void ActualizarCertifActual();
 
 private:
-    QString tabla;
     Ui::DialogoCertificaciones *ui;
+    QString tabla;
     int dia,mes,anno;
     QSqlQuery consulta;
     QStringList cabeceratabla;
+    QStringList certifActual;
 };
 
 #endif // DIALOGONUEVACERTIFICACION_H

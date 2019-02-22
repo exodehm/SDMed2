@@ -9,8 +9,6 @@
 #include "./Dialogos/dialogotablaslistadoobras.h"
 #include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
 
-#include "./Tablas/combocertificaciones.h"
-
 #include "pyrun.h"
 
 #include <QMessageBox>
@@ -46,11 +44,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         botonCertificaciones->setEnabled(false);
         ui->CertBar->addWidget(botonCertificaciones);
         //seccion certificacion actual
-        labelCertificacionActual = new QLabel(tr("Cert. actual"));
-        manejoCertificaciones = new ComboCertificaciones;
-        manejoCertificaciones->setEnabled(false);
-        ui->CertBar->addWidget(labelCertificacionActual);
-        ui->CertBar->addWidget(manejoCertificaciones);
+        labelCertificacionActual[0] = new QLabel(tr("Cert. actual: "));
+        labelCertificacionActual[1] = new QLabel(tr(""));
+        ui->CertBar->addWidget(labelCertificacionActual[0]);
+        ui->CertBar->addWidget(labelCertificacionActual[1]);
         setupActions();
     }
     else
@@ -374,8 +371,7 @@ void MainWindow::ActionCerrar()
         ui->actionGuardar->setEnabled(false);
         ui->actionCerrar->setEnabled(false);
         comboMedCert->setEnabled(false);
-        botonCertificaciones->setEnabled(false);
-        manejoCertificaciones->setEnabled(false);
+        botonCertificaciones->setEnabled(false);        
         ui->actionVer_Arbol->setEnabled(false);
         ui->actionExportar->setEnabled(false);
         ui->actionImprimir->setEnabled(false);
@@ -524,6 +520,19 @@ void MainWindow::NuevaCertificacion()
     (*obraActual)->AnadirCertificacion();
 }
 
+void MainWindow::CambiarLabelCertificacionActual(QStringList certActual)
+{
+    qDebug()<<"Certificacion actual hola hola= "<<certActual;
+    labelCertificacionActual[1]->clear();
+    QString label = " <strong><b>";
+    label.append(certActual.at(0));
+    label.append("</b></strong> (");
+    label.append(certActual.at(1));
+    label.append(")");
+    labelCertificacionActual[1]->setText(label);
+
+}
+
 void MainWindow::setupActions()
 {
     QObject::connect(ui->actionNuevo,SIGNAL(triggered(bool)),this,SLOT(ActionNuevo()));
@@ -551,7 +560,7 @@ void MainWindow::setupActions()
     QObject::connect(ui->actionAcerca_de,SIGNAL(triggered(bool)),this,SLOT(AcercaDe()));
     QObject::connect(ui->actionAcerca_de_Qt,SIGNAL(triggered(bool)),this,SLOT(AcercaDeQt()));
     QObject::connect(comboMedCert,SIGNAL(currentIndexChanged(int)),this,SLOT(CambiarMedCert(int)));
-    QObject::connect(botonCertificaciones,SIGNAL(pressed()),this,SLOT(NuevaCertificacion()));
+    QObject::connect(botonCertificaciones,SIGNAL(pressed()),this,SLOT(NuevaCertificacion()));    
     //QObject::connect(comboCertificacionActual,SIGNAL(currentIndexChanged(int)),this,SLOT(CambiarCertificacionActual(int)));
 }
 
@@ -565,9 +574,6 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     ui->actionImprimir->setEnabled(true);
     comboMedCert->setEnabled(true);
     botonCertificaciones->setEnabled(true);
-    manejoCertificaciones->setEnabled(true);
-    manejoCertificaciones->ActualizarDatos(_codigo);
-
     ui->actionVer_Arbol->setEnabled(true);
     ui->tabPrincipal->addTab(NuevaObra,_resumen);
     ui->tabPrincipal->setCurrentIndex(ui->tabPrincipal->currentIndex()+1);
@@ -582,6 +588,7 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     QObject::connect(NuevaObra,SIGNAL(PegarP()),this,SLOT(ActionPegar()));
     QObject::connect(NuevaObra,SIGNAL(CopiarM()),this,SLOT(ActionCopiar()));
     QObject::connect(NuevaObra,SIGNAL(PegarM()),this,SLOT(ActionPegar()));
+    QObject::connect(NuevaObra,SIGNAL(CambiarLabelCertActual(QStringList)),this,SLOT(CambiarLabelCertificacionActual(QStringList)));
 }
 
 void MainWindow::CambiarObraActual(int indice)
@@ -592,8 +599,7 @@ void MainWindow::CambiarObraActual(int indice)
         {
             obraActual=ListaObras.begin();
             std::advance(obraActual,indice);
-            ActivarDesactivarBotonesPila((*obraActual)->Pila()->index());
-            manejoCertificaciones->ActualizarDatos((*obraActual)->LeeTabla());
+            ActivarDesactivarBotonesPila((*obraActual)->Pila()->index());            
         }
     }
 }

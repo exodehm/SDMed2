@@ -16,7 +16,6 @@ class QComboBox;
 class QLabel;
 class QComboBox;
 class QPushButton;
-class ComboCertificaciones;
 
 class MainWindow : public QMainWindow
 {
@@ -66,6 +65,7 @@ private slots:
     void CambiarObraActual(int indice);
     void CambiarMedCert(int indice);
     void NuevaCertificacion();
+    void CambiarLabelCertificacionActual(QStringList certActual);
     //void CambiarCertificacionActual(int actual);
 
     /*bool ActionAbrirDesdeReciente();
@@ -102,8 +102,7 @@ private:
     //boton nueva certificacion
     QPushButton* botonCertificaciones;
     //combo certificacion actual
-    QLabel* labelCertificacionActual;
-    ComboCertificaciones* manejoCertificaciones;
+    QLabel* labelCertificacionActual[2];
 
     QDir ruta;
     //listas para copiar y pegar

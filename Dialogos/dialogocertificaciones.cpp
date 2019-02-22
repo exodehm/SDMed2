@@ -6,6 +6,7 @@
 #include <QStandardItemModel>
 #include <QCheckBox>
 #include <QPushButton>
+#include <QRadioButton>
 
 DialogoCertificaciones::DialogoCertificaciones(QString tabla, QWidget *parent) :tabla(tabla),QDialog(parent),ui(new Ui::DialogoCertificaciones)
 {
@@ -17,10 +18,13 @@ DialogoCertificaciones::DialogoCertificaciones(QString tabla, QWidget *parent) :
     ui->comboDia->setCurrentIndex(dia-1);
     ui->comboMes->setCurrentIndex(mes-1);
     ui->comboAnno->setCurrentIndex(anno-2010);        
-    cabeceratabla<<"Nº Certificación"<<"Fecha certificación"<<"Borrar";
+    cabeceratabla<<"Nº Certificación"<<"Fecha certificación"<<"Borrar"<<"Actual";
     actualizarTabla();
     ui->tablaCertificaciones->setHorizontalHeaderLabels(cabeceratabla);
     ui->tablaCertificaciones->horizontalHeader()->setStretchLastSection(true);
+    //al comienzo desactivo el boton de Ok para forzar a que haya una certificacion seleccionada
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+    setFixedWidth(850);
     QObject::connect(ui->comboDia,SIGNAL(currentIndexChanged(int)),this,SLOT(cambiaDia(int)));
     QObject::connect(ui->comboMes,SIGNAL(currentIndexChanged(int)),this,SLOT(cambiaMes(int)));
     QObject::connect(ui->comboAnno,SIGNAL(currentIndexChanged(int)),this,SLOT(cambiaAnno(int)));
@@ -101,15 +105,14 @@ void DialogoCertificaciones::insertarNuevaCertificacion()
 
 void DialogoCertificaciones::borrarCertificacion()
 {
-    qDebug()<<"Borrarr";
     for (int i=0;i<ui->tablaCertificaciones->rowCount();i++)
     {
-        QCheckBox* c =  static_cast<QCheckBox*>(ui->tablaCertificaciones->cellWidget(i,2));
+        QCheckBox* c =  static_cast<QCheckBox*>(ui->tablaCertificaciones->cellWidget(i,tipoColumna::BORRAR));
         if (c)
         {
             if (c->isChecked())
             {
-                QString fecha = ui->tablaCertificaciones->item(i,1)->text();
+                QString fecha = ui->tablaCertificaciones->item(i,tipoColumna::FECHA)->text();
                 QString cadenaborrarcertificacion = "DELETE FROM \"" + tabla + "_Certificaciones" + "\" WHERE fecha = '"+fecha+"'";
                 qDebug()<<cadenaborrarcertificacion;
                 consulta.exec(cadenaborrarcertificacion);
@@ -131,16 +134,49 @@ void DialogoCertificaciones::actualizarTabla()
     int i=0,j=0;
     while (consulta.next())
     {
+        //nº certificacion
         QTableWidgetItem* itemnum = new QTableWidgetItem(QString::number(i+1));
         ui->tablaCertificaciones->setItem(i,j,itemnum);
         j++;
+        //fecha
         QTableWidgetItem* item = new QTableWidgetItem(consulta.value(0).toString());
         item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
         ui->tablaCertificaciones->setItem(i,j,item);
         j++;
+        //check borrar
         QCheckBox* itemcheck = new QCheckBox;
         ui->tablaCertificaciones->setCellWidget(i,j,itemcheck);
+        j++;
+        //radio button actual
+        QRadioButton* itemradio = new QRadioButton;
+        QObject::connect(itemradio,SIGNAL(clicked(bool)),this,SLOT(ActualizarCertifActual()));
+        ui->tablaCertificaciones->setCellWidget(i,j,itemradio);
+        //actualizo contadores
         j=0;
         i++;
     }
+}
+
+void DialogoCertificaciones::ActualizarCertifActual()
+{
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+    for (int i=0;i<ui->tablaCertificaciones->rowCount();i++)
+    {
+        QRadioButton* b =  static_cast<QRadioButton*>(ui->tablaCertificaciones->cellWidget(i,tipoColumna::ACTUAL));
+        if (b)
+        {
+            if (b->isChecked())
+            {
+                QString num_certif = ui->tablaCertificaciones->item(i,tipoColumna::NUM_CERTIFICACION)->text();
+                QString fecha = ui->tablaCertificaciones->item(i,tipoColumna::FECHA)->text();
+                certifActual.clear();
+                certifActual<<num_certif<<fecha;
+            }
+        }
+    }
+}
+
+QStringList DialogoCertificaciones::CertificacionActual()
+{
+    return certifActual;
 }

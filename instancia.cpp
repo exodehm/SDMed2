@@ -474,19 +474,8 @@ void Instancia::AnadirCertificacion()
     DialogoCertificaciones d(tabla);
     if (d.exec())
     {
-        QString cadenanuevacertificacion = "SELECT anadir_certificacion('"+ tabla + "','" + d.LeeFecha() + "')";
-        consulta.exec(cadenanuevacertificacion);
-        bool resultado;
-        while (consulta.next())
-        {
-            resultado = consulta.value(0).toBool();
-        }
-        if (resultado == false)
-        {
-            QMessageBox::warning(this, tr("Aviso"),
-                                           tr("La fecha ha de ser posterior a la de la última certificación"),
-                                 QMessageBox::Ok);
-        }
+        certActual = d.CertificacionActual();
+        emit CambiarLabelCertActual(d.CertificacionActual());
     }
 }
 

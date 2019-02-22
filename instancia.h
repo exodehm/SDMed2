@@ -64,6 +64,7 @@ signals:
     void CopiarM();
     void PegarM();
     void ActivarBoton(int);
+    void CambiarLabelCertActual(QStringList);
 
 private:
     QHeaderView* cabeceraTablaP;
@@ -96,7 +97,7 @@ private:
     QString tabla,resumen;
     QString textoPartidaInicial;
 
-    QStringList ruta;
+    QStringList ruta, certActual;
 };
 
 #endif // INSTANCIA_H
