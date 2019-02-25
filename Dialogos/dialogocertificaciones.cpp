@@ -113,7 +113,7 @@ void DialogoCertificaciones::borrarCertificacion()
             if (c->isChecked())
             {
                 QString fecha = ui->tablaCertificaciones->item(i,tipoColumna::FECHA)->text();
-                QString cadenaborrarcertificacion = "DELETE FROM \"" + tabla + "_Certificaciones" + "\" WHERE fecha = '"+fecha+"'";
+                QString cadenaborrarcertificacion = "DELETE FROM \"" + tabla + "_ListadoCertificaciones" + "\" WHERE fecha = '"+fecha+"'";
                 qDebug()<<cadenaborrarcertificacion;
                 consulta.exec(cadenaborrarcertificacion);
             }
@@ -124,7 +124,7 @@ void DialogoCertificaciones::borrarCertificacion()
 
 void DialogoCertificaciones::actualizarTabla()
 {
-    QString cadenaconsultacertificaciones = "SELECT fecha FROM \"" + tabla + "_Certificaciones" + "\" ORDER BY num_certificacion";
+    QString cadenaconsultacertificaciones = "SELECT fecha FROM \"" + tabla + "_ListadoCertificaciones" + "\" ORDER BY num_certificacion";
     qDebug()<<cadenaconsultacertificaciones;
     consulta.exec(cadenaconsultacertificaciones);
     int filas = consulta.size();

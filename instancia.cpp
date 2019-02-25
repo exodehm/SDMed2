@@ -292,7 +292,7 @@ void Instancia::RefrescarVista()
     tablaPrincipal->resizeColumnsToContents();
     tablaMediciones->resizeColumnsToContents();
     tablaCertificaciones->resizeColumnsToContents();
-    //modeloTablaCert->layoutChanged();
+    modeloTablaCert->layoutChanged();
     //tablaPrincipal->setCurrentIndex(indiceActual);
     separadorTablasMedicion->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
     /*modeloArbol->layoutChanged();
@@ -502,6 +502,7 @@ void Instancia::ActivarDesactivarUndoRedo(int indice)
 
 void Instancia::Certificar()
 {
+    qDebug()<<"Certif actual"<<certActual.at(0);
     QWidget* w = qApp->focusWidget();
     TablaBase* tabla = qobject_cast<TablaBase*>(w);
     if(tabla)
@@ -520,7 +521,7 @@ void Instancia::Certificar()
             CertificacionModel* modelo = qobject_cast<CertificacionModel*>(modeloTablaCert);
             if (modelo)
             {
-                modelo->Certificar(listaIndices);
+                modelo->Certificar(listaIndices,certActual.at(0));
             }
             tabla->selectionModel()->clearSelection();
         }

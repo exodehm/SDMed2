@@ -12,7 +12,6 @@ public:
     CertificacionModel(const QString &tabla, const QString& codigopadre, const QString &codigohijo, QUndoStack *p, QObject* parent=nullptr);
     ~CertificacionModel();
 
-    void Certificar(const QList<int> &filas);
     void ActualizarDatos(QString padre, QString hijo);
 };
 

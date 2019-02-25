@@ -85,6 +85,26 @@ void MedCertModel::Pegar(int fila)
 
 }
 
+void MedCertModel::Certificar(const QList<int> &filas, QString num_cert)
+{
+    for (auto elem:filas)
+        qDebug()<<"Copiar los indices: "<<elem;
+    QString indices;
+    indices.append("{");
+    for (int i=0;i<filas.size();i++)
+    {
+       indices.append(QString::number(filas.at(i)));
+       if (i<filas.size()-1)
+       {
+           indices.append(",");
+       }
+    }
+    indices.append("}");
+    QString cadenacertificar = "SELECT certificar('"+tabla+"','"+codigopadre+"','"+codigohijo+"','"+indices+"','"+num_cert+"')";
+    qDebug()<<cadenacertificar;
+    consulta.exec(cadenacertificar);
+}
+
 void MedCertModel::BorrarFilas(const QList<int>& filas)
 {
     QList<QString>idsBorrar;
