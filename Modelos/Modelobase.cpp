@@ -19,13 +19,13 @@ ModeloBase::~ModeloBase(){}
 
 bool ModeloBase::esColumnaNumerica(int columna) const
 {
-    return  columna==tipoColumna::CANPRES ||
-            columna==tipoColumna::CANCERT ||
-            columna==tipoColumna::PORCERTPRES ||
-            columna==tipoColumna::PRPRES ||
-            columna==tipoColumna::PRCERT ||
-            columna==tipoColumna::IMPPRES ||
-            columna==tipoColumna::IMPCERT;
+    return  columna==tipoColumnaTPrincipal::CANPRES ||
+            columna==tipoColumnaTPrincipal::CANCERT ||
+            columna==tipoColumnaTPrincipal::PORCERTPRES ||
+            columna==tipoColumnaTPrincipal::PRPRES ||
+            columna==tipoColumnaTPrincipal::PRCERT ||
+            columna==tipoColumnaTPrincipal::IMPPRES ||
+            columna==tipoColumnaTPrincipal::IMPCERT;
 }
 
 void ModeloBase::QuitarIndicadorFilaVacia()
@@ -145,7 +145,7 @@ Qt::ItemFlags ModeloBase::flags(const QModelIndex &index) const
     {
         return 0;
     }
-    if (/*index.row()!= filavacia && */index.column()!=tipoColumna::IMPPRES && index.column()!=tipoColumna::IMPCERT)
+    if (/*index.row()!= filavacia && */index.column()!=tipoColumnaTPrincipal::IMPPRES && index.column()!=tipoColumnaTPrincipal::IMPCERT)
     {
         return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
     }

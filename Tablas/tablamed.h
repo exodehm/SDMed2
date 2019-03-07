@@ -4,16 +4,16 @@
 #include "../defs.h"
 #include "tablabase.h"
 
-class TablaMedCert : public TablaBase
+class TablaMed : public TablaBase
 {
      Q_OBJECT
 public:
-    explicit TablaMedCert(int nColumnas, QWidget *parent=nullptr);    
+    explicit TablaMed(int nColumnas, QWidget *parent=nullptr);
 
 
 public slots:
-    void MostrarMenuCabecera(QPoint pos);
-    void MostrarMenuLateralTabla(QPoint pos);
+    void MostrarMenuCabecera(QPoint pos) override;
+    void MostrarMenuLateralTabla(QPoint pos) override;
     //void Copiar();
 
 signals:

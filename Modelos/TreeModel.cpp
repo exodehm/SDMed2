@@ -72,7 +72,7 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
-    if (index.column()==tipoColumna::NATURALEZA)
+    if (index.column()==tipoColumnaTPrincipal::NATURALEZA)
     {
         if (role == Qt::DecorationRole)
         {

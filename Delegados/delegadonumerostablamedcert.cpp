@@ -9,7 +9,7 @@ void DelegadoNumerosTablaMedCert::paint( QPainter *painter,const QStyleOptionVie
 {   
     if (index.isValid())
     {
-        if (index.column()==tipoColumna::PARCIAL)
+        if (index.column()==tipoColumnaTMedCert::PARCIAL)
         {
             painter->save();
             painter->setPen(Qt::yellow);
@@ -19,7 +19,7 @@ void DelegadoNumerosTablaMedCert::paint( QPainter *painter,const QStyleOptionVie
             painter->drawText(option.rect, Qt::AlignCenter, displayText(index.data(), QLocale::system()));
             painter->restore();
         }
-        else if (index.column()==tipoColumna::SUBTOTAL)
+        else if (index.column()==tipoColumnaTMedCert::SUBTOTAL)
         {
             painter->save();
             painter->setPen(Qt::yellow);

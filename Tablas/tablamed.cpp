@@ -1,30 +1,32 @@
-#include "tablamedcert.h"
+#include "tablamed.h"
 
-TablaMedCert::TablaMedCert(int nColumnas, QWidget *parent): TablaBase(nColumnas, parent)
+TablaMed::TablaMed(int nColumnas, QWidget *parent): TablaBase(nColumnas, parent)
 {    
-    limiteIzquierdo=tipoColumna::COMENTARIO;
-    limiteDerecho=tipoColumna::PARCIAL;
+    limiteIzquierdo=tipoColumnaTMedCert::COMENTARIO;
+    limiteDerecho=tipoColumnaTMedCert::PARCIAL;
 
-    celdaBloqueada[tipoColumna::FASE]=true;
-    celdaBloqueada[tipoColumna::PARCIAL]=true;
-    celdaBloqueada[tipoColumna::SUBTOTAL]=true;
-    celdaBloqueada[tipoColumna::ID]=true;
+    celdaBloqueada[tipoColumnaTMedCert::FASE]=true;
+    celdaBloqueada[tipoColumnaTMedCert::PARCIAL]=true;
+    celdaBloqueada[tipoColumnaTMedCert::SUBTOTAL]=true;
+    celdaBloqueada[tipoColumnaTMedCert::ID]=true;
 
-    setItemDelegateForColumn(tipoColumna::N,dlgNumTablaMC);
-    setItemDelegateForColumn(tipoColumna::COMENTARIO,dlgBA);
-    setItemDelegateForColumn(tipoColumna::LONGITUD,dlgNumTablaMC);
-    setItemDelegateForColumn(tipoColumna::ANCHURA,dlgNumTablaMC);
-    setItemDelegateForColumn(tipoColumna::ALTURA,dlgNumTablaMC);
-    setItemDelegateForColumn(tipoColumna::FORMULA,dlgBA);
-    setItemDelegateForColumn(tipoColumna::PARCIAL,dlgNumTablaMC);
-    setItemDelegateForColumn(tipoColumna::SUBTOTAL,dlgNumTablaMC);
-    setItemDelegateForColumn(tipoColumna::FASE,dlgCB);
-    setItemDelegateForColumn(tipoColumna::ID,dlgCB);    
+    setItemDelegateForColumn(tipoColumnaTMedCert::N,dlgNumTablaMC);
+    setItemDelegateForColumn(tipoColumnaTMedCert::COMENTARIO,dlgBA);
+    setItemDelegateForColumn(tipoColumnaTMedCert::LONGITUD,dlgNumTablaMC);
+    setItemDelegateForColumn(tipoColumnaTMedCert::ANCHURA,dlgNumTablaMC);
+    setItemDelegateForColumn(tipoColumnaTMedCert::ALTURA,dlgNumTablaMC);
+    setItemDelegateForColumn(tipoColumnaTMedCert::FORMULA,dlgBA);
+    setItemDelegateForColumn(tipoColumnaTMedCert::PARCIAL,dlgNumTablaMC);
+    setItemDelegateForColumn(tipoColumnaTMedCert::SUBTOTAL,dlgNumTablaMC);
+    setItemDelegateForColumn(tipoColumnaTMedCert::FASE,dlgCB);
+    setItemDelegateForColumn(tipoColumnaTMedCert::ID,dlgCB);
+
+    setColumnHidden(tipoColumnaTMedCert::ID,true);
 
     QObject::connect(cabeceraHorizontal, SIGNAL(sectionClicked(int)), this,SLOT(Bloquear(int)));
 }
 
-void TablaMedCert::MostrarMenuCabecera(QPoint pos)
+void TablaMed::MostrarMenuCabecera(QPoint pos)
 {
     int column=this->horizontalHeader()->logicalIndexAt(pos);
     qDebug()<<"Columna: "<<column;
@@ -34,7 +36,7 @@ void TablaMedCert::MostrarMenuCabecera(QPoint pos)
     menu->popup(this->horizontalHeader()->viewport()->mapToGlobal(pos));
 }
 
-void TablaMedCert::MostrarMenuLateralTabla(QPoint pos)
+void TablaMed::MostrarMenuLateralTabla(QPoint pos)
 {
     QMenu *menu=new QMenu(this);
     QAction *AccionCopiar = new QAction(tr("Copiar lineas de medición"), this);
@@ -55,10 +57,11 @@ void TablaMedCert::MostrarMenuLateralTabla(QPoint pos)
     QObject::connect(AccionPegar, SIGNAL(triggered()), this, SLOT(Pegar()));
     /*certificar*/
     QObject::connect(AccionCertificar, SIGNAL(triggered()), this, SLOT(Certificar()));
+
     menu->popup(cabeceraVertical->viewport()->mapToGlobal(pos));
 }
 
-/*void TablaMedCert::Copiar()
+/*void TablaMed::Copiar()
 {
     qDebug()<<"Copiar en tabla de mediciones";
     //emit CopiarMediciones();

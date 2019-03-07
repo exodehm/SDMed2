@@ -20,7 +20,6 @@ SOURCES += main.cpp\
     Dialogos/dialogodatoscodigoresumen.cpp \
     instancia.cpp \
     consultas.cpp \
-    Tablas/tablamedcert.cpp \
     Tablas/tablaprincipal.cpp \
     Tablas/vistaarbol.cpp \
     Tablas/tablabase.cpp \
@@ -34,7 +33,6 @@ SOURCES += main.cpp\
     Delegados/delegadonumerostablaprincipal.cpp \
     iconos.cpp \
     filter.cpp \
-    Modelos/MedCertModel.cpp \
     Modelos/treeitem.cpp \
     Modelos/TreeModel.cpp \
     Dialogos/dialogotablaslistadoobras.cpp \
@@ -50,7 +48,9 @@ SOURCES += main.cpp\
     Modelos/PrincipalModel.cpp \
     pyrun.cpp \
     Dialogos/dialogocertificaciones.cpp \
-    Modelos/CertificacionModel.cpp
+    Modelos/MedicionModel.cpp \
+    Tablas/tablacert.cpp \
+    Tablas/tablamed.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -60,7 +60,6 @@ HEADERS  += mainwindow.h \
     instancia.h \
     consultas.h \
     Tablas/tablabase.h \
-    Tablas/tablamedcert.h \
     Tablas/tablaprincipal.h \
     Tablas/vistaarbol.h \
     Editor/editor.h \
@@ -73,7 +72,6 @@ HEADERS  += mainwindow.h \
     Delegados/delegadonumerostablaprincipal.h \
     iconos.h \
     filter.h \
-    Modelos/MedCertModel.h \
     Modelos/treeitem.h \
     Modelos/TreeModel.h \
     defs.h \
@@ -91,7 +89,9 @@ HEADERS  += mainwindow.h \
     python_wrapper.h \
     pyrun.h \
     Dialogos/dialogocertificaciones.h \
-    Modelos/CertificacionModel.h
+    Modelos/MedicionModel.h \
+    Tablas/tablacert.h \
+    Tablas/tablamed.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \

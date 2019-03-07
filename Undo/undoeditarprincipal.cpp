@@ -94,8 +94,8 @@ void UndoEditarNaturaleza::redo()
 
 /************CANTIDAD*******************/
 UndoEditarCantidad::UndoEditarCantidad(QString tabla, QString cod_padre, QString cod_hijo,
-                                         QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion):
-    UndoEditarPrincipal(tabla,cod_padre,cod_hijo,dato_antiguo,dato_nuevo,descripcion)
+                                         QVariant dato_antiguo, QVariant dato_nuevo, QString tipo_Cantidad, QVariant descripcion):
+    UndoEditarPrincipal(tabla,cod_padre,cod_hijo,dato_antiguo,dato_nuevo,descripcion), columnaCantidad(tipo_Cantidad)
 {
     QString cadenaGuardarLineasMediciom = "SELECT * from ver_lineas_medicion('"+tabla+"','"+cod_padre+"','"+cod_hijo+"');";
     //qDebug()<<cadenaGuardarLineasMediciom;
@@ -116,11 +116,14 @@ void UndoEditarCantidad::undo()
 {
     if (lineasMedicion.isEmpty())//si no hay medicion guardada pongo el antiguo valor
     {
-        QString cadenaconsulta = "SELECT modificar_cantidad('" +tabla+ "','" +codigopadre + "','" +codigohijo+ "'," + datoAntiguo.toString()+ ");";
+        qDebug()<<"Repongo la cantidad antigua";
+        QString cadenaconsulta = "SELECT modificar_cantidad('" +tabla+ "','" +codigopadre + "','" +codigohijo+ "','" + columnaCantidad +"','" + datoAntiguo.toString()+ "');";
+        qDebug()<<cadenaconsulta;
         consulta.exec(cadenaconsulta);
     }
     else//si la hay, repongo la medicion
     {
+        qDebug()<<"Repongo las lineas de medicion";
         foreach (const QList<QVariant>&linea, lineasMedicion)
         {
             QString cadenainsertarlineasmedicion = "SELECT insertar_medicion('"+ tabla +"','"+ codigopadre +"','"+\
@@ -141,10 +144,13 @@ void UndoEditarCantidad::redo()
     QString cadenaborrarlineasmedicion = "SELECT borrar_lineas_medicion('"+tabla+"','"+codigopadre+"','"+codigohijo+"');";
     qDebug()<<"cadenaborrarlineasmedicion"<<cadenaborrarlineasmedicion;
     consulta.exec(cadenaborrarlineasmedicion);
-    QString cadenaconsulta = "SELECT modificar_cantidad('" +tabla+ "','" +codigopadre + "','" +codigohijo+ "'," + datoNuevo.toString()+ ");";
+    QString cadenaconsulta = "SELECT modificar_cantidad('" +tabla+ "','" +codigopadre + "','" +codigohijo+ "','" + columnaCantidad +"','" + datoNuevo.toString()+ "');";
     qDebug()<<cadenaconsulta;
     consulta.exec(cadenaconsulta);
 }
+
+
+
 
 /************PRECIO*******************/
 UndoEditarPrecio::UndoEditarPrecio(QString tabla, QString cod_padre, QString cod_hijo,

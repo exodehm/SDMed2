@@ -4,6 +4,8 @@
 #include "filter.h"
 #include "defs.h"
 
+#include <QSqlQuery>
+
 class QUndoStack;
 class QSplitter;
 class MedCertModel;
@@ -28,6 +30,8 @@ public:
 
     const QString& LeeTabla() const;
     const QString& LeeResumen() const;
+    QStringList LeerCertifActual();
+    bool HayCertificacion();
 
 public slots:
 
@@ -37,9 +41,7 @@ public slots:
     void TablaSeleccionarTodo(QWidget* widgetactivo);
     void TablaDeseleccionarTodo(QWidget* widgetactivo);
 
-    void PosicionarTablaP(QModelIndex indice);
-    void PosicionarTablaM(QModelIndex indice);
-    void MostrarDeSegun(int indice);    
+    void MostrarDeSegun(int indice);
     void Undo();
     void Redo();
     void RefrescarVista();
@@ -51,8 +53,7 @@ public slots:
     void PegarMedicionTablaM();
     void CopiarElementosTablaPortapapeles(const QModelIndexList &lista, TablaBase* tabla);
     void AnadirCertificacion();
-    void Certificar();
-    void CambiarEntreMedicionYCertificacion(int n);    
+    void Certificar();     
     void ActivarDesactivarUndoRedo(int indice);
     void GuardarTextoPartidaInicial();
     void GuardarTextoPartida();

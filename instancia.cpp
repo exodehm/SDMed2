@@ -3,14 +3,15 @@
 
 #include "./Modelos/Modelobase.h"
 #include "./Modelos/PrincipalModel.h"
-#include "./Modelos/MedCertModel.h"
-#include "./Modelos/CertificacionModel.h"
+#include "./Modelos/MedicionModel.h"
 #include "./Modelos/TreeModel.h"
 
 #include "./Tablas/tablaprincipal.h"
-#include "./Tablas/tablamedcert.h"
+#include "./Tablas/tablacert.h"
 #include "./Editor/editor.h"
 #include "./Tablas/vistaarbol.h"
+
+#include "./defs.h"
 
 #include "./Undo/undoeditarprincipal.h"
 
@@ -30,14 +31,12 @@
 #include <QUndoStack>
 #include <QMessageBox>
 
-#include <QtSql/QSqlQuery>
-
 Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resumen(res),QWidget(parent)
 {
     codigopadre ="";
     codigohijo = cod;
     ruta<<codigopadre<<codigohijo;
-    pila = new QUndoStack(this);
+    pila = new QUndoStack(this);    
     GenerarUI();
 }
 
@@ -61,31 +60,38 @@ void Instancia::GenerarUI()
     arbol->setModel(modeloArbol);
     arbol->setVisible(false);
     separadorTablas = new QSplitter(Qt::Vertical);
+
     //tabla principal
     modeloTablaP = new PrincipalModel(tabla, codigopadre, codigohijo, pila);
     tablaPrincipal = new TablaPrincipal(modeloTablaP->columnCount(QModelIndex()));
     tablaPrincipal->setObjectName("TablaP");
     tablaPrincipal->setModel(modeloTablaP);
     separadorTablas->addWidget(tablaPrincipal);
+
     //tabla mediciones
-    modeloTablaMed = new MedCertModel(tabla, codigopadre, codigohijo, pila);
-    tablaMediciones = new TablaMedCert(modeloTablaMed->columnCount(QModelIndex()));
+    modeloTablaMed = new MedicionModel(tabla, codigopadre, codigohijo, tipoTablaMedCert::MEDICION, pila);
+    tablaMediciones = new TablaMed(modeloTablaMed->columnCount(QModelIndex()));
     tablaMediciones->setObjectName("TablaMC");
     tablaMediciones->setModel(modeloTablaMed);
-    //en principio la columna de id es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
-    tablaMediciones->setColumnHidden(tipoColumna::ID,true);
+    //en principio las columnas de id u pos es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
+    tablaMediciones->setColumnHidden(tipoColumnaTMedCert::ID,true);
+    tablaMediciones->setColumnHidden(tipoColumnaTMedCert::POSICION,true);
+
     //tabla certificaciones
-    modeloTablaCert = new CertificacionModel(tabla, codigopadre, codigohijo, pila);
-    tablaCertificaciones =  new TablaMedCert(modeloTablaCert->columnCount(QModelIndex()));
+    modeloTablaCert = new MedicionModel(tabla, codigopadre, codigohijo, tipoTablaMedCert::CERTIFICACION, pila);
+    tablaCertificaciones =  new TablaCert(modeloTablaCert->columnCount(QModelIndex()));
     tablaCertificaciones->setModel(modeloTablaCert);
-    tablaCertificaciones->setEnabled(false);
     //igual pasa con las id de la tabla de certificaciones
-    tablaCertificaciones->setColumnHidden(tipoColumna::ID,true);
+    tablaCertificaciones->setColumnHidden(tipoColumnaTMedCert::ID,true);
+    tablaCertificaciones->setColumnHidden(tipoColumnaTMedCert::POSICION,true);
+    //por ultimo la dejo inutilizada hasta que no haya al menos unas certificacion definida
+    //tablaCertificaciones->setEnabled(false);
+    tablaCertificaciones->setEnabled(HayCertificacion());
+
     //tab para las tablas de mediciones y certificaciones
     separadorTablasMedicion = new QTabWidget;
     separadorTablasMedicion->addTab(tablaMediciones,QString(tr("Medicion")));
     separadorTablasMedicion->addTab(tablaCertificaciones,QString(tr("Certificacion")));
-
     separadorTablas->addWidget(separadorTablasMedicion);
 
     //editor
@@ -98,15 +104,17 @@ void Instancia::GenerarUI()
     separadorPrincipal->addWidget(arbol);
     lienzoGlobal->addWidget(separadorPrincipal);
 
+    //vista de arbol
     arbol->expandAll();
-    arbol->resizeColumnToContents(tipoColumna::CODIGO);
-    arbol->resizeColumnToContents(tipoColumna::NATURALEZA);
-    arbol->resizeColumnToContents(tipoColumna::UD);
-    arbol->resizeColumnToContents(tipoColumna::RESUMEN);
-    arbol->resizeColumnToContents(tipoColumna::IMPPRES);
+    arbol->resizeColumnToContents(tipoColumnaTPrincipal::CODIGO);
+    arbol->resizeColumnToContents(tipoColumnaTPrincipal::NATURALEZA);
+    arbol->resizeColumnToContents(tipoColumnaTPrincipal::UD);
+    arbol->resizeColumnToContents(tipoColumnaTPrincipal::RESUMEN);
+    arbol->resizeColumnToContents(tipoColumnaTPrincipal::IMPPRES);
 
     RefrescarVista();
-    MostrarDeSegun(0);    
+    MostrarDeSegun(0);
+    certActual = LeerCertifActual();
 
     /************signals y slots*****************/
     QObject::connect(tablaPrincipal,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(BajarNivel()));
@@ -139,6 +147,33 @@ const QString& Instancia::LeeResumen() const
     return resumen;
 }
 
+QStringList Instancia::LeerCertifActual()
+{
+    QString leercertificacionactual = "SELECT * FROM leer_certificacion_actual('"+tabla+"')";
+    qDebug()<<leercertificacionactual;
+    consulta.exec(leercertificacionactual);
+    certActual.clear();
+    while (consulta.next())
+    {
+        certActual<<consulta.value(0).toString()<<consulta.value(1).toString();
+    }
+    qDebug()<<"CertACtual = "<<certActual.at(0)<<"<-->"<<certActual.at(1);
+    emit CambiarLabelCertActual(certActual);
+    return certActual;
+}
+
+bool Instancia::HayCertificacion()
+{
+    QString cadenahaycertificacion = "SELECT hay_certificacion('"+tabla+"')";
+    qDebug()<<cadenahaycertificacion;
+    consulta.exec(cadenahaycertificacion);
+    while (consulta.next())
+    {        
+        return consulta.value(0).toBool();
+    }
+    return false;
+}
+
 QUndoStack* Instancia::Pila()
 {
     return pila;
@@ -155,10 +190,10 @@ void Instancia::MostrarDeSegun(int indice)
     {
         verCertificacion=false;
     }
-    tablaPrincipal->setColumnHidden(tipoColumna::CANCERT,verCertificacion);
-    tablaPrincipal->setColumnHidden(tipoColumna::PORCERTPRES,verCertificacion);
-    tablaPrincipal->setColumnHidden(tipoColumna::PRCERT,verCertificacion);
-    tablaPrincipal->setColumnHidden(tipoColumna::IMPCERT,verCertificacion);
+    tablaPrincipal->setColumnHidden(tipoColumnaTPrincipal::CANCERT,verCertificacion);
+    tablaPrincipal->setColumnHidden(tipoColumnaTPrincipal::PORCERTPRES,verCertificacion);
+    tablaPrincipal->setColumnHidden(tipoColumnaTPrincipal::PRCERT,verCertificacion);
+    tablaPrincipal->setColumnHidden(tipoColumnaTPrincipal::IMPCERT,verCertificacion);
 }
 
 void Instancia::SubirNivel()
@@ -363,25 +398,6 @@ void Instancia::EscribirTexto()
     editor->EscribeTexto(descripcion);
 }
 
-void Instancia::PosicionarTablaP(QModelIndex indice)
-{
-    /* int linea = indice.row();
-    if (modeloTablaP->HayFilaVacia())
-    {
-        if (linea > modeloTablaP->FilaVacia())
-        {
-            linea = indice.row()-1;
-        }
-    }
-    indiceActual=indice;
-    O->PosicionarAristaActual(linea);*/
-}
-
-void Instancia::PosicionarTablaM(QModelIndex indice)
-{
-    //O->PosicionarLineaActualMedicion(indice.row());
-}
-
 void Instancia::GuardarTextoPartidaInicial()
 {
     //qDebug()<<"textoPartidaActual"<<textoPartidaInicial;
@@ -396,7 +412,6 @@ void Instancia::GuardarTextoPartida()
         QString cadenaundo = ("Cambiar texto de partida a " + editor->LeeContenido());
         //qDebug()<<cadenaundo;
         pila->push(new UndoEditarTexto(tabla, codigopadre, codigohijo, textoPartidaInicial,editor->LeeContenidoConFormato(),QVariant(cadenaundo)));
-
     }
 }
 
@@ -476,7 +491,11 @@ void Instancia::AnadirCertificacion()
     if (d.exec())
     {
         certActual = d.CertificacionActual();
-        emit CambiarLabelCertActual(d.CertificacionActual());
+        tablaCertificaciones->setEnabled(true);
+        qDebug()<<"Tamaño de la cer atual "<<certActual.size();
+        QString cadenainsertarcertificacion = "SELECT crear_tabla_certificaciones('"+tabla+"')";
+        consulta.exec(cadenainsertarcertificacion);
+        emit CambiarLabelCertActual(certActual);
     }
 }
 
@@ -502,43 +521,38 @@ void Instancia::ActivarDesactivarUndoRedo(int indice)
 
 void Instancia::Certificar()
 {
-    qDebug()<<"Certif actual"<<certActual.at(0);
-    QWidget* w = qApp->focusWidget();
-    TablaBase* tabla = qobject_cast<TablaBase*>(w);
-    if(tabla)
+    if (HayCertificacion())
     {
-        QModelIndex indice = tabla->currentIndex();
-        if (tabla->selectionModel()->isRowSelected(indice.row(),QModelIndex()))//si hay alguna fila seleccionada
+        qDebug()<<"Certif actual"<<certActual.at(0);
+        QWidget* w = qApp->focusWidget();
+        TablaMed* tabla = qobject_cast<TablaMed*>(w);
+        if(tabla)
         {
-            QModelIndexList indices = tabla->selectionModel()->selectedIndexes();
-            QList<int> listaIndices;
-            foreach (QModelIndex i, indices)
+            QModelIndex indice = tabla->currentIndex();
+            if (tabla->selectionModel()->isRowSelected(indice.row(),QModelIndex()))//si hay alguna fila seleccionada
             {
-                if (!listaIndices.contains(i.row()))
-                    listaIndices.append(i.row());
-            }
-            qSort(listaIndices);
-            CertificacionModel* modelo = qobject_cast<CertificacionModel*>(modeloTablaCert);
+                QModelIndexList indices = tabla->selectionModel()->selectedIndexes();
+                QList<int> listaIndices;
+                foreach (QModelIndex i, indices)
+                {
+                    if (!listaIndices.contains(i.row()))
+                        listaIndices.append(i.row());
+                }
+                qSort(listaIndices);
+                /*MedicionModel* modelo = qobject_cast<MedicionModel*>(modeloTablaCert);
             if (modelo)
             {
                 modelo->Certificar(listaIndices,certActual.at(0));
+            }*/
+                modeloTablaMed->Certificar(listaIndices,certActual.at(0));
+                tabla->selectionModel()->clearSelection();
             }
-            tabla->selectionModel()->clearSelection();
         }
     }
+    else
+    {
+        QMessageBox::warning(this, tr("Aviso"),
+                             tr("No hay certificación activa"),
+                             QMessageBox::Ok);
+    }
 }
-
-void Instancia::CambiarEntreMedicionYCertificacion(int n)
-{
-    //O->cambiarEntreMedYCert(n);
-}
-
-/*PrincipalModel* Instancia::ModeloTablaPrincipal()
-{
-    return modeloTablaP;
-}*/
-
-/*TablaBase* Instancia::LeeTablaPrincipal()
-{
-    return tablaPrincipal;
-}*/

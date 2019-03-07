@@ -37,12 +37,12 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
 {
     if (index.isValid() && (role == Qt::EditRole /*|| role == Qt::DisplayRole*/) && value.toString()!=index.data().toString())
     {
-        QString codpadre = datos.at(0).at(tipoColumna::CODIGO).toString();
-        QString codhijo = this->index(index.row(),tipoColumna::CODIGO).data().toString();
+        QString codpadre = datos.at(0).at(tipoColumnaTPrincipal::CODIGO).toString();
+        QString codhijo = this->index(index.row(),tipoColumnaTPrincipal::CODIGO).data().toString();
         codpadre.remove(LeyendasCabecera[0]);
         switch (index.column())
         {
-        case tipoColumna::CODIGO:
+        case tipoColumnaTPrincipal::CODIGO:
             if (index.data().isNull())//cuando este en una fila vacia se insertara una nueva partida
             {
                 QString descripcion = "Insertar nueva partida con el codigo: ";
@@ -56,31 +56,41 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
                 return true;
             }            
             break;
-        case tipoColumna::NATURALEZA:
+        case tipoColumnaTPrincipal::NATURALEZA:
         {
             QString descripcion = "Editar resumen con el codigo: ";
             pila->push(new UndoEditarNaturaleza(tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
         }
             break;
-        case tipoColumna::UD:
+        case tipoColumnaTPrincipal::UD:
         {
             QString descripcion = "Editar ud con el codigo: ";
             pila->push(new UndoEditarUnidad(tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
         }
             break;
-        case tipoColumna::RESUMEN:
+        case tipoColumnaTPrincipal::RESUMEN:
         {
             QString descripcion = "Editar resumen con el codigo: ";
             pila->push(new UndoEditarResumen(tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
         }
             break;
-        case tipoColumna::CANPRES:
+        case tipoColumnaTPrincipal::CANPRES:
+        case tipoColumnaTPrincipal::CANCERT:
         {
             QString descripcion = "Editar cantidad con el codigo: ";
-            QString cadenahaymediciones = "SELECT hay_medicion ('"+ tabla + "','" + codpadre + "','" + codhijo+"');";
+            QString tipoCantidad;
+            if (index.column()==tipoColumnaTPrincipal::CANPRES)
+            {
+                tipoCantidad = "0";
+            }
+            else
+            {
+                tipoCantidad = "1";
+            }
+            QString cadenahaymediciones = "SELECT hay_medicion ('"+ tabla + "','" + codpadre + "','" + codhijo+"','" + tipoCantidad+"');";
             consulta.exec(cadenahaymediciones);
             bool hayMedicion;
             while (consulta.next())
@@ -95,11 +105,11 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
                     return false;
                 }
             }
-            pila->push(new UndoEditarCantidad(tabla, codpadre, codhijo, index.data(), value, descripcion));
+            pila->push(new UndoEditarCantidad(tabla, codpadre, codhijo, index.data(), value, tipoCantidad, descripcion));
             return true;
         }
             break;
-        case tipoColumna::PRPRES:
+        case tipoColumnaTPrincipal::PRPRES:
         {
             QString descripcion = "Editar precio con el codigo: ";
             QString cadenahaydescompuesto = "SELECT hay_descomposicion ('"+ tabla + "','" + codhijo+"');";
@@ -167,7 +177,7 @@ void PrincipalModel::PrepararCabecera(QList<QList<QVariant> > &datos)
     {     for(int i=0; i<datos.at(0).length(); i++)
         {
             //leo la naturaleza del concepto padre
-            if (i==tipoColumna::NATURALEZA)
+            if (i==tipoColumnaTPrincipal::NATURALEZA)
             {
                 naturalezapadre = datos.at(0).at(i).toInt();
             }

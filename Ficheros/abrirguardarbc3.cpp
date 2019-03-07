@@ -171,6 +171,7 @@ void AbrirGuardarBC3::procesarMediciones(QStringList &registroM)
         int lineasmedicion = medicion.size()/6;
         QString conceptos[6];//TIPO[0]/COMENTARIO{ # ID_BIM }[1]/UNIDADES[2]/LONGITUD[3]/LATITUD[4]/ALTURA[5]
         //qDebug()<<"Padre: "<<padre<<"hijo: "<<hijo;
+        QString num_cert ="0",tipotabla = "0", num_lineas = "1";
         QString cadenainsertarmedicion;
         for (int i=0;i<lineasmedicion;i++)
         {
@@ -183,8 +184,8 @@ void AbrirGuardarBC3::procesarMediciones(QStringList &registroM)
                     conceptos[j]="NULL";
                 }
             }
-            qDebug()<<"Insertar "<<conceptos[0]<<"','"<<conceptos[1]<<"','"<<conceptos[2]<<"','"<<conceptos[3]<<"','"<<conceptos[4]<<"','"<<conceptos[5]<<"en la posicion: "<<i;
-            cadenainsertarmedicion = "SELECT insertar_medicion('"+codigo+"','"+padre+"','"+hijo+"','"+QString::number(i)+"',"+conceptos[0]+",'"+conceptos[1]+"',"+conceptos[2]+","+conceptos[3]+","+conceptos[4]+","+conceptos[5]+");";
+            cadenainsertarmedicion = "SELECT insertar_lineas_medcert('"+codigo+"','"+padre+"','"+hijo+"','"+num_lineas+"','"+\
+                    QString::number(i)+"','"+tipotabla+"','"+num_cert+"',"+conceptos[0]+",'"+conceptos[1]+"',"+conceptos[2]+","+conceptos[3]+","+conceptos[4]+","+conceptos[5]+");";
             qDebug()<<"cadena insertar medicion"<<cadenainsertarmedicion;
             consulta.exec(cadenainsertarmedicion);
         }

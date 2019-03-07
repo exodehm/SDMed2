@@ -98,7 +98,7 @@ void DialogoCertificaciones::insertarNuevaCertificacion()
     }
     else
     {
-        actualizarTabla();
+        actualizarTabla();        
     }
 }
 
@@ -115,16 +115,16 @@ void DialogoCertificaciones::borrarCertificacion()
                 QString fecha = ui->tablaCertificaciones->item(i,tipoColumna::FECHA)->text();
                 QString cadenaborrarcertificacion = "DELETE FROM \"" + tabla + "_ListadoCertificaciones" + "\" WHERE fecha = '"+fecha+"'";
                 qDebug()<<cadenaborrarcertificacion;
-                consulta.exec(cadenaborrarcertificacion);
+                consulta.exec(cadenaborrarcertificacion);                
             }
         }
     }
-    actualizarTabla();
+    actualizarTabla();    
 }
 
 void DialogoCertificaciones::actualizarTabla()
 {
-    QString cadenaconsultacertificaciones = "SELECT fecha FROM \"" + tabla + "_ListadoCertificaciones" + "\" ORDER BY num_certificacion";
+    QString cadenaconsultacertificaciones = "SELECT fecha, actual FROM \"" + tabla + "_ListadoCertificaciones" + "\" ORDER BY num_certificacion";
     qDebug()<<cadenaconsultacertificaciones;
     consulta.exec(cadenaconsultacertificaciones);
     int filas = consulta.size();
@@ -149,12 +149,14 @@ void DialogoCertificaciones::actualizarTabla()
         j++;
         //radio button actual
         QRadioButton* itemradio = new QRadioButton;
+        itemradio->setChecked(consulta.value(1).toBool());
         QObject::connect(itemradio,SIGNAL(clicked(bool)),this,SLOT(ActualizarCertifActual()));
         ui->tablaCertificaciones->setCellWidget(i,j,itemradio);
         //actualizo contadores
         j=0;
         i++;
     }
+    ActualizarCertifActual();
 }
 
 void DialogoCertificaciones::ActualizarCertifActual()
@@ -171,6 +173,9 @@ void DialogoCertificaciones::ActualizarCertifActual()
                 QString fecha = ui->tablaCertificaciones->item(i,tipoColumna::FECHA)->text();
                 certifActual.clear();
                 certifActual<<num_certif<<fecha;
+                QString cadenaactualizarcertactual = "SELECT actualizar_certificacion_actual('"+ tabla + "','"+ fecha + "')";
+                qDebug()<<cadenaactualizarcertactual;
+                consulta.exec(cadenaactualizarcertactual);
             }
         }
     }

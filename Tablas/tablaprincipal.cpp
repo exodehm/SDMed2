@@ -2,26 +2,26 @@
 
 TablaPrincipal::TablaPrincipal(int nColumnas, QWidget *parent): TablaBase(nColumnas, parent)
 {
-    limiteIzquierdo=tipoColumna::CODIGO;
-    limiteDerecho=tipoColumna::IMPPRES;
+    limiteIzquierdo=tipoColumnaTPrincipal::CODIGO;
+    limiteDerecho=tipoColumnaTPrincipal::IMPPRES;
 
-    celdaBloqueada[tipoColumna::CODIGO]=true;
-    celdaBloqueada[tipoColumna::PORCERTPRES]=true;
-    celdaBloqueada[tipoColumna::IMPPRES]=true;
-    celdaBloqueada[tipoColumna::IMPCERT]=true;
-    setItemDelegateForColumn(tipoColumna::CODIGO,dlgBA);
-    setItemDelegateForColumn(tipoColumna::UD,dlgBA);
-    setItemDelegateForColumn(tipoColumna::RESUMEN,dlgBA);
-    setItemDelegateForColumn(tipoColumna::CANPRES,dlgNumTablaP);
-    setItemDelegateForColumn(tipoColumna::CANCERT,dlgNumTablaP);
-    setItemDelegateForColumn(tipoColumna::PRPRES,dlgNumTablaP);
-    setItemDelegateForColumn(tipoColumna::PRCERT,dlgNumTablaP);
-    setItemDelegateForColumn(tipoColumna::PORCERTPRES,dlgNumTablaP);
-    setItemDelegateForColumn(tipoColumna::IMPPRES,dlgCB);
-    setItemDelegateForColumn(tipoColumna::IMPCERT,dlgCB);
+    celdaBloqueada[tipoColumnaTPrincipal::CODIGO]=true;
+    celdaBloqueada[tipoColumnaTPrincipal::PORCERTPRES]=true;
+    celdaBloqueada[tipoColumnaTPrincipal::IMPPRES]=true;
+    celdaBloqueada[tipoColumnaTPrincipal::IMPCERT]=true;
+    setItemDelegateForColumn(tipoColumnaTPrincipal::CODIGO,dlgBA);
+    setItemDelegateForColumn(tipoColumnaTPrincipal::UD,dlgBA);
+    setItemDelegateForColumn(tipoColumnaTPrincipal::RESUMEN,dlgBA);
+    setItemDelegateForColumn(tipoColumnaTPrincipal::CANPRES,dlgNumTablaP);
+    setItemDelegateForColumn(tipoColumnaTPrincipal::CANCERT,dlgNumTablaP);
+    setItemDelegateForColumn(tipoColumnaTPrincipal::PRPRES,dlgNumTablaP);
+    setItemDelegateForColumn(tipoColumnaTPrincipal::PRCERT,dlgNumTablaP);
+    setItemDelegateForColumn(tipoColumnaTPrincipal::PORCERTPRES,dlgNumTablaP);
+    setItemDelegateForColumn(tipoColumnaTPrincipal::IMPPRES,dlgCB);
+    setItemDelegateForColumn(tipoColumnaTPrincipal::IMPCERT,dlgCB);
 
     dlgIco= new DelegadoIconos;
-    setItemDelegateForColumn(tipoColumna::NATURALEZA,dlgIco);
+    setItemDelegateForColumn(tipoColumnaTPrincipal::NATURALEZA,dlgIco);
     cabeceraHorizontal->setSelectionMode(QAbstractItemView::NoSelection);
 }
 

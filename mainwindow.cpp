@@ -375,6 +375,10 @@ void MainWindow::ActionCerrar()
         ui->actionVer_Arbol->setEnabled(false);
         ui->actionExportar->setEnabled(false);
         ui->actionImprimir->setEnabled(false);
+        //cerrar
+        labelCertificacionActual[1]->clear();
+        QString label = "";
+        labelCertificacionActual[1]->setText(label);
     }
 }
 
@@ -522,14 +526,17 @@ void MainWindow::NuevaCertificacion()
 
 void MainWindow::CambiarLabelCertificacionActual(QStringList certActual)
 {
+    qDebug()<<"CertACtualMain = "<<certActual.at(0)<<"<-->"<<certActual.at(1);
     labelCertificacionActual[1]->clear();
-    QString label = " <strong><b>";
+    QString label;
+    label.append("<strong><b>");
     label.append(certActual.at(0));
-    label.append("</b></strong> (");
+    label.append("</b></strong>");
+    label.append("(");
     label.append(certActual.at(1));
     label.append(")");
+    qDebug()<<"label: "<<label;
     labelCertificacionActual[1]->setText(label);
-
 }
 
 void MainWindow::setupActions()
@@ -588,6 +595,7 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     QObject::connect(NuevaObra,SIGNAL(CopiarM()),this,SLOT(ActionCopiar()));
     QObject::connect(NuevaObra,SIGNAL(PegarM()),this,SLOT(ActionPegar()));
     QObject::connect(NuevaObra,SIGNAL(CambiarLabelCertActual(QStringList)),this,SLOT(CambiarLabelCertificacionActual(QStringList)));
+    NuevaObra->LeerCertifActual();
 }
 
 void MainWindow::CambiarObraActual(int indice)
@@ -598,7 +606,8 @@ void MainWindow::CambiarObraActual(int indice)
         {
             obraActual=ListaObras.begin();
             std::advance(obraActual,indice);
-            ActivarDesactivarBotonesPila((*obraActual)->Pila()->index());            
+            ActivarDesactivarBotonesPila((*obraActual)->Pila()->index());
+            (*obraActual)->LeerCertifActual();
         }
     }
 }

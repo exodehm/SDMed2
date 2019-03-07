@@ -27,7 +27,7 @@ void DelegadoArbol::paint( QPainter *painter,const QStyleOptionViewItem &option,
     if (index.isValid())
     {
         TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
-        int naturaleza = item->data(tipoColumna::NATURALEZA).toInt();//columna 1 == naturaleza
+        int naturaleza = item->data(tipoColumnaTPrincipal::NATURALEZA).toInt();//columna 1 == naturaleza
         switch (naturaleza)
         {
         case Codificacion::Capitulo:

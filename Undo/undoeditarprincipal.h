@@ -76,12 +76,14 @@ class UndoEditarCantidad : public UndoEditarPrincipal
 {
 public:
     UndoEditarCantidad (QString tabla, QString cod_padre, QString cod_hijo,
-                       QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion);
+                       QVariant dato_antiguo, QVariant dato_nuevo, QString tipo_Cantidad, QVariant descripcion);
 
     void undo();
     void redo();
 
 protected:
+
+    QString columnaCantidad;//canpres o cancert
     QList<QList<QVariant>>lineasMedicion;
 };
 

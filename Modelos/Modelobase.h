@@ -30,12 +30,15 @@ public:
     bool HayFilaVacia();
     int FilaVacia();
     virtual void ActualizarDatos(QString padre, QString hijo)=0;
-    virtual bool EsPartida()=0;
+    virtual bool EsPartida(){return bool();}
     virtual void PrepararCabecera(QList<QList<QVariant>>&datos)=0;
-    virtual void BorrarFilas(const QList<int>&filas)=0;
-    virtual void InsertarFila(int fila)=0;
+
+    virtual void BorrarFilas(const QList<int>&filas){Q_UNUSED (filas)}
+    virtual void InsertarFila(int fila){Q_UNUSED(fila)}
+
     virtual void Copiar(const QList<int> &filas)=0;
-    virtual void Pegar(int fila)=0;    
+    virtual void Pegar(int fila)=0;
+    virtual void Certificar(const QList<int> &filas,QString num_cert){}
     //void ActualizarIds(QString idpadre, QString idhijo);
 
 public slots:

@@ -99,9 +99,9 @@ QHeaderView* TablaBase::CabeceraDeTabla()
 
 void TablaBase::PonerDelegadoOriginal(int columna)
 {
-    if (sender()->parent()->parent()->objectName()=="TablaP")
+    if (sender()->parent()->parent()->objectName()=="TablaP") //tabla principal
     {
-        if (columna!=tipoColumna::CODIGO && columna!=tipoColumna::UD && columna!=tipoColumna::RESUMEN)
+        if (columna!=tipoColumnaTPrincipal::CODIGO && columna!=tipoColumnaTPrincipal::UD && columna!=tipoColumnaTPrincipal::RESUMEN)
         {
             setItemDelegateForColumn(columna,dlgNumTablaP);
         }
@@ -110,9 +110,9 @@ void TablaBase::PonerDelegadoOriginal(int columna)
             setItemDelegateForColumn(columna,dlgBA);
         }
     }
-    else
+    else //tabla de mediciones o certificaciones
     {
-        if (columna==tipoColumna::N || columna==tipoColumna::LONGITUD || columna==tipoColumna::ANCHURA || columna==tipoColumna::ALTURA)
+        if (columna==tipoColumnaTMedCert::N || columna==tipoColumnaTMedCert::LONGITUD || columna==tipoColumnaTMedCert::ANCHURA || columna==tipoColumnaTMedCert::ALTURA)
         {
             setItemDelegateForColumn(columna,dlgNumTablaMC);
         }

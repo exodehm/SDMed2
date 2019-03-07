@@ -22,8 +22,6 @@ bool Filter::eventFilter(QObject *obj, QEvent* event)
             {
                 if (tabla->selectionModel()->isRowSelected(indice.row(),QModelIndex()))//si hay alguna fila seleccionada
                 {
-                    //tabla->model()->removeRows(tabla->selectionModel()->selectedRows().first().row(),tabla->selectionModel()->selectedRows().size());
-                    //tabla->setUpdatesEnabled(false);
                     QModelIndexList indices = tabla->selectionModel()->selectedIndexes();
                     QList<int> listaIndices;                    
                     foreach (QModelIndex i, indices)
@@ -54,7 +52,7 @@ bool Filter::eventFilter(QObject *obj, QEvent* event)
                 while (tabla->columnaBloqueada(col) || tabla->isColumnHidden(col))
                 {
                     col++;
-                    qDebug()<<"Columna: "<<col;
+                    //qDebug()<<"Columna: "<<col;
                 }
                 QModelIndex ind;
                 if (col>tabla->limiteDerecho)
@@ -127,7 +125,7 @@ bool Filter::eventFilter(QObject *obj, QEvent* event)
                 if (indice.row()>0)//si estoy en la segunda fila o mas
                 {
                     QModelIndex ind = tabla->model()->index(indice.row()-1,indice.column());
-                    qDebug()<<"Fila: "<<ind.row()<<" - Columna: "<<ind.column();
+                    //qDebug()<<"Fila: "<<ind.row()<<" - Columna: "<<ind.column();
                     emit tabla->CambiaFila(ind);
                     tabla->setCurrentIndex(ind);
                     return true;

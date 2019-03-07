@@ -3,10 +3,10 @@
 
 #include <QString>
 
-namespace tipoColumna {
-    enum  {CODIGO, NATURALEZA, UD, RESUMEN, CANPRES, CANCERT, PORCERTPRES, PRPRES, PRCERT, IMPPRES, IMPCERT};
-    enum  {FASE, COMENTARIO, N, LONGITUD, ANCHURA, ALTURA, FORMULA, PARCIAL, SUBTOTAL,ID};
-}
+enum tipoColumnaTPrincipal {CODIGO, NATURALEZA, UD, RESUMEN, CANPRES, CANCERT, PORCERTPRES, PRPRES, PRCERT, IMPPRES, IMPCERT};
+
+enum  tipoColumnaTMedCert {FASE, COMENTARIO, N, LONGITUD, ANCHURA, ALTURA, FORMULA, PARCIAL, SUBTOTAL, ID, POSICION, N_CERTIF};
+
 
 enum class Naturaleza{SIN_CLASIFICAR, MANO_DE_OBRA, MAQUINARIA, MATERIALES, COMP_RESIDUO, CLASIF_RESIDUO, CAPITULO, PARTIDA};
 
@@ -15,10 +15,7 @@ namespace naturaleza {
     static const QString leyenda_nat[]={"Sin clasificar", "Mano de Obra", "Maquinaria", "Materiales", "Comp residuo", "Clasificacion residuo", "Capitulo", "Partida"};
 }
 
-namespace tipoTablaMedicion {
-    enum{MEDICION,CERTIFICACION};
-
-}
+enum tipoTablaMedCert {MEDICION,CERTIFICACION};
 
 namespace movimiento {
     enum {INICIO, ARRIBA, ABAJO, IZQUIERDA, DERECHA};

@@ -66,10 +66,6 @@ private slots:
     void CambiarMedCert(int indice);
     void NuevaCertificacion();
     void CambiarLabelCertificacionActual(QStringList certActual);
-    //void CambiarCertificacionActual(int actual);
-
-    /*bool ActionAbrirDesdeReciente();
-    void updateArchivosRecientesActions();*/
 
     void ActivarDesactivarBotonesPila(int indice);
 
@@ -104,10 +100,7 @@ private:
     //combo certificacion actual
     QLabel* labelCertificacionActual[2];
 
-    QDir ruta;
-    //listas para copiar y pegar
-    //std::list<std::pair<pArista,pNodo>>ListaNodosCopiarPegar;
-    //Medicion ListaMedicionCopiarPegar;
+    QDir ruta;    
 
     void writeSettings();
     void readSettings();
