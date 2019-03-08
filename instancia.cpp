@@ -388,7 +388,7 @@ void Instancia::Pegar()
 void Instancia::EscribirTexto()
 {
     QString cadenavertexto = "SELECT ver_texto('" + tabla + "','" + codigohijo+"');";
-    //qDebug()<<cadenavertexto;
+    qDebug()<<cadenavertexto;
     consulta.exec(cadenavertexto);
     QString descripcion;
     while (consulta.next())

@@ -62,6 +62,11 @@ void TablaPrincipal::MostrarMenuLateralTabla(QPoint pos)
     menu->popup(cabeceraVertical->viewport()->mapToGlobal(pos));
 }
 
+void TablaPrincipal::MostrarMenuTabla(QPoint pos)
+{
+
+}
+
 void TablaPrincipal::CopiarPartidas()
 {
     qDebug()<<"Copiar tabla principal";

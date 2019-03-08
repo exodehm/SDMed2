@@ -45,6 +45,8 @@ public slots:
 
     virtual void MostrarMenuCabecera(QPoint pos)=0;
     virtual void MostrarMenuLateralTabla(QPoint pos)=0;
+    virtual void MostrarMenuTabla(QPoint pos)=0;
+
 
 signals:
     void Copiar();

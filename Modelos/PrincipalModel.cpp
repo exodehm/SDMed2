@@ -171,7 +171,7 @@ bool PrincipalModel::EsPartida()
     return naturalezapadre == static_cast<int>(Naturaleza::PARTIDA);
 }
 
-void PrincipalModel::PrepararCabecera(QList<QList<QVariant> > &datos)
+void PrincipalModel::PrepararCabecera()
 {
     if (!datos.isEmpty())
     {     for(int i=0; i<datos.at(0).length(); i++)
@@ -238,7 +238,7 @@ void PrincipalModel::ActualizarDatos(QString padre, QString hijo)
         datos.append(lineaDatos);
         lineaDatos.clear();
     }
-    PrepararCabecera(datos);
+    PrepararCabecera(/*datos*/);
     if (datos.size()<=1)//añado una fila extra para poder insertar hijos en caso de hojas
     {
         hayFilaVacia = true;

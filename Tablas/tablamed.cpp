@@ -1,4 +1,6 @@
 #include "tablamed.h"
+#include "defs.h"
+#include "./Modelos/MedicionModel.h"
 
 TablaMed::TablaMed(int nColumnas, QWidget *parent): TablaBase(nColumnas, parent)
 {    
@@ -59,6 +61,71 @@ void TablaMed::MostrarMenuLateralTabla(QPoint pos)
     QObject::connect(AccionCertificar, SIGNAL(triggered()), this, SLOT(Certificar()));
 
     menu->popup(cabeceraVertical->viewport()->mapToGlobal(pos));
+}
+
+void TablaMed::MostrarMenuTabla(QPoint pos)
+{
+   if (this->currentIndex().column()==tipoColumnaTMedCert::SUBTOTAL)
+   {
+       QMenu *menu=new QMenu(this);
+       QAction *AccionSubtotalNormal = new QAction(tr("Normal"), this);
+       QAction *AccionSubtotalOrigen = new QAction(tr("Subtotal a origen"), this);
+       QAction *AccionSubtotalParcial = new QAction(tr("Subtotal parcial"), this);
+       AccionSubtotalNormal->setObjectName("AccionSubtotalNormal");
+       AccionSubtotalOrigen->setObjectName("AccionSubtotalOrigen");
+       AccionSubtotalParcial->setObjectName("AccionSubtotalParcial");
+       QList<QAction*>listaAcciones;
+       listaAcciones<<AccionSubtotalNormal<<AccionSubtotalOrigen<<AccionSubtotalParcial;
+       menu->addActions(listaAcciones);
+       menu->popup(this->viewport()->mapToGlobal(pos));
+       QObject::connect(AccionSubtotalNormal,SIGNAL(triggered(bool)),this,SLOT(CambiarTipoSubtotal()));
+       QObject::connect(AccionSubtotalOrigen,SIGNAL(triggered(bool)),this,SLOT(CambiarTipoSubtotal()));
+       QObject::connect(AccionSubtotalParcial,SIGNAL(triggered(bool)),this,SLOT(CambiarTipoSubtotal()));
+
+   }
+}
+
+void TablaMed::CambiarTipoSubtotalOrigen()
+{
+    MedicionModel* M = qobject_cast<MedicionModel*>(this->model());
+    QVariant tipo = 2;
+    if (M)
+    {
+        M->CambiarTipoLineaMedicion(this->currentIndex().row(),this->currentIndex().column(),tipo);
+    }
+}
+
+void TablaMed::CambiarTipoSubtotalParcial()
+{
+    MedicionModel* M = qobject_cast<MedicionModel*>(this->model());
+    QVariant tipo = 1;
+    if (M)
+    {
+        M->CambiarTipoLineaMedicion(this->currentIndex().row(),this->currentIndex().column(),tipo);
+    }
+}
+
+void TablaMed::CambiarTipoSubtotal()
+{
+    int tipo;
+    QString accion = sender()->objectName();
+    if (accion == "AccionSubtotalNormal")
+    {
+        tipo = 0;
+    }
+    else if (accion == "AccionSubtotalParcial")
+    {
+        tipo = 1;
+    }
+    else if (accion == "AccionSubtotalOrigen")
+    {
+        tipo = 2;
+    }
+    MedicionModel* M = qobject_cast<MedicionModel*>(this->model());
+    if (M)
+    {
+        M->CambiarTipoLineaMedicion(this->currentIndex().row(),this->currentIndex().column(),tipo);
+    }
 }
 
 /*void TablaMed::Copiar()

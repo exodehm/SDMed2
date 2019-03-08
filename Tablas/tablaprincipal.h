@@ -13,6 +13,7 @@ public:
 public slots:
     void MostrarMenuCabecera(QPoint pos) override;
     void MostrarMenuLateralTabla(QPoint pos) override;
+    void MostrarMenuTabla(QPoint pos) override;
     //void Copiar();
     void CopiarPartidas();
 

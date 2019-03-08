@@ -14,6 +14,11 @@ public:
 public slots:
     void MostrarMenuCabecera(QPoint pos) override;
     void MostrarMenuLateralTabla(QPoint pos) override;
+    void MostrarMenuTabla(QPoint pos) override;
+
+    void CambiarTipoSubtotalOrigen();
+    void CambiarTipoSubtotalParcial();
+    void CambiarTipoSubtotal();
     //void Copiar();
 
 signals:

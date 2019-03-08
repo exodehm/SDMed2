@@ -16,17 +16,20 @@ public:
 
     bool setData(const QModelIndex & index, const QVariant& value, int role);
 
-    void PrepararCabecera(QList<QList<QVariant>>&datos);
+    void PrepararCabecera(/*QList<QList<QVariant>>&datos*/);
     void Copiar(const QList<int> &filas);
     void Pegar(int fila);
     void Certificar(const QList<int> &filas,QString num_cert) override;
     void BorrarFilas(const QList<int> &filas) override;
     void InsertarFila(int fila) override;
-    void ActualizarDatos(QString padre, QString hijo) override;    
+    void ActualizarDatos(QString padre, QString hijo) override;
+
+    void CambiarTipoLineaMedicion(int fila, int columna, QVariant tipo);
 
 private:
 
     enum tipoTablaMedCert eTipoTabla;
+    float subtotal;
 };
 
 #endif // MEDCERTMODELBASE_H

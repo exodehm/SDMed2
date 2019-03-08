@@ -31,7 +31,7 @@ public:
     int FilaVacia();
     virtual void ActualizarDatos(QString padre, QString hijo)=0;
     virtual bool EsPartida(){return bool();}
-    virtual void PrepararCabecera(QList<QList<QVariant>>&datos)=0;
+    virtual void PrepararCabecera(/*QList<QList<QVariant>>&datos*/)=0;
 
     virtual void BorrarFilas(const QList<int>&filas){Q_UNUSED (filas)}
     virtual void InsertarFila(int fila){Q_UNUSED(fila)}

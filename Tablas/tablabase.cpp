@@ -18,6 +18,7 @@ TablaBase::TablaBase(int nColumnas, QWidget *parent): QTableView(parent)
     installEventFilter(filtro);
     cabeceraHorizontal->setContextMenuPolicy(Qt::CustomContextMenu);
     cabeceraVertical->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
     mapperH = new QSignalMapper(cabeceraHorizontal);
     mapperV = new QSignalMapper(cabeceraVertical);
 
@@ -30,6 +31,7 @@ TablaBase::TablaBase(int nColumnas, QWidget *parent): QTableView(parent)
 
     QObject::connect(cabeceraHorizontal, SIGNAL(customContextMenuRequested(QPoint)), SLOT(MostrarMenuCabecera(QPoint)));
     QObject::connect(cabeceraVertical, SIGNAL(customContextMenuRequested(QPoint)), SLOT(MostrarMenuLateralTabla(QPoint)));
+    QObject::connect(this, SIGNAL(customContextMenuRequested(QPoint)), SLOT(MostrarMenuTabla(QPoint)));
 }
 
 TablaBase::~TablaBase()

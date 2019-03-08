@@ -15,7 +15,7 @@ public:
     bool removeRows(int fila, int numFilas, const QModelIndex& parent);
 
     bool EsPartida();
-    void PrepararCabecera(QList<QList<QVariant>>&datos);
+    void PrepararCabecera(/*QList<QList<QVariant>>&datos*/) override;
 
     void BorrarFilas(const QList<int>&filas) override;
     void InsertarFila(int fila) override;

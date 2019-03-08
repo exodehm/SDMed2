@@ -201,6 +201,7 @@ void AbrirGuardarBC3::procesarTexto(const QStringList& registroT)
         QString codigotexto = datos.at(0);
         codigotexto.remove('#');
         QString cadenainsertartexto = "SELECT insertar_texto('"+ codigo + "','"+codigotexto+"','"+datos.at(1)+"');";
+        qDebug()<<cadenainsertartexto;
         consulta.exec(cadenainsertartexto);
     }
 }

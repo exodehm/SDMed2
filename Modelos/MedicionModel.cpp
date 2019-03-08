@@ -59,12 +59,19 @@ bool MedicionModel::setData(const QModelIndex &index, const QVariant &value, int
     return false;
 }
 
-void MedicionModel::PrepararCabecera(QList<QList<QVariant> > &datos)
+void MedicionModel::PrepararCabecera(/*QList<QList<QVariant> > &datos*/)
 {    
     QList<QVariant>cabecera;
     for (int i=0;i<LeyendasCabecera.size();i++)
     {
         //qDebug()<<"cabecera: "<<static_cast<QVariant>(LeyendasCabecera[i]);
+        if (i == tipoColumnaTMedCert::PARCIAL)
+        {
+            QString SubT = LeyendasCabecera[i] + QString::number(subtotal,'f',2);
+            cabecera.append(static_cast<QVariant>(SubT));
+            ++i;
+            //qDebug()<<"El numero es: "<<QString::number(subtotal,'f',2);
+        }
         cabecera.append(static_cast<QVariant>(LeyendasCabecera[i]));
     }
     datos.prepend(cabecera);
@@ -119,12 +126,20 @@ void MedicionModel::InsertarFila(int fila)
     pila->push(new UndoInsertarLineaMedicion(tabla,codigopadre,codigohijo,1,fila,eTipoTabla,V));
 }
 
+void MedicionModel::CambiarTipoLineaMedicion(int fila, int columna, QVariant tipo)
+{
+    QString desc = "Cambiar tipo de columna subtotal" ;
+    pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,datos.at(fila+1).at(columna+1),tipo,
+     datos.at(fila+1).at(tipoColumnaTMedCert::ID).toString(),columna, eTipoTabla, QVariant(desc)));
+}
+
 void MedicionModel::ActualizarDatos(QString padre, QString hijo)
 {
     hayFilaVacia = false;
     datos.clear();
     codigopadre=padre;
     codigohijo=hijo;
+    subtotal = 0;
     QString cadena_consulta = "SELECT * FROM ver_medcert('"+tabla+"','"+ codigopadre + "','"+ codigohijo+"','"+QString::number(eTipoTabla)+"')";
     qDebug()<<cadena_consulta;
     consulta.exec(cadena_consulta);
@@ -144,11 +159,15 @@ void MedicionModel::ActualizarDatos(QString padre, QString hijo)
             {
                 lineaDatos.append(consulta.value(i));
             }
+            if (i == tipoColumnaTMedCert::PARCIAL)
+            {
+                subtotal += consulta.value(i).toFloat();
+            }
         }
         datos.append(lineaDatos);
-        lineaDatos.clear();
+        lineaDatos.clear();        
     }
-    PrepararCabecera(datos);
+    PrepararCabecera(/*datos*/);
     if (datos.size()<=1)//añado una fila extra para poder insertar hijos en caso de hojas
     {
         hayFilaVacia = true;
