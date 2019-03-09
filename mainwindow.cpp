@@ -525,17 +525,22 @@ void MainWindow::NuevaCertificacion()
 }
 
 void MainWindow::CambiarLabelCertificacionActual(QStringList certActual)
-{
-    qDebug()<<"CertACtualMain = "<<certActual.at(0)<<"<-->"<<certActual.at(1);
+{    
     labelCertificacionActual[1]->clear();
     QString label;
-    label.append("<strong><b>");
-    label.append(certActual.at(0));
-    label.append("</b></strong>");
-    label.append("(");
-    label.append(certActual.at(1));
-    label.append(")");
-    qDebug()<<"label: "<<label;
+    if (certActual.at(0) == "0")
+    {
+        label = tr("No hay certificación activa");
+    }
+    else
+    {
+        label.append("<strong><b>");
+        label.append(certActual.at(0));
+        label.append("</b></strong>");
+        label.append("(");
+        label.append(certActual.at(1));
+        label.append(")");
+    }
     labelCertificacionActual[1]->setText(label);
 }
 

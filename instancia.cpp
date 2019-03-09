@@ -492,7 +492,6 @@ void Instancia::AnadirCertificacion()
     {
         certActual = d.CertificacionActual();
         tablaCertificaciones->setEnabled(true);
-        qDebug()<<"Tamaño de la cer atual "<<certActual.size();
         QString cadenainsertarcertificacion = "SELECT crear_tabla_certificaciones('"+tabla+"')";
         consulta.exec(cadenainsertarcertificacion);
         emit CambiarLabelCertActual(certActual);

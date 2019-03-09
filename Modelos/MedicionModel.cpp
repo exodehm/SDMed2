@@ -26,7 +26,8 @@ MedicionModel::MedicionModel(const QString &tabla, const QString &codigopadre, c
     LeyendasCabecera.append(QObject::tr("Altura\n"));
     LeyendasCabecera.append(QObject::tr("Fórmula\n"));
     LeyendasCabecera.append(QObject::tr("Parcial\n"));
-    LeyendasCabecera.append(QObject::tr("SubTotal\n"));   
+    LeyendasCabecera.append(QObject::tr("SubTotal\n"));
+    LeyendasCabecera.append(QObject::tr("Tipo\n"));
     LeyendasCabecera.append(QObject::tr("Id\n"));
     LeyendasCabecera.append(QObject::tr("Posicion\n"));
     NUM_COLUMNAS = LeyendasCabecera.size();
@@ -107,11 +108,11 @@ void MedicionModel::Certificar(const QList<int> &filas, QString num_cert)
 
 void MedicionModel::BorrarFilas(const QList<int>& filas)
 {
+    qDebug()<<"Borrar filas medicion"<<datos.size()<<"-"<<datos.at(0).size();
     QList<QString>filasBorrar;
     foreach (const int& i, filas)
     {        
         filasBorrar.append(datos.at(i+1).at(tipoColumnaTMedCert::POSICION).toString());
-        //qDebug()<<"Filas: "<<(datos.at(i+1).at(tipoColumna::POSICION));
     }
     QString desc="Undo borrar lineas medicion";
     QVariant V(desc);
