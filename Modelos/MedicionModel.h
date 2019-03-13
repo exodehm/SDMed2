@@ -25,11 +25,13 @@ public:
     void ActualizarDatos(QString padre, QString hijo) override;
 
     void CambiarTipoLineaMedicion(int fila, int columna, QVariant tipo);
+    void CambiaCertificacionActual(int cert);
 
 private:
 
     enum tipoTablaMedCert eTipoTabla;
     float subtotal;
+    int certif_actual;
 };
 
 #endif // MEDCERTMODELBASE_H

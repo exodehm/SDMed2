@@ -35,6 +35,7 @@ private slots:
     bool ActionImportar();
     bool ActionAbrirBBDD();
     bool BorrarBBDD(QStringList datosobra);
+    void CambiarResumenObra(QString codigo, QString resumen);
     //bool Guardar();
     bool Exportar(QString nombreFichero=QString());
     bool GuardarObra(QString nombreFichero);

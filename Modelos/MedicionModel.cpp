@@ -31,6 +31,7 @@ MedicionModel::MedicionModel(const QString &tabla, const QString &codigopadre, c
     LeyendasCabecera.append(QObject::tr("Id\n"));
     LeyendasCabecera.append(QObject::tr("Posicion\n"));
     NUM_COLUMNAS = LeyendasCabecera.size();
+    certif_actual = 0;
     ActualizarDatos(codigopadre,codigohijo);
 }
 
@@ -124,14 +125,22 @@ void MedicionModel::InsertarFila(int fila)
     QString desc="Insertar linea medicion en fila: "+fila;
     qDebug()<<desc;
     QVariant V(desc);
-    pila->push(new UndoInsertarLineaMedicion(tabla,codigopadre,codigohijo,1,fila,eTipoTabla,V));
+    pila->push(new UndoInsertarLineaMedicion(tabla,codigopadre,codigohijo,1,fila,eTipoTabla, certif_actual, V));
 }
 
 void MedicionModel::CambiarTipoLineaMedicion(int fila, int columna, QVariant tipo)
 {
     QString desc = "Cambiar tipo de columna subtotal" ;
     pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,datos.at(fila+1).at(columna+1),tipo,
-     datos.at(fila+1).at(tipoColumnaTMedCert::ID).toString(),columna, eTipoTabla, QVariant(desc)));
+                                      datos.at(fila+1).at(tipoColumnaTMedCert::ID).toString(),columna, eTipoTabla, QVariant(desc)));
+}
+
+void MedicionModel::CambiaCertificacionActual(int cert)
+{
+    if (eTipoTabla==tipoTablaMedCert::CERTIFICACION)
+    {
+        certif_actual = cert;
+    }
 }
 
 void MedicionModel::ActualizarDatos(QString padre, QString hijo)

@@ -69,8 +69,9 @@ void UndoBorrarLineasMedicion::redo()
 
 
 /*************INSERTAR LINEA MEDICION******************/
-UndoInsertarLineaMedicion::UndoInsertarLineaMedicion(const QString& nombretabla,const QString& codpadre, const QString& codhijo, const int num_filas, const int pos, enum tipoTablaMedCert tipo, QVariant descripcion):
-    tabla(nombretabla),codigopadre(codpadre),codigohijo(codhijo), numFilas(num_filas), posicion(pos), eTipoTabla(tipo)
+UndoInsertarLineaMedicion::UndoInsertarLineaMedicion(const QString& nombretabla,const QString& codpadre, const QString& codhijo,
+                                                     const int num_filas, const int pos, enum tipoTablaMedCert tipo, int num_cert, QVariant descripcion):
+    tabla(nombretabla),codigopadre(codpadre),codigohijo(codhijo), numFilas(num_filas), posicion(pos), eTipoTabla(tipo),cert_actual(num_cert)
 {
     qDebug()<<descripcion;
 }
@@ -83,7 +84,8 @@ void UndoInsertarLineaMedicion::undo()
 
 void UndoInsertarLineaMedicion::redo()
 {
-    QString cadenainsertar = "SELECT insertar_lineas_medcert('"+tabla+"','"+codigopadre+"','"+codigohijo+"','"+QString::number(numFilas)+"','"+QString::number(posicion)+"','"+QString::number(eTipoTabla)+"')";
+    QString cadenainsertar = "SELECT insertar_lineas_medcert('"+tabla+"','"+codigopadre+"','"+codigohijo+"','"+QString::number(numFilas)+"','"+
+            QString::number(posicion)+"','"+QString::number(eTipoTabla)+"','"+QString::number(cert_actual)+  "')";
     qDebug()<<"cadena insertar"<<cadenainsertar;
     consulta.exec(cadenainsertar);
 }

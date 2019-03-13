@@ -45,7 +45,8 @@ private:
 class UndoInsertarLineaMedicion : public QUndoCommand
 {
 public:
-    UndoInsertarLineaMedicion(const QString& nombretabla,const QString& codpadre, const QString& codhijo, const int num_filas, const int pos, enum tipoTablaMedCert tipo, QVariant descripcion);
+    UndoInsertarLineaMedicion(const QString& nombretabla,const QString& codpadre, const QString& codhijo, const int num_filas, const int pos,
+                              enum tipoTablaMedCert tipo, int num_cert, QVariant descripcion);
 
     void undo();
     void redo();
@@ -55,6 +56,7 @@ private:
     int posicion, numFilas;
     QSqlQuery consulta;
     enum tipoTablaMedCert eTipoTabla;
+    int cert_actual;
 };
 
 

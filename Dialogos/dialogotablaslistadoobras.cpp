@@ -42,6 +42,7 @@ DialogoTablaListadosObras::DialogoTablaListadosObras(const QList<QList<QVariant>
     }
     ui->tabla->resizeColumnsToContents();
     QObject::connect(this,SIGNAL(accepted()),SLOT(listaNombreObrasAbrir()));
+    QObject::connect(this->ui->tabla,SIGNAL(cellChanged(int,int)),SLOT(MostrarCambioTitulo(int,int)));
 }
 
 DialogoTablaListadosObras::~DialogoTablaListadosObras()
@@ -81,4 +82,11 @@ void DialogoTablaListadosObras::Borrar()
     datosobra<<codigoobra<<resumenobra;
     emit BorrarObra(datosobra);
     ui->tabla->removeRow(fila);
+}
+
+void DialogoTablaListadosObras::MostrarCambioTitulo(int fila, int columna)
+{
+    //columna-1 = codigo
+    //columna = resumen
+    emit (CambiarResumenObra(ui->tabla->item(fila,columna-1)->text(), ui->tabla->item(fila,columna)->text()));
 }

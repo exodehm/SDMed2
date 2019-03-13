@@ -229,6 +229,7 @@ bool MainWindow::ActionAbrirBBDD()
     {
         DialogoTablaListadosObras* cuadro = new DialogoTablaListadosObras(ListaObrasenBDD, this);
         QObject::connect(cuadro,SIGNAL(BorrarObra(QStringList)),this,SLOT(BorrarBBDD(QStringList)));
+        QObject::connect(cuadro,SIGNAL(CambiarResumenObra(QString, QString)),this,SLOT(CambiarResumenObra(QString, QString)));
         if (cuadro->exec())
         {
             foreach (QStringList l, cuadro->listaNombreObrasAbrir())
@@ -238,7 +239,6 @@ bool MainWindow::ActionAbrirBBDD()
         }
         delete cuadro;
     }
-
     return true;
 }
 
@@ -285,6 +285,32 @@ bool MainWindow::BorrarBBDD(QStringList datosobra)
     }
     return true;
 }
+
+void MainWindow::CambiarResumenObra(QString codigo, QString resumen)
+{
+    QMessageBox::StandardButton respuesta = QMessageBox::question(
+                this,
+                tr("Aviso"),
+                tr("Se cambiara el resumen de la obra. ¿Realmente desea continuar?"),
+                QMessageBox::No | QMessageBox::Default,
+                QMessageBox::Yes);
+    if (respuesta == QMessageBox::Yes)
+    {
+        QString consultacambiarresumenobra = "SELECT cambiar_resumen_obra ('"+codigo+"','" + resumen + "')";
+        QSqlQuery consulta;
+        consulta.exec(consultacambiarresumenobra);
+    }
+    else
+    {
+        qDebug()<<"Volver a poner lo que hubiera";
+        DialogoTablaListadosObras* d = qobject_cast<DialogoTablaListadosObras*>(sender());
+        if (d)
+        {
+            d->CargarDatos();
+        }
+    }
+}
+
 
 bool MainWindow::Exportar(QString nombrefichero)
 {

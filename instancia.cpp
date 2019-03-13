@@ -115,19 +115,14 @@ void Instancia::GenerarUI()
     RefrescarVista();
     MostrarDeSegun(0);
     certActual = LeerCertifActual();
+    ActualizarCertificacionEnModelo();
 
     /************signals y slots*****************/
     QObject::connect(tablaPrincipal,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(BajarNivel()));
-    QObject::connect(tablaPrincipal->CabeceraDeTabla(),SIGNAL(sectionDoubleClicked(int)),this,SLOT(SubirNivel()));
-    //QObject::connect(tablaPrincipal,SIGNAL(clicked(QModelIndex)),this,SLOT(PosicionarTablaP(QModelIndex)));
-    //QObject::connect(tablaPrincipal,SIGNAL(CambiaFila(QModelIndex)),this,SLOT(PosicionarTablaP(QModelIndex)));
-    //QObject::connect(tablaMediciones,SIGNAL(CambiaFila(QModelIndex)),this,SLOT(PosicionarTablaM(QModelIndex)));
-    //QObject::connect(modeloTablaMed,SIGNAL(Posicionar(QModelIndex)),this,SLOT(PosicionarTablaM(QModelIndex)));
+    QObject::connect(tablaPrincipal->CabeceraDeTabla(),SIGNAL(sectionDoubleClicked(int)),this,SLOT(SubirNivel()));   
     QObject::connect(tablaPrincipal,SIGNAL(Copiar()),this,SLOT(Copiar()));
     QObject::connect(tablaMediciones,SIGNAL(Copiar()),this,SLOT(Copiar()));
-    //QObject::connect(tablaPrincipal,SIGNAL(CopiarFilas(QList<int>)),this,SLOT(CopiarPartidas(QList<int>)));
     QObject::connect(tablaPrincipal,SIGNAL(Pegar()),this,SLOT(Pegar()));
-    //QObject::connect(tablaMediciones,SIGNAL(CopiarFilas()),this,SLOT(CopiarMedicionTablaM()));
     QObject::connect(tablaMediciones,SIGNAL(Pegar()),this,SLOT(Pegar()));
 
     QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
@@ -172,6 +167,16 @@ bool Instancia::HayCertificacion()
         return consulta.value(0).toBool();
     }
     return false;
+}
+
+void Instancia::ActualizarCertificacionEnModelo()
+{
+    MedicionModel* m = qobject_cast<MedicionModel*>(modeloTablaCert);
+    if (m)
+    {
+        qDebug()<<"Actualizar a: "<<certActual.at(0)<<"--"<<certActual.at(1);
+        m->CambiaCertificacionActual(certActual.at(0).toInt());
+    }
 }
 
 QUndoStack* Instancia::Pila()
@@ -494,6 +499,7 @@ void Instancia::AnadirCertificacion()
         tablaCertificaciones->setEnabled(true);
         QString cadenainsertarcertificacion = "SELECT crear_tabla_certificaciones('"+tabla+"')";
         consulta.exec(cadenainsertarcertificacion);
+        ActualizarCertificacionEnModelo();
         emit CambiarLabelCertActual(certActual);
     }
 }

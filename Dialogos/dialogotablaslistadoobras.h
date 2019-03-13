@@ -23,9 +23,11 @@ public:
 public slots:
     QList<QStringList> listaNombreObrasAbrir();
     void Borrar();
+    void MostrarCambioTitulo(int fila, int columna);
 
 signals:
     void BorrarObra(QStringList datosobra);
+    void CambiarResumenObra(QString codigo, QString resumen);
 
 private:
     Ui::DialogoTablasListadoObras *ui;

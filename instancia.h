@@ -32,6 +32,7 @@ public:
     const QString& LeeResumen() const;
     QStringList LeerCertifActual();
     bool HayCertificacion();
+    void ActualizarCertificacionEnModelo();
 
 public slots:
 
