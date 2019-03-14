@@ -113,11 +113,11 @@ void MedicionModel::BorrarFilas(const QList<int>& filas)
     QList<QString>filasBorrar;
     foreach (const int& i, filas)
     {        
-        filasBorrar.append(datos.at(i+1).at(tipoColumnaTMedCert::POSICION).toString());
+        filasBorrar.append(datos.at(i+1).at(tipoColumnaTMedCert::ID).toString());
     }
     QString desc="Undo borrar lineas medicion";
     QVariant V(desc);
-    pila->push(new UndoBorrarLineasMedicion(tabla,filasBorrar,V));
+    pila->push(new UndoBorrarLineasMedicion(tabla,filasBorrar,eTipoTabla,V));
 }
 
 void MedicionModel::InsertarFila(int fila)

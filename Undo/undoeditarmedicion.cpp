@@ -37,8 +37,8 @@ void UndoEditarMedicion::redo()
 }
 
 /*************BORRAR LINEA MEDICION******************/
-UndoBorrarLineasMedicion::UndoBorrarLineasMedicion(const QString &nombretabla, const QList<QString> &idsborrar, QVariant descripcion):
-    tabla(nombretabla),ids(idsborrar)
+UndoBorrarLineasMedicion::UndoBorrarLineasMedicion(const QString& nombretabla,const QList<QString>&idsborrar,enum tipoTablaMedCert tipo,QVariant descripcion):
+    tabla(nombretabla),ids(idsborrar),eTipoTabla(tipo)
 {    
     cadenaborrar.append("{");
     foreach (QString i, ids)
@@ -62,13 +62,13 @@ void UndoBorrarLineasMedicion::undo()
 void UndoBorrarLineasMedicion::redo()
 {
 
-    QString cadenaborrarfilas = "SELECT borrar_lineas_medicion('"+tabla+"','"+cadenaborrar+"',0,'t','t')";
+    QString cadenaborrarfilas = "SELECT borrar_lineas_medcert('"+tabla+"','"+cadenaborrar+"','" + QString::number(eTipoTabla)+ "','t','t')";
     qDebug()<<cadenaborrarfilas;
     consulta.exec(cadenaborrarfilas);
 }
 
 
-/*************INSERTAR LINEA MEDICION******************/
+/*************INSERTAR LINEA MEDICION/CERTIFICACION******************/
 UndoInsertarLineaMedicion::UndoInsertarLineaMedicion(const QString& nombretabla,const QString& codpadre, const QString& codhijo,
                                                      const int num_filas, const int pos, enum tipoTablaMedCert tipo, int num_cert, QVariant descripcion):
     tabla(nombretabla),codigopadre(codpadre),codigohijo(codhijo), numFilas(num_filas), posicion(pos), eTipoTabla(tipo),cert_actual(num_cert)
@@ -78,7 +78,9 @@ UndoInsertarLineaMedicion::UndoInsertarLineaMedicion(const QString& nombretabla,
 
 void UndoInsertarLineaMedicion::undo()
 {
-    QString cadenaborrarfilas = "SELECT borrar_lineas_medicion('"+tabla+"','"+cadenaid+"','f','t',)";
+    //en este caso no me interesa guardar las lineas borradas, porque la accion es la contraria al insertado, no un borrado directo
+    QString cadenaborrarfilas = "SELECT borrar_lineas_medcert('"+tabla+"','"+cadenaid+"','" + QString::number(eTipoTabla)+ "','f','t')";
+    qDebug()<<cadenaborrarfilas;
     consulta.exec(cadenaborrarfilas);
 }
 
@@ -88,6 +90,16 @@ void UndoInsertarLineaMedicion::redo()
             QString::number(posicion)+"','"+QString::number(eTipoTabla)+"','"+QString::number(cert_actual)+  "')";
     qDebug()<<"cadena insertar"<<cadenainsertar;
     consulta.exec(cadenainsertar);
+    //ahora preparo el array de ids a borrar para la orden redo. En este caso será siempre un array de un solo elemento, ya que la insercion se hace de uno en uno
+    QString cadenaconsultarid = "SELECT * FROM id_por_posicion('" + tabla + "','" + codigopadre + "','" + codigohijo + "','"
+            + QString::number(posicion) + "','" + QString::number(eTipoTabla)+ "')";
+    consulta.exec(cadenaconsultarid);
+    cadenaid.append("{");
+    while (consulta.next())
+    {
+        cadenaid.append(consulta.value(0).toString());
+    }
+    cadenaid.append("}");
 }
 
 
