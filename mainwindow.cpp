@@ -378,18 +378,12 @@ void MainWindow::ActionCerrar()
 {
     if (!ListaObras.empty())
     {
-        if (ConfirmarContinuar())
+        std::list<Instancia*>::iterator obraBorrar = obraActual;
+        obraActual = ListaObras.erase(obraActual);
+        delete (*obraBorrar);
+        if ( obraActual == ListaObras.end() && !ListaObras.empty())
         {
-            std::list<Instancia*>::iterator obraBorrar = obraActual;
-            {
-                qDebug()<<"Borrando la obra actual-> "<<(*obraBorrar)->LeeResumen();
-                obraActual = ListaObras.erase(obraActual);
-                delete (*obraBorrar);
-                if ( obraActual == ListaObras.end() && !ListaObras.empty())
-                {
-                    obraActual = std::prev(obraActual);
-                }
-            }
+            obraActual = std::prev(obraActual);
         }
     }
     if (ListaObras.empty())
@@ -521,28 +515,6 @@ bool MainWindow::HayObra()
 void MainWindow::CambiarMedCert(int indice)
 {
     (*obraActual)->MostrarDeSegun(indice);
-}
-
-bool MainWindow::ConfirmarContinuar()
-{
-    if ((*obraActual)->Pila()->index()>0)
-    {
-        QString cadena = tr("La obra  <b>%1</b> ha sido modificada.<br>¿Quieres guardar los cambios?").arg((*obraActual)->LeeResumen());
-        int r = QMessageBox::warning(this, tr("SDMed2"),
-                                     cadena,
-                                     QMessageBox::Yes | QMessageBox::Default,
-                                     QMessageBox::No,
-                                     QMessageBox::Cancel | QMessageBox::Escape);
-        if (r == QMessageBox::Yes)
-        {
-            return Exportar();
-        }
-        else if (r == QMessageBox::Cancel)
-        {
-            return false;
-        }
-    }
-    return true;
 }
 
 void MainWindow::NuevaCertificacion()

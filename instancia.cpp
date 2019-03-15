@@ -47,6 +47,8 @@ Instancia::~Instancia()
     delete modeloTablaCert;
     delete modeloArbol;
     delete editor;
+    QString cadenaborrarobra = "SELECT cerrar_tablas_auxiliares('"+tabla+"');";
+    consulta.exec(cadenaborrarobra);
 }
 
 void Instancia::GenerarUI()

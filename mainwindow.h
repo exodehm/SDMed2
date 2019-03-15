@@ -88,7 +88,6 @@ private:
     //fin de menu abrir reciente
     Ui::MainWindow *ui;
 
-    bool ConfirmarContinuar();
     void AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen);
 
     bool HayObra();
