@@ -8,10 +8,10 @@
 #include <QtSql/QSqlError>
 #include <QDebug>
 
-MedicionModel::MedicionModel(const QString &tabla, const QString &codigopadre, const QString &codigohijo, tipoTablaMedCert tipotabla, QUndoStack *p, QObject *parent):
-    eTipoTabla(tipotabla), ModeloBase(tabla, codigopadre, codigohijo, p, parent)
+MedicionModel::MedicionModel(const QString &tabla, const QString &codigopadre, const QString &codigohijo, int fase, QUndoStack *p, QObject *parent):
+    num_cert(fase), ModeloBase(tabla, codigopadre, codigohijo, p, parent)
 {    
-    if (eTipoTabla == tipoTablaMedCert::MEDICION)
+    if (num_cert == 0)
     {
         LeyendasCabecera.append(QObject::tr("Fase\n"));
     }
@@ -54,8 +54,8 @@ bool MedicionModel::setData(const QModelIndex &index, const QVariant &value, int
     {
         QString descripcion ="Cambio el valor de "+ index.data().toString()+" a "+value.toString()+" en la linea: "+datos.at(index.row()+1).at(tipoColumnaTMedCert::ID).toString();
         qDebug()<<descripcion;
-        pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,index.data(),value,
-         datos.at(index.row()+1).at(tipoColumnaTMedCert::ID).toString(),index.column(), eTipoTabla, QVariant(descripcion)));
+        /*pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,index.data(),value,
+         datos.at(index.row()+1).at(tipoColumnaTMedCert::ID).toString(),index.column(), eTipoTabla, QVariant(descripcion)));*/
         return true;
     }    
     return false;
@@ -114,10 +114,11 @@ void MedicionModel::BorrarFilas(const QList<int>& filas)
     foreach (const int& i, filas)
     {        
         filasBorrar.append(datos.at(i+1).at(tipoColumnaTMedCert::ID).toString());
+        //qDebug()<<"Id a borrar: "<<filasBorrar.at(i+1);
     }
     QString desc="Undo borrar lineas medicion";
     QVariant V(desc);
-    pila->push(new UndoBorrarLineasMedicion(tabla,filasBorrar,eTipoTabla,V));
+    pila->push(new UndoBorrarLineasMedicion(tabla,filasBorrar,num_cert,V));
 }
 
 void MedicionModel::InsertarFila(int fila)
@@ -125,19 +126,19 @@ void MedicionModel::InsertarFila(int fila)
     QString desc="Insertar linea medicion en fila: "+fila;
     qDebug()<<desc;
     QVariant V(desc);
-    pila->push(new UndoInsertarLineaMedicion(tabla,codigopadre,codigohijo,1,fila,eTipoTabla, certif_actual, V));
+    pila->push(new UndoInsertarLineaMedicion(tabla,codigopadre,codigohijo,1,fila,num_cert, V));
 }
 
 void MedicionModel::CambiarTipoLineaMedicion(int fila, int columna, QVariant tipo)
 {
     QString desc = "Cambiar tipo de columna subtotal" ;
-    pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,datos.at(fila+1).at(columna+1),tipo,
-                                      datos.at(fila+1).at(tipoColumnaTMedCert::ID).toString(),columna, eTipoTabla, QVariant(desc)));
+    /*pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,datos.at(fila+1).at(columna+1),tipo,
+                                      datos.at(fila+1).at(tipoColumnaTMedCert::ID).toString(),columna, eTipoTabla, QVariant(desc)));*/
 }
 
 void MedicionModel::CambiaCertificacionActual(int cert)
 {
-    if (eTipoTabla==tipoTablaMedCert::CERTIFICACION)
+    //if (eTipoTabla==tipoTablaMedCert::CERTIFICACION)
     {
         certif_actual = cert;
     }
@@ -150,7 +151,7 @@ void MedicionModel::ActualizarDatos(QString padre, QString hijo)
     codigopadre=padre;
     codigohijo=hijo;
     subtotal = 0;
-    QString cadena_consulta = "SELECT * FROM ver_medcert('"+tabla+"','"+ codigopadre + "','"+ codigohijo+"','"+QString::number(eTipoTabla)+"')";
+    QString cadena_consulta = "SELECT * FROM ver_medcert('"+tabla+"','"+ codigopadre + "','"+ codigohijo+"','"+QString::number(num_cert)+"')";
     qDebug()<<cadena_consulta;
     consulta.exec(cadena_consulta);
     QList<QVariant> lineaDatos;

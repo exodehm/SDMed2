@@ -30,7 +30,7 @@ private:
 class UndoBorrarLineasMedicion : public QUndoCommand
 {
 public:
-    UndoBorrarLineasMedicion(const QString& nombretabla,const QList<QString>&idsborrar,enum tipoTablaMedCert tipo,QVariant descripcion);
+    UndoBorrarLineasMedicion(const QString& nombretabla,const QList<QString>&idsborrar,int fase,QVariant descripcion);
 
     void undo();
     void redo();
@@ -39,7 +39,7 @@ private:
     QString tabla, cadenaborrar;
     QList<QString>ids;
     QSqlQuery consulta;
-    enum tipoTablaMedCert eTipoTabla;
+    int num_certif;
 };
 
 /*************INSERTAR LINEA MEDICION******************/
@@ -47,7 +47,7 @@ class UndoInsertarLineaMedicion : public QUndoCommand
 {
 public:
     UndoInsertarLineaMedicion(const QString& nombretabla,const QString& codpadre, const QString& codhijo, const int num_filas, const int pos,
-                              enum tipoTablaMedCert tipo, int num_cert, QVariant descripcion);
+                              int fase, QVariant descripcion);
 
     void undo();
     void redo();
@@ -56,8 +56,7 @@ private:
     QString tabla, codigopadre, codigohijo, id, cadenaid;
     int posicion, numFilas;
     QSqlQuery consulta;
-    enum tipoTablaMedCert eTipoTabla;
-    int cert_actual;
+    int num_cert;    
 };
 
 

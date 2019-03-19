@@ -43,8 +43,8 @@ Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resum
 Instancia::~Instancia()
 {   
     delete modeloTablaP;
-    delete modeloTablaMed;
-    delete modeloTablaCert;
+    //borrar los modelos y tablas de la lista de tablas de mediciones!!!
+    //pendiente!!!
     delete modeloArbol;
     delete editor;
     QString cadenaborrarobra = "SELECT cerrar_tablas_auxiliares('"+tabla+"');";
@@ -70,30 +70,23 @@ void Instancia::GenerarUI()
     tablaPrincipal->setModel(modeloTablaP);
     separadorTablas->addWidget(tablaPrincipal);
 
-    //tabla mediciones
-    modeloTablaMed = new MedicionModel(tabla, codigopadre, codigohijo, tipoTablaMedCert::MEDICION, pila);
-    tablaMediciones = new TablaMed(modeloTablaMed->columnCount(QModelIndex()));
-    tablaMediciones->setObjectName("TablaMC");
-    tablaMediciones->setModel(modeloTablaMed);
-    //en principio las columnas de id u pos es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
-    tablaMediciones->setColumnHidden(tipoColumnaTMedCert::ID,true);
-    tablaMediciones->setColumnHidden(tipoColumnaTMedCert::POSICION,true);
-
-    //tabla certificaciones
-    modeloTablaCert = new MedicionModel(tabla, codigopadre, codigohijo, tipoTablaMedCert::CERTIFICACION, pila);
-    tablaCertificaciones =  new TablaCert(modeloTablaCert->columnCount(QModelIndex()));
-    tablaCertificaciones->setModel(modeloTablaCert);
-    //igual pasa con las id de la tabla de certificaciones
-    tablaCertificaciones->setColumnHidden(tipoColumnaTMedCert::ID,true);
-    tablaCertificaciones->setColumnHidden(tipoColumnaTMedCert::POSICION,true);
-    //por ultimo la dejo inutilizada hasta que no haya al menos unas certificacion definida
-    //tablaCertificaciones->setEnabled(false);
-    tablaCertificaciones->setEnabled(HayCertificacion());
-
-    //tab para las tablas de mediciones y certificaciones
+    //tablas medicion y certificacion
     separadorTablasMedicion = new QTabWidget;
-    separadorTablasMedicion->addTab(tablaMediciones,QString(tr("Medicion")));
-    separadorTablasMedicion->addTab(tablaCertificaciones,QString(tr("Certificacion")));
+    separadorTablas->addWidget(separadorTablasMedicion);
+    CrearTablasMedCert();
+    qDebug()<<Listadotablasmedcert.size();
+    for (auto it = Listadotablasmedcert.begin();it!=Listadotablasmedcert.end();it++)
+    {
+        separadorTablasMedicion->addTab(*it,(*it)->objectName());
+    }
+
+    //ultimo elemento del tab. Un boton para añadir mas certificaciones
+    QIcon icono ("/home/david/programacion/Qt/SDMed2/SDMed2/Iconos/plus.png");
+    QPushButton* buton = new QPushButton(icono,"");
+    buton->setFlat(true);
+    buton->setToolTip(tr("Añadir certificacion"));
+    QObject::connect(buton,SIGNAL(clicked(bool)),this,SLOT(AnadirCertificacion()));
+    separadorTablasMedicion->addTab(buton,icono,"");
     separadorTablas->addWidget(separadorTablasMedicion);
 
     //editor
@@ -113,21 +106,18 @@ void Instancia::GenerarUI()
     arbol->resizeColumnToContents(tipoColumnaTPrincipal::UD);
     arbol->resizeColumnToContents(tipoColumnaTPrincipal::RESUMEN);
     arbol->resizeColumnToContents(tipoColumnaTPrincipal::IMPPRES);
-
+    qDebug()<<"Refrescar vista()";
     RefrescarVista();
     MostrarDeSegun(0);
-    certActual = LeerCertifActual();
-    ActualizarCertificacionEnModelo();
+    //certActual = LeerCertifActual();
+    //ActualizarCertificacionEnModelo();
 
     /************signals y slots*****************/
     QObject::connect(tablaPrincipal,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(BajarNivel()));
     QObject::connect(tablaPrincipal->CabeceraDeTabla(),SIGNAL(sectionDoubleClicked(int)),this,SLOT(SubirNivel()));   
     QObject::connect(tablaPrincipal,SIGNAL(Copiar()),this,SLOT(Copiar()));
-    QObject::connect(tablaMediciones,SIGNAL(Copiar()),this,SLOT(Copiar()));
     QObject::connect(tablaPrincipal,SIGNAL(Pegar()),this,SLOT(Pegar()));
-    QObject::connect(tablaMediciones,SIGNAL(Pegar()),this,SLOT(Pegar()));
-
-    QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
+    //QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
     //QObject::connect(separadorTablasMedicion,SIGNAL(currentChanged(int)),this,SLOT(CambiarEntreMedicionYCertificacion(int)));
     QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(ActivarDesactivarUndoRedo(int)));
     QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
@@ -173,11 +163,46 @@ bool Instancia::HayCertificacion()
 
 void Instancia::ActualizarCertificacionEnModelo()
 {
-    MedicionModel* m = qobject_cast<MedicionModel*>(modeloTablaCert);
+    /*MedicionModel* m = qobject_cast<MedicionModel*>(modeloTablaCert);
     if (m)
     {
         qDebug()<<"Actualizar a: "<<certActual.at(0)<<"--"<<certActual.at(1);
         m->CambiaCertificacionActual(certActual.at(0).toInt());
+    }*/
+}
+
+void Instancia::CrearTablasMedCert()
+{
+    int fase = 0;
+    //mediciones
+    ModeloBase* modeloM = new MedicionModel(tabla, codigopadre, codigohijo, fase, pila);
+    TablaBase* tablaM = new TablaMed(modeloM->columnCount(QModelIndex()));
+    tablaM->setModel(modeloM);
+    //en principio las columnas de id u pos es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
+    tablaM->setColumnHidden(tipoColumnaTMedCert::ID,true);
+    tablaM->setColumnHidden(tipoColumnaTMedCert::POSICION,true);
+    tablaM->setObjectName(tr("Mediciones"));
+    QObject::connect(tablaM,SIGNAL(Copiar()),this,SLOT(Copiar()));
+    QObject::connect(tablaM,SIGNAL(Pegar()),this,SLOT(Pegar()));
+    Listadotablasmedcert.append(tablaM);
+    //certificaciones
+    QString cadenalistadocertificaciones = "SELECT * FROM ver_certificaciones('"+ tabla + "');";
+    consulta.exec(cadenalistadocertificaciones);
+    while (consulta.next())
+    {
+        //qDebug()<<consulta.value(0)<<"--"<<consulta.value(1)<<"--"<<consulta.value(2);
+        ModeloBase* modeloC = new MedicionModel(tabla, codigopadre, codigohijo, consulta.value(0).toInt(), pila);
+        TablaBase* tablaC = new TablaMed(modeloC->columnCount(QModelIndex()));
+        tablaC->setModel(modeloC);
+        //en principio las columnas de id u pos es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
+        tablaC->setColumnHidden(tipoColumnaTMedCert::ID,true);
+        tablaC->setColumnHidden(tipoColumnaTMedCert::POSICION,true);
+        QString certif = tr("Certificación nº ");
+        certif.append(consulta.value(0).toString());
+        tablaC->setObjectName(certif);
+        QObject::connect(tablaC,SIGNAL(Copiar()),this,SLOT(Copiar()));
+        QObject::connect(tablaC,SIGNAL(Pegar()),this,SLOT(Pegar()));
+        Listadotablasmedcert.append(tablaC);
     }
 }
 
@@ -317,24 +342,28 @@ void Instancia::Redo()
 void Instancia::RefrescarVista()
 {
     modeloTablaP->ActualizarDatos(codigopadre, codigohijo);
-    modeloTablaMed->ActualizarDatos(codigopadre,codigohijo);
-    modeloTablaCert->ActualizarDatos(codigopadre, codigohijo);
-    //modeloArbol->ActualizarDatos(tabla);
-    /*modeloTablaP->QuitarIndicadorFilaVacia();
+    modeloTablaP->layoutChanged();
+    tablaPrincipal->resizeColumnsToContents();
+    for (auto it = Listadotablasmedcert.begin();it!=Listadotablasmedcert.end();++it)
+    {
+        ModeloBase* m = qobject_cast<ModeloBase*>((*it)->model());
+        if (m)
+        {
+            m->ActualizarDatos(codigopadre,codigohijo);
+            m->layoutChanged();
+        }
+        (*it)->resizeColumnsToContents();
+    }
+    modeloArbol->ActualizarDatos(tabla);
+    modeloTablaP->QuitarIndicadorFilaVacia();
     if (modeloTablaP->rowCount(QModelIndex())==0)
     {
         modeloTablaP->insertRow(0);
-    }*/    
+    }
     EscribirTexto();
     editor->EscribirRuta(ruta);
     //editor->Formatear();
-    GuardarTextoPartidaInicial();
-    modeloTablaP->layoutChanged();
-    modeloTablaMed->layoutChanged();
-    tablaPrincipal->resizeColumnsToContents();
-    tablaMediciones->resizeColumnsToContents();
-    tablaCertificaciones->resizeColumnsToContents();
-    modeloTablaCert->layoutChanged();
+    GuardarTextoPartidaInicial();    
     //tablaPrincipal->setCurrentIndex(indiceActual);
     separadorTablasMedicion->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
     /*modeloArbol->layoutChanged();
@@ -497,12 +526,20 @@ void Instancia::AnadirCertificacion()
     DialogoCertificaciones d(tabla);
     if (d.exec())
     {
-        certActual = d.CertificacionActual();
-        tablaCertificaciones->setEnabled(true);
+        certActual = d.CertificacionActual();        
         QString cadenainsertarcertificacion = "SELECT crear_tabla_certificaciones('"+tabla+"')";
         consulta.exec(cadenainsertarcertificacion);
         ActualizarCertificacionEnModelo();
-        emit CambiarLabelCertActual(certActual);
+        emit CambiarLabelCertActual(certActual);        
+        ModeloBase* modelonuevacert = new MedicionModel(tabla, codigopadre, codigohijo, certActual.at(0).toInt(), pila);
+        TablaBase* tablanuevacert = new TablaMed(modelonuevacert->columnCount(QModelIndex()));
+        tablanuevacert->setModel(modelonuevacert);
+        QString cadenacert = tr("Certificación nº ");
+        cadenacert.append(certActual.at(0));
+        separadorTablasMedicion->insertTab(separadorTablasMedicion->count()-1,tablanuevacert,cadenacert);
+        separadorTablasMedicion->setCurrentIndex(separadorTablasMedicion->count()-2);
+        Listadotablasmedcert.append(tablanuevacert);
+        RefrescarVista();
     }
 }
 
@@ -551,7 +588,7 @@ void Instancia::Certificar()
             {
                 modelo->Certificar(listaIndices,certActual.at(0));
             }*/
-                modeloTablaMed->Certificar(listaIndices,certActual.at(0));
+                //modeloTablaMed->Certificar(listaIndices,certActual.at(0));
                 tabla->selectionModel()->clearSelection();
             }
         }

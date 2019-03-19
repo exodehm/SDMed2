@@ -11,7 +11,7 @@ class MedicionModel : public ModeloBase
 
 public:
 
-    MedicionModel(const QString &tabla, const QString& codigopadre, const QString &codigohijo, enum tipoTablaMedCert tipotabla,  QUndoStack *p, QObject* parent=nullptr);
+    MedicionModel(const QString &tabla, const QString& codigopadre, const QString &codigohijo, int fase,  QUndoStack *p, QObject* parent=nullptr);
     ~MedicionModel();
 
     bool setData(const QModelIndex & index, const QVariant& value, int role);
@@ -29,7 +29,7 @@ public:
 
 private:
 
-    enum tipoTablaMedCert eTipoTabla;
+    int num_cert;
     float subtotal;
     int certif_actual;
 };

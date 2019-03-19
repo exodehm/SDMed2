@@ -33,6 +33,7 @@ public:
     QStringList LeerCertifActual();
     bool HayCertificacion();
     void ActualizarCertificacionEnModelo();
+    void CrearTablasMedCert();
 
 public slots:
 
@@ -71,9 +72,7 @@ signals:
 private:
     QHeaderView* cabeceraTablaP;
     //modelos
-    ModeloBase* modeloTablaP;
-    ModeloBase* modeloTablaMed;
-    ModeloBase* modeloTablaCert;
+    ModeloBase* modeloTablaP;   
     TreeModel* modeloArbol;
 
     QVBoxLayout* lienzoGlobal;
@@ -85,8 +84,7 @@ private:
     QTabWidget* separadorTablasMedicion;
 
     TablaBase* tablaPrincipal;
-    TablaBase* tablaMediciones;
-    TablaBase* tablaCertificaciones;
+    QList<TablaBase*>Listadotablasmedcert;
     Editor* editor;
     VistaArbol* arbol;
 
