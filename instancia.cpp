@@ -42,9 +42,12 @@ Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resum
 
 Instancia::~Instancia()
 {   
+    //borrar modelos
     delete modeloTablaP;
-    //borrar los modelos y tablas de la lista de tablas de mediciones!!!
-    //pendiente!!!
+    for (auto it = Listadotablasmedcert.begin();it!=Listadotablasmedcert.end();++it)
+    {
+        delete (*it)->model();
+    }
     delete modeloArbol;
     delete editor;
     QString cadenaborrarobra = "SELECT cerrar_tablas_auxiliares('"+tabla+"');";
@@ -106,11 +109,10 @@ void Instancia::GenerarUI()
     arbol->resizeColumnToContents(tipoColumnaTPrincipal::UD);
     arbol->resizeColumnToContents(tipoColumnaTPrincipal::RESUMEN);
     arbol->resizeColumnToContents(tipoColumnaTPrincipal::IMPPRES);
-    qDebug()<<"Refrescar vista()";
     RefrescarVista();
     MostrarDeSegun(0);
-    //certActual = LeerCertifActual();
-    //ActualizarCertificacionEnModelo();
+    certActual = LeerCertifActual();
+    ActualizarCertificacionEnModelo();
 
     /************signals y slots*****************/
     QObject::connect(tablaPrincipal,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(BajarNivel()));
@@ -354,7 +356,7 @@ void Instancia::RefrescarVista()
         }
         (*it)->resizeColumnsToContents();
     }
-    modeloArbol->ActualizarDatos(tabla);
+    //modeloArbol->ActualizarDatos(tabla);
     modeloTablaP->QuitarIndicadorFilaVacia();
     if (modeloTablaP->rowCount(QModelIndex())==0)
     {
@@ -366,9 +368,9 @@ void Instancia::RefrescarVista()
     GuardarTextoPartidaInicial();    
     //tablaPrincipal->setCurrentIndex(indiceActual);
     separadorTablasMedicion->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
-    /*modeloArbol->layoutChanged();
+    modeloArbol->layoutChanged();
     arbol->expandAll();
-    arbol->resizeColumnToContents(tipoColumna::CODIGO);
+    /*arbol->resizeColumnToContents(tipoColumna::CODIGO);
     arbol->resizeColumnToContents(tipoColumna::NATURALEZA);
     arbol->resizeColumnToContents(tipoColumna::UD);
     arbol->resizeColumnToContents(tipoColumna::RESUMEN);*/

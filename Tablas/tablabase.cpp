@@ -1,4 +1,5 @@
 #include "tablabase.h"
+#include <QDebug>
 
 TablaBase::TablaBase(int nColumnas, QWidget *parent): QTableView(parent)
 {
@@ -36,7 +37,7 @@ TablaBase::TablaBase(int nColumnas, QWidget *parent): QTableView(parent)
 
 TablaBase::~TablaBase()
 {
-
+    qDebug()<<"Borrando tabla";
 }
 
 bool TablaBase::columnaBloqueada(int columna)

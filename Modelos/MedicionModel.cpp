@@ -54,8 +54,8 @@ bool MedicionModel::setData(const QModelIndex &index, const QVariant &value, int
     {
         QString descripcion ="Cambio el valor de "+ index.data().toString()+" a "+value.toString()+" en la linea: "+datos.at(index.row()+1).at(tipoColumnaTMedCert::ID).toString();
         qDebug()<<descripcion;
-        /*pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,index.data(),value,
-         datos.at(index.row()+1).at(tipoColumnaTMedCert::ID).toString(),index.column(), eTipoTabla, QVariant(descripcion)));*/
+        pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,index.data(),value,
+         datos.at(index.row()+1).at(tipoColumnaTMedCert::ID).toString(),index.column(), num_cert, QVariant(descripcion)));
         return true;
     }    
     return false;

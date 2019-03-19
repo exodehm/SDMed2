@@ -3,9 +3,9 @@
 
 UndoEditarMedicion::UndoEditarMedicion(QString nombretabla, QString id_padre, QString id_hijo,
                                        QVariant dato_antiguo, QVariant dato_nuevo, QString id_fila,
-                                       int nombrecolumna, tipoTablaMedCert tipotabla, QVariant descripcion):
+                                       int nombrecolumna, int fase, QVariant descripcion):
     tabla(nombretabla),idpadre(id_padre),idhijo(id_hijo),datoAntiguo(dato_antiguo),datoNuevo(dato_nuevo),
-    idfila(id_fila),columna(nombrecolumna),eTipoTabla(tipotabla)
+    idfila(id_fila),columna(nombrecolumna),num_cert(fase)
 {
     qDebug()<<descripcion.toString();
 }
@@ -17,7 +17,7 @@ void UndoEditarMedicion::undo()
             datoAntiguo.toString()+"','"+\
             idfila+"','"+\
             QString::number(columna)+"','"+\
-            QString::number(eTipoTabla)+\
+            QString::number(num_cert)+\
             "');";
     qDebug()<<cadena;
     consulta.exec(cadena);
@@ -30,7 +30,7 @@ void UndoEditarMedicion::redo()
             datoNuevo.toString()+"','"+\
             idfila+"','"+\
             QString::number(columna)+"','"+\
-            QString::number(eTipoTabla)+\
+            QString::number(num_cert)+\
             "');";
     qDebug()<<cadena;
     consulta.exec(cadena);

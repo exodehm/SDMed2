@@ -12,7 +12,7 @@ class UndoEditarMedicion : public QUndoCommand
 public:
     UndoEditarMedicion(QString nombretabla, QString id_padre, QString id_hijo,
                        QVariant dato_antiguo, QVariant dato_nuevo, QString id_fila,
-                       int nombrecolumna, enum tipoTablaMedCert tipotabla, QVariant descripcion);
+                       int nombrecolumna, int fase, QVariant descripcion);
 
     void undo();
     void redo();
@@ -22,7 +22,7 @@ private:
     QString tabla,idpadre,idhijo,idfila;
     QVariant datoAntiguo, datoNuevo;
     int columna;
-    enum tipoTablaMedCert eTipoTabla;
+    int num_cert;
 
 };
 
