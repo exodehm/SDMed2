@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     else
     {
         QMessageBox::warning(this,"Aviso mortal","No se puede abrir la BBDD");
-    }    
+    }
 }
 
 MainWindow::~MainWindow()
@@ -519,7 +519,7 @@ void MainWindow::CambiarMedCert(int indice)
 
 void MainWindow::NuevaCertificacion()
 {
-    (*obraActual)->AnadirCertificacion();
+    (*obraActual)->AdministrarCertificaciones();
 }
 
 void MainWindow::CambiarLabelCertificacionActual(QStringList certActual)

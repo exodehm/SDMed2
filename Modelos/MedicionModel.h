@@ -26,6 +26,7 @@ public:
 
     void CambiarTipoLineaMedicion(int fila, int columna, QVariant tipo);
     void CambiaCertificacionActual(int cert);
+    void CambiarNumeroCertificacion(int numcert);
 
 private:
 

@@ -5,6 +5,8 @@
 #include <QDate>
 #include <QSqlQuery>
 
+#include "./Tablas/tablabase.h"
+
 namespace Ui {
 class DialogoCertificaciones;
 }
@@ -16,18 +18,23 @@ class DialogoCertificaciones : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogoCertificaciones(QString tabla, QWidget *parent = 0);
+    explicit DialogoCertificaciones(QString tabla,QWidget *parent = 0);
     ~DialogoCertificaciones();
     QString LeeFecha();
     QStringList CertificacionActual();
+
+signals:
+    void BorrarCertificacion(QString fecha_certificacion);
+    void InsertarCertificacion(QString fecha_certificacion);
+    void ActualizarCert();
 
 private slots:
     void cambiaDia(int d);
     void cambiaMes(int m);
     void cambiaAnno(int a);
     void actualizarCombos(QDate date);
-    void insertarNuevaCertificacion();
-    void borrarCertificacion();
+    void InsertarNuevaCertificacion();
+    void BorrarCertificacion();
     void actualizarTabla();
     void ActualizarCertifActual();
 
@@ -37,7 +44,7 @@ private:
     int dia,mes,anno;
     QSqlQuery consulta;
     QStringList cabeceratabla;
-    QStringList certifActual;
+    QStringList certifActual;    
 };
 
 #endif // DIALOGONUEVACERTIFICACION_H

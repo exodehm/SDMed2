@@ -13,7 +13,7 @@ class DialogoSuprimirMedicion : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogoSuprimirMedicion(QString titulo, QWidget *parent = 0);
+    explicit DialogoSuprimirMedicion(QString titulo, QString tipocantidad, QWidget *parent = 0);
     ~DialogoSuprimirMedicion();
     bool Suprimir() const;
 

@@ -94,8 +94,8 @@ void UndoEditarNaturaleza::redo()
 
 /************CANTIDAD*******************/
 UndoEditarCantidad::UndoEditarCantidad(QString tabla, QString cod_padre, QString cod_hijo,
-                                         QVariant dato_antiguo, QVariant dato_nuevo, QString tipo_Cantidad, QVariant descripcion):
-    UndoEditarPrincipal(tabla,cod_padre,cod_hijo,dato_antiguo,dato_nuevo,descripcion), columnaCantidad(tipo_Cantidad)
+                                         QVariant dato_antiguo, QVariant dato_nuevo, QString tipo_cantidad, QVariant descripcion):
+    UndoEditarPrincipal(tabla,cod_padre,cod_hijo,dato_antiguo,dato_nuevo,descripcion), columnaCantidad(tipo_cantidad)
 {
     QString cadenaGuardarLineasMediciom = "SELECT * from ver_lineas_medicion('"+tabla+"','"+cod_padre+"','"+cod_hijo+"');";
     //qDebug()<<cadenaGuardarLineasMediciom;
@@ -141,10 +141,10 @@ void UndoEditarCantidad::undo()
 
 void UndoEditarCantidad::redo()
 {   
-    QString cadenaborrarlineasmedicion = "SELECT borrar_lineas_medicion('"+tabla+"','"+codigopadre+"','"+codigohijo+"');";
+    /*QString cadenaborrarlineasmedicion = "SELECT borrar_lineas_medcert('"+tabla+"','"+codigopadre+"','"+codigohijo+"');";
     qDebug()<<"cadenaborrarlineasmedicion"<<cadenaborrarlineasmedicion;
-    consulta.exec(cadenaborrarlineasmedicion);
-    QString cadenaconsulta = "SELECT modificar_cantidad('" +tabla+ "','" +codigopadre + "','" +codigohijo+ "','" + columnaCantidad +"','" + datoNuevo.toString()+ "');";
+    consulta.exec(cadenaborrarlineasmedicion);*/
+    QString cadenaconsulta = "SELECT modificar_cantidad('" +tabla+ "','" +codigopadre + "','" +codigohijo+ "','" + columnaCantidad +"','t','" + datoNuevo.toString()+ "');";
     qDebug()<<cadenaconsulta;
     consulta.exec(cadenaconsulta);
 }

@@ -41,13 +41,7 @@ Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resum
 }
 
 Instancia::~Instancia()
-{   
-    //borrar modelos
-    delete modeloTablaP;
-    for (auto it = Listadotablasmedcert.begin();it!=Listadotablasmedcert.end();++it)
-    {
-        delete (*it)->model();
-    }
+{
     delete modeloArbol;
     delete editor;
     QString cadenaborrarobra = "SELECT cerrar_tablas_auxiliares('"+tabla+"');";
@@ -76,19 +70,22 @@ void Instancia::GenerarUI()
     //tablas medicion y certificacion
     separadorTablasMedicion = new QTabWidget;
     separadorTablas->addWidget(separadorTablasMedicion);
-    CrearTablasMedCert();
-    qDebug()<<Listadotablasmedcert.size();
-    for (auto it = Listadotablasmedcert.begin();it!=Listadotablasmedcert.end();it++)
+    //CrearTablasMedCert();
+    //Tabla Medicion
+    InsertarTablaMedCert(0);//0 es la tabla de mediciones
+    //Tablas de certificacion
+    QString cadenalistadocertificaciones = "SELECT * FROM ver_certificaciones('"+ tabla + "');";
+    consulta.exec(cadenalistadocertificaciones);
+    while (consulta.next())
     {
-        separadorTablasMedicion->addTab(*it,(*it)->objectName());
+     InsertarTablaMedCert(consulta.value(0).toInt());
     }
-
     //ultimo elemento del tab. Un boton para añadir mas certificaciones
     QIcon icono ("/home/david/programacion/Qt/SDMed2/SDMed2/Iconos/plus.png");
     QPushButton* buton = new QPushButton(icono,"");
     buton->setFlat(true);
     buton->setToolTip(tr("Añadir certificacion"));
-    QObject::connect(buton,SIGNAL(clicked(bool)),this,SLOT(AnadirCertificacion()));
+    QObject::connect(buton,SIGNAL(clicked(bool)),this,SLOT(AdministrarCertificaciones()));
     separadorTablasMedicion->addTab(buton,icono,"");
     separadorTablas->addWidget(separadorTablasMedicion);
 
@@ -138,7 +135,7 @@ const QString& Instancia::LeeResumen() const
 
 QStringList Instancia::LeerCertifActual()
 {
-    QString leercertificacionactual = "SELECT * FROM leer_certificacion_actual('"+tabla+"')";
+    QString leercertificacionactual = "SELECT * FROM ver_certificacion_actual('"+tabla+"')";
     qDebug()<<leercertificacionactual;
     consulta.exec(leercertificacionactual);
     certActual.clear();
@@ -173,39 +170,30 @@ void Instancia::ActualizarCertificacionEnModelo()
     }*/
 }
 
-void Instancia::CrearTablasMedCert()
+void Instancia::InsertarTablaMedCert(int num_certif)
 {
-    int fase = 0;
-    //mediciones
-    ModeloBase* modeloM = new MedicionModel(tabla, codigopadre, codigohijo, fase, pila);
-    TablaBase* tablaM = new TablaMed(modeloM->columnCount(QModelIndex()));
-    tablaM->setModel(modeloM);
-    //en principio las columnas de id u pos es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
-    tablaM->setColumnHidden(tipoColumnaTMedCert::ID,true);
-    tablaM->setColumnHidden(tipoColumnaTMedCert::POSICION,true);
-    tablaM->setObjectName(tr("Mediciones"));
-    QObject::connect(tablaM,SIGNAL(Copiar()),this,SLOT(Copiar()));
-    QObject::connect(tablaM,SIGNAL(Pegar()),this,SLOT(Pegar()));
-    Listadotablasmedcert.append(tablaM);
-    //certificaciones
-    QString cadenalistadocertificaciones = "SELECT * FROM ver_certificaciones('"+ tabla + "');";
-    consulta.exec(cadenalistadocertificaciones);
-    while (consulta.next())
+    qDebug()<<"Insertar tabla en la pos "<<num_certif;
+    ModeloBase* modeloMC = new MedicionModel(tabla, codigopadre, codigohijo, num_certif, pila);
+    TablaBase* tablaMC;
+    if (num_certif == 0)//tabla de medicion
     {
-        //qDebug()<<consulta.value(0)<<"--"<<consulta.value(1)<<"--"<<consulta.value(2);
-        ModeloBase* modeloC = new MedicionModel(tabla, codigopadre, codigohijo, consulta.value(0).toInt(), pila);
-        TablaBase* tablaC = new TablaMed(modeloC->columnCount(QModelIndex()));
-        tablaC->setModel(modeloC);
-        //en principio las columnas de id u pos es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
-        tablaC->setColumnHidden(tipoColumnaTMedCert::ID,true);
-        tablaC->setColumnHidden(tipoColumnaTMedCert::POSICION,true);
-        QString certif = tr("Certificación nº ");
-        certif.append(consulta.value(0).toString());
-        tablaC->setObjectName(certif);
-        QObject::connect(tablaC,SIGNAL(Copiar()),this,SLOT(Copiar()));
-        QObject::connect(tablaC,SIGNAL(Pegar()),this,SLOT(Pegar()));
-        Listadotablasmedcert.append(tablaC);
+        tablaMC = new TablaMed(modeloMC->columnCount(QModelIndex()));
+        tablaMC->setObjectName(tr("Mediciones"));
+        QObject::connect(tablaMC,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
     }
+    else
+    {
+        tablaMC = new TablaCert(modeloMC->columnCount(QModelIndex()));
+        tablaMC->setObjectName(tr("Certificación nº ")+QString::number(num_certif));
+    }
+    tablaMC->setModel(modeloMC);
+    //en principio las columnas de id u pos es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
+    tablaMC->setColumnHidden(tipoColumnaTMedCert::ID,true);
+    tablaMC->setColumnHidden(tipoColumnaTMedCert::POSICION,true);
+    QObject::connect(tablaMC,SIGNAL(Copiar()),this,SLOT(Copiar()));
+    QObject::connect(tablaMC,SIGNAL(Pegar()),this,SLOT(Pegar()));
+    Listadotablasmedcert.append(tablaMC);
+    separadorTablasMedicion->insertTab(num_certif,tablaMC,tablaMC->objectName());
 }
 
 QUndoStack* Instancia::Pila()
@@ -523,25 +511,85 @@ void Instancia::CopiarElementosTablaPortapapeles(const QModelIndexList &lista, T
     clipboard->setText(textoACopiar);
 }
 
-void Instancia::AnadirCertificacion()
+void Instancia::AdministrarCertificaciones()
 {
-    DialogoCertificaciones d(tabla);
-    if (d.exec())
+    DialogoCertificaciones* d = new DialogoCertificaciones(tabla);
+    QObject::connect(d,SIGNAL(BorrarCertificacion(QString)),this,SLOT(BorrarCertificacion(QString)));
+    QObject::connect(d,SIGNAL(InsertarCertificacion(QString)),this,SLOT(AnadirCertificacion(QString)));
+    QObject::connect(d,SIGNAL(ActualizarCert()),this,SLOT(LeerCertifActual()));
+    if (d->exec())
     {
-        certActual = d.CertificacionActual();        
-        QString cadenainsertarcertificacion = "SELECT crear_tabla_certificaciones('"+tabla+"')";
-        consulta.exec(cadenainsertarcertificacion);
-        ActualizarCertificacionEnModelo();
-        emit CambiarLabelCertActual(certActual);        
-        ModeloBase* modelonuevacert = new MedicionModel(tabla, codigopadre, codigohijo, certActual.at(0).toInt(), pila);
-        TablaBase* tablanuevacert = new TablaMed(modelonuevacert->columnCount(QModelIndex()));
-        tablanuevacert->setModel(modelonuevacert);
-        QString cadenacert = tr("Certificación nº ");
-        cadenacert.append(certActual.at(0));
-        separadorTablasMedicion->insertTab(separadorTablasMedicion->count()-1,tablanuevacert,cadenacert);
-        separadorTablasMedicion->setCurrentIndex(separadorTablasMedicion->count()-2);
-        Listadotablasmedcert.append(tablanuevacert);
-        RefrescarVista();
+        //ActualizarCertificacionEnModelo();
+        //emit CambiarLabelCertActual(certActual);
+    }
+}
+
+void Instancia::BorrarCertificacion(QString fecha_certificacion)
+{
+    //Borro la certificacion de la BBDD. Todas las lineas que tengan ese numero de certificacion quedaran borradas
+    QString cadenaborrarcertificacion = "SELECT * FROM borrar_certificacion('" + tabla + "','" + fecha_certificacion + "')";
+    qDebug()<<cadenaborrarcertificacion;
+    consulta.exec(cadenaborrarcertificacion);
+    //ahora hallo el nº de certificacion para reajustar las tablas
+    int num_certificacion;
+    while (consulta.next())
+    {
+        num_certificacion = consulta.value(0).toInt();
+        qDebug()<<"Numero de ce "<<num_certificacion;
+    }
+    auto iterador = Listadotablasmedcert.begin();
+    std::advance(iterador,num_certificacion);
+    Listadotablasmedcert.erase(iterador);
+    separadorTablasMedicion->removeTab(num_certificacion);
+    iterador = Listadotablasmedcert.begin();//lo llevo de nuevo al origen
+    ++iterador;//ahora lo avanzo una unidad hasta la tabla de certificaciones
+    int i = 1;
+    while (iterador!=Listadotablasmedcert.end())
+    {
+        (*iterador)->setObjectName("Certificación nº "+ QString::number(i));
+        MedicionModel* m = qobject_cast<MedicionModel*>((*iterador)->model());
+        if (m)
+        {
+            m->CambiarNumeroCertificacion(i);
+        }
+        separadorTablasMedicion->removeTab(i);
+        separadorTablasMedicion->insertTab(i,*iterador,(*iterador)->objectName());
+        i++;
+        ++iterador;
+    }   
+    RefrescarVista();
+}
+
+void Instancia::AnadirCertificacion(QString fecha_certificacion)
+{
+    QString cadenanuevacertificacion = "SELECT anadir_certificacion('"+ tabla + "','" + fecha_certificacion + "')";
+    qDebug()<<cadenanuevacertificacion;
+    consulta.exec(cadenanuevacertificacion);
+    bool resultado = false;
+    while (consulta.next())
+    {
+        resultado = consulta.value(0).toBool();
+    }
+    if (resultado == false)
+    {
+        QMessageBox::warning(this, tr("Aviso"),
+                                       tr("La fecha ha de ser posterior a la de la última certificación"),
+                             QMessageBox::Ok);
+    }
+    else
+    {
+        int numcert = 0;
+        QString cadenavercertificaciones = "SELECT * FROM ver_certificaciones('"+tabla+"');";
+        consulta.exec(cadenavercertificaciones);
+        while (consulta.next())
+        {
+            if (consulta.value(1).toString() == fecha_certificacion)
+            {
+                numcert = consulta.value(0).toInt();
+                //qDebug()<<"LA fecha es : "<<consulta.value(1).toString()<<" y el numcert es: "<<numcert;
+            }
+        }
+        InsertarTablaMedCert(numcert);
     }
 }
 

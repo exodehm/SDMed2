@@ -90,16 +90,17 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
             {
                 tipoCantidad = "1";
             }
-            QString cadenahaymediciones = "SELECT hay_medicion ('"+ tabla + "','" + codpadre + "','" + codhijo+"','" + tipoCantidad+"');";
+            QString cadenahaymediciones = "SELECT hay_medcert ('"+ tabla + "','" + codpadre + "','" + codhijo+"','" + tipoCantidad+"');";
             consulta.exec(cadenahaymediciones);
-            bool hayMedicion;
+            qDebug()<<cadenahaymediciones;
+            bool hayMedCert;
             while (consulta.next())
             {
-                hayMedicion = consulta.value(0).toBool();
+                hayMedCert = consulta.value(0).toBool();
             }
-            if (hayMedicion)
+            if (hayMedCert)
             {
-                DialogoSuprimirMedicion* d = new DialogoSuprimirMedicion(tabla);
+                DialogoSuprimirMedicion* d = new DialogoSuprimirMedicion(tabla, tipoCantidad);
                 if (d->exec()==QDialog::Rejected || d->Suprimir()==false)
                 {
                     return false;

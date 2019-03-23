@@ -144,6 +144,11 @@ void MedicionModel::CambiaCertificacionActual(int cert)
     }
 }
 
+void MedicionModel::CambiarNumeroCertificacion(int numcert)
+{
+    num_cert = numcert;
+}
+
 void MedicionModel::ActualizarDatos(QString padre, QString hijo)
 {
     hayFilaVacia = false;

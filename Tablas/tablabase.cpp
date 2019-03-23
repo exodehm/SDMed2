@@ -38,6 +38,7 @@ TablaBase::TablaBase(int nColumnas, QWidget *parent): QTableView(parent)
 TablaBase::~TablaBase()
 {
     qDebug()<<"Borrando tabla";
+    delete model();
 }
 
 bool TablaBase::columnaBloqueada(int columna)

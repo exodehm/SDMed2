@@ -10,7 +10,7 @@
 
 DialogoCertificaciones::DialogoCertificaciones(QString tabla, QWidget *parent) :tabla(tabla),QDialog(parent),ui(new Ui::DialogoCertificaciones)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);    
     QDate date = ui->calendarWidget->selectedDate();
     dia=date.day();
     mes=date.month();
@@ -29,8 +29,8 @@ DialogoCertificaciones::DialogoCertificaciones(QString tabla, QWidget *parent) :
     QObject::connect(ui->comboMes,SIGNAL(currentIndexChanged(int)),this,SLOT(cambiaMes(int)));
     QObject::connect(ui->comboAnno,SIGNAL(currentIndexChanged(int)),this,SLOT(cambiaAnno(int)));
     QObject::connect(ui->calendarWidget,SIGNAL(clicked(QDate)),this,SLOT(actualizarCombos(QDate)));
-    QObject::connect(ui->botonInsertarCertificacion,SIGNAL(clicked()),this,SLOT(insertarNuevaCertificacion()));
-    QObject::connect(ui->botonBorrarCertificacion,SIGNAL(clicked(bool)),this,SLOT(borrarCertificacion()));
+    QObject::connect(ui->botonInsertarCertificacion,SIGNAL(clicked()),this,SLOT(InsertarNuevaCertificacion()));
+    QObject::connect(ui->botonBorrarCertificacion,SIGNAL(clicked(bool)),this,SLOT(BorrarCertificacion()));
 }
 
 DialogoCertificaciones::~DialogoCertificaciones()
@@ -80,30 +80,14 @@ void DialogoCertificaciones::actualizarCombos(QDate date)
     ui->comboAnno->setCurrentIndex(cadena.toInt()-2010);
 }
 
-void DialogoCertificaciones::insertarNuevaCertificacion()
+void DialogoCertificaciones::InsertarNuevaCertificacion()
 {
-    QString cadenanuevacertificacion = "SELECT anadir_certificacion('"+ tabla + "','" + LeeFecha() + "')";
-    qDebug()<<cadenanuevacertificacion;
-    consulta.exec(cadenanuevacertificacion);
-    bool resultado = false;
-    while (consulta.next())
-    {
-        resultado = consulta.value(0).toBool();
-    }
-    if (resultado == false)
-    {
-        QMessageBox::warning(this, tr("Aviso"),
-                                       tr("La fecha ha de ser posterior a la de la última certificación"),
-                             QMessageBox::Ok);
-    }
-    else
-    {
-        actualizarTabla();        
-    }
+    emit InsertarCertificacion(LeeFecha());
+    actualizarTabla();
 }
 
 
-void DialogoCertificaciones::borrarCertificacion()
+void DialogoCertificaciones::BorrarCertificacion()
 {
     for (int i=0;i<ui->tablaCertificaciones->rowCount();i++)
     {
@@ -113,18 +97,16 @@ void DialogoCertificaciones::borrarCertificacion()
             if (c->isChecked())
             {
                 QString fecha = ui->tablaCertificaciones->item(i,tipoColumna::FECHA)->text();
-                QString cadenaborrarcertificacion = "DELETE FROM \"" + tabla + "_ListadoCertificaciones" + "\" WHERE fecha = '"+fecha+"'";
-                qDebug()<<cadenaborrarcertificacion;
-                consulta.exec(cadenaborrarcertificacion);                
+                emit BorrarCertificacion(fecha);
+                actualizarTabla();
             }
         }
     }
-    actualizarTabla();    
 }
 
 void DialogoCertificaciones::actualizarTabla()
 {
-    QString cadenaconsultacertificaciones = "SELECT fecha, actual FROM \"" + tabla + "_ListadoCertificaciones" + "\" ORDER BY num_certificacion";
+    QString cadenaconsultacertificaciones = "SELECT fecha, actual FROM \"" + tabla + "_ListadoCertificaciones" + "\" ORDER BY fecha";
     qDebug()<<cadenaconsultacertificaciones;
     consulta.exec(cadenaconsultacertificaciones);
     int filas = consulta.size();
@@ -176,6 +158,7 @@ void DialogoCertificaciones::ActualizarCertifActual()
                 QString cadenaactualizarcertactual = "SELECT actualizar_certificacion_actual('"+ tabla + "','"+ fecha + "')";
                 qDebug()<<cadenaactualizarcertactual;
                 consulta.exec(cadenaactualizarcertactual);
+                emit ActualizarCert();
             }
         }
     }

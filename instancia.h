@@ -30,10 +30,10 @@ public:
 
     const QString& LeeTabla() const;
     const QString& LeeResumen() const;
-    QStringList LeerCertifActual();
+    //certificaciones    
     bool HayCertificacion();
-    void ActualizarCertificacionEnModelo();
-    void CrearTablasMedCert();
+    void ActualizarCertificacionEnModelo();    
+    void InsertarTablaMedCert(int num_certif);
 
 public slots:
 
@@ -54,7 +54,10 @@ public slots:
     void PegarPartidasTablaP();
     void PegarMedicionTablaM();
     void CopiarElementosTablaPortapapeles(const QModelIndexList &lista, TablaBase* tabla);
-    void AnadirCertificacion();
+    void AdministrarCertificaciones();
+    void BorrarCertificacion (QString fecha_certificacion);
+    void AnadirCertificacion (QString fecha_certificacion);
+    QStringList LeerCertifActual();
     void Certificar();     
     void ActivarDesactivarUndoRedo(int indice);
     void GuardarTextoPartidaInicial();
