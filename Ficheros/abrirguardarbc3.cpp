@@ -19,9 +19,9 @@ AbrirGuardarBC3::AbrirGuardarBC3(const QStringList &listadoBC3, bool &abierta)
         }
         if (linea[0]=='D' && linea[1]=='|')
         {
-            linea.chop(2);
+            linea.remove(QRegExp("[\n\r]."));
             linea.remove(0,2);
-            //qDebug()<<linea;
+            qDebug()<<linea;
             registroD.append(linea);
         }
         if (linea[0]=='M' && linea[1]=='|')
@@ -110,7 +110,7 @@ void AbrirGuardarBC3::procesarConceptos(QStringList &registroC)
         precio=datos.at(3);
         fecha = datos.at(4);
         naturaleza=datos.at(5);
-        QString cadenainsertar = "SELECT insertar_concepto('"+codigo+"','"+codigopartida+"','"+ud+"','"+resumen+"','"+precio+"','"+naturaleza+"','"+fecha+"');";
+        QString cadenainsertar = "SELECT insertar_concepto('"+codigo+"','"+codigopartida+"','"+ud+"','"+resumen+"','','"+precio+"','"+naturaleza+"','"+fecha+"');";
         //qDebug()<<"Cadena insertar: "<<cadenainsertar;
         consulta.exec(cadenainsertar);
     }
@@ -124,12 +124,17 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
     //esto hay que implementarlo. Por ahora solo considera 3 campos
     foreach (const QString& linea, registroD)
     {
+        qDebug()<<"Linea D: "<<linea;
         QStringList lista = linea.split("|");
+        qDebug()<<"Tamaño linea D: "<<lista.size();
         QString padre = lista.at(0);
+        qDebug()<<"PAdre: "<<padre;
         quitarSimbolos(padre);
         int nHijos=(linea.count("\\")/3);
+        qDebug()<<"Hijos nº "<<nHijos;
         int nCampos = lista.size()-1;
         QString resto;
+        qDebug()<<"resto "<<resto;
         if (nCampos == 2)
         {
             resto = lista.at(1);
@@ -138,6 +143,7 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
         {
             resto = lista.at(2);
         }
+        qDebug()<<"Hasta aqui";
         QString registros[3]; //nombrehijo, factor, cantidad
         QStringList relaciones = resto.split("\\");
         for (int i=0; i<nHijos; i++)
