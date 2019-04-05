@@ -34,6 +34,7 @@ public:
     bool HayCertificacion();
     void ActualizarCertificacionEnModelo();    
     void InsertarTablaMedCert(int num_certif);
+    void ExportarXLSS(QString nombreFichero);
 
 public slots:
 

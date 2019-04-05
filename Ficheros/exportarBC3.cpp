@@ -1,4 +1,4 @@
-#include "exportar.h"
+#include "exportarBC3.h"
 #include <QDebug>
 #include <QSqlQuery>
 

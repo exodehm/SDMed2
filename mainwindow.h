@@ -25,7 +25,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     QString strippedName(const QString &fullFileName);
-    QString CodigoBC3(const QString& nombrefichero);
+    //QString CodigoBC3(const QString& nombrefichero);
     QList<QList<QVariant> > VerObrasEnBBDD();
 
 

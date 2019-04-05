@@ -44,13 +44,14 @@ SOURCES += main.cpp\
     Dialogos/dialogoprecio.cpp \
     Undo/undoinsertarprincipal.cpp \
     Undo/undoeditarmedicion.cpp \
-    Ficheros/exportar.cpp \
     Modelos/PrincipalModel.cpp \
     pyrun.cpp \
     Dialogos/dialogocertificaciones.cpp \
     Modelos/MedicionModel.cpp \
     Tablas/tablacert.cpp \
-    Tablas/tablamed.cpp
+    Tablas/tablamed.cpp \
+    Ficheros/exportarBC3.cpp \
+    Ficheros/exportarXLS.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -84,14 +85,15 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogoprecio.h \
     Undo/undoinsertarprincipal.h \
     Undo/undoeditarmedicion.h \
-    Ficheros/exportar.h \
     Modelos/PrincipalModel.h \
     python_wrapper.h \
     pyrun.h \
     Dialogos/dialogocertificaciones.h \
     Modelos/MedicionModel.h \
     Tablas/tablacert.h \
-    Tablas/tablamed.h
+    Tablas/tablamed.h \
+    Ficheros/exportarBC3.h \
+    Ficheros/exportarXLS.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \

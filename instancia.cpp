@@ -13,6 +13,8 @@
 
 #include "./defs.h"
 
+#include "./Ficheros/exportarXLS.h"
+
 #include "./Undo/undoeditarprincipal.h"
 
 #include "./Dialogos/dialogocertificaciones.h"
@@ -30,6 +32,7 @@
 #include <QTabWidget>
 #include <QUndoStack>
 #include <QMessageBox>
+#include <QSqlRecord>
 
 Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resumen(res),QWidget(parent)
 {
@@ -107,6 +110,7 @@ void Instancia::GenerarUI()
     arbol->resizeColumnToContents(tipoColumnaTPrincipal::RESUMEN);
     arbol->resizeColumnToContents(tipoColumnaTPrincipal::IMPPRES);
     RefrescarVista();
+    //tablaPrincipal->resizeColumnsToContents();
     MostrarDeSegun(0);
     certActual = LeerCertifActual();
     ActualizarCertificacionEnModelo();
@@ -194,6 +198,46 @@ void Instancia::InsertarTablaMedCert(int num_certif)
     QObject::connect(tablaMC,SIGNAL(Pegar()),this,SLOT(Pegar()));
     Listadotablasmedcert.append(tablaMC);
     separadorTablasMedicion->insertTab(num_certif,tablaMC,tablaMC->objectName());
+}
+
+void Instancia::ExportarXLSS(QString nombreFichero)
+{
+    QString cadenaconsulta = "WITH RECURSIVE tree AS(\
+            SELECT codpadre, codhijo, canpres, cancert, 1 AS depth, cast(posicion as text) as camino,posicion from \"PRUEBASCOMP_Relacion\"\
+            WHERE codpadre is NULL\
+            UNION ALL\
+            SELECT rel.codpadre, rel.codhijo, rel.canpres, rel.cancert, depth+1, camino || '.' || cast(rel.posicion as text) , rel.posicion\
+            FROM \"PRUEBASCOMP_Relacion\" rel\
+            JOIN tree t ON rel.codpadre = t.codhijo\
+            )\
+            SELECT C.codigo, C.naturaleza, C.ud, C.resumen,tree.canpres,tree.cancert, C.preciocert/C.preciomed AS \"Porcerntaje\", \
+            C.preciomed, C.preciocert, C.preciomed*tree.canpres as \"Importe presupuesto\", C.preciocert*tree.cancert as \"Importe certifi.\", tree.depth \
+            FROM tree, \"PRUEBASCOMP_Conceptos\" AS C \
+            WHERE C.codigo=tree.codhijo \
+            ORDER BY camino;";
+    consulta.exec(cadenaconsulta);
+    QSqlRecord rec = consulta.record();
+    qDebug()<<cadenaconsulta;
+    QList<QList<QString>> tabladatos;
+    while (consulta.next())
+    {
+        QList<QString>fila;
+        for (int i=0;i<rec.count();i++)
+        {
+            fila.append(consulta.value(i).toString());
+        }
+        tabladatos.append(fila);
+        fila.clear();
+    }
+    /*for (int i = 0;i<consulta.size();i++)
+    {
+        for (int j=0;j<rec.count();j++)
+        {
+            qDebug()<<tabladatos.at(i).at(j);
+        }
+    }*/
+    XLS::crearFuncion(nombreFichero,tabladatos);
+    //ExportarXLS exportador(tabla.toUtf8().constData(),nombreFichero.toUtf8().constData(),consulta);
 }
 
 QUndoStack* Instancia::Pila()
@@ -343,21 +387,21 @@ void Instancia::RefrescarVista()
             m->layoutChanged();
         }
         (*it)->resizeColumnsToContents();
-    }
-    //modeloArbol->ActualizarDatos(tabla);
-    modeloTablaP->QuitarIndicadorFilaVacia();
+    }    
+    /*modeloTablaP->QuitarIndicadorFilaVacia();
     if (modeloTablaP->rowCount(QModelIndex())==0)
     {
         modeloTablaP->insertRow(0);
-    }
+    }*/
     EscribirTexto();
     editor->EscribirRuta(ruta);
     //editor->Formatear();
     GuardarTextoPartidaInicial();    
     //tablaPrincipal->setCurrentIndex(indiceActual);
     separadorTablasMedicion->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
-    modeloArbol->layoutChanged();
-    arbol->expandAll();
+    //modeloArbol->ActualizarDatos(tabla);
+    //modeloArbol->layoutChanged();
+    //arbol->expandAll();
     /*arbol->resizeColumnToContents(tipoColumna::CODIGO);
     arbol->resizeColumnToContents(tipoColumna::NATURALEZA);
     arbol->resizeColumnToContents(tipoColumna::UD);

@@ -480,6 +480,7 @@
       <string>Exportar</string>
      </property>
      <addaction name="actionExportarFIEBCD"/>
+     <addaction name="actionHoja_de_Calculo_xls"/>
     </widget>
     <widget class="QMenu" name="menuAbrir_reciente">
      <property name="title">
@@ -1004,12 +1005,12 @@
     <string>Exportar</string>
    </property>
    <property name="toolTip">
-    <string>ExportarBC3</string>
+    <string>Exportar</string>
    </property>
   </action>
   <action name="actionImprimir">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="../recursos.qrc">
@@ -1023,6 +1024,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionHoja_de_Calculo_xls">
+   <property name="text">
+    <string>Hoja de Calculo (*.xls)</string>
    </property>
   </action>
  </widget>

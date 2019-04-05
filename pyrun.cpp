@@ -1,5 +1,5 @@
 #include "pyrun.h"
-#include <marshal.h>
+//#include <marshal.h>
 
 #include <QDebug>
 #include <QDir>
@@ -9,18 +9,40 @@
 PyRun::PyRun()
 {
     qDebug()<<"Constructor pyRun";
-    const char *scriptDirectoryName = "/home/usuario/programacion/";
-        Py_Initialize();
-        PyObject *sysPath = PySys_GetObject("path");
-        PyObject *path = PyUnicode_FromString(scriptDirectoryName);
-        int result = PyList_Insert(sysPath, 0, path);
-        PyObject *mainModule = PyImport_AddModule("hola.py");
-
-        //PyObject *pModule = PyImport_ImportModule("hola.py");
-        if (PyErr_Occurred())
-        {
-            PyErr_Print();
-        }
+    //const char *scriptDirectoryName = "/home/david/programacion/python/PlugingsAPI/";
+    const char *scriptDirectoryName = "/home/david/programacion/Qt/SDMed2/SDMed2/python/";
+    Py_Initialize();
+    PyObject *sysPath = PySys_GetObject("path");
+    PyObject *path = PyUnicode_FromString(scriptDirectoryName);
+    int result = PyList_Insert(sysPath, 0, path);
+    qDebug()<<"result: "<<result;
+    PyObject* pluginModule = PyImport_Import(PyUnicode_FromString("mis_macros"));
+    qDebug()<<"modulo: "<<pluginModule;
+    Py_DECREF(path);
+    if (!pluginModule)
+    {
+        PyErr_Print();
+        //return "Error importing module";
+    }
+    PyObject* mimacro = PyObject_GetAttrString(pluginModule, "mimacro");
+    Py_DECREF(pluginModule);
+    if (!mimacro)
+    {
+        PyErr_Print();
+        //return "Error importing module";
+    }
+    //PyObject* args = PyTuple_New(0);
+    PyObject* args = Py_BuildValue("(s)","Pepe");
+    PyObject_CallObject(mimacro,args);
+    Py_DECREF(args);
+    if (PyErr_Occurred())
+    {
+        PyErr_Print();
+    }
+    else
+    {
+        qDebug()<<"Todo Ok";
+    }
 }
 
 

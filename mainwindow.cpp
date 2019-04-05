@@ -3,7 +3,7 @@
 
 #include "instancia.h"
 #include "./Ficheros/abrirguardarbc3.h"
-#include "./Ficheros/exportar.h"
+#include "./Ficheros/exportarBC3.h"
 #include "./Dialogos/dialogoabout.h"
 #include "./Dialogos/dialogodatoscodigoresumen.h"
 #include "./Dialogos/dialogotablaslistadoobras.h"
@@ -61,7 +61,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-QString MainWindow::CodigoBC3(const QString &nombrefichero)
+/*QString MainWindow::CodigoBC3(const QString &nombrefichero)
 {
     QFile fichero(nombrefichero);
     if(fichero.open(QIODevice::ReadOnly))
@@ -91,7 +91,7 @@ QString MainWindow::CodigoBC3(const QString &nombrefichero)
         }
     }
     return QString();
-}
+}*/
 
 QList<QList<QVariant>> MainWindow::VerObrasEnBBDD()
 {
@@ -314,7 +314,11 @@ void MainWindow::CambiarResumenObra(QString codigo, QString resumen)
 
 bool MainWindow::Exportar(QString nombrefichero)
 {
-    QFileDialog d(this,tr("Guardar fichero"),QDir::homePath(),tr("Archivos BC3 (*.bc3);;Archivos XLS (*.xls)"));
+    QFileDialog d;
+    d.setOptions(QFileDialog::DontUseNativeDialog);  // with or without this
+    d.setFileMode(QFileDialog::AnyFile);
+    d.setAcceptMode(QFileDialog::AcceptSave);
+    d.setDirectory(".");
     if (!nombrefichero.isEmpty())
     {
         d.selectFile(nombrefichero);
@@ -333,35 +337,37 @@ bool MainWindow::Exportar(QString nombrefichero)
         else
         {
             QString extension = d.selectedNameFilter();
-            extension = extension.right(5);
-            extension = extension.left(4);
-            if (fileName.right(4)==".bc3" || fileName.right(4)==".xls")
+            int tam_extension = extension.length()-extension.lastIndexOf('.');
+            extension = extension.right(tam_extension);
+            extension.remove(')');
+            if (fileName.right(4)==".bc3" || fileName.right(5)==".xlsx")
             {
-                fileName=fileName.left(fileName.size()-4);
+                fileName=fileName.left(fileName.size()-extension.size());
             }
             return GuardarObra(fileName + extension);
-        }        
+        }
     }
     return false;
 }
 
 bool MainWindow::GuardarObra(QString nombreFichero)
 {
+    qDebug()<<"GuardarObra: "<<nombreFichero;
     bool toReturn=false;
-    QString extension = nombreFichero.right(4);
+    QString extension = nombreFichero.right(nombreFichero.length()-nombreFichero.lastIndexOf('.'));
     if (extension == ".bc3" || extension == ".BC3")
     {
         ExportarBC3 exportador((*obraActual)->LeeTabla(),nombreFichero);
         qDebug()<<"Guardada la obra "<<nombreFichero<<" con exito";
         toReturn = true;
     }
-    if (extension == ".xls" || extension == ".XLS")
+    if (extension == ".xlsx" || extension == ".XLSX")
     {
-        //obraActual->miobra->GuardarSEG(nombreFichero);
+        (*obraActual)->ExportarXLSS(nombreFichero);
         qDebug()<<"Guardando en formato xls";
         toReturn = true;
     }
-    if (*obraActual)
+    if (*obraActual && toReturn == true)
     {
         (*obraActual)->Pila()->clear();
     }

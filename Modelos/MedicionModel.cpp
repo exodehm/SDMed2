@@ -32,7 +32,7 @@ MedicionModel::MedicionModel(const QString &tabla, const QString &codigopadre, c
     LeyendasCabecera.append(QObject::tr("Posicion\n"));
     NUM_COLUMNAS = LeyendasCabecera.size();
     certif_actual = 0;
-    ActualizarDatos(codigopadre,codigohijo);
+    //ActualizarDatos(codigopadre,codigohijo);
 }
 
 MedicionModel::~MedicionModel()

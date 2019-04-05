@@ -25,7 +25,7 @@ PrincipalModel::PrincipalModel(const QString &tabla, const QString &codigopadre,
     LeyendasCabecera.append(tr("PrCert\n"));
     LeyendasCabecera.append(tr("ImpPres\n"));
     LeyendasCabecera.append(tr("ImpCert\n"));
-    ActualizarDatos(codigopadre, codigohijo);
+    //ActualizarDatos(codigopadre, codigohijo);
 }
 
 PrincipalModel::~PrincipalModel()
