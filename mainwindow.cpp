@@ -8,6 +8,7 @@
 #include "./Dialogos/dialogodatoscodigoresumen.h"
 #include "./Dialogos/dialogotablaslistadoobras.h"
 #include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
+#include "./imprimir.h"
 
 #include "pyrun.h"
 
@@ -376,8 +377,11 @@ bool MainWindow::GuardarObra(QString nombreFichero)
 
 void MainWindow::ActionImprimir()
 {   
-    PyRun* pyRun = new PyRun();
-    delete pyRun;
+    /*QString str1 = QDir::currentPath();
+    QByteArray ba = str1.toLocal8Bit();
+    const char *ruta = ba.data();*/
+    Imprimir impresor("/home/david/programacion/Qt/SDMed2/SDMed2/python/","plugin_loader","iniciar");
+    //impresor.CargarPlugins();
 }
 
 void MainWindow::ActionCerrar()

@@ -1,0 +1,42 @@
+; the next section is mandatory
+
+[general]
+name=Imprimidor chachi piruli
+email=d.gis.consultores@gmail.com
+author=D-GIS
+qgisMinimumVersion=2.0
+description=Un dialogo intuitivo adaptado a la BBDD de la CRCC
+about=Utilidad para buscar y generar mapas de parcelas en función de filtros de selección.
+version=version 1.0
+tracker=http://bugs.itopen.it
+repository=http://www.itopen.it/repo
+; end of mandatory metadata
+
+
+
+; start of optional metadata
+category=Database
+changelog=The changelog lists the plugin versions
+    and their changes as in the example below:
+    1.0 - First stable release
+    0.9 - All features implemented
+    0.8 - First testing release
+
+; Tags are in comma separated value format, spaces are allowed within the
+; tag name.
+; Tags should be in English language. Please also check for existing tags and
+; synonyms before creating a new one.
+tags=wkt,raster,hello world
+
+; these metadata can be empty, they will eventually become mandatory.
+homepage=http://www.itopen.it
+icon=icon.png
+
+; experimental flag (applies to the single version)
+experimental=True
+
+; deprecated flag (applies to the whole plugin and not only to the uploaded version)
+deprecated=False
+
+; if empty, it will be automatically set to major version + .99
+; qgisMaximumVersion=2.10

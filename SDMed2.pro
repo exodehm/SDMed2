@@ -51,7 +51,8 @@ SOURCES += main.cpp\
     Tablas/tablacert.cpp \
     Tablas/tablamed.cpp \
     Ficheros/exportarBC3.cpp \
-    Ficheros/exportarXLS.cpp
+    Ficheros/exportarXLS.cpp \
+    imprimir.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -86,14 +87,14 @@ HEADERS  += mainwindow.h \
     Undo/undoinsertarprincipal.h \
     Undo/undoeditarmedicion.h \
     Modelos/PrincipalModel.h \
-    python_wrapper.h \
     pyrun.h \
     Dialogos/dialogocertificaciones.h \
     Modelos/MedicionModel.h \
     Tablas/tablacert.h \
     Tablas/tablamed.h \
     Ficheros/exportarBC3.h \
-    Ficheros/exportarXLS.h
+    Ficheros/exportarXLS.h \
+    imprimir.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
