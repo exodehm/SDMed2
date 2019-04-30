@@ -1,12 +1,12 @@
 ; the next section is mandatory
 
 [general]
-name=Buscador de parcelas
+name=Listado de Precios Auxiliares
 email=d.gis.consultores@gmail.com
-author=D-GIS
-qgisMinimumVersion=2.0
-description=Un dialogo intuitivo adaptado a la BBDD de la CRCC
-about=Utilidad para buscar y generar mapas de parcelas en función de filtros de selección.
+author=SDMed
+SDMedMinimumVersion=0.1
+description=Relación de precios auxiliares que intervienen en la obra
+about=Utilidad para información
 version=version 1.0
 tracker=http://bugs.itopen.it
 repository=http://www.itopen.it/repo

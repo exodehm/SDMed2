@@ -73,7 +73,6 @@ void Instancia::GenerarUI()
     //tablas medicion y certificacion
     separadorTablasMedicion = new QTabWidget;
     separadorTablas->addWidget(separadorTablasMedicion);
-    //CrearTablasMedCert();
     //Tabla Medicion
     InsertarTablaMedCert(0);//0 es la tabla de mediciones
     //Tablas de certificacion

@@ -17,7 +17,7 @@ static void cleanup()
     }
 }
 
-bool loadPlugins(const QString &modulePath, const QString &moduleName, const QString &function)
+bool loadModule(const QString &modulePath, const QString &moduleName, const QString &functionName, const QStringList& args)
 {
     qputenv("PYTHONPATH", modulePath.toLocal8Bit());
     if (init() != AppModuleLoaded)
@@ -29,20 +29,24 @@ bool loadPlugins(const QString &modulePath, const QString &moduleName, const QSt
     pModule = PyImport_Import(pName);
     Py_DECREF(pName);
     if (pModule){
-        pFunc = PyObject_GetAttrString(pModule, function.toLocal8Bit().constData());
+        pFunc = PyObject_GetAttrString(pModule, functionName.toLocal8Bit().constData());
         /* pFunc is a new reference */
-        if (pFunc && PyCallable_Check(pFunc)){
-            pArgs = PyTuple_New(1);
-            pValue = PyUnicode_FromString(modulePath.toLocal8Bit().constData());
-            if (!pValue){
-                Py_DECREF(pArgs);
-                Py_DECREF(pModule);
-                qWarning("Cannot convert argument\n");
-                return false;
-            }
+        if (pFunc && PyCallable_Check(pFunc))
+        {
             /* pValue reference stolen here: */
-            PyTuple_SetItem(pArgs, 0, pValue);
-
+            pArgs = PyTuple_New(args.size());
+            for (int i = 0;i<args.size();i++)
+            {
+                PyObject* arg_valor = Py_BuildValue("s",args.at(i).toLocal8Bit().constData());
+                if (!arg_valor)
+                {
+                    Py_DECREF(pArgs);
+                    Py_DECREF(pModule);
+                    qWarning("Cannot convert argument\n");
+                    return false;
+                }
+                PyTuple_SetItem(pArgs, i, arg_valor);//meto los datos de conexion
+            }
             pValue = PyObject_CallObject(pFunc, pArgs);
             Py_DECREF(pArgs);
             if (pValue){
@@ -62,7 +66,7 @@ bool loadPlugins(const QString &modulePath, const QString &moduleName, const QSt
         {
             if (PyErr_Occurred())
                 PyErr_Print();
-            qWarning("Cannot find function \"%s\"\n", function.toLocal8Bit().constData());
+            qWarning("Cannot find function \"%s\"\n", functionName.toLocal8Bit().constData());
         }
         Py_XDECREF(pFunc);
         Py_DECREF(pModule);

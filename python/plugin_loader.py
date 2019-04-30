@@ -4,7 +4,7 @@
 import imp
 import os
 import sys
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, QtSql
 from DialogoImprimir import DialogoImprimir
 
 
@@ -65,35 +65,35 @@ class MiWidget(QtWidgets.QWidget):
 
 
 if __name__ == "__main__":	
-	for i in getPlugins("/home/david/programacion/Qt/SDMed2/SDMed2/python/"):
-		print("Loading plugin " + i["name"])
-		plugin = loadPlugin(i)
-		plugin.run()
-	plugins = getPlugins("/home/david/programacion/Qt/SDMed2/SDMed2/python/")
-	app = QtWidgets.QApplication(sys.argv)
-	#myapp = MiWidget()
-	myapp = DialogoImprimir(plugins)
-	myapp.show()	
-	sys.exit(app.exec_())
+		for i in getPlugins("/home/david/programacion/Qt/SDMed2/SDMed2/python/"):
+			print("Loading plugin " + i["name"])
+			plugin = loadPlugin(i)
+			plugin.run()
+		plugins = getPlugins("/home/david/programacion/Qt/SDMed2/SDMed2/python/")
+		conexion = QtSql.QSqlDatabase('QPSQL')
+		obraActual = "PRUEBASCOMP"
+		app = QtWidgets.QApplication(sys.argv)
+		myapp = DialogoImprimir(plugins,conexion, obraActual)
+		myapp.show()	
+		sys.exit(app.exec_())
 
 
-def iniciar(ruta):
-	print ("iniciar()")
-	#import sys
-	#sys.path.insert(0, ruta)
-	#print(sys.path)
-	#print ("iniciar python en la ruta: " + ruta)
-	'''for i in getPlugins(ruta):
-		print("Loading plugin " + i["name"])
-		plugin = loadPlugin(i)
-		plugin.run()'''
-	if not hasattr(sys,'argv'):
-		sys.argv = []
-	app = QtWidgets.QApplication.instance()
-	if app is None:
-		app = QtWidgets.QApplication([])
-	#myapp = MiWidget()
-	myapp = DialogoImprimir(getPlugins(ruta))
-	myapp.show()
-	return myapp.exec_()
-	#sys.exit(app.exec_())
+def iniciar(*datos):
+	ruta = os.path.dirname(__file__) + "/"
+	conexion = QtSql.QSqlDatabase('QPSQL')
+	conexion.setDatabaseName(datos[0])
+	conexion.setHostName(datos[1])
+	conexion.setPort(int(datos[2]))
+	conexion.setUserName(datos[3])
+	conexion.setPassword(datos[4])
+	obraActual = datos[5]
+	if conexion.open():
+		print('Successful')		
+		app = QtWidgets.QApplication.instance()
+		if app is None:
+			app = QtWidgets.QApplication([])
+		myapp = DialogoImprimir(getPlugins(ruta), conexion, obraActual)
+		myapp.show()
+		return myapp.exec_()		
+	else:
+		print ("error")

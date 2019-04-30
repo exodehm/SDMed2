@@ -90,7 +90,7 @@ private:
 
     void AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen);
 
-    bool HayObra();
+    bool HayObrasAbiertas();
     //combo ver medicion/certificacion
     //el combo he de annadirlo a mano porque no se puede insertar un widget a una qToolBar desde QtDesigner
     QLabel* labelVerMedCert;

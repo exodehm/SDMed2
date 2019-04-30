@@ -90,10 +90,10 @@ void UndoPegarPartidas::redo()
         esPrimerRedo = false;
         QString cadenaconsulta = "SELECT pegar('"+tabla+"','"+codigopadre+"','"+fila+"')";
         qDebug()<<cadenaconsulta;
-        consulta.exec(cadenaconsulta);        
+        consulta.exec(cadenaconsulta);
         while (consulta.next())
         {
-            nodosinsertados = consulta.value(0).toString();            
+            nodosinsertados = consulta.value(0).toString();
         }
     }
     else

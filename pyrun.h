@@ -1,10 +1,11 @@
 #ifndef PYRUN_H
 #define PYRUN_H
 
+
+//se crea un entorno para cargar modulos en python
+
 #include <QString>
-
-
-class QString;
+#include <QStringList>
 
 namespace PyRun
 {
@@ -14,7 +15,7 @@ enum State
     PythonInitialized,
     AppModuleLoaded
 };
-bool loadPlugins(const QString &modulePath, const QString &moduleName, const QString &function);
+bool loadModule(const QString &modulePath, const QString &moduleName, const QString &functionName, const QStringList &args=QStringList());
 State init();
 }
 #endif // PYRUN_H

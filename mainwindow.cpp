@@ -19,6 +19,7 @@
 #include <QPushButton>
 #include <QUndoStack>
 #include <QFileDialog>
+#include <QDir>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -377,11 +378,24 @@ bool MainWindow::GuardarObra(QString nombreFichero)
 
 void MainWindow::ActionImprimir()
 {   
-    /*QString str1 = QDir::currentPath();
-    QByteArray ba = str1.toLocal8Bit();
-    const char *ruta = ba.data();*/
-    Imprimir impresor("/home/david/programacion/Qt/SDMed2/SDMed2/python/","plugin_loader","iniciar");
-    //impresor.CargarPlugins();
+    //Imprimir impresor("/home/david/programacion/Qt/SDMed2/SDMed2/python/","plugin_loader","iniciar", db);
+    QString ruta = "/home/david/programacion/Qt/SDMed2/SDMed2/python/";
+    QString pModulo = "plugin_loader";
+    QString pFuncion = "iniciar";
+    QStringList pArgumentos;
+    //argumentos
+    //primero meto los datos de la conexion
+    pArgumentos<<db.databaseName()<<db.hostName()<<QString::number(db.port())<<db.userName()<<db.password();
+    //ahora meto los datos de la obra actual (nombre, padre e hijo)
+    if (HayObrasAbiertas())
+    {
+        pArgumentos<<(*obraActual)->LeeTabla();
+
+        if(::PyRun::loadModule(QDir::current().absoluteFilePath(ruta), pModulo, pFuncion, pArgumentos))
+        {
+            qDebug()<< __PRETTY_FUNCTION__ << "successful";
+        }
+    }
 }
 
 void MainWindow::ActionCerrar()
@@ -432,7 +446,7 @@ void MainWindow::ActionCopiar()
 
 void MainWindow::ActionPegar()
 {
-    if (HayObra())
+    if (HayObrasAbiertas())
     {
         (*obraActual)->Pegar();
     }
@@ -445,7 +459,7 @@ void MainWindow::ActionCortar()
 
 void MainWindow::ActionUndo()
 {
-    if (HayObra())
+    if (HayObrasAbiertas())
     {
         (*obraActual)->Undo();
     }
@@ -453,7 +467,7 @@ void MainWindow::ActionUndo()
 
 void MainWindow::ActionRedo()
 {
-    if (HayObra())
+    if (HayObrasAbiertas())
     {
         (*obraActual)->Redo();
     }
@@ -461,7 +475,7 @@ void MainWindow::ActionRedo()
 
 void MainWindow::ActionAdelante()
 {
-    if (HayObra())
+    if (HayObrasAbiertas())
     {
         (*obraActual)->Mover(movimiento::DERECHA);
     }
@@ -469,7 +483,7 @@ void MainWindow::ActionAdelante()
 
 void MainWindow::ActionAtras()
 {
-    if (HayObra())
+    if (HayObrasAbiertas())
     {
         (*obraActual)->Mover(movimiento::IZQUIERDA);
     }
@@ -477,7 +491,7 @@ void MainWindow::ActionAtras()
 
 void MainWindow::ActionInicio()
 {
-    if (HayObra())
+    if (HayObrasAbiertas())
     {
         (*obraActual)->Mover(movimiento::INICIO);
     }
@@ -485,7 +499,7 @@ void MainWindow::ActionInicio()
 
 void MainWindow::ActionVerArbol()
 {
-    if (HayObra())
+    if (HayObrasAbiertas())
     {
         (*obraActual)->VerArbol();
     }
@@ -517,7 +531,7 @@ void MainWindow::AcercaDeQt()
     QMessageBox::aboutQt(this);
 }
 
-bool MainWindow::HayObra()
+bool MainWindow::HayObrasAbiertas()
 {
     return !ListaObras.empty();
 }

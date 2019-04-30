@@ -2,16 +2,17 @@
 #include <QDebug>
 
 UndoEditarMedicion::UndoEditarMedicion(QString nombretabla, QString id_padre, QString id_hijo,
-                                       QVariant dato_antiguo, QVariant dato_nuevo, QString id_fila,
+                                       QVariant dato_antiguo, QVariant dato_nuevo, QString pos,
                                        int nombrecolumna, int fase, QVariant descripcion):
     tabla(nombretabla),idpadre(id_padre),idhijo(id_hijo),datoAntiguo(dato_antiguo),datoNuevo(dato_nuevo),
-    idfila(id_fila),columna(nombrecolumna),num_cert(fase)
+    posicion(pos),columna(nombrecolumna),num_cert(fase)
 {
     qDebug()<<descripcion.toString();
 }
 
 void UndoEditarMedicion::undo()
 {
+    QString idfila = ObtenerIdPorPosicion();
     QString cadena = "SELECT modificar_campo_medcert('"+\
             tabla+"','"+idpadre+"','"+idhijo+"','"+\
             datoAntiguo.toString()+"','"+\
@@ -25,6 +26,7 @@ void UndoEditarMedicion::undo()
 
 void UndoEditarMedicion::redo()
 {
+    QString idfila = ObtenerIdPorPosicion();
     QString cadena = "SELECT modificar_campo_medcert('"+\
             tabla+"','"+idpadre+"','"+idhijo+"','"+\
             datoNuevo.toString()+"','"+\
@@ -34,6 +36,20 @@ void UndoEditarMedicion::redo()
             "');";
     qDebug()<<cadena;
     consulta.exec(cadena);
+}
+
+QString UndoEditarMedicion::ObtenerIdPorPosicion()
+{
+    QString cadenaconsultarid = "SELECT * FROM id_por_posicion('" + tabla + "','" + idpadre + "','" + idhijo + "','"
+            + posicion + "','" + QString::number(num_cert)+ "')";
+    //qDebug()<<"CAdena ID "<<cadenaconsultarid;
+    consulta.exec(cadenaconsultarid);
+    QString cadenaid;
+    while (consulta.next())
+    {
+        cadenaid.append(consulta.value(0).toString());
+    }
+    return cadenaid;
 }
 
 /*************BORRAR LINEA MEDICION******************/
@@ -94,6 +110,7 @@ void UndoInsertarLineaMedicion::redo()
             + QString::number(posicion) + "','" + QString::number(num_cert)+ "')";
     //qDebug()<<"CAdena ID "<<cadenaconsultarid;
     consulta.exec(cadenaconsultarid);
+    cadenaid.clear();
     cadenaid.append("{");
     while (consulta.next())
     {
