@@ -26,10 +26,11 @@ public:
     QUndoStack* Pila();
     void Mover(int tipomovimiento);
     void VerArbol();
-    void AjustarPresupuesto(float cantidades[2]);
+    void AjustarPresupuesto();
 
     const QString& LeeTabla() const;
     const QString& LeeResumen() const;
+    const float LeePrecio(const QString& codigo = "");
     //certificaciones    
     bool HayCertificacion();
     void ActualizarCertificacionEnModelo();    

@@ -517,7 +517,10 @@ void MainWindow::ActionDeseleccionarTodo()
 
 void MainWindow::ActionAjustarPresupuesto()
 {
-
+    if (HayObrasAbiertas())
+    {
+       (*obraActual)->AjustarPresupuesto();
+    }
 }
 
 void MainWindow::AcercaDe()

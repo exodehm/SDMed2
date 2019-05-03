@@ -52,7 +52,9 @@ SOURCES += main.cpp\
     Tablas/tablamed.cpp \
     Ficheros/exportarBC3.cpp \
     Ficheros/exportarXLS.cpp \
-    imprimir.cpp
+    imprimir.cpp \
+    Undo/undoajustar.cpp \
+    Dialogos/dialogoajustar.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -94,11 +96,12 @@ HEADERS  += mainwindow.h \
     Tablas/tablamed.h \
     Ficheros/exportarBC3.h \
     Ficheros/exportarXLS.h \
-    imprimir.h
+    imprimir.h \
+    Undo/undoajustar.h \
+    Dialogos/dialogoajustar.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
-    Ui/dialogoajustarprecio.ui \
     Ui/dialogocreditos.ui \
     Ui/dialogolicencia.ui \
     Ui/dialogoprecio.ui \
@@ -107,7 +110,8 @@ FORMS    += Ui/mainwindow.ui \
     Editor/editor.ui \
     Ui/dialogotablaslistadoobras.ui \
     Ui/dialogoadvertenciaborrarbbdd.ui \
-    Ui/dialogocertificaciones.ui
+    Ui/dialogocertificaciones.ui \
+    Ui/dialogoajustar.ui
 
 QT += sql
 

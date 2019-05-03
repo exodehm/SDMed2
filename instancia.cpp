@@ -16,8 +16,10 @@
 #include "./Ficheros/exportarXLS.h"
 
 #include "./Undo/undoeditarprincipal.h"
+#include "./Undo/undoajustar.h"
 
 #include "./Dialogos/dialogocertificaciones.h"
+#include "./Dialogos/dialogoajustar.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -134,6 +136,19 @@ const QString& Instancia::LeeTabla() const
 const QString& Instancia::LeeResumen() const
 {
     return resumen;
+}
+
+const float Instancia::LeePrecio(const QString &codigo)
+{
+    QString leerpreciodecodigo = "SELECT * FROM ver_precio('"+tabla+"','"+codigo+"')";
+    qDebug()<<leerpreciodecodigo;
+    consulta.exec(leerpreciodecodigo);
+    float preciodecodigo;
+    while (consulta.next())
+    {
+        preciodecodigo = consulta.value(0).toFloat();
+    }
+    return preciodecodigo;
 }
 
 QStringList Instancia::LeerCertifActual()
@@ -342,6 +357,17 @@ void Instancia::Mover(int tipomovimiento)
 void Instancia::VerArbol()
 {
     arbol->setVisible(!arbol->isVisible());
+}
+
+void Instancia::AjustarPresupuesto()
+{
+    qDebug()<<LeePrecio();
+    DialogoAjustar* d = new DialogoAjustar(LeeTabla(), LeeResumen(), LeePrecio());
+    int res = d->exec();
+    if (res==1)
+    {
+        pila->push(new UndoAjustarPresupuesto(QString::number(LeePrecio()),d->LeePrecioParaAjustar()));
+    }
 }
 
 void Instancia::TablaSeleccionarTodo(QWidget* widgetactivo)
