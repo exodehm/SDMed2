@@ -8,6 +8,7 @@ import imp
 import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets, QtSql
+from DialogoOpcionesPagina import DialogoOpcionesPagina
 
 class DialogoImprimir(QtWidgets.QDialog):
 	def __init__(self, plugins, conexion, obra):
@@ -16,6 +17,13 @@ class DialogoImprimir(QtWidgets.QDialog):
 		self.conexion = conexion
 		self.GeneraUI(plugins)
 		self.obra = obra
+		LTamannoPagina = ['A4','A3']
+		LOrientacion = ['Vertical','Horizontal']
+		LEncabezado = ['Datos de proyecto','No','Definir']
+		LFecha = ['Hoy','No','Definir']
+		LNumeracion = ['Si','No']
+		self.LDatosConfiguracion = [LTamannoPagina,LOrientacion,LEncabezado,LFecha,LNumeracion]
+		self.datosConfiguracionPagina={'TamannoPagina':LTamannoPagina[0],'Orientacion':LOrientacion[0],'Encabezado':LEncabezado[0],'Fecha':LFecha[0],'Numeracion':LNumeracion[0]}
 		
 	def GeneraUI(self,plugins):
 		self.setObjectName("Dialog")
@@ -48,10 +56,15 @@ class DialogoImprimir(QtWidgets.QDialog):
 		spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
 		self.LayoutGroupBox.addItem(spacerItem)
 		self.LayoutPrincipal.addLayout(self.LayoutGroupBox)
-		#botones
+		#boton Imprimir
 		self.buttonImprimir = QtWidgets.QPushButton(self)
 		self.buttonImprimir.setObjectName("botonImprimir")
 		self.LayoutBotones.addWidget(self.buttonImprimir)
+		
+		#boton Opciones Pagina
+		self.buttonOpcionesPagina = QtWidgets.QPushButton(self)
+		self.buttonOpcionesPagina.setObjectName("opcionesPagina")
+		self.LayoutBotones.addWidget(self.buttonOpcionesPagina)
 		
 		self.buttonBox = QtWidgets.QDialogButtonBox(self)
 		self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
@@ -62,7 +75,9 @@ class DialogoImprimir(QtWidgets.QDialog):
 		self.LayoutPrincipal.addLayout(self.LayoutBotones)
 		
 		self.retranslateUi()
+		#acciones
 		self.buttonImprimir.pressed.connect(self.Imprimir)
+		self.buttonOpcionesPagina.pressed.connect(self.ConfigurarPagina)
 		self.buttonBox.accepted.connect(self.accept)
 		self.buttonBox.rejected.connect(self.reject)
 		QtCore.QMetaObject.connectSlotsByName(self)
@@ -72,6 +87,7 @@ class DialogoImprimir(QtWidgets.QDialog):
 		self.setWindowTitle(_translate("Dialog", "Opciones de impresión"))
 		self.groupBox.setTitle(_translate("Dialog", "Selecciona opcion:"))
 		self.buttonImprimir.setText(_translate("Dialog", "Imprimir"))
+		self.buttonOpcionesPagina.setText(_translate("Dialog", "Opciones de impresión"))
 	
 	def Imprimir(self):
 		print ("Cargar Funcion ")
@@ -79,7 +95,13 @@ class DialogoImprimir(QtWidgets.QDialog):
 			if self.arrayRadioButtons[i].isChecked():
 				programa = self.plugins[i]
 				funcionImprimir = imp.load_module(MainModule, *programa["info"])
-				funcionImprimir.imprimir(self.conexion, self.obra)
+				funcionImprimir.imprimir(self.conexion, self.obra, self.datosConfiguracionPagina)
+				
+	def ConfigurarPagina(self):
+		print ("Configurar pagina")
+		dialogo = DialogoOpcionesPagina(self.datosConfiguracionPagina)
+		dialogo.show()
+		return dialogo.exec_()
 		
 		
 

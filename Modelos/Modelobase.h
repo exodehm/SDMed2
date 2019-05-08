@@ -5,7 +5,7 @@
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
 
-class QUndoStack;
+class MiUndoStack;
 
 class ModeloBase: public QSqlQueryModel
 {
@@ -13,7 +13,7 @@ class ModeloBase: public QSqlQueryModel
 
 public:
 
-    ModeloBase(const QString& tabla, const QString& codigopadre, const QString& codigohijo, QUndoStack* p, QObject* parent=nullptr);
+    ModeloBase(const QString& tabla, const QStringList& ruta, MiUndoStack* p, QObject* parent=nullptr);
     ~ModeloBase();
     bool esColumnaNumerica(int columna) const;
     void QuitarIndicadorFilaVacia();
@@ -29,7 +29,7 @@ public:
 
     bool HayFilaVacia();
     int FilaVacia();
-    virtual void ActualizarDatos(QString padre, QString hijo)=0;
+    virtual void ActualizarDatos(const QStringList& ruta)=0;
     virtual bool EsPartida(){return bool();}
     virtual void PrepararCabecera(/*QList<QList<QVariant>>&datos*/)=0;
 
@@ -46,17 +46,18 @@ public slots:
 
 protected:
     int NUM_COLUMNAS;
-    QStringList cabecera;
-    QStringList LeyendasCabecera;
-    bool hayFilaVacia;
-    int filavacia;
-    QList<QList<QVariant>>datos;
-    QList<QList<QVariant>>datoscolor;
-    QSqlQuery consulta;
-    int naturalezapadre;
-    QUndoStack* pila;
-    QString tabla;
-    QString codigopadre,codigohijo;
+    QStringList m_cabecera;
+    QStringList m_LeyendasCabecera;
+    QStringList m_ruta;
+    bool m_hayFilaVacia;
+    int m_filavacia;
+    QList<QList<QVariant>>m_datos;
+    QList<QList<QVariant>>m_datoscolor;
+    QSqlQuery m_consulta;
+    int m_naturalezapadre;
+    MiUndoStack* m_pila;
+    QString m_tabla;
+    QString m_codigopadre, m_codigohijo;
 };
 
 #endif // MODELOBASE_H

@@ -21,6 +21,8 @@
 #include "./Dialogos/dialogocertificaciones.h"
 #include "./Dialogos/dialogoajustar.h"
 
+#include "./miundostack.h"
+
 #include <QDebug>
 #include <QHeaderView>
 #include <QKeyEvent>
@@ -32,7 +34,6 @@
 #include <QSplitter>
 #include <QPushButton>
 #include <QTabWidget>
-#include <QUndoStack>
 #include <QMessageBox>
 #include <QSqlRecord>
 
@@ -41,7 +42,7 @@ Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resum
     codigopadre ="";
     codigohijo = cod;
     ruta<<codigopadre<<codigohijo;
-    pila = new QUndoStack(this);    
+    pila = new MiUndoStack(this);
     GenerarUI();
 }
 
@@ -66,7 +67,7 @@ void Instancia::GenerarUI()
     separadorTablas = new QSplitter(Qt::Vertical);
 
     //tabla principal
-    modeloTablaP = new PrincipalModel(tabla, codigopadre, codigohijo, pila);
+    modeloTablaP = new PrincipalModel(tabla, ruta, pila);
     tablaPrincipal = new TablaPrincipal(modeloTablaP->columnCount(QModelIndex()));
     tablaPrincipal->setObjectName("TablaP");
     tablaPrincipal->setModel(modeloTablaP);
@@ -191,7 +192,7 @@ void Instancia::ActualizarCertificacionEnModelo()
 void Instancia::InsertarTablaMedCert(int num_certif)
 {
     qDebug()<<"Insertar tabla en la pos "<<num_certif;
-    ModeloBase* modeloMC = new MedicionModel(tabla, codigopadre, codigohijo, num_certif, pila);
+    ModeloBase* modeloMC = new MedicionModel(tabla, ruta, num_certif, pila);
     TablaBase* tablaMC;
     if (num_certif == 0)//tabla de medicion
     {
@@ -254,7 +255,7 @@ void Instancia::ExportarXLSS(QString nombreFichero)
     //ExportarXLS exportador(tabla.toUtf8().constData(),nombreFichero.toUtf8().constData(),consulta);
 }
 
-QUndoStack* Instancia::Pila()
+MiUndoStack *Instancia::Pila()
 {
     return pila;
 }
@@ -327,6 +328,7 @@ void Instancia::Mover(int tipomovimiento)
     {
         ruta.pop_back();
         cadenamover = "SELECT ver_siguiente('"+ tabla + "','"+ codigopadre + "','"+ codigohijo+"')";
+        qDebug()<<cadenamover;
         consulta.exec(cadenamover);
         while (consulta.next())
         {
@@ -389,18 +391,27 @@ void Instancia::TablaDeseleccionarTodo(QWidget* widgetactivo)
 }
 
 void Instancia::Undo()
-{
-    pila->undo();
+{    
+    ruta = pila->LeeRuta();
+    codigopadre = ruta.at(ruta.size()-2);
+    codigohijo = ruta.at(ruta.size()-1);
+    pila->Undo();
+    pila->GuardarRuta(ruta);
 }
 
 void Instancia::Redo()
 {
-    pila->redo();
+    ruta = pila->LeeRuta();
+    codigopadre = ruta.at(ruta.size()-2);
+    codigohijo = ruta.at(ruta.size()-1);
+    pila->Redo();
+    pila->GuardarRuta(ruta);
 }
 
 void Instancia::RefrescarVista()
 {
-    modeloTablaP->ActualizarDatos(codigopadre, codigohijo);
+    qDebug()<<"Refrescar la vista con "<<codigopadre<<" -- "<<codigohijo;
+    modeloTablaP->ActualizarDatos(ruta);
     modeloTablaP->layoutChanged();
     tablaPrincipal->resizeColumnsToContents();
     for (auto it = Listadotablasmedcert.begin();it!=Listadotablasmedcert.end();++it)
@@ -408,7 +419,7 @@ void Instancia::RefrescarVista()
         ModeloBase* m = qobject_cast<ModeloBase*>((*it)->model());
         if (m)
         {
-            m->ActualizarDatos(codigopadre,codigohijo);
+            m->ActualizarDatos(ruta);
             m->layoutChanged();
         }
         (*it)->resizeColumnsToContents();
@@ -506,7 +517,7 @@ void Instancia::GuardarTextoPartida()
     {
         QString cadenaundo = ("Cambiar texto de partida a " + editor->LeeContenido());
         //qDebug()<<cadenaundo;
-        pila->push(new UndoEditarTexto(tabla, codigopadre, codigohijo, textoPartidaInicial,editor->LeeContenidoConFormato(),QVariant(cadenaundo)));
+        pila->Push(ruta, new UndoEditarTexto(tabla, codigopadre, codigohijo, textoPartidaInicial,editor->LeeContenidoConFormato(),QVariant(cadenaundo)));
     }
 }
 

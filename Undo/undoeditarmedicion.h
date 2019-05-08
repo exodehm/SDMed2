@@ -3,27 +3,26 @@
 
 #include "./defs.h"
 
-#include <QUndoCommand>
+#include "./undobase.h"
 #include <QVariant>
 #include <QSqlQuery>
 
-class UndoEditarMedicion : public QUndoCommand
+class UndoEditarMedicion : public UndoBase
 {
 public:
-    UndoEditarMedicion(QString nombretabla, QString id_padre, QString id_hijo,
-                       QVariant dato_antiguo, QVariant dato_nuevo, QString pos,
-                       int nombrecolumna, int fase, QVariant descripcion);
+    UndoEditarMedicion(const QString& nombretabla, const QString& id_padre, const QString& id_hijo,
+                       const QVariant& dato_antiguo, const QVariant& dato_nuevo, const QString& pos,
+                       const int& nombrecolumna, const int& num_cert, const QVariant& descripcion);
 
     void undo();
     void redo();
     QString ObtenerIdPorPosicion();
+    QString ObtenerArrayIdPorPosicion();
 
-private:
-    QSqlQuery consulta;
-    QString tabla,idpadre,idhijo, posicion;
-    QVariant datoAntiguo, datoNuevo;
-    int columna;
-    int num_cert;
+protected:
+    QString m_posicion;
+    int m_columna;
+    int m_num_cert;
 };
 
 /*************BORRAR LINEA MEDICION******************/
@@ -43,7 +42,7 @@ private:
 };
 
 /*************INSERTAR LINEA MEDICION******************/
-class UndoInsertarLineaMedicion : public QUndoCommand
+class UndoInsertarLineaMedicion : public UndoEditarMedicion
 {
 public:
     UndoInsertarLineaMedicion(const QString& nombretabla,const QString& codpadre, const QString& codhijo, const int num_filas, const int pos,
@@ -53,10 +52,8 @@ public:
     void redo();
 
 private:
-    QString tabla, codigopadre, codigohijo, id, cadenaid;
-    int posicion, numFilas;
-    QSqlQuery consulta;
-    int num_cert;    
+    QString m_id, m_cadenaid;
+    int m_numFilas;
 };
 
 

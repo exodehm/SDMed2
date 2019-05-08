@@ -1,13 +1,16 @@
 from PyQt5 import QtSql
 from openpyxl import Workbook
+from openpyxl.drawing import line
+import datetime
 
 def run():
     print("Plugin para imprimir precios auxiliares de mano de obra, materiales y maquinaria")
     
-def imprimir(conexion, obra):
+def imprimir(conexion, obra, datosconfiguracionpagina):
 	print ("Imprimir " + obra)
-	consulta = QtSql.QSqlQuery("SELECT * FROM \"" + obra + "_Conceptos\" WHERE naturaleza = 1 OR naturaleza = 2 OR naturaleza = 3", conexion)
+	consulta = QtSql.QSqlQuery("SELECT * FROM \"" + obra + "_Conceptos\" WHERE naturaleza = 2", conexion)
 	print (consulta.lastError().text())
+	print (datosconfiguracionpagina)
 	rec = consulta.record()
 	codigo = rec.indexOf("codigo")
 	resumen = rec.indexOf("resumen")
@@ -20,10 +23,18 @@ def imprimir(conexion, obra):
 	sheet = book.active
 	sheet.title = "Listado de Auxiliares"
 	sheet.sheet_properties.tabColor = "ff0000"
-	sheet.oddHeader.left.text = "Page &[Page] of &N"
-	sheet.oddHeader.left.size = 10
+	#cabecera
+	sheet.print_title_cols = 'A:B' # the first two cols
+	sheet.print_title_rows = '1:1' # the first row	
+	sheet.oddHeader.left.size = 12
 	sheet.oddHeader.left.font = "Tahoma,Bold"
 	sheet.oddHeader.left.color = "CC3366"
+	sheet.oddHeader.left.text = "Listado de Auxiliares"	
+	#pie
+	sheet.oddFooter.left.font = "Tahoma,Bold"
+	hoy = datetime.date.today()
+	sheet.oddFooter.left.text = str(hoy.strftime('%d de %b de %Y'))
+	sheet.oddFooter.right.text = "Page &[Page] of &N"
 	#e inserto datos
 	fila = 1
 	columna = 1

@@ -54,7 +54,9 @@ SOURCES += main.cpp\
     Ficheros/exportarXLS.cpp \
     imprimir.cpp \
     Undo/undoajustar.cpp \
-    Dialogos/dialogoajustar.cpp
+    Dialogos/dialogoajustar.cpp \
+    miundostack.cpp \
+    Undo/undobase.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -98,7 +100,9 @@ HEADERS  += mainwindow.h \
     Ficheros/exportarXLS.h \
     imprimir.h \
     Undo/undoajustar.h \
-    Dialogos/dialogoajustar.h
+    Dialogos/dialogoajustar.h \
+    miundostack.h \
+    Undo/undobase.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \

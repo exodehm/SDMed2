@@ -9,6 +9,7 @@
 #include "./Dialogos/dialogotablaslistadoobras.h"
 #include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
 #include "./imprimir.h"
+#include "./miundostack.h"
 
 #include "pyrun.h"
 
@@ -17,7 +18,6 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
-#include <QUndoStack>
 #include <QFileDialog>
 #include <QDir>
 

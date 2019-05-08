@@ -6,7 +6,7 @@
 
 #include <QSqlQuery>
 
-class QUndoStack;
+class MiUndoStack;
 class QSplitter;
 class MedCertModel;
 class ModeloBase;
@@ -23,7 +23,7 @@ public:
 
     void GenerarUI();
     void EscribirTexto();    
-    QUndoStack* Pila();
+    MiUndoStack* Pila();
     void Mover(int tipomovimiento);
     void VerArbol();
     void AjustarPresupuesto();
@@ -95,7 +95,7 @@ private:
 
     QModelIndex indiceActual;
 
-    QUndoStack* pila;
+    MiUndoStack* pila;
 
     QString codigopadre,codigohijo;
     QSqlQuery consulta;

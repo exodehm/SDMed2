@@ -1,11 +1,10 @@
 #include "undoeditarmedicion.h"
 #include <QDebug>
 
-UndoEditarMedicion::UndoEditarMedicion(QString nombretabla, QString id_padre, QString id_hijo,
-                                       QVariant dato_antiguo, QVariant dato_nuevo, QString pos,
-                                       int nombrecolumna, int fase, QVariant descripcion):
-    tabla(nombretabla),idpadre(id_padre),idhijo(id_hijo),datoAntiguo(dato_antiguo),datoNuevo(dato_nuevo),
-    posicion(pos),columna(nombrecolumna),num_cert(fase)
+UndoEditarMedicion::UndoEditarMedicion(const QString &nombretabla, const QString &id_padre, const QString &id_hijo,
+                                       const QVariant &dato_antiguo, const QVariant &dato_nuevo, const QString &pos,
+                                       const int &nombrecolumna, const int &num_cert, const QVariant &descripcion):
+    UndoBase(nombretabla,id_padre,id_hijo,dato_antiguo,dato_nuevo,descripcion), m_posicion(pos),m_columna(nombrecolumna),m_num_cert(num_cert)
 {
     qDebug()<<descripcion.toString();
 }
@@ -14,42 +13,51 @@ void UndoEditarMedicion::undo()
 {
     QString idfila = ObtenerIdPorPosicion();
     QString cadena = "SELECT modificar_campo_medcert('"+\
-            tabla+"','"+idpadre+"','"+idhijo+"','"+\
-            datoAntiguo.toString()+"','"+\
+            m_tabla+"','"+m_codigopadre+"','"+m_codigohijo+"','"+\
+            m_datoAntiguo.toString()+"','"+\
             idfila+"','"+\
-            QString::number(columna)+"','"+\
-            QString::number(num_cert)+\
+            QString::number(m_columna)+"','"+\
+            QString::number(m_num_cert)+\
             "');";
     qDebug()<<cadena;
-    consulta.exec(cadena);
+    m_consulta.exec(cadena);
 }
 
 void UndoEditarMedicion::redo()
 {
     QString idfila = ObtenerIdPorPosicion();
     QString cadena = "SELECT modificar_campo_medcert('"+\
-            tabla+"','"+idpadre+"','"+idhijo+"','"+\
-            datoNuevo.toString()+"','"+\
+            m_tabla+"','"+m_codigopadre+"','"+m_codigohijo+"','"+\
+            m_datoNuevo.toString()+"','"+\
             idfila+"','"+\
-            QString::number(columna)+"','"+\
-            QString::number(num_cert)+\
+            QString::number(m_columna)+"','"+\
+            QString::number(m_num_cert)+\
             "');";
     qDebug()<<cadena;
-    consulta.exec(cadena);
+    m_consulta.exec(cadena);
 }
 
 QString UndoEditarMedicion::ObtenerIdPorPosicion()
 {
-    QString cadenaconsultarid = "SELECT * FROM id_por_posicion('" + tabla + "','" + idpadre + "','" + idhijo + "','"
-            + posicion + "','" + QString::number(num_cert)+ "')";
-    //qDebug()<<"CAdena ID "<<cadenaconsultarid;
-    consulta.exec(cadenaconsultarid);
-    QString cadenaid;
-    while (consulta.next())
+    QString cadenaconsultarid = "SELECT * FROM id_por_posicion('" + m_tabla + "','" + m_codigopadre + "','" + m_codigohijo + "','"
+            + m_posicion + "','" + QString::number(m_num_cert)+ "')";    
+    qDebug()<<"CAdena ID "<<cadenaconsultarid;
+    m_consulta.exec(cadenaconsultarid);
+    QString cadenaid;    
+    while (m_consulta.next())
     {
-        cadenaid.append(consulta.value(0).toString());
+        cadenaid.append(m_consulta.value(0).toString());
     }
     return cadenaid;
+}
+
+QString UndoEditarMedicion::ObtenerArrayIdPorPosicion()
+{
+    QString arraycadenaid;
+    arraycadenaid.append("{");
+    arraycadenaid.append(ObtenerIdPorPosicion());
+    arraycadenaid.append("}");
+    return arraycadenaid;
 }
 
 /*************BORRAR LINEA MEDICION******************/
@@ -86,7 +94,7 @@ void UndoBorrarLineasMedicion::redo()
 /*************INSERTAR LINEA MEDICION/CERTIFICACION******************/
 UndoInsertarLineaMedicion::UndoInsertarLineaMedicion(const QString& nombretabla, const QString& codpadre, const QString& codhijo,
                                                      const int num_filas, const int pos, int fase, QVariant descripcion):
-    tabla(nombretabla),codigopadre(codpadre),codigohijo(codhijo), numFilas(num_filas), posicion(pos), num_cert(fase)
+    UndoEditarMedicion(nombretabla,codpadre,codhijo,QVariant(),QVariant(),QString::number(pos),-1,fase, descripcion),m_numFilas(num_filas)
 {
     qDebug()<<descripcion;
 }
@@ -94,29 +102,19 @@ UndoInsertarLineaMedicion::UndoInsertarLineaMedicion(const QString& nombretabla,
 void UndoInsertarLineaMedicion::undo()
 {
     //en este caso no me interesa guardar las lineas borradas, porque la accion es la contraria al insertado, no un borrado directo
-    QString cadenaborrarfilas = "SELECT borrar_lineas_medcert('"+tabla+"','"+cadenaid+"','" + QString::number(num_cert)+ "','f','t')";
+    QString cadenaborrarfilas = "SELECT borrar_lineas_medcert('"+m_tabla+"','"+m_cadenaid+"','" + QString::number(m_num_cert)+ "','f','t')";
     qDebug()<<cadenaborrarfilas;
-    consulta.exec(cadenaborrarfilas);
+    m_consulta.exec(cadenaborrarfilas);
 }
 
 void UndoInsertarLineaMedicion::redo()
 {
-    QString cadenainsertar = "SELECT insertar_lineas_medcert('"+tabla+"','"+codigopadre+"','"+codigohijo+"','"+QString::number(numFilas)+"','"+
-            QString::number(posicion)+"','"+QString::number(num_cert)+"')";
+    QString cadenainsertar = "SELECT insertar_lineas_medcert('"+m_tabla+"','"+m_codigopadre+"','"+m_codigohijo+"','"+QString::number(m_numFilas)+"','"+
+            m_posicion+"','"+QString::number(m_num_cert)+"')";
     qDebug()<<"cadena insertar"<<cadenainsertar;
-    consulta.exec(cadenainsertar);
-    //ahora preparo el array de ids a borrar para la orden redo. En este caso será siempre un array de un solo elemento, ya que la insercion se hace de uno en uno
-    QString cadenaconsultarid = "SELECT * FROM id_por_posicion('" + tabla + "','" + codigopadre + "','" + codigohijo + "','"
-            + QString::number(posicion) + "','" + QString::number(num_cert)+ "')";
-    //qDebug()<<"CAdena ID "<<cadenaconsultarid;
-    consulta.exec(cadenaconsultarid);
-    cadenaid.clear();
-    cadenaid.append("{");
-    while (consulta.next())
-    {
-        cadenaid.append(consulta.value(0).toString());
-    }
-    cadenaid.append("}");
+    m_consulta.exec(cadenainsertar);
+    //ahora preparo el array de ids a borrar para la orden redo. En este caso será siempre un array de un solo elemento, ya que la insercion se hace de uno en uno   
+    m_cadenaid = ObtenerArrayIdPorPosicion();
 }
 
 

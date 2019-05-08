@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DialogoOpcionesPagina</class>
+ <widget class="QDialog" name="DialogoOpcionesPagina">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>504</width>
+    <height>276</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Opciones de página</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QLabel" name="labelOpcionesPagina">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Opciones de página:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_2">
+         <property name="minimumSize">
+          <size>
+           <width>350</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="labelTamanno">
+         <property name="text">
+          <string>Tamaño:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboTamanno">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <item>
+          <property name="text">
+           <string>A4</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>A3</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>13</width>
+           <height>34</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxOrientacion">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Orientación:</string>
+         </property>
+         <widget class="QRadioButton" name="radioButton_5">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>0</y>
+            <width>90</width>
+            <height>22</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Horizontal</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="radioButton_6">
+          <property name="geometry">
+           <rect>
+            <x>100</x>
+            <y>0</y>
+            <width>73</width>
+            <height>22</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Vertical</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+         <zorder>radioButton_5</zorder>
+         <zorder>radioButton_6</zorder>
+         <zorder></zorder>
+         <zorder></zorder>
+         <zorder></zorder>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QLabel" name="labelEncabezado">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Encabezado:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="minimumSize">
+          <size>
+           <width>400</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBoxEncabezado">
+       <property name="title">
+        <string/>
+       </property>
+       <widget class="QRadioButton" name="radioButtonEncabezadoDatos">
+        <property name="geometry">
+         <rect>
+          <x>11</x>
+          <y>1</y>
+          <width>134</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Datos de proyecto</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radioButtonEncabezadoNo">
+        <property name="geometry">
+         <rect>
+          <x>151</x>
+          <y>1</y>
+          <width>48</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>No</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radioButtonEncabezadoDefinir">
+        <property name="geometry">
+         <rect>
+          <x>205</x>
+          <y>1</y>
+          <width>70</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Definir</string>
+        </property>
+       </widget>
+       <zorder>radioButtonEncabezadoDatos</zorder>
+       <zorder>radioButtonEncabezadoNo</zorder>
+       <zorder>radioButtonEncabezadoDefinir</zorder>
+       <zorder></zorder>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <item>
+        <widget class="QLabel" name="labelPie">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Pie:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_3">
+         <property name="minimumSize">
+          <size>
+           <width>450</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBoxFecha">
+       <property name="font">
+        <font>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="title">
+        <string>Fecha:</string>
+       </property>
+       <widget class="QRadioButton" name="radioButtonFechaHoy">
+        <property name="geometry">
+         <rect>
+          <x>51</x>
+          <y>3</y>
+          <width>55</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Hoy</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radioButtonFechaNo">
+        <property name="geometry">
+         <rect>
+          <x>112</x>
+          <y>3</y>
+          <width>48</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>No</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radioButtonFechaDefinir">
+        <property name="geometry">
+         <rect>
+          <x>166</x>
+          <y>3</y>
+          <width>70</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Definir</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonFechaPosicion">
+        <property name="geometry">
+         <rect>
+          <x>242</x>
+          <y>1</y>
+          <width>85</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Posición</string>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBoxNumeracion">
+       <property name="title">
+        <string>Numeración:</string>
+       </property>
+       <widget class="QRadioButton" name="radioButtonNumeracionNo">
+        <property name="geometry">
+         <rect>
+          <x>138</x>
+          <y>3</y>
+          <width>48</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>No</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonNumeracionPosicion">
+        <property name="geometry">
+         <rect>
+          <x>192</x>
+          <y>1</y>
+          <width>85</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Posición</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radioButtonNumeracionSi">
+        <property name="geometry">
+         <rect>
+          <x>91</x>
+          <y>3</y>
+          <width>41</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Si</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <item>
+        <widget class="QDialogButtonBox" name="buttonBox">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="standardButtons">
+          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>DialogoOpcionesPagina</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>DialogoOpcionesPagina</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

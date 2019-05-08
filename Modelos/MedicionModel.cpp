@@ -2,35 +2,36 @@
 #include "consultas.h"
 #include "../defs.h"
 #include "../iconos.h"
+#include "./miundostack.h"
 #include "../Undo/undoeditarmedicion.h"
 
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
 #include <QDebug>
 
-MedicionModel::MedicionModel(const QString &tabla, const QString &codigopadre, const QString &codigohijo, int fase, QUndoStack *p, QObject *parent):
-    num_cert(fase), ModeloBase(tabla, codigopadre, codigohijo, p, parent)
+MedicionModel::MedicionModel(const QString &tabla, const QStringList &ruta, int fase, MiUndoStack *p, QObject *parent):
+    num_cert(fase), ModeloBase(tabla, ruta, p, parent)
 {    
     if (num_cert == 0)
     {
-        LeyendasCabecera.append(QObject::tr("Fase\n"));
+        m_LeyendasCabecera.append(QObject::tr("Fase\n"));
     }
     else
     {
-        LeyendasCabecera.append(QObject::tr("Certificación\n"));
+        m_LeyendasCabecera.append(QObject::tr("Certificación\n"));
     }
-    LeyendasCabecera.append(QObject::tr("Comentario\n"));
-    LeyendasCabecera.append(QObject::tr("Nº Uds\n"));
-    LeyendasCabecera.append(QObject::tr("Longitud\n"));
-    LeyendasCabecera.append(QObject::tr("Anchura\n"));
-    LeyendasCabecera.append(QObject::tr("Altura\n"));
-    LeyendasCabecera.append(QObject::tr("Fórmula\n"));
-    LeyendasCabecera.append(QObject::tr("Parcial\n"));
-    LeyendasCabecera.append(QObject::tr("SubTotal\n"));
-    LeyendasCabecera.append(QObject::tr("Tipo\n"));
-    LeyendasCabecera.append(QObject::tr("Id\n"));
-    LeyendasCabecera.append(QObject::tr("Posicion\n"));
-    NUM_COLUMNAS = LeyendasCabecera.size();
+    m_LeyendasCabecera.append(QObject::tr("Comentario\n"));
+    m_LeyendasCabecera.append(QObject::tr("Nº Uds\n"));
+    m_LeyendasCabecera.append(QObject::tr("Longitud\n"));
+    m_LeyendasCabecera.append(QObject::tr("Anchura\n"));
+    m_LeyendasCabecera.append(QObject::tr("Altura\n"));
+    m_LeyendasCabecera.append(QObject::tr("Fórmula\n"));
+    m_LeyendasCabecera.append(QObject::tr("Parcial\n"));
+    m_LeyendasCabecera.append(QObject::tr("SubTotal\n"));
+    m_LeyendasCabecera.append(QObject::tr("Tipo\n"));
+    m_LeyendasCabecera.append(QObject::tr("Id\n"));
+    m_LeyendasCabecera.append(QObject::tr("Posicion\n"));
+    NUM_COLUMNAS = m_LeyendasCabecera.size();
     certif_actual = 0;
     //ActualizarDatos(codigopadre,codigohijo);
 }
@@ -42,9 +43,9 @@ MedicionModel::~MedicionModel()
 
 bool MedicionModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    qDebug()<<"Set data mediciones en "<<index.row()<<" con datos de "<<datos.size();
+    qDebug()<<"Set data mediciones en "<<index.row()<<" con datos de "<<m_datos.size();
     //cuando estoy en una fila extra (la ultima o cuando no hay medicion)
-    if (index.row() == datos.size()-1)
+    if (index.row() == m_datos.size()-1)
     {
         QString descripcion ="Añado fila extra y edito";
         qDebug()<<descripcion;
@@ -52,10 +53,10 @@ bool MedicionModel::setData(const QModelIndex &index, const QVariant &value, int
     }
     if (index.isValid() && (role == Qt::EditRole /*|| role == Qt::DisplayRole*/) && value.toString()!=index.data().toString())
     {
-        QString descripcion ="Cambio el valor de "+ index.data().toString()+" a "+value.toString()+" en la linea: "+datos.at(index.row()+1).at(tipoColumnaTMedCert::ID).toString();
+        QString descripcion ="Cambio el valor de "+ index.data().toString()+" a "+value.toString()+" en la linea: "+m_datos.at(index.row()+1).at(tipoColumnaTMedCert::ID).toString();
         qDebug()<<descripcion;
-        pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,index.data(),value,
-         datos.at(index.row()+1).at(tipoColumnaTMedCert::POSICION).toString(),index.column(), num_cert, QVariant(descripcion)));
+        m_pila->Push(m_ruta, new UndoEditarMedicion(m_tabla,m_codigopadre,m_codigohijo,index.data(),value,
+         m_datos.at(index.row()+1).at(tipoColumnaTMedCert::POSICION).toString(),index.column(), num_cert, QVariant(descripcion)));
         return true;
     }    
     return false;
@@ -64,19 +65,19 @@ bool MedicionModel::setData(const QModelIndex &index, const QVariant &value, int
 void MedicionModel::PrepararCabecera(/*QList<QList<QVariant> > &datos*/)
 {    
     QList<QVariant>cabecera;
-    for (int i=0;i<LeyendasCabecera.size();i++)
+    for (int i=0;i<m_LeyendasCabecera.size();i++)
     {
         //qDebug()<<"cabecera: "<<static_cast<QVariant>(LeyendasCabecera[i]);
         if (i == tipoColumnaTMedCert::PARCIAL)
         {
-            QString SubT = LeyendasCabecera[i] + QString::number(subtotal,'f',2);
+            QString SubT = m_LeyendasCabecera[i] + QString::number(subtotal,'f',2);
             cabecera.append(static_cast<QVariant>(SubT));
             ++i;
             //qDebug()<<"El numero es: "<<QString::number(subtotal,'f',2);
         }
-        cabecera.append(static_cast<QVariant>(LeyendasCabecera[i]));
+        cabecera.append(static_cast<QVariant>(m_LeyendasCabecera[i]));
     }
-    datos.prepend(cabecera);
+    m_datos.prepend(cabecera);
 }
 
 void MedicionModel::Copiar(const QList<int>& filas)
@@ -104,21 +105,21 @@ void MedicionModel::Certificar(const QList<int> &filas, QString num_cert)
        }
     }
     indices.append("}");
-    pila->push(new UndoCertificarLineaMedicion(tabla,codigopadre,codigohijo,indices,num_cert,QVariant()));    
+    m_pila->push(new UndoCertificarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,indices,num_cert,QVariant()));
 }
 
 void MedicionModel::BorrarFilas(const QList<int>& filas)
 {
-    qDebug()<<"Borrar filas medicion"<<datos.size()<<"-"<<datos.at(0).size();
+    qDebug()<<"Borrar filas medicion"<<m_datos.size()<<"-"<<m_datos.at(0).size();
     QList<QString>filasBorrar;
     foreach (const int& i, filas)
     {        
-        filasBorrar.append(datos.at(i+1).at(tipoColumnaTMedCert::ID).toString());
+        filasBorrar.append(m_datos.at(i+1).at(tipoColumnaTMedCert::ID).toString());
         //qDebug()<<"Id a borrar: "<<filasBorrar.at(i+1);
     }
     QString desc="Undo borrar lineas medicion";
     QVariant V(desc);
-    pila->push(new UndoBorrarLineasMedicion(tabla,filasBorrar,num_cert,V));
+    m_pila->push(new UndoBorrarLineasMedicion(m_tabla,filasBorrar,num_cert,V));
 }
 
 void MedicionModel::InsertarFila(int fila)
@@ -126,7 +127,7 @@ void MedicionModel::InsertarFila(int fila)
     QString desc="Insertar linea medicion en fila: "+fila;
     qDebug()<<desc;
     QVariant V(desc);
-    pila->push(new UndoInsertarLineaMedicion(tabla,codigopadre,codigohijo,1,fila,num_cert, V));
+    m_pila->Push(m_ruta,new UndoInsertarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,1,fila,num_cert, V));
 }
 
 void MedicionModel::CambiarTipoLineaMedicion(int fila, int columna, QVariant tipo)
@@ -149,44 +150,45 @@ void MedicionModel::CambiarNumeroCertificacion(int numcert)
     num_cert = numcert;
 }
 
-void MedicionModel::ActualizarDatos(QString padre, QString hijo)
+void MedicionModel::ActualizarDatos(const QStringList &ruta)
 {
-    hayFilaVacia = false;
-    datos.clear();
-    codigopadre=padre;
-    codigohijo=hijo;
+    m_hayFilaVacia = false;
+    m_datos.clear();
+    m_ruta = ruta;
+    m_codigopadre=ruta.at(ruta.size()-2);
+    m_codigohijo=ruta.at(ruta.size()-1);
     subtotal = 0;
-    QString cadena_consulta = "SELECT * FROM ver_medcert('"+tabla+"','"+ codigopadre + "','"+ codigohijo+"','"+QString::number(num_cert)+"')";
+    QString cadena_consulta = "SELECT * FROM ver_medcert('"+m_tabla+"','"+ m_codigopadre + "','"+ m_codigohijo+"','"+QString::number(num_cert)+"')";
     qDebug()<<cadena_consulta;
-    consulta.exec(cadena_consulta);
+    m_consulta.exec(cadena_consulta);
     QList<QVariant> lineaDatos;
-    while (consulta.next())
+    while (m_consulta.next())
     {
         for (int i=0;i<NUM_COLUMNAS;i++)
         {
             //qDebug()<<"CONSULTA.VALUE["<<i<<"] "<<consulta.value(i);
-            if (consulta.value(i).type()==QVariant::Double)
+            if (m_consulta.value(i).type()==QVariant::Double)
             {
-                float numero = consulta.value(i).toDouble();
+                float numero = m_consulta.value(i).toDouble();
                 QString numeroletra = QString::number(numero, 'f', 2);
                 lineaDatos.append(static_cast<QVariant>(numeroletra));
             }
             else
             {
-                lineaDatos.append(consulta.value(i));
+                lineaDatos.append(m_consulta.value(i));
             }
             if (i == tipoColumnaTMedCert::PARCIAL)
             {
-                subtotal += consulta.value(i).toFloat();
+                subtotal += m_consulta.value(i).toFloat();
             }
         }
-        datos.append(lineaDatos);
+        m_datos.append(lineaDatos);
         lineaDatos.clear();        
     }
     PrepararCabecera(/*datos*/);
-    if (datos.size()<=1)//añado una fila extra para poder insertar hijos en caso de hojas
+    if (m_datos.size()<=1)//añado una fila extra para poder insertar hijos en caso de hojas
     {
-        hayFilaVacia = true;
-        filavacia=0;
+        m_hayFilaVacia = true;
+        m_filavacia=0;
     }
 }

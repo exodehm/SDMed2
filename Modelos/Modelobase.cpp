@@ -8,11 +8,13 @@
 #include <QtSql/QSqlError>
 #include <QDebug>
 
-ModeloBase::ModeloBase(const QString &tabla, const QString &codigopadre, const QString &codigohijo, QUndoStack *p, QObject *parent):
-    tabla(tabla), codigopadre(codigopadre),codigohijo(codigohijo),consulta(codigopadre), pila(p), QSqlQueryModel(parent)
+ModeloBase::ModeloBase(const QString &tabla, const QStringList &ruta, MiUndoStack *p, QObject *parent):
+    m_tabla(tabla), m_ruta(ruta), m_pila(p), QSqlQueryModel(parent)
 {
-    hayFilaVacia=false;
-    naturalezapadre = (int)Naturaleza::CAPITULO;
+    m_codigopadre = ruta.at(ruta.size()-2);
+    m_codigohijo = ruta.at(ruta.size()-1);
+    m_hayFilaVacia=false;
+    m_naturalezapadre = (int)Naturaleza::CAPITULO;
 }
 
 ModeloBase::~ModeloBase(){}
@@ -30,19 +32,19 @@ bool ModeloBase::esColumnaNumerica(int columna) const
 
 void ModeloBase::QuitarIndicadorFilaVacia()
 {
-    hayFilaVacia=false;
+    m_hayFilaVacia=false;
 }
 
 int ModeloBase::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    if (hayFilaVacia)
+    if (m_hayFilaVacia)
     {
-        return datos.size();
+        return m_datos.size();
     }
     else
     {
-        return datos.size()-1;
+        return m_datos.size()-1;
     }
 }
 
@@ -58,9 +60,9 @@ QVariant ModeloBase::headerData(int section, Qt::Orientation orientation, int ro
     {
         if (role == Qt::DisplayRole)
         {
-            if (datos.size()>=1)
+            if (m_datos.size()>=1)
             {
-                return datos.at(0).at(section);
+                return m_datos.at(0).at(section);
             }
         }
     }
@@ -121,20 +123,20 @@ QVariant ModeloBase::data(const QModelIndex &index, int role) const
     return QVariant;*/
     if (!index.isValid()) return QVariant();
     QModelIndex indice = index;
-    if (hayFilaVacia)
+    if (m_hayFilaVacia)
     {
-        if (index.row()>=filavacia)
+        if (index.row()>=m_filavacia)
         {
             indice = this->index(index.row()-1,index.column());
         }
     }
-    if (hayFilaVacia && index.row()==filavacia)
+    if (m_hayFilaVacia && index.row()==m_filavacia)
     {
         return QVariant();
     }
     else if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
-        return datos.at(indice.row()+1).at(indice.column());
+        return m_datos.at(indice.row()+1).at(indice.column());
     }
     return QVariant();
 }
@@ -159,8 +161,8 @@ bool ModeloBase::insertRows(int row, int count, const QModelIndex &parent)
     if (!HayFilaVacia())
     {
         beginInsertRows(QModelIndex(), row, row+count-1);
-        hayFilaVacia = true;
-        filavacia = row;
+        m_hayFilaVacia = true;
+        m_filavacia = row;
         endInsertRows();
     }
     return true;
@@ -173,15 +175,15 @@ bool ModeloBase::removeRows(int filaInicial, int numFilas, const QModelIndex &pa
 
 bool ModeloBase::HayFilaVacia()
 {
-    return hayFilaVacia;
+    return m_hayFilaVacia;
 }
 
 int ModeloBase::FilaVacia()
 {
-    if (hayFilaVacia)
+    if (m_hayFilaVacia)
     {
-        qDebug()<<"Fila vacia en: "<<filavacia;
-        return filavacia;
+        qDebug()<<"Fila vacia en: "<<m_filavacia;
+        return m_filavacia;
     }
     else
     {

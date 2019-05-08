@@ -1,31 +1,18 @@
 #ifndef UNDOEDITARPRINCIPAL_H
 #define UNDOEDITARPRINCIPAL_H
 
-#include <QUndoCommand>
+#include "./undobase.h"
 #include <QVariant>
 #include <QSqlQuery>
 
 
-class UndoEditarPrincipal : public QUndoCommand
-{
-public:
-    UndoEditarPrincipal(QString tabla, QString cod_padre, QString cod_hijo,
-                        QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion);
-
-protected:
-    QSqlQuery consulta;
-    QVariant datoAntiguo, datoNuevo;
-    QString tabla, codigopadre, codigohijo;
-};
-
-
 /*************CODIGO**************/
 
-class UndoEditarCodigo : public UndoEditarPrincipal
+class UndoEditarCodigo : public UndoBase
 {
 public:
-    UndoEditarCodigo (QString tabla, QString cod_padre, QString cod_hijo,
-                       QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion);
+    UndoEditarCodigo (const QString& tabla, const QString& codigopadre, const QString& codigohijo, const QVariant& datoAntiguo,
+                      const QVariant& datoNuevo, const QVariant& descripcion);
 
     void undo();
     void redo();
@@ -34,11 +21,11 @@ public:
 
 /*************UNIDAD**************/
 
-class UndoEditarUnidad : public UndoEditarPrincipal
+class UndoEditarUnidad : public UndoBase
 {
 public:
-    UndoEditarUnidad (QString tabla, QString cod_padre, QString cod_hijo,
-                       QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion);
+    UndoEditarUnidad (const QString& tabla, const QString& codigopadre, const QString& codigohijo, const QVariant& datoAntiguo,
+                      const QVariant& datoNuevo, const QVariant& descripcion);
 
     void undo();
     void redo();
@@ -47,11 +34,11 @@ public:
 
 /*************RESUMEN**************/
 
-class UndoEditarResumen : public UndoEditarPrincipal
+class UndoEditarResumen : public UndoBase
 {
 public:
-    UndoEditarResumen (QString tabla, QString cod_padre, QString cod_hijo,
-                       QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion);
+    UndoEditarResumen (const QString& tabla, const QString& codigopadre, const QString& codigohijo, const QVariant& datoAntiguo,
+                       const QVariant& datoNuevo, const QVariant& descripcion);
 
     void undo();
     void redo();
@@ -60,11 +47,11 @@ public:
 
 /*************NATURALEZA**************/
 
-class UndoEditarNaturaleza : public UndoEditarPrincipal
+class UndoEditarNaturaleza : public UndoBase
 {
 public:
-    UndoEditarNaturaleza (QString tabla, QString cod_padre, QString cod_hijo,
-                       QVariant dato_antiguo, QVariant dato_nuevo, QVariant descripcion);
+    UndoEditarNaturaleza (const QString& tabla, const QString& codigopadre, const QString& codigohijo, const QVariant& datoAntiguo,
+                          const QVariant& datoNuevo, const QVariant& descripcion);
 
     void undo();
     void redo();
@@ -72,29 +59,29 @@ public:
 
 /*************CANTIDAD**************/
 
-class UndoEditarCantidad : public UndoEditarPrincipal
+class UndoEditarCantidad : public UndoBase
 {
 public:
-    UndoEditarCantidad (QString tabla, QString cod_padre, QString cod_hijo,
-                       QVariant dato_antiguo, QVariant dato_nuevo, QString tipo_cantidad, QVariant descripcion);
+    UndoEditarCantidad (const QString& tabla, const QString& codigopadre, const QString& codigohijo, const QVariant& datoAntiguo,
+                        const QVariant& datoNuevo, const QString& tipo_cantidad, const QVariant& descripcion);
 
     void undo();
     void redo();
 
 protected:
 
-    QString columnaCantidad;//canpres o cancert
-    QList<QList<QVariant>>lineasMedicion;
+    QString m_columnaCantidad;//canpres o cancert
+    QList<QList<QVariant>>m_lineasMedicion;
 };
 
 
 /*************PRECIO**************/
 
-class UndoEditarPrecio : public UndoEditarPrincipal
+class UndoEditarPrecio : public UndoBase
 {
 public:
-    UndoEditarPrecio (QString tabla, QString cod_padre, QString cod_hijo,
-                       QVariant dato_antiguo, QVariant dato_nuevo, int opc, QVariant descripcion);
+    UndoEditarPrecio (const QString& tabla, const QString& codigopadre, const QString& codigohijo, const QVariant& datoAntiguo,
+                      const QVariant& datoNuevo, int opc, const QVariant& descripcion);
 
     void undo();
     void redo();
@@ -106,7 +93,7 @@ private:
 
 
 /***************TEXTO********************/
-class UndoEditarTexto : public UndoEditarPrincipal
+class UndoEditarTexto : public UndoBase
 {
 public:
     UndoEditarTexto (const QString& tabla, const QString& cod_padre, const QString& cod_hijo, const QString& _textoantiguo, const QString& _textonuevo,

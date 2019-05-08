@@ -11,7 +11,7 @@ class MedicionModel : public ModeloBase
 
 public:
 
-    MedicionModel(const QString &tabla, const QString& codigopadre, const QString &codigohijo, int fase,  QUndoStack *p, QObject* parent=nullptr);
+    MedicionModel(const QString &tabla, const QStringList& ruta, int fase,  MiUndoStack *p, QObject* parent=nullptr);
     ~MedicionModel();
 
     bool setData(const QModelIndex & index, const QVariant& value, int role);
@@ -22,7 +22,7 @@ public:
     void Certificar(const QList<int> &filas,QString num_cert) override;
     void BorrarFilas(const QList<int> &filas) override;
     void InsertarFila(int fila) override;
-    void ActualizarDatos(QString padre, QString hijo) override;
+    void ActualizarDatos(const QStringList& ruta) override;
 
     void CambiarTipoLineaMedicion(int fila, int columna, QVariant tipo);
     void CambiaCertificacionActual(int cert);

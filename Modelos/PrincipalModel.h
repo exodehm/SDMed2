@@ -8,7 +8,7 @@ class PrincipalModel : public ModeloBase
     Q_OBJECT
 public:
 
-    PrincipalModel(const QString &tabla, const QString& codigopadre, const QString &codigohijo, QUndoStack *p, QObject* parent=nullptr);
+    PrincipalModel(const QString &tabla, const QStringList& ruta, MiUndoStack *p, QObject* parent=nullptr);
     ~PrincipalModel();
 
     bool setData(const QModelIndex & index, const QVariant& value, int role);
@@ -19,7 +19,7 @@ public:
 
     void BorrarFilas(const QList<int>&filas) override;
     void InsertarFila(int fila) override;
-    void ActualizarDatos(QString padre, QString hijo);
+    void ActualizarDatos(const QStringList& ruta);
 
     int LeeColor(int fila, int columna);
 
