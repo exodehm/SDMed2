@@ -1,2 +1,2 @@
 # SDMed2
-Pograma de Mediciones y Presupuestos basado en Qt y PostgreSQL
+Pograma de Mediciones y Presupuestos basado en PostgreSQL, Qt y Python
