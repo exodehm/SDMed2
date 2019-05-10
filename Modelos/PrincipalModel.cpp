@@ -48,34 +48,34 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
             if (index.data().isNull())//cuando este en una fila vacia se insertara una nueva partida
             {
                 QString descripcion = "Insertar nueva partida con el codigo: ";
-                m_pila->Push(m_ruta,new UndoInsertarPartidas(m_tabla, codpadre, value, index.row(),descripcion));
+                m_pila->Push(m_ruta,0,new UndoInsertarPartidas(m_tabla, codpadre, value, index.row(),descripcion));
                 return true;
             }
             else
             {
                 QString descripcion = "Editar codigo con el codigo: ";
-                m_pila->Push(m_ruta,new UndoEditarCodigo(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
+                m_pila->Push(m_ruta,0,new UndoEditarCodigo(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
                 return true;
             }
             break;
         case tipoColumnaTPrincipal::NATURALEZA:
         {
             QString descripcion = "Editar resumen con el codigo: ";
-            m_pila->Push(m_ruta,new UndoEditarNaturaleza(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
+            m_pila->Push(m_ruta,0,new UndoEditarNaturaleza(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
         }
             break;
         case tipoColumnaTPrincipal::UD:
         {
             QString descripcion = "Editar ud con el codigo: ";
-            m_pila->Push(m_ruta,new UndoEditarUnidad(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
+            m_pila->Push(m_ruta,0,new UndoEditarUnidad(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
         }
             break;
         case tipoColumnaTPrincipal::RESUMEN:
         {
             QString descripcion = "Editar resumen con el codigo: ";            
-            m_pila->Push(m_ruta,new UndoEditarResumen(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
+            m_pila->Push(m_ruta,0,new UndoEditarResumen(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
         }
             break;
@@ -108,7 +108,7 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
                     return false;
                 }
             }
-            m_pila->Push(m_ruta,new UndoEditarCantidad(m_tabla, codpadre, codhijo, index.data(), value, tipoCantidad, descripcion));
+            m_pila->Push(m_ruta,0,new UndoEditarCantidad(m_tabla, codpadre, codhijo, index.data(), value, tipoCantidad, descripcion));
             return true;
         }
             break;
@@ -131,12 +131,12 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
                 }
                 else
                 {           
-                    m_pila->Push(m_ruta,new UndoEditarPrecio(m_tabla, codpadre, codhijo, index.data(), value, d->Respuesta(), descripcion));
+                    m_pila->Push(m_ruta,0,new UndoEditarPrecio(m_tabla, codpadre, codhijo, index.data(), value, d->Respuesta(), descripcion));
                 }
             }
             else
             {
-                m_pila->Push(m_ruta,new UndoEditarPrecio(m_tabla, codpadre, codhijo, index.data(), value, precio::MODIFICAR, descripcion));
+                m_pila->Push(m_ruta,0,new UndoEditarPrecio(m_tabla, codpadre, codhijo, index.data(), value, precio::MODIFICAR, descripcion));
             }
             return true;
         }
@@ -202,7 +202,7 @@ void PrincipalModel::BorrarFilas(const QList<int> &filas)
         //removeRows(i,1,QModelIndex());
         partidasborrar.append(m_datos.at(i+1).at(0).toString());//añado 1 por la cabecera
     }
-    m_pila->push(new UndoBorrarPartidas(m_tabla,partidasborrar,QVariant()));
+    m_pila->Push(m_ruta,0,new UndoBorrarPartidas(m_tabla,partidasborrar,QVariant()));
 }
 
 void PrincipalModel::InsertarFila(int fila)

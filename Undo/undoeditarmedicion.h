@@ -7,7 +7,7 @@
 #include <QVariant>
 #include <QSqlQuery>
 
-class UndoEditarMedicion : public UndoBase
+class UndoEditarMedicion : public UndoMedicionBase
 {
 public:
     UndoEditarMedicion(const QString& nombretabla, const QString& id_padre, const QString& id_hijo,
@@ -15,37 +15,32 @@ public:
                        const int& nombrecolumna, const int& num_cert, const QVariant& descripcion);
 
     void undo();
-    void redo();
-    QString ObtenerIdPorPosicion();
-    QString ObtenerArrayIdPorPosicion();
+    void redo();    
 
 protected:
-    QString m_posicion;
-    int m_columna;
-    int m_num_cert;
+    QVariant m_datoAntiguo, m_datoNuevo;
+    int m_columna;    
 };
 
 /*************BORRAR LINEA MEDICION******************/
-class UndoBorrarLineasMedicion : public QUndoCommand
+class UndoBorrarLineasMedicion : public UndoMedicionBase
 {
 public:
-    UndoBorrarLineasMedicion(const QString& nombretabla,const QList<QString>&idsborrar,int fase,QVariant descripcion);
+    UndoBorrarLineasMedicion(const QString& nombretabla,const QString& id_padre,const QString& id_hijo,
+                             const QList<int>&lineas,const int& num_cert,const QVariant& descripcion);
 
     void undo();
     void redo();
 
-private:    
-    QString tabla, cadenaborrar;
-    QList<QString>ids;
-    QSqlQuery consulta;
-    int num_certif;
+private:
+    QString m_array_lineas_borrar;
 };
 
 /*************INSERTAR LINEA MEDICION******************/
-class UndoInsertarLineaMedicion : public UndoEditarMedicion
+class UndoInsertarLineaMedicion : public UndoMedicionBase
 {
 public:
-    UndoInsertarLineaMedicion(const QString& nombretabla,const QString& codpadre, const QString& codhijo, const int num_filas, const int pos,
+    UndoInsertarLineaMedicion(const QString& nombretabla,const QString& id_padre, const QString& id_hijo, const int num_filas, const QString& pos,
                               int fase, QVariant descripcion);
 
     void undo();

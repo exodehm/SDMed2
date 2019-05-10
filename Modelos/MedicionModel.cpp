@@ -32,8 +32,7 @@ MedicionModel::MedicionModel(const QString &tabla, const QStringList &ruta, int 
     m_LeyendasCabecera.append(QObject::tr("Id\n"));
     m_LeyendasCabecera.append(QObject::tr("Posicion\n"));
     NUM_COLUMNAS = m_LeyendasCabecera.size();
-    certif_actual = 0;
-    //ActualizarDatos(codigopadre,codigohijo);
+    certif_actual = 0;    
 }
 
 MedicionModel::~MedicionModel()
@@ -55,7 +54,7 @@ bool MedicionModel::setData(const QModelIndex &index, const QVariant &value, int
     {
         QString descripcion ="Cambio el valor de "+ index.data().toString()+" a "+value.toString()+" en la linea: "+m_datos.at(index.row()+1).at(tipoColumnaTMedCert::ID).toString();
         qDebug()<<descripcion;
-        m_pila->Push(m_ruta, new UndoEditarMedicion(m_tabla,m_codigopadre,m_codigohijo,index.data(),value,
+        m_pila->Push(m_ruta, num_cert, new UndoEditarMedicion(m_tabla,m_codigopadre,m_codigohijo,index.data(),value,
          m_datos.at(index.row()+1).at(tipoColumnaTMedCert::POSICION).toString(),index.column(), num_cert, QVariant(descripcion)));
         return true;
     }    
@@ -111,15 +110,15 @@ void MedicionModel::Certificar(const QList<int> &filas, QString num_cert)
 void MedicionModel::BorrarFilas(const QList<int>& filas)
 {
     qDebug()<<"Borrar filas medicion"<<m_datos.size()<<"-"<<m_datos.at(0).size();
-    QList<QString>filasBorrar;
+    /*QList<QString>filasBorrar;
     foreach (const int& i, filas)
     {        
         filasBorrar.append(m_datos.at(i+1).at(tipoColumnaTMedCert::ID).toString());
         //qDebug()<<"Id a borrar: "<<filasBorrar.at(i+1);
-    }
+    }*/
     QString desc="Undo borrar lineas medicion";
     QVariant V(desc);
-    m_pila->push(new UndoBorrarLineasMedicion(m_tabla,filasBorrar,num_cert,V));
+    m_pila->push(new UndoBorrarLineasMedicion(m_tabla,m_codigopadre,m_codigohijo,filas,num_cert,V));
 }
 
 void MedicionModel::InsertarFila(int fila)
@@ -127,7 +126,7 @@ void MedicionModel::InsertarFila(int fila)
     QString desc="Insertar linea medicion en fila: "+fila;
     qDebug()<<desc;
     QVariant V(desc);
-    m_pila->Push(m_ruta,new UndoInsertarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,1,fila,num_cert, V));
+    m_pila->Push(m_ruta,num_cert, new UndoInsertarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,1,QString::number(fila),num_cert, V));
 }
 
 void MedicionModel::CambiarTipoLineaMedicion(int fila, int columna, QVariant tipo)

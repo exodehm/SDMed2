@@ -42,6 +42,7 @@ Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resum
     codigopadre ="";
     codigohijo = cod;
     ruta<<codigopadre<<codigohijo;
+    m_tablamedcertactiva=0;
     pila = new MiUndoStack(this);
     GenerarUI();
 }
@@ -74,8 +75,8 @@ void Instancia::GenerarUI()
     separadorTablas->addWidget(tablaPrincipal);
 
     //tablas medicion y certificacion
-    separadorTablasMedicion = new QTabWidget;
-    separadorTablas->addWidget(separadorTablasMedicion);
+    separadorTablasMedCert = new QTabWidget;
+    separadorTablas->addWidget(separadorTablasMedCert);
     //Tabla Medicion
     InsertarTablaMedCert(0);//0 es la tabla de mediciones
     //Tablas de certificacion
@@ -91,8 +92,8 @@ void Instancia::GenerarUI()
     buton->setFlat(true);
     buton->setToolTip(tr("Añadir certificacion"));
     QObject::connect(buton,SIGNAL(clicked(bool)),this,SLOT(AdministrarCertificaciones()));
-    separadorTablasMedicion->addTab(buton,icono,"");
-    separadorTablas->addWidget(separadorTablasMedicion);
+    separadorTablasMedCert->addTab(buton,icono,"");
+    separadorTablas->addWidget(separadorTablasMedCert);
 
     //editor
     editor = new Editor;//(separadorTablas);
@@ -123,7 +124,7 @@ void Instancia::GenerarUI()
     QObject::connect(tablaPrincipal,SIGNAL(Copiar()),this,SLOT(Copiar()));
     QObject::connect(tablaPrincipal,SIGNAL(Pegar()),this,SLOT(Pegar()));
     //QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
-    //QObject::connect(separadorTablasMedicion,SIGNAL(currentChanged(int)),this,SLOT(CambiarEntreMedicionYCertificacion(int)));
+    QObject::connect(separadorTablasMedCert,SIGNAL(currentChanged(int)),this,SLOT(ActualizarTablaMedCertActiva(int)));
     QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(ActivarDesactivarUndoRedo(int)));
     QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
     QObject::connect(arbol,SIGNAL(clicked(QModelIndex)),this,SLOT(SincronizarArbolTablal()));
@@ -212,7 +213,7 @@ void Instancia::InsertarTablaMedCert(int num_certif)
     QObject::connect(tablaMC,SIGNAL(Copiar()),this,SLOT(Copiar()));
     QObject::connect(tablaMC,SIGNAL(Pegar()),this,SLOT(Pegar()));
     Listadotablasmedcert.append(tablaMC);
-    separadorTablasMedicion->insertTab(num_certif,tablaMC,tablaMC->objectName());
+    separadorTablasMedCert->insertTab(num_certif,tablaMC,tablaMC->objectName());
 }
 
 void Instancia::ExportarXLSS(QString nombreFichero)
@@ -392,20 +393,26 @@ void Instancia::TablaDeseleccionarTodo(QWidget* widgetactivo)
 
 void Instancia::Undo()
 {    
-    ruta = pila->LeeRuta();
+    MiUndoStack::POSICION pos = pila->LeePosicion();
+    ruta = pos.first;
+    m_tablamedcertactiva = pos.second;
     codigopadre = ruta.at(ruta.size()-2);
     codigohijo = ruta.at(ruta.size()-1);
+    separadorTablasMedCert->setCurrentIndex(m_tablamedcertactiva);
     pila->Undo();
-    pila->GuardarRuta(ruta);
+    pila->GuardarPosicion(ruta,m_tablamedcertactiva);
 }
 
 void Instancia::Redo()
 {
-    ruta = pila->LeeRuta();
+    MiUndoStack::POSICION pos = pila->LeePosicion();
+    ruta = pos.first;
+    m_tablamedcertactiva = pos.second;
     codigopadre = ruta.at(ruta.size()-2);
     codigohijo = ruta.at(ruta.size()-1);
+    separadorTablasMedCert->setCurrentIndex(m_tablamedcertactiva);
     pila->Redo();
-    pila->GuardarRuta(ruta);
+    pila->GuardarPosicion(ruta,m_tablamedcertactiva);
 }
 
 void Instancia::RefrescarVista()
@@ -434,7 +441,7 @@ void Instancia::RefrescarVista()
     //editor->Formatear();
     GuardarTextoPartidaInicial();    
     //tablaPrincipal->setCurrentIndex(indiceActual);
-    separadorTablasMedicion->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
+    separadorTablasMedCert->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
     //modeloArbol->ActualizarDatos(tabla);
     //modeloArbol->layoutChanged();
     //arbol->expandAll();
@@ -517,7 +524,7 @@ void Instancia::GuardarTextoPartida()
     {
         QString cadenaundo = ("Cambiar texto de partida a " + editor->LeeContenido());
         //qDebug()<<cadenaundo;
-        pila->Push(ruta, new UndoEditarTexto(tabla, codigopadre, codigohijo, textoPartidaInicial,editor->LeeContenidoConFormato(),QVariant(cadenaundo)));
+        pila->Push(ruta,m_tablamedcertactiva, new UndoEditarTexto(tabla, codigopadre, codigohijo, textoPartidaInicial,editor->LeeContenidoConFormato(),QVariant(cadenaundo)));
     }
 }
 
@@ -552,6 +559,11 @@ void Instancia::SincronizarArbolTablal()
         }
         RefrescarVista();
     }
+}
+
+void Instancia::ActualizarTablaMedCertActiva(int indice)
+{
+    m_tablamedcertactiva = indice;
 }
 
 void Instancia::CopiarMedicionTablaM()
@@ -620,7 +632,7 @@ void Instancia::BorrarCertificacion(QString fecha_certificacion)
     auto iterador = Listadotablasmedcert.begin();
     std::advance(iterador,num_certificacion);
     Listadotablasmedcert.erase(iterador);
-    separadorTablasMedicion->removeTab(num_certificacion);
+    separadorTablasMedCert->removeTab(num_certificacion);
     iterador = Listadotablasmedcert.begin();//lo llevo de nuevo al origen
     ++iterador;//ahora lo avanzo una unidad hasta la tabla de certificaciones
     int i = 1;
@@ -632,8 +644,8 @@ void Instancia::BorrarCertificacion(QString fecha_certificacion)
         {
             m->CambiarNumeroCertificacion(i);
         }
-        separadorTablasMedicion->removeTab(i);
-        separadorTablasMedicion->insertTab(i,*iterador,(*iterador)->objectName());
+        separadorTablasMedCert->removeTab(i);
+        separadorTablasMedCert->insertTab(i,*iterador,(*iterador)->objectName());
         i++;
         ++iterador;
     }   

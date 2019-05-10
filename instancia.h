@@ -65,6 +65,7 @@ public slots:
     void GuardarTextoPartidaInicial();
     void GuardarTextoPartida();
     void SincronizarArbolTablal();
+    void ActualizarTablaMedCertActiva(int indice);
 
 signals:
     void CopiarP();
@@ -86,7 +87,7 @@ private:
     QSplitter* separadorTablas;
 
     //tablas, editor y arbol
-    QTabWidget* separadorTablasMedicion;
+    QTabWidget* separadorTablasMedCert;
 
     TablaBase* tablaPrincipal;
     QList<TablaBase*>Listadotablasmedcert;
@@ -103,6 +104,7 @@ private:
     QString textoPartidaInicial;
 
     QStringList ruta, certActual;
+    int m_tablamedcertactiva;
 };
 
 #endif // INSTANCIA_H
