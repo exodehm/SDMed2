@@ -9,6 +9,9 @@ void DelegadoNumerosTablaMedCert::paint( QPainter *painter,const QStyleOptionVie
 {   
     if (index.isValid())
     {
+        QStyleOptionViewItem opt = option;
+        initStyleOption(&opt, index);
+
         if (index.column()==tipoColumnaTMedCert::PARCIAL)
         {
             painter->save();
@@ -24,13 +27,14 @@ void DelegadoNumerosTablaMedCert::paint( QPainter *painter,const QStyleOptionVie
             painter->save();
             painter->setPen(Qt::yellow);
             painter->setBrush(Qt::yellow);
-            if (index.data()!="")
+            //if (index.data()!="")
             {
                 painter->setBrush(Qt::cyan);
+                opt.font.setBold(true);
             }
-            painter->drawRect(option.rect);
+            painter->drawRect(opt.rect);
             painter->setPen(Qt::magenta);
-            painter->drawText(option.rect, Qt::AlignCenter, displayText(index.data(), QLocale::system()));
+            painter->drawText(opt.rect, Qt::AlignCenter, displayText(index.data(), QLocale::system()));
             painter->restore();
         }
         else

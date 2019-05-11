@@ -7,6 +7,7 @@ import sys
 import imp
 import os
 
+from openpyxl import Workbook
 from PyQt5 import QtCore, QtGui, QtWidgets, QtSql
 from DialogoOpcionesPagina import DialogoOpcionesPagina
 
@@ -17,13 +18,8 @@ class DialogoImprimir(QtWidgets.QDialog):
 		self.conexion = conexion
 		self.GeneraUI(plugins)
 		self.obra = obra
-		LTamannoPagina = ['A4','A3']
-		LOrientacion = ['Vertical','Horizontal']
-		LEncabezado = ['Datos de proyecto','No','Definir']
-		LFecha = ['Hoy','No','Definir']
-		LNumeracion = ['Si','No']
-		self.LDatosConfiguracion = [LTamannoPagina,LOrientacion,LEncabezado,LFecha,LNumeracion]
-		self.datosConfiguracionPagina={'TamannoPagina':LTamannoPagina[0],'Orientacion':LOrientacion[0],'Encabezado':LEncabezado[0],'Fecha':LFecha[0],'Numeracion':LNumeracion[0]}
+		self.wb = Workbook()
+		self.informe = self.wb.active
 		
 	def GeneraUI(self,plugins):
 		self.setObjectName("Dialog")
@@ -95,12 +91,13 @@ class DialogoImprimir(QtWidgets.QDialog):
 			if self.arrayRadioButtons[i].isChecked():
 				programa = self.plugins[i]
 				funcionImprimir = imp.load_module(MainModule, *programa["info"])
-				funcionImprimir.imprimir(self.conexion, self.obra, self.datosConfiguracionPagina)
+				funcionImprimir.imprimir(self.conexion, self.obra, self.wb)
 				
 	def ConfigurarPagina(self):
 		print ("Configurar pagina")
-		dialogo = DialogoOpcionesPagina(self.datosConfiguracionPagina)
-		dialogo.show()
+		dialogo = DialogoOpcionesPagina(self.informe)
+		dialogo.show()		
+		self.informe = dialogo.DatosConfPagina()
 		return dialogo.exec_()
 		
 		

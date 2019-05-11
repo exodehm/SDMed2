@@ -6,11 +6,10 @@ import datetime
 def run():
     print("Plugin para imprimir precios auxiliares de mano de obra, materiales y maquinaria")
     
-def imprimir(conexion, obra, datosconfiguracionpagina):
+def imprimir(conexion, obra, book):
 	print ("Imprimir " + obra)
 	consulta = QtSql.QSqlQuery("SELECT * FROM \"" + obra + "_Conceptos\" WHERE naturaleza = 2", conexion)
 	print (consulta.lastError().text())
-	print (datosconfiguracionpagina)
 	rec = consulta.record()
 	codigo = rec.indexOf("codigo")
 	resumen = rec.indexOf("resumen")
@@ -19,7 +18,7 @@ def imprimir(conexion, obra, datosconfiguracionpagina):
 	fecha = rec.indexOf("fecha")
 	preciomed = rec.indexOf("preciomed");
 	#abro una instancia de hoja de calculo	
-	book = Workbook()
+	#book = Workbook()
 	sheet = book.active
 	sheet.title = "Listado de Auxiliares"
 	sheet.sheet_properties.tabColor = "ff0000"

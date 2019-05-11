@@ -132,8 +132,8 @@ void MedicionModel::InsertarFila(int fila)
 void MedicionModel::CambiarTipoLineaMedicion(int fila, int columna, QVariant tipo)
 {
     QString desc = "Cambiar tipo de columna subtotal" ;
-    /*pila->push(new UndoEditarMedicion(tabla,codigopadre,codigohijo,datos.at(fila+1).at(columna+1),tipo,
-                                      datos.at(fila+1).at(tipoColumnaTMedCert::ID).toString(),columna, eTipoTabla, QVariant(desc)));*/
+    m_pila->Push(m_ruta,num_cert,new UndoEditarMedicion(m_tabla,m_codigopadre,m_codigohijo,m_datos.at(fila+1).at(columna+1),tipo,
+                                      m_datos.at(fila+1).at(tipoColumnaTMedCert::POSICION).toString(),columna, num_cert, QVariant(desc)));
 }
 
 void MedicionModel::CambiaCertificacionActual(int cert)

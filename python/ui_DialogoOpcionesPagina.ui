@@ -99,7 +99,7 @@
          <property name="title">
           <string>Orientación:</string>
          </property>
-         <widget class="QRadioButton" name="radioButton_5">
+         <widget class="QRadioButton" name="radioButtonOrientacionHorizontal">
           <property name="geometry">
            <rect>
             <x>200</x>
@@ -112,7 +112,7 @@
            <string>Horizontal</string>
           </property>
          </widget>
-         <widget class="QRadioButton" name="radioButton_6">
+         <widget class="QRadioButton" name="radioButtonOrientacionVertical">
           <property name="geometry">
            <rect>
             <x>100</x>
@@ -128,11 +128,8 @@
            <bool>true</bool>
           </property>
          </widget>
-         <zorder>radioButton_5</zorder>
-         <zorder>radioButton_6</zorder>
-         <zorder></zorder>
-         <zorder></zorder>
-         <zorder></zorder>
+         <zorder>radioButtonOrientacionVertical</zorder>
+         <zorder>radioButtonOrientacionHorizontal</zorder>
         </widget>
        </item>
       </layout>
@@ -214,10 +211,9 @@
          <string>Definir</string>
         </property>
        </widget>
-       <zorder>radioButtonEncabezadoDatos</zorder>
        <zorder>radioButtonEncabezadoNo</zorder>
        <zorder>radioButtonEncabezadoDefinir</zorder>
-       <zorder></zorder>
+       <zorder>radioButtonEncabezadoDatos</zorder>
       </widget>
      </item>
      <item>

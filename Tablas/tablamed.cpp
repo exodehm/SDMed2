@@ -87,10 +87,10 @@ void TablaMed::MostrarMenuTabla(QPoint pos)
 
 void TablaMed::CambiarTipoSubtotalOrigen()
 {
-    MedicionModel* M = qobject_cast<MedicionModel*>(this->model());
-    QVariant tipo = 2;
+    MedicionModel* M = qobject_cast<MedicionModel*>(this->model());    
     if (M)
     {
+        QVariant tipo = 2;
         M->CambiarTipoLineaMedicion(this->currentIndex().row(),this->currentIndex().column(),tipo);
     }
 }
