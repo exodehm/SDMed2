@@ -88,56 +88,34 @@ UndoEditarCantidad::UndoEditarCantidad(const QString &tabla, const QString &codi
                                          const QVariant &datoAntiguo, const QVariant &datoNuevo, const QString &tipo_cantidad, const QVariant &descripcion):
     UndoBase(tabla,codigopadre,codigohijo,datoAntiguo,datoNuevo,descripcion), m_columnaCantidad(tipo_cantidad)
 {
-    QString cadenaGuardarLineasMediciom = "SELECT * from ver_lineas_medicion('"+tabla+"','"+codigopadre+"','"+codigohijo+"');";
-    //qDebug()<<cadenaGuardarLineasMediciom;
-    m_consulta.exec(cadenaGuardarLineasMediciom);
-    QList<QVariant>linea;
-    while (m_consulta.next()) {
-        for (int i=0;i<6;i++)
-        {
-            //qDebug()<<consulta.value(i);
-            linea.append(m_consulta.value(i));
-        }
-        m_lineasMedicion.append(linea);
-        linea.clear();
-    }
 }
 
 void UndoEditarCantidad::undo()
 {
-    if (m_lineasMedicion.isEmpty())//si no hay medicion guardada pongo el antiguo valor
+    QString cadenaconsulta;
+    if (m_hayMedicion)
     {
-        qDebug()<<"Repongo la cantidad antigua";
-        QString cadenaconsulta = "SELECT modificar_cantidad('" +m_tabla+ "','" +m_codigopadre + "','" +m_codigohijo+ "','" + m_columnaCantidad +"','" + m_datoAntiguo.toString()+ "');";
+        cadenaconsulta = "SELECT restaurar_lineas_borradas('"+m_tabla+"');";
+    }
+    else
+    {
+        cadenaconsulta = "SELECT modificar_cantidad('" +m_tabla+ "','" +m_codigopadre + "','" +m_codigohijo+ "','" +
+                    m_columnaCantidad +"','t','"+ m_datoAntiguo.toString()+ "');";
         qDebug()<<cadenaconsulta;
-        m_consulta.exec(cadenaconsulta);
+
     }
-    else//si la hay, repongo la medicion
-    {
-        qDebug()<<"Repongo las lineas de medicion";
-        foreach (const QList<QVariant>&linea, m_lineasMedicion)
-        {
-            QString cadenainsertarlineasmedicion = "SELECT insertar_medicion('"+ m_tabla +"','"+ m_codigopadre +"','"+\
-                    m_codigohijo+"','"+linea.at(0).toString()+\
-                    "','"+ linea.at(1).toString()+\
-                    "','"+ linea.at(2).toString()+\
-                    "','"+ linea.at(3).toString()+\
-                    "','"+ linea.at(4).toString()+\
-                    "','"+ linea.at(5).toString()+"');";
-            qDebug()<<cadenainsertarlineasmedicion;
-            m_consulta.exec(cadenainsertarlineasmedicion);
-        }
-    }
+    m_consulta.exec(cadenaconsulta);
 }
 
 void UndoEditarCantidad::redo()
-{   
-    /*QString cadenaborrarlineasmedicion = "SELECT borrar_lineas_medcert('"+tabla+"','"+codigopadre+"','"+codigohijo+"');";
-    qDebug()<<"cadenaborrarlineasmedicion"<<cadenaborrarlineasmedicion;
-    consulta.exec(cadenaborrarlineasmedicion);*/
-    QString cadenaconsulta = "SELECT modificar_cantidad('" +m_tabla+ "','" +m_codigopadre + "','" +m_codigohijo+ "','" + m_columnaCantidad +"','t','" + m_datoNuevo.toString()+ "');";
-    qDebug()<<cadenaconsulta;
+{
+    QString cadenaconsulta = "SELECT modificar_cantidad('" +m_tabla+ "','" +m_codigopadre + "','" +m_codigohijo+ "','" +
+            m_columnaCantidad +"','t','"+ m_datoNuevo.toString()+ "');";
     m_consulta.exec(cadenaconsulta);
+    while (m_consulta.next())
+    {
+        m_hayMedicion = m_consulta.value(0).toBool();
+    }
 }
 
 
@@ -151,7 +129,7 @@ UndoEditarPrecio::UndoEditarPrecio(const QString &tabla, const QString &codigopa
 void UndoEditarPrecio::undo()
 {
     QString cadenaconsulta;    
-    cadenaconsulta = "SELECT modificar_precio('"+m_tabla+"','"+m_codigopadre+"','"+m_codigohijo+ "','" +m_datoNuevo.toString()+"','"+QString::number(opcion)+"','f');";
+    cadenaconsulta = "SELECT modificar_precio('"+m_tabla+"','"+m_codigopadre+"','"+m_codigohijo+ "','" +m_datoAntiguo.toString()+"','"+QString::number(opcion)+"','f');";
     qDebug()<<cadenaconsulta;
     m_consulta.exec(cadenaconsulta);
 }

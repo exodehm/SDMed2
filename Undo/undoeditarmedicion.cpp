@@ -66,7 +66,8 @@ void UndoBorrarLineasMedicion::undo()
 void UndoBorrarLineasMedicion::redo()
 {
 
-    QString cadenaborrarfilas = "SELECT borrar_lineas_medcert('"+ m_tabla +"','"+ m_codigopadre +"','"+ m_codigohijo +"','"+ m_array_lineas_borrar +"','"+ QString::number(m_num_cert) + "','t','t')";
+    QString cadenaborrarfilas = "SELECT borrar_lineas_medcert('"+ m_tabla +"','"+ m_codigopadre +"','"+ m_codigohijo +"','"+
+            QString::number(m_num_cert) + "','" + m_array_lineas_borrar  + "','t','t')";
     qDebug()<<cadenaborrarfilas;
     m_consulta.exec(cadenaborrarfilas);
 }

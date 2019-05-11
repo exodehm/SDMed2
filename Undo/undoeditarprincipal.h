@@ -71,7 +71,7 @@ public:
 protected:
 
     QString m_columnaCantidad;//canpres o cancert
-    QList<QList<QVariant>>m_lineasMedicion;
+    bool m_hayMedicion;
 };
 
 

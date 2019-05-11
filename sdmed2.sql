@@ -5,7 +5,7 @@
 -- Dumped from database version 9.5.16
 -- Dumped by pg_dump version 9.5.16
 
--- Started on 2019-05-09 13:23:32 CEST
+-- Started on 2019-05-11 13:11:46 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -25,7 +25,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 2478 (class 0 OID 0)
+-- TOC entry 2480 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -34,7 +34,7 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- TOC entry 738 (class 1247 OID 119400)
+-- TOC entry 748 (class 1247 OID 119400)
 -- Name: tp_certificacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -47,7 +47,7 @@ CREATE TYPE public.tp_certificacion AS (
 ALTER TYPE public.tp_certificacion OWNER TO postgres;
 
 --
--- TOC entry 693 (class 1247 OID 68362)
+-- TOC entry 699 (class 1247 OID 68362)
 -- Name: tp_color; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -61,7 +61,7 @@ CREATE TYPE public.tp_color AS ENUM (
 ALTER TYPE public.tp_color OWNER TO postgres;
 
 --
--- TOC entry 750 (class 1247 OID 68336)
+-- TOC entry 760 (class 1247 OID 68336)
 -- Name: tp_concepto; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -82,7 +82,7 @@ CREATE TYPE public.tp_concepto AS (
 ALTER TYPE public.tp_concepto OWNER TO postgres;
 
 --
--- TOC entry 714 (class 1247 OID 116483)
+-- TOC entry 720 (class 1247 OID 116483)
 -- Name: tp_copiarconcepto; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -96,7 +96,7 @@ CREATE TYPE public.tp_copiarconcepto AS (
 ALTER TYPE public.tp_copiarconcepto OWNER TO postgres;
 
 --
--- TOC entry 753 (class 1247 OID 68348)
+-- TOC entry 763 (class 1247 OID 68348)
 -- Name: tp_relacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -113,7 +113,7 @@ CREATE TYPE public.tp_relacion AS (
 ALTER TYPE public.tp_relacion OWNER TO postgres;
 
 --
--- TOC entry 717 (class 1247 OID 116486)
+-- TOC entry 723 (class 1247 OID 116486)
 -- Name: tp_copiarrelacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -127,7 +127,7 @@ CREATE TYPE public.tp_copiarrelacion AS (
 ALTER TYPE public.tp_copiarrelacion OWNER TO postgres;
 
 --
--- TOC entry 744 (class 1247 OID 118267)
+-- TOC entry 754 (class 1247 OID 118267)
 -- Name: tp_guardarconcepto; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -141,7 +141,7 @@ CREATE TYPE public.tp_guardarconcepto AS (
 ALTER TYPE public.tp_guardarconcepto OWNER TO postgres;
 
 --
--- TOC entry 735 (class 1247 OID 115238)
+-- TOC entry 745 (class 1247 OID 115238)
 -- Name: tp_medicion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -164,7 +164,7 @@ CREATE TYPE public.tp_medicion AS (
 ALTER TYPE public.tp_medicion OWNER TO postgres;
 
 --
--- TOC entry 779 (class 1247 OID 117883)
+-- TOC entry 785 (class 1247 OID 117883)
 -- Name: tp_guardarmedicion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -178,7 +178,7 @@ CREATE TYPE public.tp_guardarmedicion AS (
 ALTER TYPE public.tp_guardarmedicion OWNER TO postgres;
 
 --
--- TOC entry 741 (class 1247 OID 118264)
+-- TOC entry 751 (class 1247 OID 118264)
 -- Name: tp_guardarrelacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -192,7 +192,7 @@ CREATE TYPE public.tp_guardarrelacion AS (
 ALTER TYPE public.tp_guardarrelacion OWNER TO postgres;
 
 --
--- TOC entry 768 (class 1247 OID 68380)
+-- TOC entry 778 (class 1247 OID 68380)
 -- Name: tp_lineamedicion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -214,7 +214,7 @@ CREATE TYPE public.tp_lineamedicion AS (
 ALTER TYPE public.tp_lineamedicion OWNER TO postgres;
 
 --
--- TOC entry 765 (class 1247 OID 68377)
+-- TOC entry 775 (class 1247 OID 68377)
 -- Name: tp_partida; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -235,7 +235,7 @@ CREATE TYPE public.tp_partida AS (
 ALTER TYPE public.tp_partida OWNER TO postgres;
 
 --
--- TOC entry 320 (class 1255 OID 115741)
+-- TOC entry 322 (class 1255 OID 115741)
 -- Name: actualizar_certificacion_actual(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -254,7 +254,7 @@ $_$;
 ALTER FUNCTION public.actualizar_certificacion_actual(_nombretabla character varying, _fecha character varying) OWNER TO postgres;
 
 --
--- TOC entry 281 (class 1255 OID 119247)
+-- TOC entry 283 (class 1255 OID 119247)
 -- Name: actualizar_desde_nodo(character varying, character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -322,7 +322,7 @@ $$;
 ALTER FUNCTION public.actualizar_desde_nodo(_nombretabla character varying, _codigonodo character varying, _num_cert integer) OWNER TO postgres;
 
 --
--- TOC entry 258 (class 1255 OID 18492)
+-- TOC entry 260 (class 1255 OID 18492)
 -- Name: actualizar_parcial(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -357,7 +357,7 @@ $$;
 ALTER FUNCTION public.actualizar_parcial() OWNER TO postgres;
 
 --
--- TOC entry 276 (class 1255 OID 18986)
+-- TOC entry 278 (class 1255 OID 18986)
 -- Name: actualizar_partida(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -377,7 +377,7 @@ $$;
 ALTER FUNCTION public.actualizar_partida() OWNER TO postgres;
 
 --
--- TOC entry 319 (class 1255 OID 115584)
+-- TOC entry 321 (class 1255 OID 115584)
 -- Name: anadir_certificacion(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -414,7 +414,7 @@ $_$;
 ALTER FUNCTION public.anadir_certificacion(_nombretabla character varying, _fecha character varying) OWNER TO postgres;
 
 --
--- TOC entry 278 (class 1255 OID 20163)
+-- TOC entry 280 (class 1255 OID 20163)
 -- Name: anadir_obra_a_listado(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -453,7 +453,7 @@ $$;
 ALTER FUNCTION public.anadir_obra_a_listado(codigo character varying, resumen character varying) OWNER TO postgres;
 
 --
--- TOC entry 322 (class 1255 OID 42757)
+-- TOC entry 324 (class 1255 OID 42757)
 -- Name: bloquear_precio(character varying, character varying, numeric, boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -475,7 +475,7 @@ $$;
 ALTER FUNCTION public.bloquear_precio(nombretabla character varying, codigo character varying, precio numeric, bloquear boolean) OWNER TO postgres;
 
 --
--- TOC entry 284 (class 1255 OID 119407)
+-- TOC entry 286 (class 1255 OID 119407)
 -- Name: borrar_certificacion(character varying, date); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -504,7 +504,7 @@ $_$;
 ALTER FUNCTION public.borrar_certificacion(_nombretabla character varying, _fecha date) OWNER TO postgres;
 
 --
--- TOC entry 328 (class 1255 OID 118066)
+-- TOC entry 330 (class 1255 OID 118066)
 -- Name: borrar_hijos(character varying, character varying, character varying, boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -569,7 +569,7 @@ $_$;
 ALTER FUNCTION public.borrar_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijos character varying, _guardar boolean) OWNER TO postgres;
 
 --
--- TOC entry 299 (class 1255 OID 122506)
+-- TOC entry 300 (class 1255 OID 122506)
 -- Name: borrar_lineas_medcert(character varying, integer[], integer, boolean, boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -631,19 +631,29 @@ $_$;
 ALTER FUNCTION public.borrar_lineas_medcert(_nombretabla character varying, _ids integer[], _num_cert integer, _guardar boolean, _solomedicion boolean) OWNER TO postgres;
 
 --
--- TOC entry 302 (class 1255 OID 130687)
--- Name: borrar_lineas_medcert(character varying, character varying, character varying, integer[], integer, boolean, boolean); Type: FUNCTION; Schema: public; Owner: postgres
+-- TOC entry 303 (class 1255 OID 139347)
+-- Name: borrar_lineas_medcert(character varying, character varying, character varying, integer, integer[], boolean, boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.borrar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _posiciones integer[], _num_cert integer, _guardar boolean DEFAULT true, _solomedicion boolean DEFAULT true) RETURNS void
+CREATE FUNCTION public.borrar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _posiciones integer[] DEFAULT NULL::integer[], _guardar boolean DEFAULT true, _solomedicion boolean DEFAULT true) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 --EL OBJETIVO DE LA FUNCION ES CREAR UN ARRAY DE id CON LA TABLA,CODIGOPADRE,CODIGOHIJO,NUM DE CERTIF Y POSICIONES SELECCIONADAS
+--SI NO HAY POSICIONES SELECCIONADAS, SE INCLUYEN TODAS LAS LINEAS DE MEDICION CON ESE CODPADRE,CODHIJO Y NURMCERT
 DECLARE
     tablamedcert character varying := _nombretabla || '_Mediciones';
     ids integer[];
     id integer;
+    m tp_medicion%rowtype;
+    pos integer;
 BEGIN
+IF _posiciones IS NULL THEN
+	FOR m in EXECUTE FORMAT ('SELECT * FROM %I WHERE codpadre = $1 AND codhijo = $2 AND num_certif = $3',tablamedcert)	
+	USING _codigopadre,_codigohijo,_num_cert LOOP
+	RAISE NOTICE 'Meto la posicion: %',pos;
+		_posiciones:= array_append(_posiciones,m.posicion);
+		END LOOP;
+END IF;
 --AÑADO id AL ARRAY
 FOR I IN array_lower(_posiciones, 1)..array_upper(_posiciones, 1) LOOP
 		raise notice 'posicion: %',_posiciones[I];
@@ -659,10 +669,10 @@ PERFORM borrar_lineas_medcert(_nombretabla,ids,_num_cert,_guardar,_solomedicion)
 $_$;
 
 
-ALTER FUNCTION public.borrar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _posiciones integer[], _num_cert integer, _guardar boolean, _solomedicion boolean) OWNER TO postgres;
+ALTER FUNCTION public.borrar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _posiciones integer[], _guardar boolean, _solomedicion boolean) OWNER TO postgres;
 
 --
--- TOC entry 269 (class 1255 OID 118067)
+-- TOC entry 271 (class 1255 OID 118067)
 -- Name: borrar_lineas_principal(character varying, character varying, character varying[], boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -744,7 +754,7 @@ $_$;
 ALTER FUNCTION public.borrar_lineas_principal(_nombretabla character varying, _codigopadre character varying, _codigoshijo character varying[], _guardar boolean) OWNER TO postgres;
 
 --
--- TOC entry 287 (class 1255 OID 115924)
+-- TOC entry 289 (class 1255 OID 115924)
 -- Name: borrar_obra(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -784,7 +794,7 @@ $$;
 ALTER FUNCTION public.borrar_obra(_nombretabla character varying) OWNER TO postgres;
 
 --
--- TOC entry 297 (class 1255 OID 21039)
+-- TOC entry 298 (class 1255 OID 21039)
 -- Name: borrar_relacion(character varying, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -827,7 +837,7 @@ $$;
 ALTER FUNCTION public.borrar_relacion(nombretabla character varying, idpadre integer, idhijo integer) OWNER TO postgres;
 
 --
--- TOC entry 325 (class 1255 OID 117793)
+-- TOC entry 327 (class 1255 OID 117793)
 -- Name: cambiar_resumen_obra(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -847,7 +857,7 @@ $_$;
 ALTER FUNCTION public.cambiar_resumen_obra(_nombretabla character varying, _resumen character varying) OWNER TO postgres;
 
 --
--- TOC entry 256 (class 1255 OID 118766)
+-- TOC entry 258 (class 1255 OID 118766)
 -- Name: cerrar_obra(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -873,7 +883,7 @@ $$;
 ALTER FUNCTION public.cerrar_obra(_nombretabla character varying) OWNER TO postgres;
 
 --
--- TOC entry 268 (class 1255 OID 119139)
+-- TOC entry 270 (class 1255 OID 119139)
 -- Name: cerrar_tablas_auxiliares(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -899,7 +909,7 @@ $$;
 ALTER FUNCTION public.cerrar_tablas_auxiliares(_nombretabla character varying) OWNER TO postgres;
 
 --
--- TOC entry 324 (class 1255 OID 116068)
+-- TOC entry 326 (class 1255 OID 116068)
 -- Name: certificar(character varying, character varying, character varying, character varying[], integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -938,7 +948,7 @@ $_$;
 ALTER FUNCTION public.certificar(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _indices character varying[], _num_certif integer) OWNER TO postgres;
 
 --
--- TOC entry 291 (class 1255 OID 94819)
+-- TOC entry 292 (class 1255 OID 94819)
 -- Name: copiar(character varying, character varying, character varying[], boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1013,7 +1023,7 @@ $$;
 ALTER FUNCTION public.copiar(_nombretabla character varying, _codigopadre character varying, _codigos character varying[], _primer_paso boolean) OWNER TO postgres;
 
 --
--- TOC entry 308 (class 1255 OID 26129)
+-- TOC entry 310 (class 1255 OID 26129)
 -- Name: crear_obra(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1052,7 +1062,7 @@ $$;
 ALTER FUNCTION public.crear_obra(codigo character varying, resumen character varying) OWNER TO postgres;
 
 --
--- TOC entry 260 (class 1255 OID 68341)
+-- TOC entry 262 (class 1255 OID 68341)
 -- Name: crear_tabla_conceptos(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1076,7 +1086,7 @@ $$;
 ALTER FUNCTION public.crear_tabla_conceptos(codigo character varying) OWNER TO postgres;
 
 --
--- TOC entry 312 (class 1255 OID 27302)
+-- TOC entry 314 (class 1255 OID 27302)
 -- Name: crear_tabla_mediciones(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1104,7 +1114,7 @@ $$;
 ALTER FUNCTION public.crear_tabla_mediciones(codigo character varying) OWNER TO postgres;
 
 --
--- TOC entry 311 (class 1255 OID 27293)
+-- TOC entry 313 (class 1255 OID 27293)
 -- Name: crear_tabla_relacion(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1134,7 +1144,7 @@ $$;
 ALTER FUNCTION public.crear_tabla_relacion(codigo character varying) OWNER TO postgres;
 
 --
--- TOC entry 310 (class 1255 OID 26373)
+-- TOC entry 312 (class 1255 OID 26373)
 -- Name: es_ancestro(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1179,7 +1189,7 @@ $$;
 ALTER FUNCTION public.es_ancestro(nombretabla character varying, codigopadre character varying, codigohijo character varying) OWNER TO postgres;
 
 --
--- TOC entry 323 (class 1255 OID 43477)
+-- TOC entry 325 (class 1255 OID 43477)
 -- Name: es_precio_bloqueado(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1199,7 +1209,7 @@ $$;
 ALTER FUNCTION public.es_precio_bloqueado(nombretabla character varying, codigo character varying) OWNER TO postgres;
 
 --
--- TOC entry 315 (class 1255 OID 30876)
+-- TOC entry 317 (class 1255 OID 30876)
 -- Name: existe_codigo(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1221,7 +1231,7 @@ $$;
 ALTER FUNCTION public.existe_codigo(nombretabla character varying, codigo character varying) OWNER TO postgres;
 
 --
--- TOC entry 306 (class 1255 OID 26370)
+-- TOC entry 308 (class 1255 OID 26370)
 -- Name: existe_hermano(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1249,7 +1259,7 @@ $$;
 ALTER FUNCTION public.existe_hermano(nombretabla character varying, codigopadre character varying, codigohijo character varying) OWNER TO postgres;
 
 --
--- TOC entry 304 (class 1255 OID 29562)
+-- TOC entry 305 (class 1255 OID 29562)
 -- Name: exportarbc3(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1328,7 +1338,7 @@ $$;
 ALTER FUNCTION public.exportarbc3(tabla character varying) OWNER TO postgres;
 
 --
--- TOC entry 313 (class 1255 OID 29561)
+-- TOC entry 315 (class 1255 OID 29561)
 -- Name: fecha_a_bc3(date); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1354,7 +1364,7 @@ $$;
 ALTER FUNCTION public.fecha_a_bc3(fecha date) OWNER TO postgres;
 
 --
--- TOC entry 321 (class 1255 OID 115781)
+-- TOC entry 323 (class 1255 OID 115781)
 -- Name: hay_certificacion(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1374,7 +1384,7 @@ $$;
 ALTER FUNCTION public.hay_certificacion(_nombretabla character varying) OWNER TO postgres;
 
 --
--- TOC entry 267 (class 1255 OID 68682)
+-- TOC entry 269 (class 1255 OID 68682)
 -- Name: hay_descomposicion(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1394,7 +1404,7 @@ $$;
 ALTER FUNCTION public.hay_descomposicion(_nombretabla character varying, _codigo character varying) OWNER TO postgres;
 
 --
--- TOC entry 279 (class 1255 OID 119392)
+-- TOC entry 281 (class 1255 OID 119392)
 -- Name: hay_medcert(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1424,7 +1434,7 @@ $_$;
 ALTER FUNCTION public.hay_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _tipocandidad integer) OWNER TO postgres;
 
 --
--- TOC entry 288 (class 1255 OID 119318)
+-- TOC entry 290 (class 1255 OID 119318)
 -- Name: id_por_posicion(character varying, character varying, character varying, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1446,7 +1456,7 @@ $_$;
 ALTER FUNCTION public.id_por_posicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _posicion integer, _num_cert integer) OWNER TO postgres;
 
 --
--- TOC entry 292 (class 1255 OID 119678)
+-- TOC entry 293 (class 1255 OID 119678)
 -- Name: insertar_concepto(character varying, character varying, character varying, character varying, text, numeric, integer, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1482,7 +1492,7 @@ $_$;
 ALTER FUNCTION public.insertar_concepto(nombretabla character varying, codigopadre character varying, u character varying, resumen character varying, texto text, precio numeric, nat integer, fecha character varying) OWNER TO postgres;
 
 --
--- TOC entry 270 (class 1255 OID 119160)
+-- TOC entry 272 (class 1255 OID 119160)
 -- Name: insertar_lineas_medcert(character varying, character varying, character varying, integer, integer, integer, integer, character varying, numeric, numeric, numeric, numeric, character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1537,7 +1547,7 @@ $_$;
 ALTER FUNCTION public.insertar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_lineas integer, _posicion integer, _num_cert integer, _tipo integer, _comentario character varying, _ud numeric, _longitud numeric, _anchura numeric, _altura numeric, _formula character varying, _idfila integer) OWNER TO postgres;
 
 --
--- TOC entry 294 (class 1255 OID 121855)
+-- TOC entry 295 (class 1255 OID 121855)
 -- Name: insertar_partida(character varying, character varying, character varying, smallint, numeric, character varying, character varying, text, numeric, integer, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1602,7 +1612,7 @@ $_$;
 ALTER FUNCTION public.insertar_partida(nombretabla character varying, codigopadre character varying, codigohijo character varying, pos smallint, cantidad numeric, u character varying, res character varying, texto text, precio numeric, nat integer, fec character varying) OWNER TO postgres;
 
 --
--- TOC entry 274 (class 1255 OID 118253)
+-- TOC entry 276 (class 1255 OID 118253)
 -- Name: insertar_registro_guardarconcepto(character varying, integer, public.tp_concepto); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1623,7 +1633,7 @@ $_$;
 ALTER FUNCTION public.insertar_registro_guardarconcepto(_nombretabla character varying, _paso integer, _dato public.tp_concepto) OWNER TO postgres;
 
 --
--- TOC entry 329 (class 1255 OID 117880)
+-- TOC entry 331 (class 1255 OID 117880)
 -- Name: insertar_registro_guardarmedicion(character varying, integer, public.tp_medicion); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1644,7 +1654,7 @@ $_$;
 ALTER FUNCTION public.insertar_registro_guardarmedicion(_nombretabla character varying, _paso integer, _dato public.tp_medicion) OWNER TO postgres;
 
 --
--- TOC entry 271 (class 1255 OID 118252)
+-- TOC entry 273 (class 1255 OID 118252)
 -- Name: insertar_registro_guardarrelacion(character varying, integer, public.tp_relacion); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1664,7 +1674,7 @@ $_$;
 ALTER FUNCTION public.insertar_registro_guardarrelacion(_nombretabla character varying, _paso integer, _dato public.tp_relacion) OWNER TO postgres;
 
 --
--- TOC entry 277 (class 1255 OID 77539)
+-- TOC entry 279 (class 1255 OID 77539)
 -- Name: insertar_registro_relacion(character varying, integer, public.tp_relacion); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1692,7 +1702,7 @@ $$;
 ALTER FUNCTION public.insertar_registro_relacion(_nombretabla character varying, _paso integer, _dato public.tp_relacion) OWNER TO postgres;
 
 --
--- TOC entry 318 (class 1255 OID 115233)
+-- TOC entry 320 (class 1255 OID 115233)
 -- Name: insertar_relacion(character varying, character varying, character varying, numeric, smallint); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1740,7 +1750,7 @@ $_$;
 ALTER FUNCTION public.insertar_relacion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _cantidad numeric, _pos smallint) OWNER TO postgres;
 
 --
--- TOC entry 265 (class 1255 OID 68663)
+-- TOC entry 267 (class 1255 OID 68663)
 -- Name: insertar_texto(character varying, character varying, text); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1760,7 +1770,7 @@ $$;
 ALTER FUNCTION public.insertar_texto(_nombretabla character varying, _cod character varying, _texto text) OWNER TO postgres;
 
 --
--- TOC entry 301 (class 1255 OID 113848)
+-- TOC entry 302 (class 1255 OID 113848)
 -- Name: insertar_tipo_concepto(character varying, public.tp_concepto); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1796,7 +1806,7 @@ $_$;
 ALTER FUNCTION public.insertar_tipo_concepto(nombretabla character varying, _dato public.tp_concepto) OWNER TO postgres;
 
 --
--- TOC entry 286 (class 1255 OID 119273)
+-- TOC entry 288 (class 1255 OID 119273)
 -- Name: insertar_tipo_medcert(character varying, public.tp_medicion, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1844,7 +1854,7 @@ $_$;
 ALTER FUNCTION public.insertar_tipo_medcert(_nombretabla character varying, _dato public.tp_medicion, _num_cert integer) OWNER TO postgres;
 
 --
--- TOC entry 303 (class 1255 OID 113885)
+-- TOC entry 304 (class 1255 OID 113885)
 -- Name: insertar_tipo_relacion(character varying, public.tp_relacion); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1875,7 +1885,7 @@ $_$;
 ALTER FUNCTION public.insertar_tipo_relacion(_nombretabla character varying, _dato public.tp_relacion) OWNER TO postgres;
 
 --
--- TOC entry 283 (class 1255 OID 119337)
+-- TOC entry 285 (class 1255 OID 119337)
 -- Name: modificar_campo_medcert(character varying, character varying, character varying, character varying, integer, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1906,11 +1916,11 @@ $$;
 ALTER FUNCTION public.modificar_campo_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _valor character varying, _idfila integer, _columna integer, _num_cert integer) OWNER TO postgres;
 
 --
--- TOC entry 290 (class 1255 OID 119394)
+-- TOC entry 307 (class 1255 OID 139493)
 -- Name: modificar_cantidad(character varying, character varying, character varying, integer, boolean, numeric); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.modificar_cantidad(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer DEFAULT 0, _guardar boolean DEFAULT true, _cantidad numeric DEFAULT NULL::numeric) RETURNS void
+CREATE FUNCTION public.modificar_cantidad(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer DEFAULT 0, _guardar boolean DEFAULT true, _cantidad numeric DEFAULT NULL::numeric) RETURNS boolean
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -1920,7 +1930,7 @@ nuevacantidad numeric = 0;
 tipocantidad character varying;
 indices int[];
 certificaciones integer;
-
+haymedicion boolean := false;
 BEGIN
 IF _num_cert = 0 THEN    
     tipocantidad := 'canpres';
@@ -1934,6 +1944,9 @@ IF _cantidad IS NOT NULL THEN
     EXECUTE FORMAT ('SELECT array_agg(id) FROM %I WHERE codpadre = $1 AND codhijo = $2 AND num_certif = $3' , tablamedcert) 
 	INTO indices 
 	USING _codigopadre, _codigohijo, _num_cert;
+    IF array_length(indices,1)>0 THEN
+	haymedicion = true;
+    END IF;
     --borro las posibles lineas de medicion
     PERFORM borrar_lineas_medcert(_nombretabla, indices,_num_cert,_guardar,'t');
     --sustituyo la cantidad. 
@@ -1955,6 +1968,7 @@ EXECUTE FORMAT ('UPDATE %I SET %s = $1 WHERE codpadre = $2 AND codhijo = $3', ta
 IF COALESCE(_codigohijo,'') IS NOT NULL THEN
     PERFORM actualizar_desde_nodo(_nombretabla,_codigohijo,_num_cert);
 END IF;
+RETURN haymedicion;
 END;
 $_$;
 
@@ -1962,7 +1976,7 @@ $_$;
 ALTER FUNCTION public.modificar_cantidad(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _guardar boolean, _cantidad numeric) OWNER TO postgres;
 
 --
--- TOC entry 261 (class 1255 OID 68664)
+-- TOC entry 263 (class 1255 OID 68664)
 -- Name: modificar_codigo(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1988,7 +2002,7 @@ $$;
 ALTER FUNCTION public.modificar_codigo(_nombretabla character varying, _codigoantiguo character varying, _codigonuevo character varying) OWNER TO postgres;
 
 --
--- TOC entry 263 (class 1255 OID 68665)
+-- TOC entry 265 (class 1255 OID 68665)
 -- Name: modificar_naturaleza(character varying, character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2006,7 +2020,7 @@ $$;
 ALTER FUNCTION public.modificar_naturaleza(_nombretabla character varying, _cod character varying, _nat integer) OWNER TO postgres;
 
 --
--- TOC entry 317 (class 1255 OID 42060)
+-- TOC entry 319 (class 1255 OID 42060)
 -- Name: modificar_precio(character varying, character varying, character varying, numeric, integer, boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2025,7 +2039,7 @@ ELSE
 	IF restaurar IS TRUE THEN
 		PERFORM borrar_hijos(nombretabla,codhijo);
 	ELSE
-		PERFORM restaurar_lineas_principal(nombretabla);
+		PERFORM restaurar_lineas_borradas(nombretabla);
 	END IF;	
 	--por ultimo actualizo el campo precio	
 	EXECUTE FORMAT ('UPDATE %I SET preciomed = %s WHERE codigo=%s',nombretabla||'_Conceptos',quote_literal(precio),quote_literal(codhijo));	
@@ -2039,7 +2053,7 @@ $$;
 ALTER FUNCTION public.modificar_precio(nombretabla character varying, codpadre character varying, codhijo character varying, precio numeric, opcion integer, restaurar boolean) OWNER TO postgres;
 
 --
--- TOC entry 266 (class 1255 OID 68662)
+-- TOC entry 268 (class 1255 OID 68662)
 -- Name: modificar_resumen(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2057,7 +2071,7 @@ $$;
 ALTER FUNCTION public.modificar_resumen(_nombretabla character varying, _cod character varying, _res character varying) OWNER TO postgres;
 
 --
--- TOC entry 259 (class 1255 OID 68610)
+-- TOC entry 261 (class 1255 OID 68610)
 -- Name: modificar_texto(character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2077,7 +2091,7 @@ $$;
 ALTER FUNCTION public.modificar_texto(nombretabla character varying, cod character varying, textoplano character varying, textohtml character varying) OWNER TO postgres;
 
 --
--- TOC entry 264 (class 1255 OID 68661)
+-- TOC entry 266 (class 1255 OID 68661)
 -- Name: modificar_unidad(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2096,7 +2110,7 @@ $$;
 ALTER FUNCTION public.modificar_unidad(_nombretabla character varying, _cod character varying, _ud character varying) OWNER TO postgres;
 
 --
--- TOC entry 262 (class 1255 OID 68652)
+-- TOC entry 264 (class 1255 OID 68652)
 -- Name: mostrar_ruta(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2123,7 +2137,7 @@ $_$;
 ALTER FUNCTION public.mostrar_ruta(tabla character varying, codigo character varying) OWNER TO postgres;
 
 --
--- TOC entry 295 (class 1255 OID 112965)
+-- TOC entry 296 (class 1255 OID 112965)
 -- Name: pegar(character varying, character varying, smallint, boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2185,7 +2199,7 @@ $_$;
 ALTER FUNCTION public.pegar(_nombretabla character varying, _codigodestino character varying, OUT nodos_insertados character varying, _pos smallint, _primer_paso boolean) OWNER TO postgres;
 
 --
--- TOC entry 314 (class 1255 OID 29560)
+-- TOC entry 316 (class 1255 OID 29560)
 -- Name: poner_almohadilla(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2218,7 +2232,7 @@ $$;
 ALTER FUNCTION public.poner_almohadilla(tabla character varying, codigo character varying) OWNER TO postgres;
 
 --
--- TOC entry 296 (class 1255 OID 21024)
+-- TOC entry 297 (class 1255 OID 21024)
 -- Name: procesar_cadena_fecha(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2248,7 +2262,7 @@ $_$;
 ALTER FUNCTION public.procesar_cadena_fecha(cadenafecha character varying) OWNER TO postgres;
 
 --
--- TOC entry 300 (class 1255 OID 22185)
+-- TOC entry 301 (class 1255 OID 22185)
 -- Name: procesar_linea_medicion(numeric, numeric, numeric, numeric, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2269,7 +2283,7 @@ $$;
 ALTER FUNCTION public.procesar_linea_medicion(unidad numeric, longitud numeric, anchura numeric, altura numeric, formula character varying) OWNER TO postgres;
 
 --
--- TOC entry 327 (class 1255 OID 59884)
+-- TOC entry 329 (class 1255 OID 59884)
 -- Name: recorrer_principal(character varying, character varying, integer, boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2328,7 +2342,7 @@ $$;
 ALTER FUNCTION public.recorrer_principal(nombretabla character varying, codigopadre character varying, _nivel integer, primer_elemento boolean) OWNER TO postgres;
 
 --
--- TOC entry 326 (class 1255 OID 112040)
+-- TOC entry 328 (class 1255 OID 112040)
 -- Name: restaurar_lineas_borradas(character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2398,7 +2412,7 @@ $_$;
 ALTER FUNCTION public.restaurar_lineas_borradas(_nombretabla character varying, _tipotabla integer) OWNER TO postgres;
 
 --
--- TOC entry 257 (class 1255 OID 117892)
+-- TOC entry 259 (class 1255 OID 117892)
 -- Name: ultimo_paso(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2457,7 +2471,7 @@ $_$;
 ALTER FUNCTION public.ultimo_paso(_nombretabla character varying) OWNER TO postgres;
 
 --
--- TOC entry 272 (class 1255 OID 68823)
+-- TOC entry 274 (class 1255 OID 68823)
 -- Name: ver_anterior(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2485,7 +2499,7 @@ $$;
 ALTER FUNCTION public.ver_anterior(nombretabla character varying, codpadre character varying, codhijo character varying) OWNER TO postgres;
 
 --
--- TOC entry 285 (class 1255 OID 119411)
+-- TOC entry 287 (class 1255 OID 119411)
 -- Name: ver_certificacion_actual(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2519,7 +2533,7 @@ $$;
 ALTER FUNCTION public.ver_certificacion_actual(_nombretabla character varying, OUT _num_cert integer, OUT _fecha character varying) OWNER TO postgres;
 
 --
--- TOC entry 280 (class 1255 OID 119409)
+-- TOC entry 282 (class 1255 OID 119409)
 -- Name: ver_certificaciones(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2546,7 +2560,7 @@ $$;
 ALTER FUNCTION public.ver_certificaciones(_nombretabla character varying) OWNER TO postgres;
 
 --
--- TOC entry 307 (class 1255 OID 43474)
+-- TOC entry 309 (class 1255 OID 43474)
 -- Name: ver_color_hijos(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2644,7 +2658,7 @@ END IF;
 ALTER FUNCTION public.ver_color_hijos(nombretabla character varying, codigopadre character varying, codigohijo character varying) OWNER TO postgres;
 
 --
--- TOC entry 316 (class 1255 OID 43467)
+-- TOC entry 318 (class 1255 OID 43467)
 -- Name: ver_hijos(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2731,7 +2745,7 @@ END IF;
 ALTER FUNCTION public.ver_hijos(nombretabla character varying, codigopadre character varying, codigohijo character varying) OWNER TO postgres;
 
 --
--- TOC entry 282 (class 1255 OID 119393)
+-- TOC entry 284 (class 1255 OID 119393)
 -- Name: ver_lineas_medcert(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2788,7 +2802,7 @@ $$;
 ALTER FUNCTION public.ver_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _tipocantidad integer) OWNER TO postgres;
 
 --
--- TOC entry 305 (class 1255 OID 114520)
+-- TOC entry 306 (class 1255 OID 114520)
 -- Name: ver_lineas_medicion(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2838,7 +2852,7 @@ $$;
 ALTER FUNCTION public.ver_lineas_medicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying) OWNER TO postgres;
 
 --
--- TOC entry 275 (class 1255 OID 119161)
+-- TOC entry 277 (class 1255 OID 119161)
 -- Name: ver_medcert(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2890,7 +2904,7 @@ FOR var_r IN EXECUTE FORMAT('SELECT * FROM %I WHERE codhijo = $1 AND %s AND num_
 ALTER FUNCTION public.ver_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_certif integer) OWNER TO postgres;
 
 --
--- TOC entry 293 (class 1255 OID 119781)
+-- TOC entry 294 (class 1255 OID 119781)
 -- Name: ver_obra(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2922,7 +2936,7 @@ END; $_$;
 ALTER FUNCTION public.ver_obra(_nombretabla character varying) OWNER TO postgres;
 
 --
--- TOC entry 298 (class 1255 OID 122197)
+-- TOC entry 299 (class 1255 OID 122197)
 -- Name: ver_precio(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2945,7 +2959,7 @@ $$;
 ALTER FUNCTION public.ver_precio(nombretabla character varying, cod character varying) OWNER TO postgres;
 
 --
--- TOC entry 273 (class 1255 OID 68822)
+-- TOC entry 275 (class 1255 OID 68822)
 -- Name: ver_siguiente(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2973,7 +2987,7 @@ $$;
 ALTER FUNCTION public.ver_siguiente(nombretabla character varying, codpadre character varying, codhijo character varying) OWNER TO postgres;
 
 --
--- TOC entry 309 (class 1255 OID 27225)
+-- TOC entry 311 (class 1255 OID 27225)
 -- Name: ver_texto(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2993,7 +3007,7 @@ $$;
 ALTER FUNCTION public.ver_texto(nombretabla character varying, cod character varying) OWNER TO postgres;
 
 --
--- TOC entry 289 (class 1255 OID 119432)
+-- TOC entry 291 (class 1255 OID 119432)
 -- Name: ver_todas_certificaciones(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -3049,7 +3063,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 210 (class 1259 OID 116316)
+-- TOC entry 212 (class 1259 OID 116316)
 -- Name: CENZANO_Conceptos; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3061,7 +3075,7 @@ CREATE TABLE public."CENZANO_Conceptos" OF public.tp_concepto (
 ALTER TABLE public."CENZANO_Conceptos" OWNER TO postgres;
 
 --
--- TOC entry 214 (class 1259 OID 116343)
+-- TOC entry 216 (class 1259 OID 116343)
 -- Name: CENZANO_Mediciones_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -3076,7 +3090,7 @@ CREATE SEQUENCE public."CENZANO_Mediciones_id_seq"
 ALTER TABLE public."CENZANO_Mediciones_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 213 (class 1259 OID 116335)
+-- TOC entry 215 (class 1259 OID 116335)
 -- Name: CENZANO_Mediciones; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3088,7 +3102,7 @@ CREATE TABLE public."CENZANO_Mediciones" OF public.tp_medicion (
 ALTER TABLE public."CENZANO_Mediciones" OWNER TO postgres;
 
 --
--- TOC entry 212 (class 1259 OID 116332)
+-- TOC entry 214 (class 1259 OID 116332)
 -- Name: CENZANO_Relacion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -3103,7 +3117,7 @@ CREATE SEQUENCE public."CENZANO_Relacion_id_seq"
 ALTER TABLE public."CENZANO_Relacion_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 211 (class 1259 OID 116324)
+-- TOC entry 213 (class 1259 OID 116324)
 -- Name: CENZANO_Relacion; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3115,7 +3129,7 @@ CREATE TABLE public."CENZANO_Relacion" OF public.tp_relacion (
 ALTER TABLE public."CENZANO_Relacion" OWNER TO postgres;
 
 --
--- TOC entry 225 (class 1259 OID 119561)
+-- TOC entry 227 (class 1259 OID 119561)
 -- Name: O2017001_Conceptos; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3127,7 +3141,7 @@ CREATE TABLE public."O2017001_Conceptos" OF public.tp_concepto (
 ALTER TABLE public."O2017001_Conceptos" OWNER TO postgres;
 
 --
--- TOC entry 229 (class 1259 OID 119588)
+-- TOC entry 231 (class 1259 OID 119588)
 -- Name: O2017001_Mediciones_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -3142,7 +3156,7 @@ CREATE SEQUENCE public."O2017001_Mediciones_id_seq"
 ALTER TABLE public."O2017001_Mediciones_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 228 (class 1259 OID 119580)
+-- TOC entry 230 (class 1259 OID 119580)
 -- Name: O2017001_Mediciones; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3154,7 +3168,7 @@ CREATE TABLE public."O2017001_Mediciones" OF public.tp_medicion (
 ALTER TABLE public."O2017001_Mediciones" OWNER TO postgres;
 
 --
--- TOC entry 227 (class 1259 OID 119577)
+-- TOC entry 229 (class 1259 OID 119577)
 -- Name: O2017001_Relacion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -3169,7 +3183,7 @@ CREATE SEQUENCE public."O2017001_Relacion_id_seq"
 ALTER TABLE public."O2017001_Relacion_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 226 (class 1259 OID 119569)
+-- TOC entry 228 (class 1259 OID 119569)
 -- Name: O2017001_Relacion; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3181,7 +3195,7 @@ CREATE TABLE public."O2017001_Relacion" OF public.tp_relacion (
 ALTER TABLE public."O2017001_Relacion" OWNER TO postgres;
 
 --
--- TOC entry 217 (class 1259 OID 117841)
+-- TOC entry 219 (class 1259 OID 117841)
 -- Name: PRUEBASCOMP_Certificaciones_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -3196,7 +3210,7 @@ CREATE SEQUENCE public."PRUEBASCOMP_Certificaciones_id_seq"
 ALTER TABLE public."PRUEBASCOMP_Certificaciones_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 235 (class 1259 OID 121471)
+-- TOC entry 237 (class 1259 OID 121471)
 -- Name: PRUEBASCOMP_Conceptos; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3208,7 +3222,7 @@ CREATE TABLE public."PRUEBASCOMP_Conceptos" OF public.tp_concepto (
 ALTER TABLE public."PRUEBASCOMP_Conceptos" OWNER TO postgres;
 
 --
--- TOC entry 243 (class 1259 OID 130707)
+-- TOC entry 245 (class 1259 OID 139542)
 -- Name: PRUEBASCOMP_GuardarConceptos; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3220,7 +3234,7 @@ CREATE TABLE public."PRUEBASCOMP_GuardarConceptos" OF public.tp_guardarconcepto 
 ALTER TABLE public."PRUEBASCOMP_GuardarConceptos" OWNER TO postgres;
 
 --
--- TOC entry 241 (class 1259 OID 130688)
+-- TOC entry 243 (class 1259 OID 139373)
 -- Name: PRUEBASCOMP_GuardarMediciones; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3232,7 +3246,7 @@ CREATE TABLE public."PRUEBASCOMP_GuardarMediciones" OF public.tp_guardarmedicion
 ALTER TABLE public."PRUEBASCOMP_GuardarMediciones" OWNER TO postgres;
 
 --
--- TOC entry 242 (class 1259 OID 130699)
+-- TOC entry 244 (class 1259 OID 139504)
 -- Name: PRUEBASCOMP_GuardarRelaciones; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3244,7 +3258,7 @@ CREATE TABLE public."PRUEBASCOMP_GuardarRelaciones" OF public.tp_guardarrelacion
 ALTER TABLE public."PRUEBASCOMP_GuardarRelaciones" OWNER TO postgres;
 
 --
--- TOC entry 240 (class 1259 OID 121501)
+-- TOC entry 242 (class 1259 OID 121501)
 -- Name: PRUEBASCOMP_ListadoCertificaciones; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3256,7 +3270,7 @@ CREATE TABLE public."PRUEBASCOMP_ListadoCertificaciones" OF public.tp_certificac
 ALTER TABLE public."PRUEBASCOMP_ListadoCertificaciones" OWNER TO postgres;
 
 --
--- TOC entry 239 (class 1259 OID 121498)
+-- TOC entry 241 (class 1259 OID 121498)
 -- Name: PRUEBASCOMP_Mediciones_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -3271,7 +3285,7 @@ CREATE SEQUENCE public."PRUEBASCOMP_Mediciones_id_seq"
 ALTER TABLE public."PRUEBASCOMP_Mediciones_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 238 (class 1259 OID 121490)
+-- TOC entry 240 (class 1259 OID 121490)
 -- Name: PRUEBASCOMP_Mediciones; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3283,7 +3297,7 @@ CREATE TABLE public."PRUEBASCOMP_Mediciones" OF public.tp_medicion (
 ALTER TABLE public."PRUEBASCOMP_Mediciones" OWNER TO postgres;
 
 --
--- TOC entry 237 (class 1259 OID 121487)
+-- TOC entry 239 (class 1259 OID 121487)
 -- Name: PRUEBASCOMP_Relacion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -3298,7 +3312,7 @@ CREATE SEQUENCE public."PRUEBASCOMP_Relacion_id_seq"
 ALTER TABLE public."PRUEBASCOMP_Relacion_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 236 (class 1259 OID 121479)
+-- TOC entry 238 (class 1259 OID 121479)
 -- Name: PRUEBASCOMP_Relacion; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3310,7 +3324,7 @@ CREATE TABLE public."PRUEBASCOMP_Relacion" OF public.tp_relacion (
 ALTER TABLE public."PRUEBASCOMP_Relacion" OWNER TO postgres;
 
 --
--- TOC entry 230 (class 1259 OID 120067)
+-- TOC entry 232 (class 1259 OID 120067)
 -- Name: VANDALISMO_Conceptos; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3322,7 +3336,7 @@ CREATE TABLE public."VANDALISMO_Conceptos" OF public.tp_concepto (
 ALTER TABLE public."VANDALISMO_Conceptos" OWNER TO postgres;
 
 --
--- TOC entry 234 (class 1259 OID 120094)
+-- TOC entry 236 (class 1259 OID 120094)
 -- Name: VANDALISMO_Mediciones_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -3337,7 +3351,7 @@ CREATE SEQUENCE public."VANDALISMO_Mediciones_id_seq"
 ALTER TABLE public."VANDALISMO_Mediciones_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 233 (class 1259 OID 120086)
+-- TOC entry 235 (class 1259 OID 120086)
 -- Name: VANDALISMO_Mediciones; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3349,7 +3363,7 @@ CREATE TABLE public."VANDALISMO_Mediciones" OF public.tp_medicion (
 ALTER TABLE public."VANDALISMO_Mediciones" OWNER TO postgres;
 
 --
--- TOC entry 232 (class 1259 OID 120083)
+-- TOC entry 234 (class 1259 OID 120083)
 -- Name: VANDALISMO_Relacion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -3364,7 +3378,7 @@ CREATE SEQUENCE public."VANDALISMO_Relacion_id_seq"
 ALTER TABLE public."VANDALISMO_Relacion_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 231 (class 1259 OID 120075)
+-- TOC entry 233 (class 1259 OID 120075)
 -- Name: VANDALISMO_Relacion; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3376,7 +3390,7 @@ CREATE TABLE public."VANDALISMO_Relacion" OF public.tp_relacion (
 ALTER TABLE public."VANDALISMO_Relacion" OWNER TO postgres;
 
 --
--- TOC entry 222 (class 1259 OID 118460)
+-- TOC entry 224 (class 1259 OID 118460)
 -- Name: __CopiarConceptos; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3388,7 +3402,7 @@ CREATE TABLE public."__CopiarConceptos" OF public.tp_concepto (
 ALTER TABLE public."__CopiarConceptos" OWNER TO postgres;
 
 --
--- TOC entry 223 (class 1259 OID 118468)
+-- TOC entry 225 (class 1259 OID 118468)
 -- Name: __CopiarMediciones; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3400,7 +3414,7 @@ CREATE TABLE public."__CopiarMediciones" OF public.tp_medicion (
 ALTER TABLE public."__CopiarMediciones" OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 118452)
+-- TOC entry 223 (class 1259 OID 118452)
 -- Name: __CopiarRelacion; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3412,7 +3426,7 @@ CREATE TABLE public."__CopiarRelacion" OF public.tp_relacion (
 ALTER TABLE public."__CopiarRelacion" OWNER TO postgres;
 
 --
--- TOC entry 2319 (class 2606 OID 116323)
+-- TOC entry 2321 (class 2606 OID 116323)
 -- Name: CENZANO_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3421,7 +3435,7 @@ ALTER TABLE ONLY public."CENZANO_Conceptos"
 
 
 --
--- TOC entry 2323 (class 2606 OID 116342)
+-- TOC entry 2325 (class 2606 OID 116342)
 -- Name: CENZANO_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3430,7 +3444,7 @@ ALTER TABLE ONLY public."CENZANO_Mediciones"
 
 
 --
--- TOC entry 2321 (class 2606 OID 116331)
+-- TOC entry 2323 (class 2606 OID 116331)
 -- Name: CENZANO_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3439,7 +3453,7 @@ ALTER TABLE ONLY public."CENZANO_Relacion"
 
 
 --
--- TOC entry 2331 (class 2606 OID 119568)
+-- TOC entry 2333 (class 2606 OID 119568)
 -- Name: O2017001_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3448,7 +3462,7 @@ ALTER TABLE ONLY public."O2017001_Conceptos"
 
 
 --
--- TOC entry 2335 (class 2606 OID 119587)
+-- TOC entry 2337 (class 2606 OID 119587)
 -- Name: O2017001_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3457,7 +3471,7 @@ ALTER TABLE ONLY public."O2017001_Mediciones"
 
 
 --
--- TOC entry 2333 (class 2606 OID 119576)
+-- TOC entry 2335 (class 2606 OID 119576)
 -- Name: O2017001_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3466,7 +3480,7 @@ ALTER TABLE ONLY public."O2017001_Relacion"
 
 
 --
--- TOC entry 2343 (class 2606 OID 121478)
+-- TOC entry 2345 (class 2606 OID 121478)
 -- Name: PRUEBASCOMP_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3475,7 +3489,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_Conceptos"
 
 
 --
--- TOC entry 2355 (class 2606 OID 130714)
+-- TOC entry 2357 (class 2606 OID 139549)
 -- Name: PRUEBASCOMP_GuardarConceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3484,7 +3498,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_GuardarConceptos"
 
 
 --
--- TOC entry 2351 (class 2606 OID 130695)
+-- TOC entry 2353 (class 2606 OID 139380)
 -- Name: PRUEBASCOMP_GuardarMediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3493,7 +3507,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_GuardarMediciones"
 
 
 --
--- TOC entry 2353 (class 2606 OID 130706)
+-- TOC entry 2355 (class 2606 OID 139511)
 -- Name: PRUEBASCOMP_GuardarRelaciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3502,7 +3516,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_GuardarRelaciones"
 
 
 --
--- TOC entry 2349 (class 2606 OID 121505)
+-- TOC entry 2351 (class 2606 OID 121505)
 -- Name: PRUEBASCOMP_ListadoCertificaciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3511,7 +3525,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_ListadoCertificaciones"
 
 
 --
--- TOC entry 2347 (class 2606 OID 121497)
+-- TOC entry 2349 (class 2606 OID 121497)
 -- Name: PRUEBASCOMP_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3520,7 +3534,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_Mediciones"
 
 
 --
--- TOC entry 2345 (class 2606 OID 121486)
+-- TOC entry 2347 (class 2606 OID 121486)
 -- Name: PRUEBASCOMP_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3529,7 +3543,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_Relacion"
 
 
 --
--- TOC entry 2337 (class 2606 OID 120074)
+-- TOC entry 2339 (class 2606 OID 120074)
 -- Name: VANDALISMO_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3538,7 +3552,7 @@ ALTER TABLE ONLY public."VANDALISMO_Conceptos"
 
 
 --
--- TOC entry 2341 (class 2606 OID 120093)
+-- TOC entry 2343 (class 2606 OID 120093)
 -- Name: VANDALISMO_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3547,7 +3561,7 @@ ALTER TABLE ONLY public."VANDALISMO_Mediciones"
 
 
 --
--- TOC entry 2339 (class 2606 OID 120082)
+-- TOC entry 2341 (class 2606 OID 120082)
 -- Name: VANDALISMO_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3556,7 +3570,7 @@ ALTER TABLE ONLY public."VANDALISMO_Relacion"
 
 
 --
--- TOC entry 2327 (class 2606 OID 118467)
+-- TOC entry 2329 (class 2606 OID 118467)
 -- Name: __CopiarConceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3565,7 +3579,7 @@ ALTER TABLE ONLY public."__CopiarConceptos"
 
 
 --
--- TOC entry 2329 (class 2606 OID 118475)
+-- TOC entry 2331 (class 2606 OID 118475)
 -- Name: __CopiarMediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3574,7 +3588,7 @@ ALTER TABLE ONLY public."__CopiarMediciones"
 
 
 --
--- TOC entry 2325 (class 2606 OID 118459)
+-- TOC entry 2327 (class 2606 OID 118459)
 -- Name: __CopiarRelacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3583,7 +3597,7 @@ ALTER TABLE ONLY public."__CopiarRelacion"
 
 
 --
--- TOC entry 2477 (class 0 OID 0)
+-- TOC entry 2479 (class 0 OID 0)
 -- Dependencies: 6
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
 --
@@ -3594,7 +3608,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2019-05-09 13:23:33 CEST
+-- Completed on 2019-05-11 13:11:46 CEST
 
 --
 -- PostgreSQL database dump complete
