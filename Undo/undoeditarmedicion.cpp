@@ -109,9 +109,9 @@ UndoPegarLineasMedicion::UndoPegarLineasMedicion(const QString &nombretabla, con
 
 void UndoPegarLineasMedicion::undo()
 {
-    /*QString cadenaborrar = "SELECT borrar_hijos('"+m_tabla+"','"+m_codigopadre+"','"+nodosinsertados+"','1');";
+    QString cadenaborrar = "SELECT borrar_lineas_medcert('"+m_tabla+"','"+m_cadenaid+"',"+QString::number(m_num_cert)+",'t','t');";
     qDebug()<<cadenaborrar;
-    consulta.exec(cadenaborrar);*/
+    m_consulta.exec(cadenaborrar);
 }
 
 void UndoPegarLineasMedicion::redo()

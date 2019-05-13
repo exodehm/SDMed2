@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.16
--- Dumped by pg_dump version 9.5.16
+-- Dumped from database version 9.5.17
+-- Dumped by pg_dump version 9.5.17
 
--- Started on 2019-05-13 13:28:10 CEST
+-- Started on 2019-05-13 19:57:54 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -13,6 +13,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -2242,11 +2243,11 @@ $_$;
 ALTER FUNCTION public.pegar(_nombretabla character varying, _codigodestino character varying, OUT nodos_insertados character varying, _pos smallint, _primer_paso boolean) OWNER TO postgres;
 
 --
--- TOC entry 316 (class 1255 OID 139724)
+-- TOC entry 316 (class 1255 OID 139735)
 -- Name: pegar_medicion(character varying, character varying, character varying, integer, smallint); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.pegar_medicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer DEFAULT 0, _pos smallint DEFAULT (- (1)::smallint)) RETURNS character varying
+CREATE FUNCTION public.pegar_medicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer DEFAULT 0, _pos smallint DEFAULT (- (1)::smallint)) RETURNS character varying[]
     LANGUAGE plpgsql
     AS $$ 
 DECLARE
@@ -2254,19 +2255,14 @@ M tp_medicion%ROWTYPE;
 tablacopiarmediciones character varying := '__CopiarMediciones';
 posicion smallint := _pos;
 id character varying;
-listaIds character varying:='{';
+listaIds character varying[];
 BEGIN
 FOR M IN EXECUTE FORMAT('SELECT * FROM %I',tablacopiarmediciones) LOOP
-	PERFORM insertar_lineas_medcert(_nombretabla,_codigopadre,_codigohijo,1,posicion,_num_cert,M.tipo,M.comentario,M.ud,M.longitud,M.anchura,M.altura,M.formula);
-	--id:=public.id_por_posicion(_nombretabla,_codigopadre,_codigohijo,posicion,_num_cert)::character varying;
-	--concat (listaIds,'}');
-	listaIds := concat (listaIds,public.id_por_posicion(_nombretabla,_codigopadre,_codigohijo,posicion,_num_cert)::character varying);
-	posicion = posicion +1;
-	--PERFORM insertar_tipo_medcert(_nombretabla,M,'0');--tabla mediciones
-	--PERFORM insertar_tipo_medcert(_nombretabla,M,'1');--tabla certificaciones
+	PERFORM insertar_lineas_medcert(_nombretabla,_codigopadre,_codigohijo,1,posicion,_num_cert,M.tipo,M.comentario,M.ud,M.longitud,M.anchura,M.altura,M.formula);	
+	listaIds := array_append (listaIds,public.id_por_posicion(_nombretabla,_codigopadre,_codigohijo,posicion,_num_cert)::character varying);
+	posicion = posicion +1;	
 	END LOOP;
-listaIds := concat (listaIds,'}');
-return listaIds;
+RETURN listaIds;
 END;
 $$;
 
@@ -3683,7 +3679,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2019-05-13 13:28:10 CEST
+-- Completed on 2019-05-13 19:57:54 CEST
 
 --
 -- PostgreSQL database dump complete
