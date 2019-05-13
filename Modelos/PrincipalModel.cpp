@@ -301,5 +301,5 @@ void PrincipalModel::Pegar(int fila)
     QString codpadre = m_datos.at(0).at(0).toString();
     codpadre.remove(m_LeyendasCabecera[0]);
     //por ultimo llamo a la funcion
-    m_pila->push(new UndoPegarPartidas(m_tabla,codpadre,fila,QVariant()));
+    m_pila->Push(m_ruta, 0, new UndoPegarPartidas(m_tabla,codpadre,fila,QVariant()));//0 porque estoy en la tabla principal y no es importante la tabla de mediciones
 }
