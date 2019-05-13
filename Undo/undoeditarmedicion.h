@@ -11,7 +11,7 @@ class UndoEditarMedicion : public UndoMedicionBase
 {
 public:
     UndoEditarMedicion(const QString& nombretabla, const QString& id_padre, const QString& id_hijo,
-                       const QVariant& dato_antiguo, const QVariant& dato_nuevo, const QString& pos,
+                       const QVariant& dato_antiguo, const QVariant& dato_nuevo, const int& pos,
                        const int& nombrecolumna, const int& num_cert, const QVariant& descripcion);
 
     void undo();
@@ -40,7 +40,7 @@ private:
 class UndoInsertarLineaMedicion : public UndoMedicionBase
 {
 public:
-    UndoInsertarLineaMedicion(const QString& nombretabla,const QString& id_padre, const QString& id_hijo, const int num_filas, const QString& pos,
+    UndoInsertarLineaMedicion(const QString& nombretabla,const QString& id_padre, const QString& id_hijo, const int num_filas, const int& pos,
                               int fase, QVariant descripcion);
 
     void undo();
@@ -50,6 +50,22 @@ private:
     QString m_id, m_cadenaid;
     int m_numFilas;
 };
+
+/*************PEGAR LINEA MEDICION******************/
+class UndoPegarLineasMedicion : public UndoMedicionBase
+{
+public:
+    UndoPegarLineasMedicion(const QString& nombretabla,const QString& id_padre,const QString& id_hijo,
+                           const int& num_cert,const int& pos,const QVariant& descripcion);
+
+    void undo();
+    void redo();
+
+private:
+    bool esPrimerRedo;
+    QString m_cadenaid;
+};
+
 
 
 /*************CERTIFICAR LINEA MEDICION******************/

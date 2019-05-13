@@ -23,7 +23,7 @@ class UndoMedicionBase : public QUndoCommand
 {
 public:
     UndoMedicionBase (const QString& nombretabla,const QString& id_padre,const QString& id_hijo,
-    const int& num_cert, const QString& posicion, const QVariant& descripcion);
+    const int& num_cert, const int& posicion, const QVariant& descripcion);
 
     QString ObtenerIdPorPosicion();
     QString ObtenerArrayIdPorPosicion();
@@ -32,7 +32,7 @@ protected:
     QString m_tabla, m_codigopadre, m_codigohijo;
     QSqlQuery m_consulta;
     int m_num_cert;
-    QString m_posicion;
+    int m_posicion;
     QVariant m_descripcion;
 };
 

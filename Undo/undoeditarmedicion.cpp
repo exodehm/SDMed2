@@ -2,7 +2,7 @@
 #include <QDebug>
 
 UndoEditarMedicion::UndoEditarMedicion(const QString &nombretabla, const QString &id_padre, const QString &id_hijo,
-                                       const QVariant &dato_antiguo, const QVariant &dato_nuevo, const QString &pos,
+                                       const QVariant &dato_antiguo, const QVariant &dato_nuevo, const int &pos,
                                        const int &nombrecolumna, const int &num_cert, const QVariant &descripcion):
 
     UndoMedicionBase(nombretabla,id_padre,id_hijo,num_cert,pos,descripcion),m_datoAntiguo(dato_antiguo),m_datoNuevo(dato_nuevo),m_columna(nombrecolumna)
@@ -42,7 +42,7 @@ void UndoEditarMedicion::redo()
 /*************BORRAR LINEA MEDICION******************/
 UndoBorrarLineasMedicion::UndoBorrarLineasMedicion(const QString& nombretabla, const QString& id_padre, const QString& id_hijo,
                                                    const QList<int>&lineas, const int& num_cert, const QVariant& descripcion):
-    UndoMedicionBase(nombretabla,id_padre,id_hijo,num_cert,QString(),descripcion)
+    UndoMedicionBase(nombretabla,id_padre,id_hijo,num_cert,int(),descripcion)
 {
     m_array_lineas_borrar.append("{");
     foreach (const int&dato, lineas)
@@ -74,7 +74,7 @@ void UndoBorrarLineasMedicion::redo()
 
 /*************INSERTAR LINEA MEDICION/CERTIFICACION******************/
 UndoInsertarLineaMedicion::UndoInsertarLineaMedicion(const QString& nombretabla, const QString& id_padre, const QString& id_hijo,
-                                                     const int num_filas, const QString &pos, int fase, QVariant descripcion):
+                                                     const int num_filas, const int &pos, int fase, QVariant descripcion):
     UndoMedicionBase(nombretabla,id_padre,id_hijo,fase, pos, descripcion),m_numFilas(num_filas)
 {
     qDebug()<<descripcion;
@@ -99,6 +99,42 @@ void UndoInsertarLineaMedicion::redo()
     m_cadenaid = ObtenerArrayIdPorPosicion();
 }
 
+/*************PEGAR LINEA MEDICION******************/
+
+UndoPegarLineasMedicion::UndoPegarLineasMedicion(const QString &nombretabla, const QString &id_padre, const QString &id_hijo, const int &num_cert, const int &pos, const QVariant &descripcion):
+    UndoMedicionBase(nombretabla,id_padre,id_hijo,num_cert,pos,descripcion)
+{
+    esPrimerRedo = true;
+}
+
+void UndoPegarLineasMedicion::undo()
+{
+    /*QString cadenaborrar = "SELECT borrar_hijos('"+m_tabla+"','"+m_codigopadre+"','"+nodosinsertados+"','1');";
+    qDebug()<<cadenaborrar;
+    consulta.exec(cadenaborrar);*/
+}
+
+void UndoPegarLineasMedicion::redo()
+{
+    if (esPrimerRedo == true)
+    {
+        esPrimerRedo = false;
+        QString cadenaconsulta = "SELECT pegar_medicion('"+m_tabla+"','"+m_codigopadre+"','"+m_codigohijo+"','"+QString::number(m_num_cert)+"','"+QString::number(m_posicion)+"');";
+        qDebug()<<cadenaconsulta;
+        m_consulta.exec(cadenaconsulta);
+        while(m_consulta.next())
+        {
+            m_cadenaid = m_consulta.value(0).toString();
+        }
+        qDebug()<<"Insertadas las ides: "<<m_cadenaid;
+    }
+    else
+    {
+        QString cadenaconsulta = "SELECT restaurar_lineas_borradas('"+m_tabla+"','1')";
+        qDebug()<<cadenaconsulta;
+        m_consulta.exec(cadenaconsulta);
+    }
+}
 
 /*************CERTIFICAR LINEA MEDICION******************/
 UndoCertificarLineaMedicion::UndoCertificarLineaMedicion(const QString& nombretabla, const QString &codpadre, const QString &codhijo, const QString indices, const QString num_cert, QVariant descripcion):
@@ -126,5 +162,3 @@ void UndoCertificarLineaMedicion::redo()
         }
     }
 }
-
-

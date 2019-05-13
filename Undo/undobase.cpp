@@ -9,7 +9,7 @@ UndoBase::UndoBase(const QString& nombretabla, const QString& codigopadre, const
 }
 
 
-UndoMedicionBase::UndoMedicionBase(const QString &nombretabla, const QString &id_padre, const QString &id_hijo, const int &num_cert, const QString &posicion, const QVariant &descripcion):
+UndoMedicionBase::UndoMedicionBase(const QString &nombretabla, const QString &id_padre, const QString &id_hijo, const int &num_cert, const int &posicion, const QVariant &descripcion):
     m_tabla(nombretabla),m_codigopadre(id_padre),m_codigohijo(id_hijo),m_num_cert(num_cert), m_posicion(posicion),m_descripcion(descripcion)
 {
 }

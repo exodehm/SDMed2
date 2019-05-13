@@ -67,7 +67,6 @@ void UndoBorrarPartidas::redo()
 
 /************PEGAR PARTIDAS*****************/
 
-
 UndoPegarPartidas::UndoPegarPartidas(QString tablaactual, QString codigopadre, int _fila, QVariant descripcionn):
     tabla(tablaactual),codigopadre(codigopadre)
 {

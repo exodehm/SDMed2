@@ -55,7 +55,7 @@ bool MedicionModel::setData(const QModelIndex &index, const QVariant &value, int
         QString descripcion ="Cambio el valor de "+ index.data().toString()+" a "+value.toString()+" en la linea: "+m_datos.at(index.row()+1).at(tipoColumnaTMedCert::ID).toString();
         qDebug()<<descripcion;
         m_pila->Push(m_ruta, num_cert, new UndoEditarMedicion(m_tabla,m_codigopadre,m_codigohijo,index.data(),value,
-         m_datos.at(index.row()+1).at(tipoColumnaTMedCert::POSICION).toString(),index.column(), num_cert, QVariant(descripcion)));
+         m_datos.at(index.row()+1).at(tipoColumnaTMedCert::POSICION).toInt(),index.column(), num_cert, QVariant(descripcion)));
         return true;
     }    
     return false;
@@ -81,12 +81,26 @@ void MedicionModel::PrepararCabecera(/*QList<QList<QVariant> > &datos*/)
 
 void MedicionModel::Copiar(const QList<int>& filas)
 {
-
+    qDebug()<<"Copiar mediciones";
+    QString lista;
+    lista.append("{");
+    for (int i=0;i<filas.size();i++)
+    {
+       lista.append(QString::number(filas.at(i)));
+       if (i<filas.size()-1)
+       {
+           lista.append(",");
+       }
+    }
+    lista.append("}");
+    QString cadenacopiar = "SELECT copiar_medicion('"+m_tabla+"','"+m_codigopadre +"','"+ m_codigohijo +"','"+ QString::number(num_cert) +"','"+ lista+"')";
+    qDebug()<<cadenacopiar;
+    m_consulta.exec(cadenacopiar);
 }
 
 void MedicionModel::Pegar(int fila)
 {
-
+    m_pila->Push(m_ruta, num_cert, new UndoPegarLineasMedicion(m_tabla, m_codigopadre, m_codigohijo, num_cert, fila,QVariant()));
 }
 
 void MedicionModel::Certificar(const QList<int> &filas, QString num_cert)
@@ -126,14 +140,14 @@ void MedicionModel::InsertarFila(int fila)
     QString desc="Insertar linea medicion en fila: "+fila;
     qDebug()<<desc;
     QVariant V(desc);
-    m_pila->Push(m_ruta,num_cert, new UndoInsertarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,1,QString::number(fila),num_cert, V));
+    m_pila->Push(m_ruta,num_cert, new UndoInsertarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,1,fila,num_cert, V));
 }
 
 void MedicionModel::CambiarTipoLineaMedicion(int fila, int columna, QVariant tipo)
 {
     QString desc = "Cambiar tipo de columna subtotal" ;
     m_pila->Push(m_ruta,num_cert,new UndoEditarMedicion(m_tabla,m_codigopadre,m_codigohijo,m_datos.at(fila+1).at(columna+1),tipo,
-                                      m_datos.at(fila+1).at(tipoColumnaTMedCert::POSICION).toString(),columna, num_cert, QVariant(desc)));
+                                      m_datos.at(fila+1).at(tipoColumnaTMedCert::POSICION).toInt(),columna, num_cert, QVariant(desc)));
 }
 
 void MedicionModel::CambiaCertificacionActual(int cert)
