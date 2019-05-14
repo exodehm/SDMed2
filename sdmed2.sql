@@ -5,7 +5,7 @@
 -- Dumped from database version 9.5.17
 -- Dumped by pg_dump version 9.5.17
 
--- Started on 2019-05-13 19:57:54 CEST
+-- Started on 2019-05-14 13:36:57 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -26,7 +26,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 2482 (class 0 OID 0)
+-- TOC entry 2483 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -35,7 +35,7 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- TOC entry 750 (class 1247 OID 119400)
+-- TOC entry 751 (class 1247 OID 119400)
 -- Name: tp_certificacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -48,7 +48,7 @@ CREATE TYPE public.tp_certificacion AS (
 ALTER TYPE public.tp_certificacion OWNER TO postgres;
 
 --
--- TOC entry 697 (class 1247 OID 68362)
+-- TOC entry 698 (class 1247 OID 68362)
 -- Name: tp_color; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -62,7 +62,7 @@ CREATE TYPE public.tp_color AS ENUM (
 ALTER TYPE public.tp_color OWNER TO postgres;
 
 --
--- TOC entry 766 (class 1247 OID 68336)
+-- TOC entry 763 (class 1247 OID 68336)
 -- Name: tp_concepto; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -83,7 +83,7 @@ CREATE TYPE public.tp_concepto AS (
 ALTER TYPE public.tp_concepto OWNER TO postgres;
 
 --
--- TOC entry 726 (class 1247 OID 116483)
+-- TOC entry 719 (class 1247 OID 116483)
 -- Name: tp_copiarconcepto; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -97,7 +97,7 @@ CREATE TYPE public.tp_copiarconcepto AS (
 ALTER TYPE public.tp_copiarconcepto OWNER TO postgres;
 
 --
--- TOC entry 769 (class 1247 OID 68348)
+-- TOC entry 766 (class 1247 OID 68348)
 -- Name: tp_relacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -114,7 +114,7 @@ CREATE TYPE public.tp_relacion AS (
 ALTER TYPE public.tp_relacion OWNER TO postgres;
 
 --
--- TOC entry 729 (class 1247 OID 116486)
+-- TOC entry 722 (class 1247 OID 116486)
 -- Name: tp_copiarrelacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -128,7 +128,7 @@ CREATE TYPE public.tp_copiarrelacion AS (
 ALTER TYPE public.tp_copiarrelacion OWNER TO postgres;
 
 --
--- TOC entry 756 (class 1247 OID 118267)
+-- TOC entry 757 (class 1247 OID 118267)
 -- Name: tp_guardarconcepto; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -142,7 +142,7 @@ CREATE TYPE public.tp_guardarconcepto AS (
 ALTER TYPE public.tp_guardarconcepto OWNER TO postgres;
 
 --
--- TOC entry 747 (class 1247 OID 115238)
+-- TOC entry 748 (class 1247 OID 115238)
 -- Name: tp_medicion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -165,7 +165,7 @@ CREATE TYPE public.tp_medicion AS (
 ALTER TYPE public.tp_medicion OWNER TO postgres;
 
 --
--- TOC entry 791 (class 1247 OID 117883)
+-- TOC entry 792 (class 1247 OID 117883)
 -- Name: tp_guardarmedicion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -179,7 +179,7 @@ CREATE TYPE public.tp_guardarmedicion AS (
 ALTER TYPE public.tp_guardarmedicion OWNER TO postgres;
 
 --
--- TOC entry 753 (class 1247 OID 118264)
+-- TOC entry 754 (class 1247 OID 118264)
 -- Name: tp_guardarrelacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -193,7 +193,7 @@ CREATE TYPE public.tp_guardarrelacion AS (
 ALTER TYPE public.tp_guardarrelacion OWNER TO postgres;
 
 --
--- TOC entry 784 (class 1247 OID 68380)
+-- TOC entry 781 (class 1247 OID 68380)
 -- Name: tp_lineamedicion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -215,7 +215,7 @@ CREATE TYPE public.tp_lineamedicion AS (
 ALTER TYPE public.tp_lineamedicion OWNER TO postgres;
 
 --
--- TOC entry 781 (class 1247 OID 68377)
+-- TOC entry 778 (class 1247 OID 68377)
 -- Name: tp_partida; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -236,7 +236,7 @@ CREATE TYPE public.tp_partida AS (
 ALTER TYPE public.tp_partida OWNER TO postgres;
 
 --
--- TOC entry 324 (class 1255 OID 115741)
+-- TOC entry 325 (class 1255 OID 115741)
 -- Name: actualizar_certificacion_actual(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -323,7 +323,7 @@ $$;
 ALTER FUNCTION public.actualizar_desde_nodo(_nombretabla character varying, _codigonodo character varying, _num_cert integer) OWNER TO postgres;
 
 --
--- TOC entry 260 (class 1255 OID 18492)
+-- TOC entry 261 (class 1255 OID 18492)
 -- Name: actualizar_parcial(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -378,7 +378,7 @@ $$;
 ALTER FUNCTION public.actualizar_partida() OWNER TO postgres;
 
 --
--- TOC entry 323 (class 1255 OID 115584)
+-- TOC entry 324 (class 1255 OID 115584)
 -- Name: anadir_certificacion(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -454,7 +454,7 @@ $$;
 ALTER FUNCTION public.anadir_obra_a_listado(codigo character varying, resumen character varying) OWNER TO postgres;
 
 --
--- TOC entry 326 (class 1255 OID 42757)
+-- TOC entry 327 (class 1255 OID 42757)
 -- Name: bloquear_precio(character varying, character varying, numeric, boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -505,7 +505,7 @@ $_$;
 ALTER FUNCTION public.borrar_certificacion(_nombretabla character varying, _fecha date) OWNER TO postgres;
 
 --
--- TOC entry 332 (class 1255 OID 118066)
+-- TOC entry 333 (class 1255 OID 118066)
 -- Name: borrar_hijos(character varying, character varying, character varying, boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -673,7 +673,7 @@ $_$;
 ALTER FUNCTION public.borrar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _posiciones integer[], _guardar boolean, _solomedicion boolean) OWNER TO postgres;
 
 --
--- TOC entry 271 (class 1255 OID 118067)
+-- TOC entry 322 (class 1255 OID 118067)
 -- Name: borrar_lineas_principal(character varying, character varying, character varying[], boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -683,13 +683,12 @@ CREATE FUNCTION public.borrar_lineas_principal(_nombretabla character varying, _
 DECLARE
 tablaconceptos character varying := _nombretabla || '_Conceptos';
 tablamediciones character varying := _nombretabla || '_Mediciones';
---tablacertificaciones character varying := _nombretabla || '_Certificaciones';
 tablarelacion character varying := _nombretabla || '_Relacion';
 tablaguardarconceptos character varying := _nombretabla || '_GuardarConceptos';
 tablaguardarrelacion character varying := _nombretabla || '_GuardarRelaciones';
 tablaguardarmedicion character varying := _nombretabla || '_GuardarMediciones';
-tablaguardarcertificacion character varying := _nombretabla || '_GuardarCertificaciones';
 existe boolean;
+posicion integer;
 r tp_relacion%ROWTYPE;
 c tp_concepto%ROWTYPE;
 idmediciones integer[];
@@ -697,6 +696,7 @@ arraycodigoshijos character varying[];
 indice integer;
 solomedicion boolean := false; --false porque la llamo desde la funcion
 num_cert integer := NULL;
+insertar boolean := false;--esta variable controla si se va a insertar o a borrar la linea. En este caso se borra y se usa en la funcion de ordenar_posiciones
 BEGIN
 --CREO LA TABLA DE RELACIONES BORRAR SI RESTAURAR ES TRUE Y NO EXISTE PREVIEMENTE
 IF _guardar IS TRUE THEN
@@ -708,10 +708,14 @@ IF _codigoshijo IS NOT NULL THEN
 	FOR I IN array_lower(_codigoshijo, 1)..array_upper(_codigoshijo, 1) LOOP
 		--METO LA RELACION PADRE HIJO EN LA TABLA DE RELACION EN UN REGISTRO SI RESTAURAR ES TRUE
 		IF _guardar IS TRUE THEN
-			EXECUTE FORMAT ('SELECT * FROM %I WHERE codpadre = $1 AND codhijo = $2', tablarelacion) INTO r USING _codigopadre, _codigoshijo[I];
+			EXECUTE FORMAT ('SELECT * FROM %I WHERE codpadre = $1 AND codhijo = $2 ORDER BY posicion', tablarelacion) INTO r USING _codigopadre, _codigoshijo[I];
 			--METO ESE REGISTRO EN LA TABLA DE RELACION BORRAR			
 			PERFORM insertar_registro_guardarrelacion(tablaguardarrelacion,NULL,r);
 		END IF;
+		--GUARDO LA POSICION DE LA RELACION A BORRAR PARA LA POSTERIOR REORDENACION DE LAS POSICIONES LOS HIJOS RESTANTES
+		--EXECUTE FORMAT ('SELECT posicion FROM %I where codpadre = $1 AND codhijo = $2',tablarelacion) USING _codigopadre,_codigoshijo[I] INTO posicion;
+		--LO PRIMERO SERA REORDENAR LAS POSICIONES DE LOS REGISTROS DE LA TABLA RELACION POSTERIORES AL REGISTRO QUE VA A SER BORRADO
+		PERFORM ordenar_posiciones(_nombretabla, _codigopadre,_codigoshijo[I],insertar);
 		--BORRO LA RELACION PADRE-HIJO EN LA TABLA ORIGINAL
 		EXECUTE FORMAT ('DELETE FROM %I WHERE codpadre = $1 AND codhijo = $2', tablarelacion) USING _codigopadre,_codigoshijo[I];
 		--VEO SI QUEDAN MAS HIJOS EN LA TABLA RELACION
@@ -734,18 +738,12 @@ IF _codigoshijo IS NOT NULL THEN
 		EXECUTE FORMAT('SELECT array_agg(id) from %I WHERE codpadre = $1 AND codhijo = $2', tablamediciones) INTO idmediciones USING _codigopadre,_codigoshijo[I];
 		IF idmediciones IS NOT NULL THEN
 		    PERFORM borrar_lineas_medcert(_nombretabla,idmediciones,num_cert,_guardar,solomedicion);
-		END IF;
-		--POR ULTIMO LAS CERTIFICACIONES. EN ESTE CASO PRIMERO MIRO A VER SI EXISTE LA TABLA, PORQUE NO TIENE POR QUE HABERLA SIEMPRE
-		--(QUITADO PORQUE YA NO EXISTE LA TABLA DE CERTIFICACIONES)
-		/*EXECUTE FORMAT ('SELECT EXISTS (SELECT * FROM pg_catalog.pg_tables where tablename = $1)') INTO existe USING tablacertificaciones;
-		IF existe IS TRUE THEN
-			EXECUTE format('SELECT array_agg(id) from %I WHERE codpadre = $1 AND codhijo = $2', tablacertificaciones) INTO idcertificaciones
-				USING _codigopadre, _codigoshijo[I];
-			IF idcertificaciones IS NOT NULL THEN
-				PERFORM borrar_lineas_medcert(_nombretabla,idcertificaciones,1,_guardar,solomedicion);--1 porque es la tabla de certificacion
-			END IF;
-		END IF;*/
-		--queda la ordenacion de los elementos restantes
+		END IF;		
+		--queda la ordenacion de los elementos restantes		
+		/*FOR r IN EXECUTE FORMAT('SELECT * FROM %I WHERE codpadre = $1 AND posicion >$2',tablarelacion) USING _codigopadre, posicion			
+		LOOP
+			EXECUTE FORMAT ('UPDATE %I SET posicion = posicion-1 WHERE codpadre = $1 AND codhijo = $2', tablarelacion) USING r.codpadre, r.codhijo;
+		END LOOP;*/
 	END LOOP;
 END IF;
 END;
@@ -838,7 +836,7 @@ $$;
 ALTER FUNCTION public.borrar_relacion(nombretabla character varying, idpadre integer, idhijo integer) OWNER TO postgres;
 
 --
--- TOC entry 329 (class 1255 OID 117793)
+-- TOC entry 330 (class 1255 OID 117793)
 -- Name: cambiar_resumen_obra(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -884,7 +882,7 @@ $$;
 ALTER FUNCTION public.cerrar_obra(_nombretabla character varying) OWNER TO postgres;
 
 --
--- TOC entry 270 (class 1255 OID 119139)
+-- TOC entry 271 (class 1255 OID 119139)
 -- Name: cerrar_tablas_auxiliares(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -910,7 +908,7 @@ $$;
 ALTER FUNCTION public.cerrar_tablas_auxiliares(_nombretabla character varying) OWNER TO postgres;
 
 --
--- TOC entry 328 (class 1255 OID 116068)
+-- TOC entry 329 (class 1255 OID 116068)
 -- Name: certificar(character varying, character varying, character varying, character varying[], integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1105,7 +1103,7 @@ $$;
 ALTER FUNCTION public.crear_obra(codigo character varying, resumen character varying) OWNER TO postgres;
 
 --
--- TOC entry 262 (class 1255 OID 68341)
+-- TOC entry 263 (class 1255 OID 68341)
 -- Name: crear_tabla_conceptos(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1232,7 +1230,7 @@ $$;
 ALTER FUNCTION public.es_ancestro(nombretabla character varying, codigopadre character varying, codigohijo character varying) OWNER TO postgres;
 
 --
--- TOC entry 327 (class 1255 OID 43477)
+-- TOC entry 328 (class 1255 OID 43477)
 -- Name: es_precio_bloqueado(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1407,7 +1405,7 @@ $$;
 ALTER FUNCTION public.fecha_a_bc3(fecha date) OWNER TO postgres;
 
 --
--- TOC entry 325 (class 1255 OID 115781)
+-- TOC entry 326 (class 1255 OID 115781)
 -- Name: hay_certificacion(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1427,7 +1425,7 @@ $$;
 ALTER FUNCTION public.hay_certificacion(_nombretabla character varying) OWNER TO postgres;
 
 --
--- TOC entry 269 (class 1255 OID 68682)
+-- TOC entry 270 (class 1255 OID 68682)
 -- Name: hay_descomposicion(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1676,7 +1674,7 @@ $_$;
 ALTER FUNCTION public.insertar_registro_guardarconcepto(_nombretabla character varying, _paso integer, _dato public.tp_concepto) OWNER TO postgres;
 
 --
--- TOC entry 333 (class 1255 OID 117880)
+-- TOC entry 334 (class 1255 OID 117880)
 -- Name: insertar_registro_guardarmedicion(character varying, integer, public.tp_medicion); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1745,7 +1743,7 @@ $$;
 ALTER FUNCTION public.insertar_registro_relacion(_nombretabla character varying, _paso integer, _dato public.tp_relacion) OWNER TO postgres;
 
 --
--- TOC entry 322 (class 1255 OID 115233)
+-- TOC entry 323 (class 1255 OID 115233)
 -- Name: insertar_relacion(character varying, character varying, character varying, numeric, smallint); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1779,9 +1777,8 @@ ELSE
 		LOOP
 			--RAISE NOTICE 'Listado: %- %- %- % - %', r.id, r.codpadre, r.codhijo, r.canpres, r.posicion;
 			IF(r.posicion>=_pos AND r.codhijo!=_codigohijo) THEN
-				EXECUTE FORMAT ('UPDATE %I SET posicion = %I.posicion+1 WHERE codhijo = %L',
-				tablarelacion, tablarelacion,
-				r.codhijo);
+				EXECUTE FORMAT ('UPDATE %I SET posicion = %I.posicion+1 WHERE codpadre = $1 AND codhijo = $2', tablarelacion, tablarelacion)
+				USING _codigopadre, r.codhijo;
 				--RAISE NOTICE 'Ordenar los hijos % que esten despues de la posicion %',r.codhijo,pos;
 			END IF;
 		END LOOP;
@@ -1793,7 +1790,7 @@ $_$;
 ALTER FUNCTION public.insertar_relacion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _cantidad numeric, _pos smallint) OWNER TO postgres;
 
 --
--- TOC entry 267 (class 1255 OID 68663)
+-- TOC entry 268 (class 1255 OID 68663)
 -- Name: insertar_texto(character varying, character varying, text); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2010,7 +2007,12 @@ END IF;
 EXECUTE FORMAT ('UPDATE %I SET %s = $1 WHERE codpadre = $2 AND codhijo = $3', tablarelacion, tipocantidad) USING nuevacantidad, _codigopadre, _codigohijo;
 --IF existe_codigo(_nombretabla,_codigohijo) THEN
 IF COALESCE(_codigohijo,'') IS NOT NULL THEN
-    PERFORM actualizar_desde_nodo(_nombretabla,_codigohijo,_num_cert);
+    IF _num_cert IS NULL THEN--SI num_cert es nulo, actualizo tanto las mediciones como las certificaciones
+	PERFORM actualizar_desde_nodo(_nombretabla,_codigohijo,0);
+	PERFORM actualizar_desde_nodo(_nombretabla,_codigohijo,1);
+    ELSE-- y si no, pues solo actualizo la tabla que corresponda a ese _num_cert
+	PERFORM actualizar_desde_nodo(_nombretabla,_codigohijo,_num_cert);
+    END IF;
 END IF;
 RETURN haymedicion;
 END;
@@ -2020,7 +2022,7 @@ $_$;
 ALTER FUNCTION public.modificar_cantidad(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _guardar boolean, _cantidad numeric) OWNER TO postgres;
 
 --
--- TOC entry 263 (class 1255 OID 68664)
+-- TOC entry 264 (class 1255 OID 68664)
 -- Name: modificar_codigo(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2046,7 +2048,7 @@ $$;
 ALTER FUNCTION public.modificar_codigo(_nombretabla character varying, _codigoantiguo character varying, _codigonuevo character varying) OWNER TO postgres;
 
 --
--- TOC entry 265 (class 1255 OID 68665)
+-- TOC entry 266 (class 1255 OID 68665)
 -- Name: modificar_naturaleza(character varying, character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2097,7 +2099,7 @@ $$;
 ALTER FUNCTION public.modificar_precio(nombretabla character varying, codpadre character varying, codhijo character varying, precio numeric, opcion integer, restaurar boolean) OWNER TO postgres;
 
 --
--- TOC entry 268 (class 1255 OID 68662)
+-- TOC entry 269 (class 1255 OID 68662)
 -- Name: modificar_resumen(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2115,7 +2117,7 @@ $$;
 ALTER FUNCTION public.modificar_resumen(_nombretabla character varying, _cod character varying, _res character varying) OWNER TO postgres;
 
 --
--- TOC entry 261 (class 1255 OID 68610)
+-- TOC entry 262 (class 1255 OID 68610)
 -- Name: modificar_texto(character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2135,7 +2137,7 @@ $$;
 ALTER FUNCTION public.modificar_texto(nombretabla character varying, cod character varying, textoplano character varying, textohtml character varying) OWNER TO postgres;
 
 --
--- TOC entry 266 (class 1255 OID 68661)
+-- TOC entry 267 (class 1255 OID 68661)
 -- Name: modificar_unidad(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2154,7 +2156,7 @@ $$;
 ALTER FUNCTION public.modificar_unidad(_nombretabla character varying, _cod character varying, _ud character varying) OWNER TO postgres;
 
 --
--- TOC entry 264 (class 1255 OID 68652)
+-- TOC entry 265 (class 1255 OID 68652)
 -- Name: mostrar_ruta(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2179,6 +2181,44 @@ $_$;
 
 
 ALTER FUNCTION public.mostrar_ruta(tabla character varying, codigo character varying) OWNER TO postgres;
+
+--
+-- TOC entry 259 (class 1255 OID 139964)
+-- Name: ordenar_posiciones(character varying, character varying, character varying, boolean); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.ordenar_posiciones(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _insertar boolean DEFAULT true) RETURNS void
+    LANGUAGE plpgsql
+    AS $_$ 
+DECLARE
+--la funcion ordena las posiciones de los registros de la tabla relacion que tengan el mismo codigo padre que la relacion a borrar/insertar
+--si el parametro _insertar es verdadero, se aumentaran las posiciones de los registros cuya posicion sea mayor a la de la posicion del codigohijo a borrar
+--si el parametro _insertar es negativo, estaremos hablando de borrar un registro, y entonces las posiciones  mayores se disminuiran en una unidad
+tablarelacion character varying := _nombretabla || '_Relacion';
+cadena_posicion character varying;
+r tp_relacion%ROWTYPE;
+posicion integer;
+BEGIN
+IF _insertar IS TRUE THEN--si estamos insertando aumentamos la posicion 
+	cadena_posicion:='posicion=posicion+1';
+	RAISE NOTICE 'AUMENTO LO QUE HAY TRAS %-%',_codigopadre,_codigohijo;
+ELSE --si no, estamos borrando y decrecemos las posiciones de los elementos posteriores
+	cadena_posicion:='posicion=posicion-1';
+	RAISE NOTICE 'DISMINUYO LO QUE HAY TRAS %-%',_codigopadre,_codigohijo;
+END IF;
+--primero, cojo la posicion del codigohijo a insertar/borrar
+EXECUTE FORMAT ('SELECT posicion FROM %I where codpadre = $1 AND codhijo = $2',tablarelacion) USING _codigopadre,_codigohijo INTO posicion;
+raise notice 'possioccion: %',posicion;
+--segundo, itero sobre todos los registros cuyo codigo padre sea igual al codigo padre del codigo a insertar/borrar y la posicion mayor a la posicion del codigo hijo a insertar/borrar
+FOR r IN EXECUTE FORMAT('SELECT * FROM %I WHERE codpadre = $1 AND codhijo != $2 AND posicion >=$3 ORDER BY posicion',tablarelacion) USING _codigopadre, _codigohijo,posicion
+	LOOP
+		EXECUTE FORMAT ('UPDATE %I SET %s WHERE codpadre = $1 AND codhijo = $2', tablarelacion,cadena_posicion) USING r.codpadre, r.codhijo;
+	END LOOP;
+END;
+$_$;
+
+
+ALTER FUNCTION public.ordenar_posiciones(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _insertar boolean) OWNER TO postgres;
 
 --
 -- TOC entry 295 (class 1255 OID 112965)
@@ -2354,7 +2394,7 @@ $$;
 ALTER FUNCTION public.procesar_linea_medicion(unidad numeric, longitud numeric, anchura numeric, altura numeric, formula character varying) OWNER TO postgres;
 
 --
--- TOC entry 331 (class 1255 OID 59884)
+-- TOC entry 332 (class 1255 OID 59884)
 -- Name: recorrer_principal(character varying, character varying, integer, boolean); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2413,7 +2453,7 @@ $$;
 ALTER FUNCTION public.recorrer_principal(nombretabla character varying, codigopadre character varying, _nivel integer, primer_elemento boolean) OWNER TO postgres;
 
 --
--- TOC entry 330 (class 1255 OID 112040)
+-- TOC entry 331 (class 1255 OID 112040)
 -- Name: restaurar_lineas_borradas(character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2429,6 +2469,7 @@ tablaguardarconceptos character varying := _nombretabla || '_GuardarConceptos';
 tablaguardarrelacion character varying := _nombretabla || '_GuardarRelaciones';
 tablaguardarmedicion character varying := _nombretabla || '_GuardarMediciones';
 existe boolean;
+insertar boolean :=true;--indica a la funcion ordenar_posiciones que hay que aumentar las posiciones restantes a la dada
 
 c tp_concepto%ROWTYPE;
 cg tp_guardarconcepto%ROWTYPE;
@@ -2444,12 +2485,13 @@ RAISE NOTICE 'ULTIMO PASO: %',num_paso;
 --TABLA RELACION
 EXECUTE FORMAT ('SELECT EXISTS (SELECT * FROM pg_catalog.pg_tables where tablename = $1)') INTO existe USING tablaguardarrelacion;
 IF existe IS TRUE THEN
-    FOR rg IN EXECUTE FORMAT ('SELECT * FROM %I WHERE paso = $1',tablaguardarrelacion) USING num_paso
+    FOR rg IN EXECUTE FORMAT ('SELECT * FROM %I WHERE paso = $1 ORDER BY idguardar DESC',tablaguardarrelacion) USING num_paso
 	LOOP
 	    r=rg.r;
 	    /*EXECUTE FORMAT ('INSERT INTO %I VALUES(%s,%L,%L,%s,%s,%s)',tablarelacion,
 	    r.id, r.codpadre, r.codhijo, r.canpres,r.cancert,r.posicion);*/
 	    PERFORM insertar_tipo_relacion(_nombretabla,r);
+	    PERFORM ordenar_posiciones(_nombretabla,r.codpadre,r.codhijo,insertar);
 	END LOOP;
     EXECUTE FORMAT ('DELETE FROM %I WHERE paso = %s',tablaguardarrelacion,num_paso);
 END IF;
@@ -2483,7 +2525,7 @@ $_$;
 ALTER FUNCTION public.restaurar_lineas_borradas(_nombretabla character varying, _tipotabla integer) OWNER TO postgres;
 
 --
--- TOC entry 259 (class 1255 OID 117892)
+-- TOC entry 260 (class 1255 OID 117892)
 -- Name: ultimo_paso(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -3293,7 +3335,7 @@ CREATE TABLE public."PRUEBASCOMP_Conceptos" OF public.tp_concepto (
 ALTER TABLE public."PRUEBASCOMP_Conceptos" OWNER TO postgres;
 
 --
--- TOC entry 245 (class 1259 OID 139705)
+-- TOC entry 245 (class 1259 OID 139944)
 -- Name: PRUEBASCOMP_GuardarConceptos; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3305,7 +3347,7 @@ CREATE TABLE public."PRUEBASCOMP_GuardarConceptos" OF public.tp_guardarconcepto 
 ALTER TABLE public."PRUEBASCOMP_GuardarConceptos" OWNER TO postgres;
 
 --
--- TOC entry 243 (class 1259 OID 139650)
+-- TOC entry 243 (class 1259 OID 139792)
 -- Name: PRUEBASCOMP_GuardarMediciones; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3317,7 +3359,7 @@ CREATE TABLE public."PRUEBASCOMP_GuardarMediciones" OF public.tp_guardarmedicion
 ALTER TABLE public."PRUEBASCOMP_GuardarMediciones" OWNER TO postgres;
 
 --
--- TOC entry 244 (class 1259 OID 139697)
+-- TOC entry 244 (class 1259 OID 139936)
 -- Name: PRUEBASCOMP_GuardarRelaciones; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3497,7 +3539,7 @@ CREATE TABLE public."__CopiarRelacion" OF public.tp_relacion (
 ALTER TABLE public."__CopiarRelacion" OWNER TO postgres;
 
 --
--- TOC entry 2323 (class 2606 OID 116323)
+-- TOC entry 2324 (class 2606 OID 116323)
 -- Name: CENZANO_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3506,7 +3548,7 @@ ALTER TABLE ONLY public."CENZANO_Conceptos"
 
 
 --
--- TOC entry 2327 (class 2606 OID 116342)
+-- TOC entry 2328 (class 2606 OID 116342)
 -- Name: CENZANO_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3515,7 +3557,7 @@ ALTER TABLE ONLY public."CENZANO_Mediciones"
 
 
 --
--- TOC entry 2325 (class 2606 OID 116331)
+-- TOC entry 2326 (class 2606 OID 116331)
 -- Name: CENZANO_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3524,7 +3566,7 @@ ALTER TABLE ONLY public."CENZANO_Relacion"
 
 
 --
--- TOC entry 2335 (class 2606 OID 119568)
+-- TOC entry 2336 (class 2606 OID 119568)
 -- Name: O2017001_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3533,7 +3575,7 @@ ALTER TABLE ONLY public."O2017001_Conceptos"
 
 
 --
--- TOC entry 2339 (class 2606 OID 119587)
+-- TOC entry 2340 (class 2606 OID 119587)
 -- Name: O2017001_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3542,7 +3584,7 @@ ALTER TABLE ONLY public."O2017001_Mediciones"
 
 
 --
--- TOC entry 2337 (class 2606 OID 119576)
+-- TOC entry 2338 (class 2606 OID 119576)
 -- Name: O2017001_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3551,7 +3593,7 @@ ALTER TABLE ONLY public."O2017001_Relacion"
 
 
 --
--- TOC entry 2347 (class 2606 OID 121478)
+-- TOC entry 2348 (class 2606 OID 121478)
 -- Name: PRUEBASCOMP_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3560,7 +3602,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_Conceptos"
 
 
 --
--- TOC entry 2359 (class 2606 OID 139712)
+-- TOC entry 2360 (class 2606 OID 139951)
 -- Name: PRUEBASCOMP_GuardarConceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3569,7 +3611,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_GuardarConceptos"
 
 
 --
--- TOC entry 2355 (class 2606 OID 139657)
+-- TOC entry 2356 (class 2606 OID 139799)
 -- Name: PRUEBASCOMP_GuardarMediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3578,7 +3620,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_GuardarMediciones"
 
 
 --
--- TOC entry 2357 (class 2606 OID 139704)
+-- TOC entry 2358 (class 2606 OID 139943)
 -- Name: PRUEBASCOMP_GuardarRelaciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3587,7 +3629,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_GuardarRelaciones"
 
 
 --
--- TOC entry 2353 (class 2606 OID 121505)
+-- TOC entry 2354 (class 2606 OID 121505)
 -- Name: PRUEBASCOMP_ListadoCertificaciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3596,7 +3638,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_ListadoCertificaciones"
 
 
 --
--- TOC entry 2351 (class 2606 OID 121497)
+-- TOC entry 2352 (class 2606 OID 121497)
 -- Name: PRUEBASCOMP_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3605,7 +3647,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_Mediciones"
 
 
 --
--- TOC entry 2349 (class 2606 OID 121486)
+-- TOC entry 2350 (class 2606 OID 121486)
 -- Name: PRUEBASCOMP_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3614,7 +3656,7 @@ ALTER TABLE ONLY public."PRUEBASCOMP_Relacion"
 
 
 --
--- TOC entry 2341 (class 2606 OID 120074)
+-- TOC entry 2342 (class 2606 OID 120074)
 -- Name: VANDALISMO_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3623,7 +3665,7 @@ ALTER TABLE ONLY public."VANDALISMO_Conceptos"
 
 
 --
--- TOC entry 2345 (class 2606 OID 120093)
+-- TOC entry 2346 (class 2606 OID 120093)
 -- Name: VANDALISMO_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3632,7 +3674,7 @@ ALTER TABLE ONLY public."VANDALISMO_Mediciones"
 
 
 --
--- TOC entry 2343 (class 2606 OID 120082)
+-- TOC entry 2344 (class 2606 OID 120082)
 -- Name: VANDALISMO_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3641,7 +3683,7 @@ ALTER TABLE ONLY public."VANDALISMO_Relacion"
 
 
 --
--- TOC entry 2331 (class 2606 OID 118467)
+-- TOC entry 2332 (class 2606 OID 118467)
 -- Name: __CopiarConceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3650,7 +3692,7 @@ ALTER TABLE ONLY public."__CopiarConceptos"
 
 
 --
--- TOC entry 2333 (class 2606 OID 118475)
+-- TOC entry 2334 (class 2606 OID 118475)
 -- Name: __CopiarMediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3659,7 +3701,7 @@ ALTER TABLE ONLY public."__CopiarMediciones"
 
 
 --
--- TOC entry 2329 (class 2606 OID 118459)
+-- TOC entry 2330 (class 2606 OID 118459)
 -- Name: __CopiarRelacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3668,7 +3710,7 @@ ALTER TABLE ONLY public."__CopiarRelacion"
 
 
 --
--- TOC entry 2481 (class 0 OID 0)
+-- TOC entry 2482 (class 0 OID 0)
 -- Dependencies: 6
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
 --
@@ -3679,7 +3721,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2019-05-13 19:57:54 CEST
+-- Completed on 2019-05-14 13:36:58 CEST
 
 --
 -- PostgreSQL database dump complete

@@ -48,6 +48,7 @@ UndoBorrarLineasMedicion::UndoBorrarLineasMedicion(const QString& nombretabla, c
     foreach (const int&dato, lineas)
     {
         m_array_lineas_borrar.append(QString::number(dato));
+        qDebug()<<"lineas a borrar: "<<dato;
         m_array_lineas_borrar.append(",");
     }
     m_array_lineas_borrar.chop(1);//le quito la ultima coma

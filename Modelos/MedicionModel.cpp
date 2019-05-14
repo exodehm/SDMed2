@@ -132,7 +132,7 @@ void MedicionModel::BorrarFilas(const QList<int>& filas)
     }*/
     QString desc="Undo borrar lineas medicion";
     QVariant V(desc);
-    m_pila->push(new UndoBorrarLineasMedicion(m_tabla,m_codigopadre,m_codigohijo,filas,num_cert,V));
+    m_pila->Push(m_ruta,num_cert,new UndoBorrarLineasMedicion(m_tabla,m_codigopadre,m_codigohijo,filas,num_cert,V));
 }
 
 void MedicionModel::InsertarFila(int fila)
