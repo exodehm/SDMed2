@@ -8,7 +8,7 @@ def run():
     
 def imprimir(conexion, obra, book):
 	print ("Imprimir " + obra)
-	consulta = QtSql.QSqlQuery("SELECT * FROM \"" + obra + "_Conceptos\" WHERE naturaleza = 2", conexion)
+	consulta = QtSql.QSqlQuery("SELECT * FROM \"" + obra + "_Conceptos\"", conexion)
 	print (consulta.lastError().text())
 	rec = consulta.record()
 	codigo = rec.indexOf("codigo")
@@ -30,10 +30,10 @@ def imprimir(conexion, obra, book):
 	sheet.oddHeader.left.color = "CC3366"
 	sheet.oddHeader.left.text = "Listado de Auxiliares"	
 	#pie
-	sheet.oddFooter.left.font = "Tahoma,Bold"
-	hoy = datetime.date.today()
-	sheet.oddFooter.left.text = str(hoy.strftime('%d de %b de %Y'))
-	sheet.oddFooter.right.text = "Page &[Page] of &N"
+	#sheet.oddFooter.left.font = "Tahoma,Bold"
+	#hoy = datetime.date.today()
+	#sheet.oddFooter.left.text = str(hoy.strftime('%d de %b de %Y'))
+	#sheet.oddFooter.right.text = "Page &[Page] of &N"
 	#e inserto datos
 	fila = 1
 	columna = 1

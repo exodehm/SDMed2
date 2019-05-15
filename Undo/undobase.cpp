@@ -18,7 +18,7 @@ UndoMedicionBase::UndoMedicionBase(const QString &nombretabla, const QString &id
 QString UndoMedicionBase::ObtenerIdPorPosicion()
 {
     QString cadenaconsultarid = "SELECT * FROM id_por_posicion('" + m_tabla + "','" + m_codigopadre + "','" + m_codigohijo + "','"
-            + m_posicion + "','" + QString::number(m_num_cert)+ "')";
+            + QString::number(m_posicion) + "','" + QString::number(m_num_cert)+ "')";
     qDebug()<<"CAdena ID "<<cadenaconsultarid;
     m_consulta.exec(cadenaconsultarid);
     QString cadenaid;

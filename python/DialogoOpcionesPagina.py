@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Ui_DialogoOpcionesPagina import Ui_DialogoOpcionesPagina
 from openpyxl import Workbook
+import datetime
 
 class DialogoOpcionesPagina(QtWidgets.QDialog):
 	def __init__(self,informe):
@@ -33,6 +34,10 @@ class DialogoOpcionesPagina(QtWidgets.QDialog):
 			self.datosConfiguracionPagina['Numeracion']='No'
 		else:
 			self.datosConfiguracionPagina['Numeracion']='Si'
+			#self.informe.oddFooter.left.font = "Tahoma,Bold"
+			hoy = datetime.date.today()
+			self.informe.oddFooter.left.text = str(hoy.strftime('%d de %b de %Y'))
+			self.informe.oddFooter.right.text = "Page &[Page] of &N"
 		
 		print ("Se cabia la numeracion a " + self.datosConfiguracionPagina['Numeracion'])
 		

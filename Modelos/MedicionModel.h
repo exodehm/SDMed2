@@ -19,7 +19,7 @@ public:
     void PrepararCabecera(/*QList<QList<QVariant>>&datos*/);
     void Copiar(const QList<int> &filas);
     void Pegar(int fila);
-    void Certificar(const QList<int> &filas,QString num_cert) override;
+    void Certificar(const QList<int> &filas) override;
     void BorrarFilas(const QList<int> &filas) override;
     void InsertarFila(int fila) override;
     void ActualizarDatos(const QStringList& ruta) override;

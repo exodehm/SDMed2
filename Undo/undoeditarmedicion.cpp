@@ -53,7 +53,6 @@ UndoBorrarLineasMedicion::UndoBorrarLineasMedicion(const QString& nombretabla, c
     }
     m_array_lineas_borrar.chop(1);//le quito la ultima coma
     m_array_lineas_borrar.append("}");
-
 }
 
 void UndoBorrarLineasMedicion::undo()
@@ -138,26 +137,37 @@ void UndoPegarLineasMedicion::redo()
 }
 
 /*************CERTIFICAR LINEA MEDICION******************/
-UndoCertificarLineaMedicion::UndoCertificarLineaMedicion(const QString& nombretabla, const QString &codpadre, const QString &codhijo, const QString indices, const QString num_cert, QVariant descripcion):
-    tabla(nombretabla),codigopadre(codpadre),codigohijo(codhijo),indices(indices),num_cert(num_cert)
+UndoCertificarLineaMedicion::UndoCertificarLineaMedicion(const QString& nombretabla, const QString& id_padre, const QString& id_hijo,
+                                                         const QList<int>&lineas, const int& num_cert, const QVariant& descripcion):
+          UndoMedicionBase(nombretabla,id_padre,id_hijo,num_cert,int(),descripcion)
 {
+    m_array_lineas_certificar.append("{");
+    foreach (const int&dato, lineas)
+    {
+        m_array_lineas_certificar.append(QString::number(dato));
+        qDebug()<<"lineas a borrar: "<<dato;
+        m_array_lineas_certificar.append(",");
+    }
+    m_array_lineas_certificar.chop(1);//le quito la ultima coma
+    m_array_lineas_certificar.append("}");
     qDebug()<<descripcion;
 }
 
 void UndoCertificarLineaMedicion::undo()
 {
-    /*QString cadenaborrarfilas = "SELECT borrar_lineas_medicion('"+tabla+"','"+cadenaid+"','f','t',)";
-    consulta.exec(cadenaborrarfilas);*/
+    QString cadenaborrarfilas = "SELECT borrar_lineas_medcert('"+m_tabla+"','"+m_codigopadre+"','"+m_codigohijo+"','"+m_array_lineas_certificar+"')";
+    qDebug()<<cadenaborrarfilas;
+    m_consulta.exec(cadenaborrarfilas);
 }
 
 void UndoCertificarLineaMedicion::redo()
 {
-    QString cadenacertificar = "SELECT certificar('"+tabla+"','"+codigopadre+"','"+codigohijo+"','"+indices+"','"+num_cert+"')";
+    QString cadenacertificar = "SELECT certificar('"+m_tabla+"','"+m_codigopadre+"','"+m_codigohijo+"','"+m_array_lineas_certificar+"')";
     qDebug()<<cadenacertificar;
-    consulta.exec(cadenacertificar);
-    while (consulta.next())
+    m_consulta.exec(cadenacertificar);
+    while (m_consulta.next())
     {
-        if (consulta.value(0).toBool()==false)
+        if (m_consulta.value(0).toBool()==false)
         {
             qDebug()<<"No hay certificacion";
         }

@@ -52,10 +52,10 @@ bool MedicionModel::setData(const QModelIndex &index, const QVariant &value, int
     }
     if (index.isValid() && (role == Qt::EditRole /*|| role == Qt::DisplayRole*/) && value.toString()!=index.data().toString())
     {
-        QString descripcion ="Cambio el valor de "+ index.data().toString()+" a "+value.toString()+" en la linea: "+m_datos.at(index.row()+1).at(tipoColumnaTMedCert::ID).toString();
+        QString descripcion ="Cambio el valor de "+ index.data().toString()+" a "+value.toString()+" en la linea: "+m_datos.at(index.row()+1).at(tipoColumnaTMedCert::POSICION).toString();
         qDebug()<<descripcion;
         m_pila->Push(m_ruta, num_cert, new UndoEditarMedicion(m_tabla,m_codigopadre,m_codigohijo,index.data(),value,
-         m_datos.at(index.row()+1).at(tipoColumnaTMedCert::POSICION).toInt(),index.column(), num_cert, QVariant(descripcion)));
+         m_datos.at(index.row()).at(tipoColumnaTMedCert::POSICION).toInt(),index.column(), num_cert, QVariant(descripcion)));
         return true;
     }    
     return false;
@@ -103,33 +103,16 @@ void MedicionModel::Pegar(int fila)
     m_pila->Push(m_ruta, num_cert, new UndoPegarLineasMedicion(m_tabla, m_codigopadre, m_codigohijo, num_cert, fila,QVariant()));
 }
 
-void MedicionModel::Certificar(const QList<int> &filas, QString num_cert)
+void MedicionModel::Certificar(const QList<int> &filas)
 {
-    for (auto elem:filas)
-        qDebug()<<"Copiar los indices: "<<elem;
-    QString indices;
-    indices.append("{");
-    for (int i=0;i<filas.size();i++)
-    {
-       indices.append(QString::number(filas.at(i)));
-       if (i<filas.size()-1)
-       {
-           indices.append(",");
-       }
-    }
-    indices.append("}");
-    m_pila->push(new UndoCertificarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,indices,num_cert,QVariant()));
+    QString desc = "Certificar lineas medicion";
+    QVariant V(desc);
+    m_pila->Push(m_ruta,num_cert,new UndoCertificarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,filas,num_cert,V));
 }
 
 void MedicionModel::BorrarFilas(const QList<int>& filas)
 {
-    qDebug()<<"Borrar filas medicion"<<m_datos.size()<<"-"<<m_datos.at(0).size();
-    /*QList<QString>filasBorrar;
-    foreach (const int& i, filas)
-    {        
-        filasBorrar.append(m_datos.at(i+1).at(tipoColumnaTMedCert::ID).toString());
-        //qDebug()<<"Id a borrar: "<<filasBorrar.at(i+1);
-    }*/
+    qDebug()<<"Borrar filas medicion"<<m_datos.size()<<"-"<<m_datos.at(0).size();    
     QString desc="Undo borrar lineas medicion";
     QVariant V(desc);
     m_pila->Push(m_ruta,num_cert,new UndoBorrarLineasMedicion(m_tabla,m_codigopadre,m_codigohijo,filas,num_cert,V));

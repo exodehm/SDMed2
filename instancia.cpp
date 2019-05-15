@@ -700,11 +700,6 @@ void Instancia::ActivarDesactivarUndoRedo(int indice)
     ActivarBoton(indice);
 }
 
-/*void Instancia::AjustarPresupuesto(float cantidades[2])
-{
-    pila->push(new UndoAjustarPresupuesto(O,cantidades));
-}*/
-
 void Instancia::Certificar()
 {
     if (HayCertificacion())
@@ -725,12 +720,11 @@ void Instancia::Certificar()
                         listaIndices.append(i.row());
                 }
                 qSort(listaIndices);
-                /*MedicionModel* modelo = qobject_cast<MedicionModel*>(modeloTablaCert);
-            if (modelo)
-            {
-                modelo->Certificar(listaIndices,certActual.at(0));
-            }*/
-                //modeloTablaMed->Certificar(listaIndices,certActual.at(0));
+                MedicionModel* modelo = qobject_cast<MedicionModel*>(tabla->model());
+                if (modelo)
+                {
+                    modelo->Certificar(listaIndices);
+                }
                 tabla->selectionModel()->clearSelection();
             }
         }

@@ -38,7 +38,7 @@ public:
 
     virtual void Copiar(const QList<int> &filas)=0;
     virtual void Pegar(int fila)=0;
-    virtual void Certificar(const QList<int> &filas,QString num_cert){}
+    virtual void Certificar(const QList<int> &filas){}
     //void ActualizarIds(QString idpadre, QString idhijo);
 
 public slots:

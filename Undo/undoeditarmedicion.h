@@ -69,17 +69,17 @@ private:
 
 
 /*************CERTIFICAR LINEA MEDICION******************/
-class UndoCertificarLineaMedicion : public QUndoCommand
+class UndoCertificarLineaMedicion : public UndoMedicionBase
 {
 public:
-    UndoCertificarLineaMedicion(const QString& nombretabla,const QString& codpadre, const QString& codhijo, const QString indices, const QString num_cert, QVariant descripcion);
+    UndoCertificarLineaMedicion(const QString& nombretabla,const QString& id_padre,const QString& id_hijo,
+                                const QList<int>&lineas,const int& num_cert,const QVariant& descripcion);
 
     void undo();
     void redo();
 
 private:
-    QString tabla, codigopadre, codigohijo, indices, num_cert;
-    QSqlQuery consulta;
+    QString m_array_lineas_certificar;
 };
 
 
