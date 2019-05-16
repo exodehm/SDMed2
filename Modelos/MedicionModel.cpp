@@ -107,7 +107,16 @@ void MedicionModel::Certificar(const QList<int> &filas)
 {
     QString desc = "Certificar lineas medicion";
     QVariant V(desc);
-    m_pila->Push(m_ruta,num_cert,new UndoCertificarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,filas,num_cert,V));
+    QString cadenacertificacionactiva = "SELECT * FROM ver_certificacion_actual('"+m_tabla+"')";
+    m_consulta.exec(cadenacertificacionactiva);
+    int certificacionActiva;
+    while (m_consulta.next())
+    {
+        certificacionActiva = m_consulta.value(0).toInt();
+    }
+    //en este caso no guardo la tabla activa cuando certifico (que sería la tabla de mediciones), sino la tabla en la que
+    //voy a certificar
+    m_pila->Push(m_ruta,certificacionActiva,new UndoCertificarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,filas,num_cert,V));
 }
 
 void MedicionModel::BorrarFilas(const QList<int>& filas)

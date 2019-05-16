@@ -80,6 +80,7 @@ public:
 
 private:
     QString m_array_lineas_certificar;
+    QString m_certActual;
 };
 
 

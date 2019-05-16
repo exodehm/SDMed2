@@ -155,9 +155,12 @@ UndoCertificarLineaMedicion::UndoCertificarLineaMedicion(const QString& nombreta
 
 void UndoCertificarLineaMedicion::undo()
 {
-    QString cadenaborrarfilas = "SELECT borrar_lineas_medcert('"+m_tabla+"','"+m_codigopadre+"','"+m_codigohijo+"','"+m_array_lineas_certificar+"')";
-    qDebug()<<cadenaborrarfilas;
-    m_consulta.exec(cadenaborrarfilas);
+    if (m_certActual>"0")
+    {
+        QString cadenaborrarfilas = "SELECT borrar_lineas_medcert('"+m_tabla+"','"+m_codigopadre+"','"+m_codigohijo+"','"+m_certActual+"','"+m_array_lineas_certificar+"','t','t');";
+        qDebug()<<cadenaborrarfilas;
+        m_consulta.exec(cadenaborrarfilas);
+    }
 }
 
 void UndoCertificarLineaMedicion::redo()
@@ -167,9 +170,6 @@ void UndoCertificarLineaMedicion::redo()
     m_consulta.exec(cadenacertificar);
     while (m_consulta.next())
     {
-        if (m_consulta.value(0).toBool()==false)
-        {
-            qDebug()<<"No hay certificacion";
-        }
+        m_certActual = m_consulta.value(0).toString();
     }
 }
