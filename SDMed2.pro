@@ -56,7 +56,8 @@ SOURCES += main.cpp\
     Undo/undoajustar.cpp \
     Dialogos/dialogoajustar.cpp \
     miundostack.cpp \
-    Undo/undobase.cpp
+    Undo/undobase.cpp \
+    Delegados/delegadoformulasmedicion.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -102,7 +103,8 @@ HEADERS  += mainwindow.h \
     Undo/undoajustar.h \
     Dialogos/dialogoajustar.h \
     miundostack.h \
-    Undo/undobase.h
+    Undo/undobase.h \
+    Delegados/delegadoformulasmedicion.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \

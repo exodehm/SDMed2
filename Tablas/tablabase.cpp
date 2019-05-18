@@ -15,6 +15,7 @@ TablaBase::TablaBase(int nColumnas, QWidget *parent): QTableView(parent)
     dlgCB = new DelegadoColumnasBloqueadas;        
     dlgNumTablaP = new DelegadoNumerosTablaPrincipal;
     dlgNumTablaMC = new DelegadoNumerosTablaMedCert;
+    dlgFM = new DelegadoFormulasMedicion;
     filtro = new Filter;
     installEventFilter(filtro);
     cabeceraHorizontal->setContextMenuPolicy(Qt::CustomContextMenu);

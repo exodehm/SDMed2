@@ -17,15 +17,36 @@ TablaMed::TablaMed(int nColumnas, QWidget *parent): TablaBase(nColumnas, parent)
     setItemDelegateForColumn(tipoColumnaTMedCert::LONGITUD,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumnaTMedCert::ANCHURA,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumnaTMedCert::ALTURA,dlgNumTablaMC);
-    setItemDelegateForColumn(tipoColumnaTMedCert::FORMULA,dlgBA);
+    setItemDelegateForColumn(tipoColumnaTMedCert::FORMULA,dlgFM);
     setItemDelegateForColumn(tipoColumnaTMedCert::PARCIAL,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumnaTMedCert::SUBTOTAL,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumnaTMedCert::FASE,dlgCB);
     setItemDelegateForColumn(tipoColumnaTMedCert::ID,dlgCB);
 
     setColumnHidden(tipoColumnaTMedCert::ID,true);
+    setMouseTracking(true);
+    setAttribute(Qt::WA_Hover);
 
     QObject::connect(cabeceraHorizontal, SIGNAL(sectionClicked(int)), this,SLOT(Bloquear(int)));
+    QObject::connect(this,SIGNAL(hoverIndexChanged(QModelIndex)),dlgFM,SLOT(onHoverIndexChanged(QModelIndex)));
+}
+
+void TablaMed::mouseMoveEvent(QMouseEvent *event)
+{
+    QPoint pos = event->pos();
+    QModelIndex index = indexAt(pos);
+    if (index.isValid())
+    {
+        if (index.column() == tipoColumnaTMedCert::FORMULA)
+        {
+            emit hoverIndexChanged(index);
+        }
+        else
+        {
+            emit hoverIndexChanged(index);
+        }
+    }
+    TablaBase::mouseMoveEvent(event);
 }
 
 void TablaMed::MostrarMenuCabecera(QPoint pos)

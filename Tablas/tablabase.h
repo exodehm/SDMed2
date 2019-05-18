@@ -14,6 +14,7 @@
 #include "../Delegados/delegadonumerosbase.h"
 #include "../Delegados/delegadonumerostablaprincipal.h"
 #include "../Delegados/delegadonumerostablamedcert.h"
+#include "../Delegados/delegadoformulasmedicion.h"
 //#include "../Modelos/MedCertModel.h"
 #include "../Modelos/PrincipalModel.h"
 #include "../filter.h"
@@ -64,6 +65,7 @@ protected:
     DelegadoNumerosTablaPrincipal* dlgNumTablaP;
     DelegadoNumerosTablaMedCert* dlgNumTablaMC;
     DelegadoColumnasBloqueadas* dlgCB;
+    DelegadoFormulasMedicion* dlgFM;
     DelegadoIconos* dlgIco;
     bool* celdaBloqueada;
     Filter* filtro;

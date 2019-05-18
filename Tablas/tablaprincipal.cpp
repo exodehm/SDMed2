@@ -5,7 +5,7 @@ TablaPrincipal::TablaPrincipal(int nColumnas, QWidget *parent): TablaBase(nColum
     limiteIzquierdo=tipoColumnaTPrincipal::CODIGO;
     limiteDerecho=tipoColumnaTPrincipal::IMPPRES;
 
-    celdaBloqueada[tipoColumnaTPrincipal::CODIGO]=true;
+    //celdaBloqueada[tipoColumnaTPrincipal::CODIGO]=true;
     celdaBloqueada[tipoColumnaTPrincipal::PORCERTPRES]=true;
     celdaBloqueada[tipoColumnaTPrincipal::IMPPRES]=true;
     celdaBloqueada[tipoColumnaTPrincipal::IMPCERT]=true;

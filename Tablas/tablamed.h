@@ -9,6 +9,7 @@ class TablaMed : public TablaBase
      Q_OBJECT
 public:
     explicit TablaMed(int nColumnas, QWidget *parent=nullptr);
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 
 public slots:
@@ -23,6 +24,7 @@ public slots:
 
 signals:
     //void CopiarMediciones();
+    void hoverIndexChanged(QModelIndex);
 
 };
 
