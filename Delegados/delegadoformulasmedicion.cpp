@@ -1,4 +1,5 @@
 #include "delegadoformulasmedicion.h"
+#include "./Dialogos/dialogoeditorformulasmedicion.h"
 #include <QPushButton>
 #include <QApplication>
 
@@ -75,7 +76,12 @@ bool DelegadoFormulasMedicion::editorEvent(QEvent *event, QAbstractItemModel *mo
         if( clickX > x && clickX < x + w )
             if( clickY > y && clickY < y + h )
             {
-                qDebug()<<"Abro dialogo";//aqui va mi dialogo
+                QVariant uds = index.sibling(index.row(),index.column()-4).data();
+                QVariant longitud = index.sibling(index.row(),index.column()-3).data();
+                QVariant anchura = index.sibling(index.row(),index.column()-2).data();
+                QVariant altura = index.sibling(index.row(),index.column()-1).data();
+                DialogoEditorFormulasMedicion* d =  new DialogoEditorFormulasMedicion(uds,longitud,anchura,altura);
+                d->show();
             }
         return true;
     }

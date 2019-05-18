@@ -57,7 +57,8 @@ SOURCES += main.cpp\
     Dialogos/dialogoajustar.cpp \
     miundostack.cpp \
     Undo/undobase.cpp \
-    Delegados/delegadoformulasmedicion.cpp
+    Delegados/delegadoformulasmedicion.cpp \
+    Dialogos/dialogoeditorformulasmedicion.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -104,7 +105,8 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogoajustar.h \
     miundostack.h \
     Undo/undobase.h \
-    Delegados/delegadoformulasmedicion.h
+    Delegados/delegadoformulasmedicion.h \
+    Dialogos/dialogoeditorformulasmedicion.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
@@ -117,7 +119,8 @@ FORMS    += Ui/mainwindow.ui \
     Ui/dialogotablaslistadoobras.ui \
     Ui/dialogoadvertenciaborrarbbdd.ui \
     Ui/dialogocertificaciones.ui \
-    Ui/dialogoajustar.ui
+    Ui/dialogoajustar.ui \    
+    Ui/dialogoeditorformulasmedicion.ui
 
 QT += sql
 
