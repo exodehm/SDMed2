@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>580</width>
-    <height>386</height>
+    <height>561</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -104,6 +104,20 @@
                 <width>100</width>
                 <height>0</height>
                </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBoxTamanno">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>TextLabel</string>
               </property>
              </widget>
             </item>
@@ -248,11 +262,6 @@
     </layout>
    </item>
   </layout>
-  <zorder>buttonBox</zorder>
-  <zorder>groupBox</zorder>
-  <zorder>labelAnchura</zorder>
-  <zorder>verticalSpacer</zorder>
-  <zorder>groupBox</zorder>
  </widget>
  <resources/>
  <connections>

@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+class QSqlQueryModel;
+
 namespace Ui {
 class DialogoEditorFormulasMedicion;
 }
@@ -17,9 +19,13 @@ public:
 
 public slots:
     void SincronizarWidgets();
+    void RellenarListadoPerfiles();
+    void RellenarTablasDiferentesPerfiles(int tabla);
 
 private:
     Ui::DialogoEditorFormulasMedicion *ui;
+    bool m_comboPerfilesRelleno;
+    QSqlQueryModel *modeloPerfiles, *modeloTipoPerfiles;
 };
 
 #endif // DIALOGOEDITORFORMULASMEDICION_H
