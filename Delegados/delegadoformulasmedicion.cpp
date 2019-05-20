@@ -2,6 +2,7 @@
 #include "./Dialogos/dialogoeditorformulasmedicion.h"
 #include <QPushButton>
 #include <QApplication>
+#include <QPainter>
 
 DelegadoFormulasMedicion::DelegadoFormulasMedicion(QObject *parent):DelegadoBase(parent)
 {
@@ -38,8 +39,10 @@ void DelegadoFormulasMedicion::setModelData(QWidget *editor, QAbstractItemModel 
 
 void DelegadoFormulasMedicion::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (index.isValid() && index == m_indiceActivo)
+    int tipo = index.sibling(index.row(),index.column()+3).data().toInt();
+    if (index.isValid() && index == m_indiceActivo && tipo==tipoLineaMedicion::NORMAL)
     {
+        painter->drawText(option.rect,index.data().toString());
         QStyleOptionButton boton;
         QRect r = option.rect;//getting the rect of the cell
         int x,y,w,h;
@@ -81,7 +84,11 @@ bool DelegadoFormulasMedicion::editorEvent(QEvent *event, QAbstractItemModel *mo
                 QVariant anchura = index.sibling(index.row(),index.column()-2).data();
                 QVariant altura = index.sibling(index.row(),index.column()-1).data();
                 DialogoEditorFormulasMedicion* d =  new DialogoEditorFormulasMedicion(uds,longitud,anchura,altura);
-                d->show();
+                if (d->exec())
+                {
+                    qDebug()<<"Chachi todo";
+                    model->setData(index,QVariant(d->LeeFormula()));
+                }
             }
         return true;
     }

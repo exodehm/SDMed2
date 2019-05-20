@@ -4,6 +4,7 @@
 #include <QDialog>
 
 class QSqlQueryModel;
+class QComboBox;
 
 namespace Ui {
 class DialogoEditorFormulasMedicion;
@@ -17,14 +18,17 @@ public:
     explicit DialogoEditorFormulasMedicion(QVariant uds, QVariant longitud, QVariant anchura, QVariant altura, QWidget *parent = nullptr);
     ~DialogoEditorFormulasMedicion();
 
+    bool ComboVacio(const QComboBox* combo);
+
 public slots:
     void SincronizarWidgets();
     void RellenarListadoPerfiles();
     void RellenarTablasDiferentesPerfiles(int tabla);
+    void SeleccionarPeso();
+    QString LeeFormula();
 
 private:
     Ui::DialogoEditorFormulasMedicion *ui;
-    bool m_comboPerfilesRelleno;
     QSqlQueryModel *modeloPerfiles, *modeloTipoPerfiles;
 };
 

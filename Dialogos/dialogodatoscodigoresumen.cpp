@@ -25,7 +25,6 @@ bool DialogoDatosCodigoResumen::ActivadoCuadroDeDatosGenerales() const
     return checkBox->isChecked();
 }
 
-
 void DialogoDatosCodigoResumen::activarBoton(const QString& texto)
 {
     if (!lineEditCodigo->text().isEmpty() && !lineEditResumen->text().isEmpty())
