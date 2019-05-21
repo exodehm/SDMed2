@@ -87,6 +87,7 @@ void DialogoEditorFormulasMedicion::SeleccionarPeso()
     float ud,longitud,total,peso;
     ud = ui->lineEditUds->text().toFloat();
     longitud = ui->lineEditLongitud->text().toFloat();
+    //QString id = QString::number(ui->comboBoxPerfil->currentIndex());
     QString calibre = ui->comboBoxTamanno->currentText();
     QString consulta;
     int tabla = ui->comboBoxPerfil->currentIndex();
@@ -94,9 +95,9 @@ void DialogoEditorFormulasMedicion::SeleccionarPeso()
     {
         consulta = ("SELECT peso FROM \"tCorrugados\" WHERE diametro ='"+calibre+ "'");
     }
-    else
+    else if (tabla>0 && tabla<7)//IPE,IPN,HEB,HEA,HEM,UPN
     {
-        consulta = ("SELECT peso FROM perfiles WHERE nombre ='"+calibre+ "'");
+        consulta = ("SELECT peso FROM perfiles WHERE nombre ='"+calibre+ "' AND id_tipoperfil ='"+QString::number(tabla)+"'");
     }
     consultapeso.exec(consulta);
     qDebug()<<consulta;

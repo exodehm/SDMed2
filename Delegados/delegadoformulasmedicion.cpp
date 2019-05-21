@@ -83,11 +83,11 @@ bool DelegadoFormulasMedicion::editorEvent(QEvent *event, QAbstractItemModel *mo
                 QVariant longitud = index.sibling(index.row(),index.column()-3).data();
                 QVariant anchura = index.sibling(index.row(),index.column()-2).data();
                 QVariant altura = index.sibling(index.row(),index.column()-1).data();
-                DialogoEditorFormulasMedicion* d =  new DialogoEditorFormulasMedicion(uds,longitud,anchura,altura);
+                DialogoEditorFormulasMedicion* d = new DialogoEditorFormulasMedicion(uds,longitud,anchura,altura);
                 if (d->exec())
                 {
-                    qDebug()<<"Chachi todo";
                     model->setData(index,QVariant(d->LeeFormula()));
+                    model->setData(index,QVariant("chachi"),Qt::ToolTipRole);
                 }
             }
         return true;

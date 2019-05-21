@@ -42,7 +42,7 @@ MedicionModel::~MedicionModel()
 
 bool MedicionModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    qDebug()<<"Set data mediciones en "<<index.row()<<" con datos de "<<m_datos.size();
+    //qDebug()<<"Set data mediciones en "<<index.row()<<" con datos de "<<m_datos.size();
     //cuando estoy en una fila extra (la ultima o cuando no hay medicion)
     if (index.row() == m_datos.size()-1)
     {
@@ -57,7 +57,7 @@ bool MedicionModel::setData(const QModelIndex &index, const QVariant &value, int
         m_pila->Push(m_ruta, num_cert, new UndoEditarMedicion(m_tabla,m_codigopadre,m_codigohijo,index.data(),value,
          m_datos.at(index.row()).at(tipoColumnaTMedCert::POSICION).toInt(),index.column(), num_cert, QVariant(descripcion)));
         return true;
-    }    
+    }
     return false;
 }
 
