@@ -15,6 +15,7 @@ public:
     ~MedicionModel();
 
     bool setData(const QModelIndex & index, const QVariant& value, int role);
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
     void PrepararCabecera(/*QList<QList<QVariant>>&datos*/);
     void Copiar(const QList<int> &filas);

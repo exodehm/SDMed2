@@ -1,4 +1,5 @@
 #include "tablabase.h"
+#include "./filtrotablabase.h"
 #include <QDebug>
 
 TablaBase::TablaBase(int nColumnas, QWidget *parent): QTableView(parent)
@@ -16,8 +17,9 @@ TablaBase::TablaBase(int nColumnas, QWidget *parent): QTableView(parent)
     dlgNumTablaP = new DelegadoNumerosTablaPrincipal;
     dlgNumTablaMC = new DelegadoNumerosTablaMedCert;
     dlgFM = new DelegadoFormulasMedicion;
-    filtro = new Filter;
-    installEventFilter(filtro);
+    //filtro = new Filter;
+    //installEventFilter(filtro);
+    //installEventFilter(new FiltroTablaBase(this));
     cabeceraHorizontal->setContextMenuPolicy(Qt::CustomContextMenu);
     cabeceraVertical->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setContextMenuPolicy(Qt::CustomContextMenu);

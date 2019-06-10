@@ -15,10 +15,10 @@ class DialogoEditorFormulasMedicion : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogoEditorFormulasMedicion(QVariant uds, QVariant longitud, QVariant anchura, QVariant altura, QWidget *parent = nullptr);
+    explicit DialogoEditorFormulasMedicion(const QVariant& uds, const QVariant& longitud, const QVariant& anchura, const QVariant& altura, const QVariant& formula, QWidget *parent = nullptr);
     ~DialogoEditorFormulasMedicion();
 
-    bool ComboVacio(const QComboBox* combo);
+    bool ComboVacio(const QComboBox* combo);    
 
 public slots:
     void SincronizarWidgets();
@@ -26,6 +26,11 @@ public slots:
     void RellenarTablasDiferentesPerfiles(int tabla);
     void SeleccionarPeso();
     QString LeeFormula();
+    QString LeeUd();
+    QString LeeLong();
+    QString LeeAnc();
+    QString LeeAlt();
+    void Evaluar();
 
 private:
     Ui::DialogoEditorFormulasMedicion *ui;

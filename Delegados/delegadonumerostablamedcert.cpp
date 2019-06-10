@@ -7,7 +7,7 @@ DelegadoNumerosTablaMedCert::DelegadoNumerosTablaMedCert(QObject* parent):Delega
 
 void DelegadoNumerosTablaMedCert::paint( QPainter *painter,const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {   
-    if (index.isValid())
+    /*if (index.isValid())
     {
         QStyleOptionViewItem opt = option;
         initStyleOption(&opt, index);
@@ -42,7 +42,7 @@ void DelegadoNumerosTablaMedCert::paint( QPainter *painter,const QStyleOptionVie
             painter->drawText(option.rect, Qt::AlignCenter, displayText(index.data(), QLocale::system()));
         }
     }
-    else
+    else*/
     {
         DelegadoNumerosBase::paint(painter, option, index);
     }

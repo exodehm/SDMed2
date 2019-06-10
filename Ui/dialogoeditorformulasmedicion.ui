@@ -68,12 +68,12 @@
            </widget>
           </item>
           <item>
-           <widget class="QPlainTextEdit" name="plainTextEditExpresion"/>
+           <widget class="QLineEdit" name="lineEditExpresion"/>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButtonExpresion">
+           <widget class="QPushButton" name="pushButtonEvaluar">
             <property name="text">
-             <string>Calculadora</string>
+             <string>Evaluar</string>
             </property>
            </widget>
           </item>
@@ -205,7 +205,7 @@
           </size>
          </property>
          <property name="readOnly">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -231,7 +231,7 @@
           </size>
          </property>
          <property name="readOnly">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -257,7 +257,7 @@
           </size>
          </property>
          <property name="readOnly">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -283,7 +283,7 @@
           </size>
          </property>
          <property name="readOnly">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -295,7 +295,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEditResultado"/>
+        <widget class="QLineEdit" name="lineEditResultado">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -312,13 +316,7 @@
     </layout>
    </item>
   </layout>
-  <zorder>buttonBox</zorder>
   <zorder></zorder>
-  <zorder>labelPesoKgm</zorder>
-  <zorder>labelContenidoPesoKgm</zorder>
-  <zorder>labelPesoKgm</zorder>
-  <zorder>labelContenidoPesoKgm</zorder>
-  <zorder>labelPesoKgm</zorder>
  </widget>
  <resources/>
  <connections>

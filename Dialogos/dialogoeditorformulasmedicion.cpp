@@ -5,7 +5,7 @@
 #include <QtSql/QSqlQueryModel>
 #include <QDebug>
 
-DialogoEditorFormulasMedicion::DialogoEditorFormulasMedicion(QVariant uds, QVariant longitud, QVariant anchura, QVariant altura, QWidget *parent) :
+DialogoEditorFormulasMedicion::DialogoEditorFormulasMedicion(const QVariant &uds, const QVariant &longitud, const QVariant &anchura, const QVariant &altura, const QVariant &formula, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogoEditorFormulasMedicion)
 {
@@ -14,6 +14,7 @@ DialogoEditorFormulasMedicion::DialogoEditorFormulasMedicion(QVariant uds, QVari
     ui->lineEditLongitud->setText(longitud.toString());
     ui->lineEditAnchura->setText(anchura.toString());
     ui->lineEditAltura->setText(altura.toString());
+    ui->lineEditExpresion->setText(formula.toString());
 
     QObject::connect(ui->radioButtonExpresion,SIGNAL(clicked(bool)),this,SLOT(SincronizarWidgets()));
     QObject::connect(ui->radioButtonGeometria,SIGNAL(clicked(bool)),this,SLOT(SincronizarWidgets()));
@@ -21,6 +22,11 @@ DialogoEditorFormulasMedicion::DialogoEditorFormulasMedicion(QVariant uds, QVari
     QObject::connect(ui->radioButtonPerfil,SIGNAL(clicked(bool)),this,SLOT(RellenarListadoPerfiles()));
     QObject::connect(ui->comboBoxPerfil,SIGNAL(currentIndexChanged(int)),this,SLOT(RellenarTablasDiferentesPerfiles(int)));
     QObject::connect(ui->comboBoxTamanno,SIGNAL(currentIndexChanged(int)),this,SLOT(SeleccionarPeso()));
+    QObject::connect(ui->pushButtonEvaluar,SIGNAL(clicked(bool)),this,SLOT(Evaluar()));
+    QObject::connect(ui->lineEditUds,SIGNAL(editingFinished()),this,SLOT(Evaluar()));
+    QObject::connect(ui->lineEditLongitud,SIGNAL(editingFinished()),this,SLOT(Evaluar()));
+    QObject::connect(ui->lineEditAnchura,SIGNAL(editingFinished()),this,SLOT(Evaluar()));
+    QObject::connect(ui->lineEditAltura,SIGNAL(editingFinished()),this,SLOT(Evaluar()));
 }
 
 DialogoEditorFormulasMedicion::~DialogoEditorFormulasMedicion()
@@ -41,10 +47,28 @@ bool DialogoEditorFormulasMedicion::ComboVacio(const QComboBox *combo)
     return combo->count()==0;
 }
 
+void DialogoEditorFormulasMedicion::Evaluar()
+{
+    QString sUd = ui->lineEditUds->text().isEmpty()? "0" : ui->lineEditUds->text();
+    QString sLong = ui->lineEditLongitud->text().isEmpty()? "0" : ui->lineEditLongitud->text();
+    QString sAnch = ui->lineEditAnchura->text().isEmpty()? "0" : ui->lineEditAnchura->text();
+    QString sAlt = ui->lineEditAltura->text().isEmpty()? "0" : ui->lineEditAltura->text();
+    QString cadenaevaluar = "SELECT evaluar_formula('"+ sUd + "','" + sLong + "','" + sAnch + "','" + sAlt + "','" + ui->lineEditExpresion->text() + "')";
+    //qDebug()<<cadenaevaluar;
+    float resultado;
+    QSqlQuery consulta_evaluar;
+    consulta_evaluar.exec(cadenaevaluar);
+    while (consulta_evaluar.next())
+    {
+        resultado=consulta_evaluar.value(0).toFloat();
+    }    
+    ui->lineEditResultado->setText(QString::number(resultado,'f',2));
+}
+
 void DialogoEditorFormulasMedicion::SincronizarWidgets()
 {
-    ui->plainTextEditExpresion->setEnabled(ui->radioButtonExpresion->isChecked());
-    ui->pushButtonExpresion->setEnabled(ui->radioButtonExpresion->isChecked());
+    ui->lineEditExpresion->setEnabled(ui->radioButtonExpresion->isChecked());
+    ui->pushButtonEvaluar->setEnabled(ui->radioButtonExpresion->isChecked());
     ui->plainTextEditGeometria->setEnabled(ui->radioButtonGeometria->isChecked());
     ui->pushButtonGeometria->setEnabled(ui->radioButtonGeometria->isChecked());
     ui->comboBoxPerfil->setEnabled(ui->radioButtonPerfil->isChecked());
@@ -84,10 +108,7 @@ void DialogoEditorFormulasMedicion::RellenarTablasDiferentesPerfiles(int tabla)
 void DialogoEditorFormulasMedicion::SeleccionarPeso()
 {
     QSqlQuery consultapeso;
-    float ud,longitud,total,peso;
-    ud = ui->lineEditUds->text().toFloat();
-    longitud = ui->lineEditLongitud->text().toFloat();
-    //QString id = QString::number(ui->comboBoxPerfil->currentIndex());
+    float peso;
     QString calibre = ui->comboBoxTamanno->currentText();
     QString consulta;
     int tabla = ui->comboBoxPerfil->currentIndex();
@@ -109,14 +130,32 @@ void DialogoEditorFormulasMedicion::SeleccionarPeso()
     //borro el contenido de los campos anchura y altura puesto que el resultado estará en función del nº de unidades y la longitud
     ui->lineEditAnchura->setText("");
     ui->lineEditAltura->setText("");
-    ui->plainTextEditExpresion->clear();
-    ui->plainTextEditExpresion->insertPlainText("a*b*"+QString::number(peso));
-    total = ud*longitud*peso;
-    ui->lineEditResultado->setText(QString::number(total));
+    ui->lineEditExpresion->clear();
+    ui->lineEditExpresion->setText("a*b*"+QString::number(peso));
+    Evaluar();
 }
 
 QString DialogoEditorFormulasMedicion::LeeFormula()
 {
-    return ui->plainTextEditExpresion->document()->toPlainText();
+    return ui->lineEditExpresion->text();
 }
 
+QString DialogoEditorFormulasMedicion::LeeUd()
+{
+    return ui->lineEditUds->text();
+}
+
+QString DialogoEditorFormulasMedicion::LeeLong()
+{
+    return ui->lineEditLongitud->text();
+}
+
+QString DialogoEditorFormulasMedicion::LeeAnc()
+{
+    return ui->lineEditAnchura->text();
+}
+
+QString DialogoEditorFormulasMedicion::LeeAlt()
+{
+    return ui->lineEditAltura->text();
+}

@@ -18,7 +18,7 @@ void DelegadoColumnasBloqueadas::paint( QPainter *painter,const QStyleOptionView
         painter->restore();
     }
     else
-        QStyledItemDelegate::paint(painter, option, index);
+        DelegadoNumerosBase::paint(painter, option, index);
 }
 
 QSize DelegadoColumnasBloqueadas::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const

@@ -14,6 +14,8 @@ public:
     bool setData(const QModelIndex & index, const QVariant& value, int role);
     bool removeRows(int fila, int numFilas, const QModelIndex& parent);
 
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+
     bool EsPartida();
     void PrepararCabecera(/*QList<QList<QVariant>>&datos*/) override;
 

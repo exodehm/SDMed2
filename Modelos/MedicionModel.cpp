@@ -42,23 +42,39 @@ MedicionModel::~MedicionModel()
 
 bool MedicionModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    //qDebug()<<"Set data mediciones en "<<index.row()<<" con datos de "<<m_datos.size();
     //cuando estoy en una fila extra (la ultima o cuando no hay medicion)
     if (index.row() == m_datos.size()-1)
     {
-        QString descripcion ="Añado fila extra y edito";
-        qDebug()<<descripcion;
+        //QString descripcion ="Añado fila extra y edito";
+        //qDebug()<<descripcion;
         InsertarFila(index.row());
     }
     if (index.isValid() && (role == Qt::EditRole /*|| role == Qt::DisplayRole*/) && value.toString()!=index.data().toString())
     {
         QString descripcion ="Cambio el valor de "+ index.data().toString()+" a "+value.toString()+" en la linea: "+m_datos.at(index.row()+1).at(tipoColumnaTMedCert::POSICION).toString();
-        qDebug()<<descripcion;
+        //qDebug()<<descripcion;
         m_pila->Push(m_ruta, num_cert, new UndoEditarMedicion(m_tabla,m_codigopadre,m_codigohijo,index.data(),value,
-         m_datos.at(index.row()).at(tipoColumnaTMedCert::POSICION).toInt(),index.column(), num_cert, QVariant(descripcion)));
+         index.row(),index.column(), num_cert, QVariant(descripcion)));
+        return true;
+    }
+    if (index.isValid() && role == Qt::ToolTipRole)
+    {
         return true;
     }
     return false;
+}
+
+Qt::ItemFlags MedicionModel::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+    {
+        return 0;
+    }
+    if (index.column()!=tipoColumnaTMedCert::FORMULA && index.column()!=tipoColumnaTMedCert::PARCIAL && index.column()!=tipoColumnaTMedCert::SUBTOTAL)
+    {
+        return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+    }
+    return  QAbstractItemModel::flags(index);
 }
 
 void MedicionModel::PrepararCabecera(/*QList<QList<QVariant> > &datos*/)

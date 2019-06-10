@@ -1,4 +1,5 @@
 #include "tablaprincipal.h"
+#include "./filtrotablabase.h"
 
 TablaPrincipal::TablaPrincipal(int nColumnas, QWidget *parent): TablaBase(nColumnas, parent)
 {
@@ -23,6 +24,7 @@ TablaPrincipal::TablaPrincipal(int nColumnas, QWidget *parent): TablaBase(nColum
     dlgIco= new DelegadoIconos;
     setItemDelegateForColumn(tipoColumnaTPrincipal::NATURALEZA,dlgIco);
     cabeceraHorizontal->setSelectionMode(QAbstractItemView::NoSelection);
+    installEventFilter(new FiltroTablaBase(this));
 }
 
 void TablaPrincipal::MostrarMenuCabecera(QPoint pos)

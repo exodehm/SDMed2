@@ -17,9 +17,10 @@
 #include "../Delegados/delegadoformulasmedicion.h"
 //#include "../Modelos/MedCertModel.h"
 #include "../Modelos/PrincipalModel.h"
-#include "../filter.h"
+//#include "../filter.h"
 
-class Filter;
+//class Filter;
+//class FiltroTablaBase;
 
 class TablaBase : public QTableView
 {
@@ -68,7 +69,8 @@ protected:
     DelegadoFormulasMedicion* dlgFM;
     DelegadoIconos* dlgIco;
     bool* celdaBloqueada;
-    Filter* filtro;
+    /*Filter* filtro;
+    FiltroTablaBase* filtro;*/
     QSignalMapper* mapperH;
     QSignalMapper* mapperV;
 };

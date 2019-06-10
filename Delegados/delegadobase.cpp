@@ -1,4 +1,5 @@
 #include "delegadobase.h"
+#include <QPainter>
 
 DelegadoBase::DelegadoBase(QObject *parent):QStyledItemDelegate(parent)
 {

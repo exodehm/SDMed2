@@ -169,6 +169,19 @@ bool PrincipalModel::removeRows(int fila, int numFilas, const QModelIndex& paren
     return true;
 }
 
+Qt::ItemFlags PrincipalModel::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+    {
+        return 0;
+    }
+    if (index.column()!=tipoColumnaTPrincipal::IMPPRES && index.column()!=tipoColumnaTPrincipal::IMPCERT)
+    {
+        return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+    }
+    return  QAbstractItemModel::flags(index);
+}
+
 bool PrincipalModel::EsPartida()
 {
     return m_naturalezapadre == static_cast<int>(Naturaleza::PARTIDA);

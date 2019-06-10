@@ -58,7 +58,9 @@ SOURCES += main.cpp\
     miundostack.cpp \
     Undo/undobase.cpp \
     Delegados/delegadoformulasmedicion.cpp \
-    Dialogos/dialogoeditorformulasmedicion.cpp
+    Dialogos/dialogoeditorformulasmedicion.cpp \
+    Tablas/filtrotablabase.cpp \
+    Tablas/filtrotablamediciones.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -106,7 +108,9 @@ HEADERS  += mainwindow.h \
     miundostack.h \
     Undo/undobase.h \
     Delegados/delegadoformulasmedicion.h \
-    Dialogos/dialogoeditorformulasmedicion.h
+    Dialogos/dialogoeditorformulasmedicion.h \
+    Tablas/filtrotablabase.h \
+    Tablas/filtrotablamediciones.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \

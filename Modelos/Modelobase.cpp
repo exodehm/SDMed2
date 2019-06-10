@@ -1,5 +1,5 @@
 #include "Modelobase.h"
-#include "PrincipalModel.h"
+//#include "PrincipalModel.h"
 #include "consultas.h"
 #include "../defs.h"
 #include "../iconos.h"
@@ -138,20 +138,17 @@ QVariant ModeloBase::data(const QModelIndex &index, int role) const
     {
         return m_datos.at(indice.row()+1).at(indice.column());
     }
+    else if (role == Qt::ToolTipRole)
+    {
+        if (index.column() == tipoColumnaTMedCert::FORMULA)
+        {
+            QString tip;
+            tip = "<b>";
+            tip += QString("%1</b>").arg(index.data().toString());
+            return tip;
+        }
+    }
     return QVariant();
-}
-
-Qt::ItemFlags ModeloBase::flags(const QModelIndex &index) const
-{
-    if (!index.isValid())
-    {
-        return 0;
-    }
-    if (/*index.row()!= filavacia && */index.column()!=tipoColumnaTPrincipal::IMPPRES && index.column()!=tipoColumnaTPrincipal::IMPCERT)
-    {
-        return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
-    }
-    return  QAbstractItemModel::flags(index);
 }
 
 bool ModeloBase::insertRows(int row, int count, const QModelIndex &parent)

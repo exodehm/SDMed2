@@ -1,4 +1,6 @@
 #include "delegadonumerosbase.h"
+#include <QApplication>
+#include <QPainter>
 
 DelegadoNumerosBase::DelegadoNumerosBase(QObject *parent):DelegadoBase(parent)
 {
@@ -47,7 +49,22 @@ void DelegadoNumerosBase::setModelData(QWidget * editor, QAbstractItemModel * mo
 
 void DelegadoNumerosBase::paint( QPainter *painter,const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    DelegadoBase::paint(painter, option, index);
+    if ((option.state & QStyle::State_Selected) && (option.state & QStyle::State_Active))
+    {
+        qDebug()<<"Dentro";
+        painter->save();
+        painter->setBrush(Qt::NoBrush);
+        painter->setPen(Qt::black);
+        painter->drawRect(option.rect);
+        painter->setBrush(Qt::SolidPattern);
+        painter->drawRect(option.rect.x()+option.rect.width()-5,option.rect.y()+option.rect.height()-5,5,5);
+        painter->drawText(option.rect, Qt::AlignRight | Qt::AlignVCenter, index.data().toString());
+        painter->restore();
+    }
+    else
+    {
+        DelegadoBase::paint(painter, option, index);
+    }
 }
 
 QSize DelegadoNumerosBase::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const

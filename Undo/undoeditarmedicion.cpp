@@ -92,7 +92,7 @@ void UndoInsertarLineaMedicion::undo()
 void UndoInsertarLineaMedicion::redo()
 {
     QString cadenainsertar = "SELECT insertar_lineas_medcert('"+m_tabla+"','"+m_codigopadre+"','"+m_codigohijo+"','"+QString::number(m_numFilas)+"','"+
-            m_posicion+"','"+QString::number(m_num_cert)+"')";
+            QString::number(m_posicion)+"','"+QString::number(m_num_cert)+"')";
     qDebug()<<"cadena insertar"<<cadenainsertar;
     m_consulta.exec(cadenainsertar);
     //ahora preparo el array de ids a borrar para la orden redo. En este caso será siempre un array de un solo elemento, ya que la insercion se hace de uno en uno   

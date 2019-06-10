@@ -8,8 +8,11 @@ class TablaMed : public TablaBase
 {
      Q_OBJECT
 public:
+    enum eModoSeleccion{SELECCION_NORMAL, SELECCION_RESTRINGIDA};
+
     explicit TablaMed(int nColumnas, QWidget *parent=nullptr);
-    void mouseMoveEvent(QMouseEvent *event) override;
+    //void mouseMoveEvent(QMouseEvent *event) override;
+    void paintEvent(QPaintEvent* event);
 
 
 public slots:
@@ -24,7 +27,12 @@ public slots:
 
 signals:
     //void CopiarMediciones();
-    void hoverIndexChanged(QModelIndex);
+    //void hoverIndexChanged(QModelIndex);
+
+private:
+    eModoSeleccion modoSeleccion;
+    bool m_BotonIzqPresionado;
+    int m_tamMarca;
 
 };
 
