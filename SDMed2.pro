@@ -32,7 +32,6 @@ SOURCES += main.cpp\
     Delegados/delegadonumerostablamedcert.cpp \
     Delegados/delegadonumerostablaprincipal.cpp \
     iconos.cpp \
-    filter.cpp \
     Modelos/treeitem.cpp \
     Modelos/TreeModel.cpp \
     Dialogos/dialogotablaslistadoobras.cpp \
@@ -82,7 +81,6 @@ HEADERS  += mainwindow.h \
     Delegados/delegadonumerostablamedcert.h \
     Delegados/delegadonumerostablaprincipal.h \
     iconos.h \
-    filter.h \
     Modelos/treeitem.h \
     Modelos/TreeModel.h \
     defs.h \

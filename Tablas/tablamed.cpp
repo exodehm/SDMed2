@@ -17,7 +17,7 @@ TablaMed::TablaMed(const QString &tabla, const QStringList &ruta, int num_certif
     celdaBloqueada[tipoColumnaTMedCert::SUBTOTAL]=true;
     celdaBloqueada[tipoColumnaTMedCert::ID]=true;
 
-    /*setItemDelegateForColumn(tipoColumnaTMedCert::N,dlgNumTablaMC);
+    setItemDelegateForColumn(tipoColumnaTMedCert::N,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumnaTMedCert::COMENTARIO,dlgBA);
     setItemDelegateForColumn(tipoColumnaTMedCert::LONGITUD,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumnaTMedCert::ANCHURA,dlgNumTablaMC);
@@ -26,7 +26,7 @@ TablaMed::TablaMed(const QString &tabla, const QStringList &ruta, int num_certif
     setItemDelegateForColumn(tipoColumnaTMedCert::PARCIAL,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumnaTMedCert::SUBTOTAL,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumnaTMedCert::FASE,dlgCB);
-    setItemDelegateForColumn(tipoColumnaTMedCert::ID,dlgCB);*/
+    setItemDelegateForColumn(tipoColumnaTMedCert::ID,dlgCB);
 
     setModel(modelo);
     setMouseTracking(true);

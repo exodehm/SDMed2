@@ -1,17 +1,24 @@
 #ifndef INSTANCIA_H
 #define INSTANCIA_H
 
-#include "filter.h"
 #include "defs.h"
 
 #include <QSqlQuery>
+#include <QWidget>
+#include <QModelIndex>
 
 class MiUndoStack;
 class QSplitter;
+class QHeaderView;
+class QVBoxLayout;
+class QTabWidget;
+
 class MedCertModel;
 class ModeloBase;
 class TreeModel;
 class VistaArbol;
+class TablaBase;
+class Editor;
 
 class Instancia : public QWidget
 {
