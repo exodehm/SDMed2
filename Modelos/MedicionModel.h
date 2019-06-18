@@ -24,6 +24,8 @@ public:
     void BorrarFilas(const QList<int> &filas) override;
     void InsertarFila(int fila) override;
     void ActualizarDatos(const QStringList& ruta) override;
+    void EditarFormula(const QModelIndex& index);
+    void IgualarDatoColumna(const QModelIndexList &celdas);
 
     void CambiarTipoLineaMedicion(int fila, int columna, QVariant tipo);
     void CambiaCertificacionActual(int cert);

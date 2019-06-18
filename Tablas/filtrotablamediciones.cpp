@@ -1,5 +1,6 @@
 #include "./filtrotablamediciones.h"
 #include "./marca.h"
+#include "./Modelos/MedicionModel.h"
 #include <QModelIndex>
 #include <QEvent>
 #include <QHoverEvent>
@@ -23,8 +24,7 @@ FiltroTablaMediciones::FiltroTablaMediciones(TablaBase *table, QObject* parent):
     m_botonFormula->setVisible(false);
 
     QObject::connect(m_tabla->selectionModel(),SIGNAL(selectionChanged(QItemSelection,QItemSelection)),this,SLOT(FiltrarColumnaSeleccion()));
-
-
+    QObject::connect(m_botonFormula,SIGNAL(clicked(bool)),this,SLOT(AbrirDialogoEdicionFormulas()));
 }
 
 bool FiltroTablaMediciones::eventFilter(QObject *obj, QEvent *event)
@@ -99,10 +99,10 @@ bool FiltroTablaMediciones::eventFilter(QObject *obj, QEvent *event)
         //si estoy en modo restringido efectuo una accion al soltar el boton del raton
         if (m_modoRestringido == true)
         {
-            qDebug()<<"Funcion para hacer algo con los indices:";
-            for (const QModelIndex& i : m_tabla->selectionModel()->selectedIndexes())
+            MedicionModel *m = qobject_cast<MedicionModel*>(m_tabla->model());
+            if (m)
             {
-                qDebug()<<i;
+                m->IgualarDatoColumna(m_tabla->selectionModel()->selectedIndexes());
             }
         }
         m_modoRestringido = false;
@@ -136,6 +136,15 @@ void FiltroTablaMediciones::FiltrarColumnaSeleccion()
             }
         }
         DibujarMarcasSeleccionRestringida();
+    }
+}
+
+void FiltroTablaMediciones::AbrirDialogoEdicionFormulas()
+{
+    MedicionModel *m = qobject_cast<MedicionModel*>(m_tabla->model());
+    if (m)
+    {
+        m->EditarFormula(m_currentIndex);
     }
 }
 

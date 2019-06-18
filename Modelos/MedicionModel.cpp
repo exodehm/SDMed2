@@ -4,6 +4,7 @@
 #include "../iconos.h"
 #include "./miundostack.h"
 #include "../Undo/undoeditarmedicion.h"
+#include "./Dialogos/dialogoeditorformulasmedicion.h"
 
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
@@ -211,5 +212,40 @@ void MedicionModel::ActualizarDatos(const QStringList &ruta)
     {
         m_hayFilaVacia = true;
         m_filavacia=0;
+    }
+}
+
+void MedicionModel::EditarFormula(const QModelIndex& index)
+{
+    QVariant uds = index.sibling(index.row(),index.column()-4).data();
+    QVariant longitud = index.sibling(index.row(),index.column()-3).data();
+    QVariant anchura = index.sibling(index.row(),index.column()-2).data();
+    QVariant altura = index.sibling(index.row(),index.column()-1).data();
+    QVariant formula = index.data();
+    DialogoEditorFormulasMedicion* d = new DialogoEditorFormulasMedicion(uds,longitud,anchura,altura,formula);
+    if (d->exec())
+    {
+        setData(index.sibling(index.row(),index.column()-4),QVariant(d->LeeUd()),Qt::EditRole);
+        setData(index.sibling(index.row(),index.column()-3),QVariant(d->LeeLong()),Qt::EditRole);
+        setData(index.sibling(index.row(),index.column()-2),QVariant(d->LeeAnc()),Qt::EditRole);
+        setData(index.sibling(index.row(),index.column()-1),QVariant(d->LeeAlt()),Qt::EditRole);
+        setData(index,QVariant(d->LeeFormula()),Qt::EditRole);
+
+        setData(index,QVariant("chachi"),Qt::ToolTipRole);
+        qDebug()<<"contenido: "<<data(index).toString();
+        qDebug()<<"lo otro: "<<data(index,Qt::ToolTipRole);
+    }
+}
+
+void MedicionModel::IgualarDatoColumna(const QModelIndexList &celdas)
+{
+    auto it = celdas.begin();
+    QVariant datoInicial = (*it).data();
+    qDebug()<<"Igualar las celdas a "<<datoInicial;
+    ++it;
+    while (it!=celdas.end())
+    {
+        setData(*it,datoInicial,Qt::EditRole);
+        ++it;
     }
 }

@@ -23,6 +23,7 @@ public:
 
 private slots:
     void FiltrarColumnaSeleccion();
+    void AbrirDialogoEdicionFormulas();
 
 private:
     Marca* m_marca;
