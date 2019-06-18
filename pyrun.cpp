@@ -1,5 +1,5 @@
 #include "pyrun.h"
-#include <Python.h>
+#include "/usr/include/python3.6m/Python.h"
 
 #include <QByteArray>
 #include <QCoreApplication>

@@ -1,5 +1,5 @@
 //#include "exportarXLS.h"
-#include "/usr/include/python3.5m/Python.h"
+#include "/usr/include/python3.6m/Python.h"
 #include <QDebug>
 #include <QString>
 

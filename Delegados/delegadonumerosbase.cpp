@@ -49,9 +49,8 @@ void DelegadoNumerosBase::setModelData(QWidget * editor, QAbstractItemModel * mo
 
 void DelegadoNumerosBase::paint( QPainter *painter,const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    if ((option.state & QStyle::State_Selected) && (option.state & QStyle::State_Active))
+    /*if ((option.state & QStyle::State_Selected) && (option.state & QStyle::State_Active))
     {
-        qDebug()<<"Dentro";
         painter->save();
         painter->setBrush(Qt::NoBrush);
         painter->setPen(Qt::black);
@@ -61,7 +60,7 @@ void DelegadoNumerosBase::paint( QPainter *painter,const QStyleOptionViewItem &o
         painter->drawText(option.rect, Qt::AlignRight | Qt::AlignVCenter, index.data().toString());
         painter->restore();
     }
-    else
+    else*/
     {
         DelegadoBase::paint(painter, option, index);
     }

@@ -8,7 +8,7 @@ class TablaCert : public TablaMed
 {
      Q_OBJECT
 public:
-    explicit TablaCert(int nColumnas, QWidget *parent=nullptr);
+    explicit TablaCert(const QString& tabla, const QStringList& ruta, int num_certif, MiUndoStack* p, QWidget *parent=nullptr);
 
 
 public slots:
@@ -18,7 +18,6 @@ public slots:
 
 signals:
     //void CopiarMediciones();
-
 };
 
 

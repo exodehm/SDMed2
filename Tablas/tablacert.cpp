@@ -1,6 +1,7 @@
 #include "tablacert.h"
 
-TablaCert::TablaCert(int nColumnas, QWidget *parent):TablaMed(nColumnas, parent)
+TablaCert::TablaCert(const QString& tabla, const QStringList& ruta, int num_certif, MiUndoStack* p, QWidget *parent):
+    TablaMed(tabla, ruta,num_certif,p,parent)
 {
 
 }

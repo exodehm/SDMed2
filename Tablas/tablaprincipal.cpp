@@ -1,10 +1,17 @@
 #include "tablaprincipal.h"
+#include "./Modelos/PrincipalModel.h"
 #include "./filtrotablabase.h"
 
-TablaPrincipal::TablaPrincipal(int nColumnas, QWidget *parent): TablaBase(nColumnas, parent)
+TablaPrincipal::TablaPrincipal(const QString &tabla, const QStringList &ruta, MiUndoStack *p, QWidget *parent): TablaBase(parent)
 {
     limiteIzquierdo=tipoColumnaTPrincipal::CODIGO;
     limiteDerecho=tipoColumnaTPrincipal::IMPPRES;
+
+    modelo = new PrincipalModel(tabla, ruta, p);
+    setModel(modelo);
+    setObjectName("TablaP");
+
+    celdaBloqueada =  new bool[modelo->columnCount(QModelIndex())]{false};
 
     //celdaBloqueada[tipoColumnaTPrincipal::CODIGO]=true;
     celdaBloqueada[tipoColumnaTPrincipal::PORCERTPRES]=true;
@@ -19,7 +26,7 @@ TablaPrincipal::TablaPrincipal(int nColumnas, QWidget *parent): TablaBase(nColum
     setItemDelegateForColumn(tipoColumnaTPrincipal::PRCERT,dlgNumTablaP);
     setItemDelegateForColumn(tipoColumnaTPrincipal::PORCERTPRES,dlgNumTablaP);
     setItemDelegateForColumn(tipoColumnaTPrincipal::IMPPRES,dlgCB);
-    setItemDelegateForColumn(tipoColumnaTPrincipal::IMPCERT,dlgCB);
+    setItemDelegateForColumn(tipoColumnaTPrincipal::IMPCERT,dlgCB);    
 
     dlgIco= new DelegadoIconos;
     setItemDelegateForColumn(tipoColumnaTPrincipal::NATURALEZA,dlgIco);

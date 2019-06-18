@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     db= QSqlDatabase::addDatabase("QPSQL");
     db.setHostName("127.0.0.1");
     db.setPort(5432);
-    db.setDatabaseName("SDMed");
+    db.setDatabaseName("sdmed");
     db.setUserName("postgres");
     db.setPassword("melo1cotonero");
     if (db.open())
@@ -112,6 +112,7 @@ QList<QList<QVariant>> MainWindow::VerObrasEnBBDD()
         obra.append(nombrecodigoV);
         QString cadenaconsultaresumen = "SELECT resumen from \"" + \
                 consultacodigos.value(0).toString() + "\" WHERE codigo = '" + nombrecodigo + "';";
+        qDebug()<<cadenaconsultaresumen;
         consultaresumenes.exec(cadenaconsultaresumen);
         while (consultaresumenes.next())
         {
@@ -125,13 +126,13 @@ QList<QList<QVariant>> MainWindow::VerObrasEnBBDD()
             if (nombrecodigo == elem->LeeTabla())
             {
                 obraabierta = true;
-            }            
+            }
         }
         obra.append(obraabierta);
         obraabierta = false;
         listadoobras.append(obra);
         obra.clear();
-    }    
+    }
     return listadoobras;
 }
 

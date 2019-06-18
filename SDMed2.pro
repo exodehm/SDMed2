@@ -60,7 +60,8 @@ SOURCES += main.cpp\
     Delegados/delegadoformulasmedicion.cpp \
     Dialogos/dialogoeditorformulasmedicion.cpp \
     Tablas/filtrotablabase.cpp \
-    Tablas/filtrotablamediciones.cpp
+    Tablas/filtrotablamediciones.cpp \
+    Tablas/marca.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -110,7 +111,8 @@ HEADERS  += mainwindow.h \
     Delegados/delegadoformulasmedicion.h \
     Dialogos/dialogoeditorformulasmedicion.h \
     Tablas/filtrotablabase.h \
-    Tablas/filtrotablamediciones.h
+    Tablas/filtrotablamediciones.h \
+    Tablas/marca.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
@@ -135,6 +137,6 @@ RESOURCES += \
     Editor/iconosEditor.qrc \
     iconos.qrc
 
-LIBS += -L /usr/local/lib/python3.5 -lpython3.5m
-INCLUDEPATH += /usr/include/python3.5m
-DEPENDPATH +=  /usr/include/python3.5m
+LIBS += -L /usr/local/lib/python3.6 -lpython3.6m
+INCLUDEPATH += /usr/include/python3.6m
+DEPENDPATH +=  /usr/include/python3.6m

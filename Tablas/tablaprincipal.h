@@ -4,11 +4,13 @@
 #include "../defs.h"
 #include "tablabase.h"
 
+class ModeloBase;
+
 class TablaPrincipal : public TablaBase
 {
      Q_OBJECT
 public:
-    explicit TablaPrincipal(int nColumnas, QWidget *parent=nullptr);
+    explicit TablaPrincipal(const QString& tabla, const QStringList& ruta, MiUndoStack* p, QWidget *parent=nullptr);
 
 public slots:
     void MostrarMenuCabecera(QPoint pos) override;
@@ -16,9 +18,6 @@ public slots:
     void MostrarMenuTabla(QPoint pos) override;
     //void Copiar();
     void CopiarPartidas();
-
-signals:
-
 };
 
 #endif // TABLAPRINCIPAL_H

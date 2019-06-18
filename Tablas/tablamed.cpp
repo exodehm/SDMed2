@@ -3,17 +3,21 @@
 #include "./Modelos/MedicionModel.h"
 #include "./filtrotablamediciones.h"
 
-TablaMed::TablaMed(int nColumnas, QWidget *parent): TablaBase(nColumnas, parent)
+TablaMed::TablaMed(const QString &tabla, const QStringList &ruta, int num_certif, MiUndoStack *p, QWidget *parent): TablaBase(parent)
 {    
     limiteIzquierdo=tipoColumnaTMedCert::COMENTARIO;
     limiteDerecho=tipoColumnaTMedCert::PARCIAL;
+
+    modelo = new MedicionModel(tabla, ruta, num_certif, p);
+
+    celdaBloqueada =  new bool[modelo->columnCount(QModelIndex())]{false};
 
     celdaBloqueada[tipoColumnaTMedCert::FASE]=true;
     celdaBloqueada[tipoColumnaTMedCert::PARCIAL]=true;
     celdaBloqueada[tipoColumnaTMedCert::SUBTOTAL]=true;
     celdaBloqueada[tipoColumnaTMedCert::ID]=true;
 
-    setItemDelegateForColumn(tipoColumnaTMedCert::N,dlgNumTablaMC);
+    /*setItemDelegateForColumn(tipoColumnaTMedCert::N,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumnaTMedCert::COMENTARIO,dlgBA);
     setItemDelegateForColumn(tipoColumnaTMedCert::LONGITUD,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumnaTMedCert::ANCHURA,dlgNumTablaMC);
@@ -22,65 +26,17 @@ TablaMed::TablaMed(int nColumnas, QWidget *parent): TablaBase(nColumnas, parent)
     setItemDelegateForColumn(tipoColumnaTMedCert::PARCIAL,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumnaTMedCert::SUBTOTAL,dlgNumTablaMC);
     setItemDelegateForColumn(tipoColumnaTMedCert::FASE,dlgCB);
-    setItemDelegateForColumn(tipoColumnaTMedCert::ID,dlgCB);
+    setItemDelegateForColumn(tipoColumnaTMedCert::ID,dlgCB);*/
 
-    setColumnHidden(tipoColumnaTMedCert::ID,true);
+    setModel(modelo);
     setMouseTracking(true);
-    //setAttribute(Qt::WA_Hover);
-
-    installEventFilter(new FiltroTablaMediciones(this));
+    setAttribute(Qt::WA_Hover);
+    //en principio las columnas de id u pos es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
+    setColumnHidden(tipoColumnaTMedCert::ID,true);
+    setColumnHidden(tipoColumnaTMedCert::POSICION,true);
+    viewport()->installEventFilter(new FiltroTablaMediciones(this));
 
     QObject::connect(cabeceraHorizontal, SIGNAL(sectionClicked(int)), this,SLOT(Bloquear(int)));
-    QObject::connect(this,SIGNAL(hoverIndexChanged(QModelIndex)),dlgFM,SLOT(onHoverIndexChanged(QModelIndex)));
-}
-
-/*void TablaMed::mouseMoveEvent(QMouseEvent *event)
-{
-    QPoint pos = event->pos();
-    QModelIndex index = indexAt(pos);
-    if (index.isValid())
-    {
-        if (index.column() == tipoColumnaTMedCert::FORMULA)
-        {
-            //setCursor(Qt::DragMoveCursor);
-            emit hoverIndexChanged(index);
-        }
-        else
-        {
-            //setCursor(Qt::ArrowCursor);
-            emit hoverIndexChanged(index);
-        }
-    }
-    TablaBase::mouseMoveEvent(event);
-}*/
-
-void TablaMed::paintEvent(QPaintEvent *event)
-{
-    TablaBase::paintEvent(event);
-    if(selectionModel() &&  selectionModel()->selectedIndexes().isEmpty())
-    {
-        return;
-    }
-    QPen pen(Qt::black,3);
-    QPainter painter(viewport());
-    //defino el area seleccionada
-    QRect rect = visualRect(selectedIndexes().first()) | visualRect(selectedIndexes().last());
-    //dibujo la marca en la esquina inferior derecha del area seleccionada
-    painter.setBrush(QBrush(QColor(Qt::black)));
-    painter.drawRect(rect.x()+rect.width()-m_tamMarca,rect.y()+rect.height()-m_tamMarca,m_tamMarca,m_tamMarca);
-    //si hago la seleccion en modo restringido, saldra un borde
-    if (modoSeleccion == SELECCION_RESTRINGIDA)    {
-
-        painter.setPen(pen);
-        //painter.drawRect(rect);
-        painter.drawLine(rect.x(),rect.y(),rect.x()+rect.width(),rect.y());
-        painter.drawLine(rect.x(),rect.y(),rect.x(),rect.y()+rect.height());
-        pen.setWidth(1);
-        painter.setPen(pen);
-        painter.drawLine(rect.x()+rect.width(),rect.y(),rect.x()+rect.width(),rect.y()+rect.height());
-        painter.drawLine(rect.x(),rect.y()+rect.height(),rect.x()+rect.width(),rect.y()+rect.height());
-    }
-    viewport()->update();
 }
 
 void TablaMed::MostrarMenuCabecera(QPoint pos)

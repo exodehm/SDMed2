@@ -4,16 +4,13 @@
 #include "../defs.h"
 #include "tablabase.h"
 
+class MedicionModel;
+
 class TablaMed : public TablaBase
 {
      Q_OBJECT
 public:
-    enum eModoSeleccion{SELECCION_NORMAL, SELECCION_RESTRINGIDA};
-
-    explicit TablaMed(int nColumnas, QWidget *parent=nullptr);
-    //void mouseMoveEvent(QMouseEvent *event) override;
-    void paintEvent(QPaintEvent* event);
-
+    explicit TablaMed(const QString& tabla, const QStringList& ruta, int num_certif, MiUndoStack* p, QWidget *parent=nullptr);
 
 public slots:
     void MostrarMenuCabecera(QPoint pos) override;
@@ -24,16 +21,6 @@ public slots:
     void CambiarTipoSubtotalParcial();
     void CambiarTipoSubtotal();
     //void Copiar();
-
-signals:
-    //void CopiarMediciones();
-    //void hoverIndexChanged(QModelIndex);
-
-private:
-    eModoSeleccion modoSeleccion;
-    bool m_BotonIzqPresionado;
-    int m_tamMarca;
-
 };
 
 

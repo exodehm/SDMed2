@@ -2,13 +2,8 @@
 #include "./filtrotablabase.h"
 #include <QDebug>
 
-TablaBase::TablaBase(int nColumnas, QWidget *parent): QTableView(parent)
-{
-    celdaBloqueada =  new bool[nColumnas];
-    for (int i=0;i<nColumnas;i++)
-    {
-        celdaBloqueada[i]=false;
-    }
+TablaBase::TablaBase(QWidget *parent): QTableView(parent)
+{   
     cabeceraHorizontal = this->horizontalHeader();
     cabeceraVertical = this->verticalHeader();
     alturaFilas = this->verticalHeader();
@@ -16,10 +11,7 @@ TablaBase::TablaBase(int nColumnas, QWidget *parent): QTableView(parent)
     dlgCB = new DelegadoColumnasBloqueadas;        
     dlgNumTablaP = new DelegadoNumerosTablaPrincipal;
     dlgNumTablaMC = new DelegadoNumerosTablaMedCert;
-    dlgFM = new DelegadoFormulasMedicion;
-    //filtro = new Filter;
-    //installEventFilter(filtro);
-    //installEventFilter(new FiltroTablaBase(this));
+    dlgFM = new DelegadoFormulasMedicion;    
     cabeceraHorizontal->setContextMenuPolicy(Qt::CustomContextMenu);
     cabeceraVertical->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -128,4 +120,11 @@ void TablaBase::PonerDelegadoOriginal(int columna)
             setItemDelegateForColumn(columna,dlgBA);
         }
     }
+}
+
+void TablaBase::ActualizarDatos(const QStringList &ruta)
+{
+    modelo->ActualizarDatos(ruta);
+    modelo->layoutChanged();
+    resizeColumnsToContents();
 }

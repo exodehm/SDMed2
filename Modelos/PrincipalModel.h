@@ -21,7 +21,7 @@ public:
 
     void BorrarFilas(const QList<int>&filas) override;
     void InsertarFila(int fila) override;
-    void ActualizarDatos(const QStringList& ruta);
+    void ActualizarDatos(const QStringList& ruta) override;
 
     int LeeColor(int fila, int columna);
 

@@ -68,10 +68,7 @@ void Instancia::GenerarUI()
     separadorTablas = new QSplitter(Qt::Vertical);
 
     //tabla principal
-    modeloTablaP = new PrincipalModel(tabla, ruta, pila);
-    tablaPrincipal = new TablaPrincipal(modeloTablaP->columnCount(QModelIndex()));
-    tablaPrincipal->setObjectName("TablaP");
-    tablaPrincipal->setModel(modeloTablaP);
+    tablaPrincipal = new TablaPrincipal(tabla, ruta, pila);
     separadorTablas->addWidget(tablaPrincipal);
 
     //tablas medicion y certificacion
@@ -193,23 +190,18 @@ void Instancia::ActualizarCertificacionEnModelo()
 void Instancia::InsertarTablaMedCert(int num_certif)
 {
     qDebug()<<"Insertar tabla en la pos "<<num_certif;
-    ModeloBase* modeloMC = new MedicionModel(tabla, ruta, num_certif, pila);
     TablaBase* tablaMC;
     if (num_certif == 0)//tabla de medicion
     {
-        tablaMC = new TablaMed(modeloMC->columnCount(QModelIndex()));
+        tablaMC = new TablaMed(tabla, ruta, num_certif, pila);
         tablaMC->setObjectName(tr("Mediciones"));
         QObject::connect(tablaMC,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
     }
     else
     {
-        tablaMC = new TablaCert(modeloMC->columnCount(QModelIndex()));
+        tablaMC = new TablaCert(tabla, ruta, num_certif, pila);
         tablaMC->setObjectName(tr("Certificación nº ")+QString::number(num_certif));
     }
-    tablaMC->setModel(modeloMC);
-    //en principio las columnas de id u pos es para uso interno, así que no la muestro (la id es la id de la tabla de mediciones)
-    tablaMC->setColumnHidden(tipoColumnaTMedCert::ID,true);
-    tablaMC->setColumnHidden(tipoColumnaTMedCert::POSICION,true);
     QObject::connect(tablaMC,SIGNAL(Copiar()),this,SLOT(Copiar()));
     QObject::connect(tablaMC,SIGNAL(Pegar()),this,SLOT(Pegar()));
     Listadotablasmedcert.append(tablaMC);
@@ -417,20 +409,12 @@ void Instancia::Redo()
 
 void Instancia::RefrescarVista()
 {
-    qDebug()<<"Refrescar la vista con "<<codigopadre<<" -- "<<codigohijo;
-    modeloTablaP->ActualizarDatos(ruta);
-    modeloTablaP->layoutChanged();
-    tablaPrincipal->resizeColumnsToContents();
+    //qDebug()<<"Refrescar la vista con "<<codigopadre<<" -- "<<codigohijo;
+    tablaPrincipal->ActualizarDatos(ruta);
     for (auto it = Listadotablasmedcert.begin();it!=Listadotablasmedcert.end();++it)
-    {
-        ModeloBase* m = qobject_cast<ModeloBase*>((*it)->model());
-        if (m)
-        {
-            m->ActualizarDatos(ruta);
-            m->layoutChanged();
-        }
-        (*it)->resizeColumnsToContents();
-    }    
+    {    
+        (*it)->ActualizarDatos(ruta);
+    }
     /*modeloTablaP->QuitarIndicadorFilaVacia();
     if (modeloTablaP->rowCount(QModelIndex())==0)
     {
@@ -441,7 +425,12 @@ void Instancia::RefrescarVista()
     //editor->Formatear();
     GuardarTextoPartidaInicial();    
     //tablaPrincipal->setCurrentIndex(indiceActual);
-    separadorTablasMedCert->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
+    PrincipalModel *m = qobject_cast<PrincipalModel*>(tablaPrincipal->model());
+    if (m)
+    {
+        separadorTablasMedCert->setVisible(m->EsPartida());//solo se ve si es partida(Nat == 7)
+    }
+    //separadorTablasMedCert->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
     //modeloArbol->ActualizarDatos(tabla);
     //modeloArbol->layoutChanged();
     //arbol->expandAll();

@@ -17,23 +17,22 @@
 #include "../Delegados/delegadoformulasmedicion.h"
 //#include "../Modelos/MedCertModel.h"
 #include "../Modelos/PrincipalModel.h"
-//#include "../filter.h"
 
-//class Filter;
-//class FiltroTablaBase;
+class ModeloBase;
 
 class TablaBase : public QTableView
 {
     Q_OBJECT
 
 public:
-    TablaBase(int nColumnas, QWidget *parent=nullptr);
+    TablaBase(QWidget *parent=nullptr);
     ~TablaBase();
     bool columnaBloqueada(int columna);
     QHeaderView* CabeceraDeTabla();
     int limiteIzquierdo;
     int limiteDerecho;
     void PonerDelegadoOriginal(int columna);
+    virtual void ActualizarDatos(const QStringList& ruta);
 
 private slots:
     void Bloquear(int columna);
@@ -59,6 +58,7 @@ signals:
     void CertificarLineasMedicion();    
 
 protected:
+    ModeloBase* modelo;
     QHeaderView* cabeceraHorizontal;
     QHeaderView* alturaFilas;
     QHeaderView* cabeceraVertical;
@@ -69,8 +69,6 @@ protected:
     DelegadoFormulasMedicion* dlgFM;
     DelegadoIconos* dlgIco;
     bool* celdaBloqueada;
-    /*Filter* filtro;
-    FiltroTablaBase* filtro;*/
     QSignalMapper* mapperH;
     QSignalMapper* mapperV;
 };

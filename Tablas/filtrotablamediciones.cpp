@@ -1,67 +1,142 @@
-#include "filtrotablamediciones.h"
-
+#include "./filtrotablamediciones.h"
+#include "./marca.h"
+#include <QModelIndex>
+#include <QEvent>
+#include <QHoverEvent>
+#include <QMouseEvent>
 #include <QPushButton>
+#include <QDebug>
 
-
-FiltroTablaMediciones::FiltroTablaMediciones(TablaBase *tabla, QObject *parent):FiltroTablaBase(tabla,parent)
+FiltroTablaMediciones::FiltroTablaMediciones(TablaBase *table, QObject* parent): FiltroTablaBase(table,parent)
 {
+    m_modoRestringido = false;
+    m_tamMarca = 5;
+    m_tabla->installEventFilter(this);
+    m_tabla->setAttribute(Qt::WA_Hover);
+    m_marca = new Marca(5,m_tabla->viewport());
+    m_marca->setVisible(false);
+    m_marcoSeleccionRestringida = new Marco(m_tabla->viewport());
+    m_marcoSeleccionRestringida->setVisible(false);
+    m_botonPulsado = false;
+    m_botonFormula = new QPushButton("...",m_tabla);
+    m_botonFormula->setFixedSize(20, 20);
+    m_botonFormula->setVisible(false);
+
+    QObject::connect(m_tabla->selectionModel(),SIGNAL(selectionChanged(QItemSelection,QItemSelection)),this,SLOT(FiltrarColumnaSeleccion()));
+
 
 }
 
 bool FiltroTablaMediciones::eventFilter(QObject *obj, QEvent *event)
 {
+    QPoint pos;
     if( event->type() == QEvent::HoverMove)
     {
         QHoverEvent * hoverEvent = static_cast<QHoverEvent*>(event);
-        QPoint pos = m_tabla->viewport()->mapFromParent(hoverEvent->pos());
-        //establecer puntero del raton
-        /*if (m_tabla->selectionModel()->selectedIndexes().size()>0)//si hay alguna celda seleccionada
+        pos = m_tabla->viewport()->mapFromParent(hoverEvent->pos());
+        //qDebug()<<"hover pos "<<pos;
+        if (m_modoRestringido == false)
         {
-            QRect rectSelect = m_tabla->visualRect(m_tabla->selectionModel()->currentIndex());
-
-            if (pos.x()>=rectSelect.bottomRight().x()-m_tabla->LeeTamMarca() &&
-                    pos.x()<=rectSelect.bottomRight().x() &&
-                    pos.y()>=rectSelect.bottomRight().y()-m_tabla->LeeTamMarca() &&
-                    pos.y()<=rectSelect.bottomRight().y())
+            m_currentIndex = m_tabla->indexAt(pos);
+        }
+        //si hay alguna celda seleccionada y es la actual
+        if (!m_tabla->selectionModel()->selectedIndexes().isEmpty() && m_currentIndex == m_tabla->currentIndex())
+        {
+            //obtengo el rectangulo que abarca desde la primera hasta la ultima celda seleccionada
+            DibujarMarcasSeleccionRestringida();
+            m_marca->setVisible(true);
+            m_botonFormula->setVisible(m_currentIndex.isValid() && m_currentIndex.column() == tipoColumnaTMedCert::FORMULA);
+            if( m_botonFormula->isVisible())
             {
-                if (!m_tabla->BotonIzquierdoPresionado())
-                {
-                    m_tabla->setCursor(Qt::CrossCursor);
-                    m_tabla->SetModoSeleccionRestringido();
-                }
+              QRect rect = m_tabla->visualRect(m_currentIndex);
+              QPoint point = rect.topRight();
+              point.setX(point.x() - m_botonFormula->width());
+              m_botonFormula->move(m_tabla->viewport()->mapToParent(point));
+            }
+
+            QPoint point = DibujarMarcasSeleccionRestringida().bottomRight();
+
+            if (pos.x()>point.x()-m_tamMarca &&
+                    pos.x()<point.x() &&
+                    pos.y()>point.y()-m_tamMarca &&
+                    pos.y()<point.y()
+                    )
+            {
+                m_marcoSeleccionRestringida->setVisible(true);
+                m_tabla->setCursor(Qt::CrossCursor);
+                m_modoRestringido = true;
             }
             else
             {
-                m_tabla->setCursor(Qt::ArrowCursor);
-                if (!m_tabla->BotonIzquierdoPresionado())
+                if (m_botonPulsado == false)
                 {
-                    m_tabla->SetModoSeleccionNormal();
+                    m_marcoSeleccionRestringida->setVisible(false);
+                    m_tabla->setCursor(Qt::ArrowCursor);
+                    m_modoRestringido = false;
                 }
             }
-        }*/
-        //boton en la tercera columna
-        currentIndex = m_tabla->indexAt(pos);
-        QRect rect = m_tabla->visualRect(currentIndex);
-        m_boton_formulas->setVisible(currentIndex.isValid() && currentIndex.column() == 3);
-        qDebug()<<"Lo del boton";
-        if( m_boton_formulas->isVisible() )
-        {
-            QPoint point = rect.topRight();
-            point.setX(point.x() - m_boton_formulas->width());
-            m_boton_formulas->move(m_tabla->viewport()->mapToParent(point));
         }
-        event->accept();
-        return true;
+        else
+        {
+            m_marca->setVisible(false);
+        }
+        return false;
     }
-    else if (event->type() == QEvent::MouseButtonRelease)//quito la cruceta del puntero
+
+    else if (event->type() == QEvent::MouseButtonPress)
     {
-        qDebug()<<"Aprento el boton en la tabla de medicoibes";
+        m_botonPulsado = true;
+        if (m_modoRestringido == true)
+            qDebug()<<"pulsanding el ratoning";
+        return false;
+    }
+    else if (event->type() == QEvent::MouseButtonRelease)
+    {
+        m_botonPulsado = false;
         m_tabla->setCursor(Qt::ArrowCursor);
-        //retorno false para propagar el evento a la tabla y que la funcion tabla::mouseReleaseEvent termine de hacer otras cosas
-        //esta misma función, de hacer que el puntero vuelva al modo "arrow", podría hacerse desde la tabla, pero la dejo aquí
-        //por legibilidad, ya que las funciones que cambian el modo del cursor estan aqui
+        m_currentIndex = m_tabla->selectionModel()->selectedIndexes().last();
+        //m_tabla->selectionModel()->selectedIndexes().clear();
+        //si estoy en modo restringido efectuo una accion al soltar el boton del raton
+        if (m_modoRestringido == true)
+        {
+            qDebug()<<"Funcion para hacer algo con los indices:";
+            for (const QModelIndex& i : m_tabla->selectionModel()->selectedIndexes())
+            {
+                qDebug()<<i;
+            }
+        }
+        m_modoRestringido = false;
         return false;
     }
     return FiltroTablaBase::eventFilter(obj,event);
 }
+
+QRect FiltroTablaMediciones::DibujarMarcasSeleccionRestringida()
+{
+    QRect rectSelect = m_tabla->visualRect(m_tabla->selectionModel()->selectedIndexes().first())|
+            m_tabla->visualRect(m_tabla->selectionModel()->selectedIndexes().last());
+    m_marca->move(rectSelect.topLeft());
+    m_marca->resize(rectSelect.size());
+    m_marcoSeleccionRestringida->move(rectSelect.topLeft());
+    m_marcoSeleccionRestringida->resize(rectSelect.size());
+    return rectSelect;
+
+}
+
+void FiltroTablaMediciones::FiltrarColumnaSeleccion()
+{
+    if (m_modoRestringido == true /*&& !m_tabla->selectionModel()->selectedIndexes().isEmpty()*/)
+    {
+        qDebug()<<"Filtrando en modo restringido";
+        for(const QModelIndex& item : m_tabla->selectionModel()->selectedIndexes())
+        {
+            if( item.column() != m_currentIndex.column())
+            {
+                m_tabla->selectionModel()->select(item,QItemSelectionModel::Deselect);
+            }
+        }
+        DibujarMarcasSeleccionRestringida();
+    }
+}
+
 
