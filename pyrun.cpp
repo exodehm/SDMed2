@@ -28,7 +28,8 @@ bool loadModule(const QString &modulePath, const QString &moduleName, const QStr
     /* Error checking of pName left out */
     pModule = PyImport_Import(pName);
     Py_DECREF(pName);
-    if (pModule){
+    if (pModule)
+    {
         pFunc = PyObject_GetAttrString(pModule, functionName.toLocal8Bit().constData());
         /* pFunc is a new reference */
         if (pFunc && PyCallable_Check(pFunc))

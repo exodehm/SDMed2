@@ -88,7 +88,7 @@ def iniciar(*datos):
 	conexion.setPassword(datos[4])
 	obraActual = datos[5]
 	if conexion.open():
-		print('Successful')		
+		print('Successful')
 		app = QtWidgets.QApplication.instance()
 		if app is None:
 			app = QtWidgets.QApplication([])
