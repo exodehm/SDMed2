@@ -8,6 +8,7 @@
 #include "./Dialogos/dialogodatoscodigoresumen.h"
 #include "./Dialogos/dialogotablaslistadoobras.h"
 #include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
+#include "./Dialogos/dialogoconexionbbdd.h"
 #include "./imprimir.h"
 #include "./miundostack.h"
 

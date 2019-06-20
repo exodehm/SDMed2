@@ -2,6 +2,8 @@
 #include "./Modelos/PrincipalModel.h"
 #include "./filtrotablabase.h"
 
+#include <QFontDatabase>
+
 TablaPrincipal::TablaPrincipal(const QString &tabla, const QStringList &ruta, MiUndoStack *p, QWidget *parent): TablaBase(parent)
 {
     limiteIzquierdo=tipoColumnaTPrincipal::CODIGO;
@@ -32,6 +34,11 @@ TablaPrincipal::TablaPrincipal(const QString &tabla, const QStringList &ruta, Mi
     setItemDelegateForColumn(tipoColumnaTPrincipal::NATURALEZA,dlgIco);
     cabeceraHorizontal->setSelectionMode(QAbstractItemView::NoSelection);
     installEventFilter(new FiltroTablaBase(this));
+    //prueba para ver fuente truetype
+    /*int id = QFontDatabase::addApplicationFont("/home/david/Escritorio/fuente/Signatra.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    QFont monospace(family,15,1);
+    setFont(monospace);*/
 }
 
 void TablaPrincipal::MostrarMenuCabecera(QPoint pos)
