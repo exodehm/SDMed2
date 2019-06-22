@@ -155,8 +155,6 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
                 relaciones.pop_front();
             }
             qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0]<<"Cantidad: "<<registros[2];
-            //QString cadenainsertar = "SELECT insertar_partida('"+ codigo + \
-                    +"','"+padre+"','"+registros[0]+"','"+registros[2]+"','"+QString::number(i)+"','','',NULL,NULL"+");" ;
             QString cadenainsertar = "SELECT insertar_partida('"+ codigo + "','"+padre+"','"+registros[0]+"','-1','"+ registros[2]+"');" ;
 
             qDebug()<<"Cadena insertar: "<<cadenainsertar;
@@ -192,7 +190,7 @@ void AbrirGuardarBC3::procesarMediciones(QStringList &registroM)
                 }
             }
             cadenainsertarmedicion = "SELECT insertar_lineas_medcert('"+codigo+"','"+padre+"','"+hijo+"','"+num_lineas+"','"+\
-                    QString::number(i)+"','"+tipotabla+"','"+num_cert+"',"+conceptos[0]+",'"+conceptos[1]+"',"+conceptos[2]+","+conceptos[3]+","+conceptos[4]+","+conceptos[5]+");";
+                    QString::number(i)+"','"+num_cert+"','"+conceptos[0]+"','"+conceptos[1]+"','"+conceptos[2]+"','"+conceptos[3]+"','"+conceptos[4]+"','"+conceptos[5]+"');";
             qDebug()<<"cadena insertar medicion"<<cadenainsertarmedicion;
             consulta.exec(cadenainsertarmedicion);
         }
