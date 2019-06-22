@@ -8,28 +8,27 @@ import datetime
 def run():
     print("Plugin para imprimir resumen de presupuesto")
     
-def imprimir(conexion, obra, book):
-	consulta = QtSql.QSqlQuery("SELECT codigo,resumen,canpres*preciomed AS \"EUROS\" FROM \"" + obra + "_Conceptos\" AS C, \"" + obra + "_Relacion\" AS R WHERE C.codigo = R.codhijo AND R.codpadre = '" + obra + "' ORDER BY R.posicion", conexion)
-	print (consulta.lastError().text())
-	rec = consulta.record()
-	codigo = rec.indexOf("codigo")
-	resumen = rec.indexOf("resumen")
-	euros = rec.indexOf("EUROS")
+def imprimir(conexion, obra, book):	
 	#abro una instancia de hoja de calculo	
 	sheet = book.active
 	sheet.title = "RESUMEN DE PRESUPUESTO"
-	#cabecera	
-	sheet.oddHeader.left.size = 12
-	sheet.oddHeader.left.font = "Tahoma,Bold"
-	sheet.oddHeader.left.color = "CC3366"
-	sheet.oddHeader.left.text = "RESUMEN DE PRESUPUESTO"	
-	sheet.print_title_cols = 'A:F'
+	#cabecera
+	consulta = QtSql.QSqlQuery("SELECT resumen FROM \"" + obra + "_Conceptos\" AS C, \"" + obra + "_Relacion\" AS R WHERE C.codigo = R.codhijo AND R.codpadre IS NULL", conexion)
+	print (consulta.lastQuery())
+	print (consulta.lastError().text())
+	resumen = ""
+	while consulta.next():
+		resumen = consulta.value(0)		
+	sheet.oddHeader.left.size = 11
+	sheet.oddHeader.left.font = "Arial,Bold"
+	#sheet.oddHeader.left.color = "CC3366"
+	sheet.oddHeader.left.text = "RESUMEN DE PRESUPUESTO " + resumen	
+	sheet.print_title_cols = 'A:C'
 	sheet.print_title_rows = '1:2'
 	#pie
-	sheet.oddFooter.left.font = "Tahoma,Bold"
-	hoy = datetime.date.today()
-	sheet.oddFooter.left.text = str(hoy.strftime('%d de %b de %Y'))
-	sheet.oddFooter.right.text = "Page &[Page] of &N"	
+	sheet.oddFooter.center.size = 11
+	sheet.oddFooter.center.font = "Arial,Bold"	
+	sheet.oddFooter.center.text = "Página &[Page] de &N"	
 	#datos para situar filas y columnas
 	fila_inicial = 0
 	fila_final = 0
@@ -43,15 +42,24 @@ def imprimir(conexion, obra, book):
 	#fuentes
 	ft_resaltada = Font(name='Arial', size=11, bold=True)
 	ft_normal = Font(name='Arial', size=10, bold=False)
+	ft_chica = Font(name='Arial', size=9, bold=False)
 	#cabecera
+	consulta.exec_("SELECT codigo,resumen,canpres*preciomed AS \"EUROS\" FROM \"" + obra + "_Conceptos\" AS C, \"" + obra + "_Relacion\" AS R WHERE C.codigo = R.codhijo AND R.codpadre = '" + obra + "' ORDER BY R.posicion")
+	print (consulta.lastError().text())
+	rec = consulta.record()
+	codigo = rec.indexOf("codigo")
+	resumen = rec.indexOf("resumen")
+	euros = rec.indexOf("EUROS")
 	sheet.cell(column = columna, row = fila, value = "CAPITULO")
 	sheet.cell(column = columna, row = fila).font = ft_normal
 	sheet.cell(column = columna+1, row = fila, value = "RESUMEN")
 	sheet.cell(column = columna+1, row = fila).font = ft_normal
 	sheet.cell(column = columna_euros, row = fila, value = "EUROS")
 	sheet.cell(column = columna_euros, row = fila).font = ft_normal
+	sheet.cell(column = columna_euros, row = fila).alignment = Alignment(horizontal="right", vertical="center")
 	sheet.cell(column = columna_euros+1, row = fila, value = "%")
 	sheet.cell(column = columna_euros+1, row = fila).font = ft_normal
+	sheet.cell(column = columna_euros+1, row = fila).alignment = Alignment(horizontal="right", vertical="center")
 	#linea
 	for i in range(offset_izquierdo,columna_euros+2):
 		sheet.cell(column = i, row = fila).border = Border(bottom=Side(style='thick'))		
@@ -83,14 +91,13 @@ def imprimir(conexion, obra, book):
 	#porcentajes (a la derecha de las cantidades de cada capitulo)
 	for i in range(0,consulta.size()):
 		sheet.cell(column = columna_euros+1, row = fila_inicial+i, value = (sheet.cell(row=fila_inicial+i, column=columna_euros).value)/cantidad)
-		sheet.cell(column = columna_euros+1, row = fila_inicial+i).font = ft_normal
+		sheet.cell(column = columna_euros+1, row = fila_inicial+i).font = ft_chica
 		sheet.cell(column = columna_euros+1, row = fila_inicial+i).number_format = '0.00%'
 	#unir celdas entre resumen y precio y rellenar de punteado
 	for i in range(0,consulta.size()):
 		sheet.merge_cells(start_row=fila_inicial+i, start_column=offset_izquierdo+2, end_row=fila_inicial+i, end_column=columna_euros-1)		
 		coordenada_punteado_CAP = get_column_letter(offset_izquierdo+2)+str(fila_inicial+i)#punteado
-		sheet[coordenada_punteado_CAP].border = Border(bottom=Side(style='dotted'))#punteado
-		
+		sheet[coordenada_punteado_CAP].border = Border(bottom=Side(style='dotted'))#punteado		
 	#antes de seguir ajustamos el ancho
 	#anchos
 	for column_cells in sheet.columns:
@@ -198,6 +205,7 @@ def imprimir(conexion, obra, book):
 	sheet[coordenadaTP].border = Border(top=Side(style='thin'))#linea superior
 	sheet[coordenadaTP].font = ft_resaltada #negritas
 	sheet[coordenadaTP].number_format = '#,##0.00'
+	
 	#linea texto con cantidad final
 	print ("cantidad "+ str(cantidad))
 	consulta.exec_("SELECT fx_letras("+str(cantidad)+")")
@@ -206,9 +214,32 @@ def imprimir(conexion, obra, book):
 	while consulta.next():
 		cantidadenletra = consulta.value(0)
 	print ("cantidad en letras "+cantidadenletra)
-	fila = fila +1
-	sheet.cell(column = 1,row = fila, value = "Asciende el presupuesto general a la expresada cantidad de " + str(cantidadenletra) + " EUROS")	
-	sheet.cell(column = 1,row = fila).font = ft_normal
+	fila = fila +3
+	sheet.merge_cells(start_row=fila, start_column=offset_izquierdo, end_row=fila, end_column=columna_euros+1)
+	sheet.cell(column = offset_izquierdo,row = fila, value = "Asciende el presupuesto general a la expresada cantidad de " + str(cantidadenletra) + " EUROS")	
+	sheet.cell(column = offset_izquierdo,row = fila).font = ft_normal
+	sheet.cell(column = offset_izquierdo,row = fila).alignment = Alignment(wrap_text = True)
+	rd = sheet.row_dimensions[fila]
+	rd.height = 25 # value in points, there is no "auto"
+	
+	#ciudad y fecha
+	fila = fila +3
+	sheet.merge_cells(start_row=fila, start_column=offset_izquierdo, end_row=fila, end_column=columna_euros)
+	ciudad = "Granada"
+	hoy = datetime.date.today()	
+	sheet.cell(column = offset_izquierdo,row = fila, value = ciudad + ", a " + str(hoy.strftime('%d de %b de %Y')))
+	sheet.cell(column = offset_izquierdo,row = fila).alignment = Alignment(horizontal="center", vertical="center")
+	sheet.cell(column = offset_izquierdo,row = fila).font = ft_normal
+	
+	#firmas
+	fila = fila + 4
+	#sheet.merge_cells(start_row=fila, start_column=offset_izquierdo, end_row=fila, end_column=offset_izquierdo+3)
+	sheet.cell(column = offset_izquierdo,row = fila, value = "El promotor")
+	sheet.cell(column = offset_izquierdo,row = fila).font = ft_normal
+	sheet.cell(column = offset_izquierdo+3,row = fila, value = "El redactor del proyecto")
+	sheet.cell(column = offset_izquierdo+3,row = fila).font = ft_normal
+	
+	
 				
 	book.save('appending.xlsx')
 	
