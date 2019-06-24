@@ -9,6 +9,7 @@
 #include "./Dialogos/dialogotablaslistadoobras.h"
 #include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
 #include "./Dialogos/dialogoconexionbbdd.h"
+#include "./Dialogos/dialogodatosgenerales.h"
 #include "./imprimir.h"
 #include "./miundostack.h"
 
@@ -525,6 +526,12 @@ void MainWindow::ActionAjustarPresupuesto()
     }
 }
 
+void MainWindow::ActionPropiedadesObra()
+{
+    DialogoDatosGenerales* d = new DialogoDatosGenerales(this);
+    int res = d->exec();
+}
+
 void MainWindow::AcercaDe()
 {
     DialogoAbout *d = new DialogoAbout(this);
@@ -578,6 +585,7 @@ void MainWindow::setupActions()
     QObject::connect(ui->actionExportar,SIGNAL(triggered(bool)),this,SLOT(Exportar()));
     QObject::connect(ui->actionAbrirBBDD,SIGNAL(triggered(bool)),this,SLOT(ActionAbrirBBDD()));
     QObject::connect(ui->actionCerrar,SIGNAL(triggered(bool)),this,SLOT(ActionCerrar()));
+    QObject::connect(ui->actionPropiedades_de_la_obra,SIGNAL(triggered(bool)),this,SLOT(ActionPropiedadesObra()));
     //QObject::connect(ui->actionGuardar,SIGNAL(triggered(bool)),this,SLOT(ActionGuardar()));
     QObject::connect(ui->actionImprimir,SIGNAL(triggered(bool)),this,SLOT(ActionImprimir()));
     QObject::connect(ui->actionGuardar_como,SIGNAL(triggered(bool)),this,SLOT(Exportar()));

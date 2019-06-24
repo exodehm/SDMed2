@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DialogoDatosGenerales</class>
+ <widget class="QDialog" name="DialogoDatosGenerales">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>601</width>
+    <height>427</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_5">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QTabWidget" name="tabDatosGenerales">
+       <property name="tabShape">
+        <enum>QTabWidget::Rounded</enum>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tab_Datos">
+        <attribute name="title">
+         <string>Datos</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QComboBox" name="comboBox_Codificacion">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_Codificacion">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Cuadro de precios (Codificación)</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QComboBox" name="comboBox_Idioma">
+               <item>
+                <property name="text">
+                 <string>Español</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Inglés</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_Idioma">
+               <property name="text">
+                <string>Idioma</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_Datos">
+             <item>
+              <property name="text">
+               <string>Datos generales</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Datos registrales</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Datos técnicos</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Proyectista</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Director de obra</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Director de ejecución de obra</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Promotor</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Constructor</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Entidad de control</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Procentajes</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Fechas</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Datos Seguridad y Salud</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="tableWidget"/>
+           </item>
+           <item>
+            <widget class="QStackedWidget" name="stackedWidget">
+             <widget class="QWidget" name="page"/>
+             <widget class="QWidget" name="page_2"/>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_Calculo">
+        <attribute name="title">
+         <string>Cálculo</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="tab_Redondeo">
+        <attribute name="title">
+         <string>Redondeo</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QTableWidget" name="tableWidget_2">
+           <column>
+            <property name="text">
+             <string>Nombre</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Comentario</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Decimales</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_Ok">
+         <property name="text">
+          <string>Ok</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

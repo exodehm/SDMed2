@@ -61,7 +61,8 @@ SOURCES += main.cpp\
     Tablas/filtrotablabase.cpp \
     Tablas/filtrotablamediciones.cpp \
     Tablas/marca.cpp \
-    Dialogos/dialogoconexionbbdd.cpp
+    Dialogos/dialogoconexionbbdd.cpp \
+    Dialogos/dialogodatosgenerales.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -112,7 +113,8 @@ HEADERS  += mainwindow.h \
     Tablas/filtrotablabase.h \
     Tablas/filtrotablamediciones.h \
     Tablas/marca.h \
-    Dialogos/dialogoconexionbbdd.h
+    Dialogos/dialogoconexionbbdd.h \
+    Dialogos/dialogodatosgenerales.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
@@ -127,7 +129,8 @@ FORMS    += Ui/mainwindow.ui \
     Ui/dialogocertificaciones.ui \
     Ui/dialogoajustar.ui \    
     Ui/dialogoeditorformulasmedicion.ui \    
-    Ui/dialogoconexionbbdd.ui
+    Ui/dialogoconexionbbdd.ui \
+    Ui/dialogodatosgenerales.ui
 
 
 QT += sql

@@ -59,6 +59,7 @@ private slots:
     void ActionDeseleccionarTodo();
 
     void ActionAjustarPresupuesto();
+    void ActionPropiedadesObra();
 
     void AcercaDe();
     void AcercaDeQt();
