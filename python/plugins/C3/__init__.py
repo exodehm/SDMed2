@@ -39,6 +39,7 @@ def imprimir(conexion, obra, book):
 	letra_columna_euros = get_column_letter(columna_euros)
 	contador = 0
 	cantidad = 0
+	ancho_columnas = 0
 	#fuentes
 	ft_resaltada = Font(name='Arial', size=11, bold=True)
 	ft_normal = Font(name='Arial', size=10, bold=False)
@@ -50,14 +51,14 @@ def imprimir(conexion, obra, book):
 	codigo = rec.indexOf("codigo")
 	resumen = rec.indexOf("resumen")
 	euros = rec.indexOf("EUROS")
-	sheet.cell(column = columna, row = fila, value = "CAPITULO")
+	sheet.cell(column = columna, row = fila).value = "CAPITULO"
 	sheet.cell(column = columna, row = fila).font = ft_normal
-	sheet.cell(column = columna+1, row = fila, value = "RESUMEN")
+	sheet.cell(column = columna+1, row = fila).value = "RESUMEN"
 	sheet.cell(column = columna+1, row = fila).font = ft_normal
-	sheet.cell(column = columna_euros, row = fila, value = "EUROS")
+	sheet.cell(column = columna_euros, row = fila).value = "EUROS"
 	sheet.cell(column = columna_euros, row = fila).font = ft_normal
 	sheet.cell(column = columna_euros, row = fila).alignment = Alignment(horizontal="right", vertical="center")
-	sheet.cell(column = columna_euros+1, row = fila, value = "%")
+	sheet.cell(column = columna_euros+1, row = fila).value = "%"
 	sheet.cell(column = columna_euros+1, row = fila).font = ft_normal
 	sheet.cell(column = columna_euros+1, row = fila).alignment = Alignment(horizontal="right", vertical="center")
 	#linea
@@ -67,15 +68,15 @@ def imprimir(conexion, obra, book):
 	fila = fila +1
 	while consulta.next():				
 		#codigo
-		sheet.cell(column = columna, row = fila, value = consulta.value(codigo))
+		sheet.cell(column = columna, row = fila).value = consulta.value(codigo)
 		sheet.cell(column = columna, row = fila).font = ft_normal
 		#resumen
 		columna =  columna + 1
-		sheet.cell(column = columna, row = fila, value = consulta.value(resumen))
+		sheet.cell(column = columna, row = fila).value = consulta.value(resumen)
 		sheet.cell(column = columna, row = fila).font = ft_normal
 		#euros
 		columna =  columna_euros
-		sheet.cell(column = columna, row = fila, value = consulta.value(euros))
+		sheet.cell(column = columna, row = fila).value = consulta.value(euros)
 		sheet.cell(column = columna, row = fila).font = ft_normal
 		sheet.cell(column = columna, row = fila).number_format = '#,##0.00'
 		cantidad = cantidad +consulta.value(euros)
@@ -90,7 +91,8 @@ def imprimir(conexion, obra, book):
 		columna = offset_izquierdo
 	#porcentajes (a la derecha de las cantidades de cada capitulo)
 	for i in range(0,consulta.size()):
-		sheet.cell(column = columna_euros+1, row = fila_inicial+i, value = (sheet.cell(row=fila_inicial+i, column=columna_euros).value)/cantidad)
+		#sheet.cell(column = columna_euros+1, row = fila_inicial+i).value = (sheet.cell(row=fila_inicial+i, column=columna_euros).value)/cantidad
+		sheet.cell(column = columna_euros+1, row = fila_inicial+i).value = "=ROUND("+str((sheet.cell(row=fila_inicial+i, column=columna_euros).value)/cantidad)+",4)"
 		sheet.cell(column = columna_euros+1, row = fila_inicial+i).font = ft_chica
 		sheet.cell(column = columna_euros+1, row = fila_inicial+i).number_format = '0.00%'
 	#unir celdas entre resumen y precio y rellenar de punteado
@@ -98,11 +100,12 @@ def imprimir(conexion, obra, book):
 		sheet.merge_cells(start_row=fila_inicial+i, start_column=offset_izquierdo+2, end_row=fila_inicial+i, end_column=columna_euros-1)		
 		coordenada_punteado_CAP = get_column_letter(offset_izquierdo+2)+str(fila_inicial+i)#punteado
 		sheet[coordenada_punteado_CAP].border = Border(bottom=Side(style='dotted'))#punteado		
-	#antes de seguir ajustamos el ancho
-	#anchos
+	#antes de seguir ajustamos el ancho	de las columnas		
 	for column_cells in sheet.columns:
-		length = max(len(as_text(cell.value)) for cell in column_cells)
-		sheet.column_dimensions[column_cells[0].column].width = length
+		ancho = max(len(as_text(cell.value)) for cell in column_cells)
+		sheet.column_dimensions[column_cells[0].column].width = ancho
+		ancho_columnas = ancho_columnas + ancho
+	sheet.column_dimensions['F'].width = 8
 	#EM
 	fila = fila + 1;
 	sheet.merge_cells(start_row=fila, start_column=offset_izquierdo, end_row=fila, end_column=columna_euros-1)
@@ -206,9 +209,19 @@ def imprimir(conexion, obra, book):
 	sheet[coordenadaTP].font = ft_resaltada #negritas
 	sheet[coordenadaTP].number_format = '#,##0.00'
 	
+	#termino de ajuStar los anchos 	
+	columnaD = sheet['D']
+	ancho = max(len(as_text(cell.value)) for cell in columnaD)
+	sheet.column_dimensions['D'].width = ancho
+	ancho_columnas = ancho_columnas + ancho
+	print (ancho_columnas)
+	sheet.column_dimensions['C'].width = 90-ancho_columnas
+	#cd = sheet['D']
+	#print (cd[0])
+		
 	#linea texto con cantidad final
 	print ("cantidad "+ str(cantidad))
-	consulta.exec_("SELECT fx_letras("+str(cantidad)+")")
+	consulta.exec_("SELECT numero_en_euro("+str(cantidad)+")")
 	print (consulta.lastError().text())
 	cantidadenletra=""
 	while consulta.next():
@@ -216,7 +229,7 @@ def imprimir(conexion, obra, book):
 	print ("cantidad en letras "+cantidadenletra)
 	fila = fila +3
 	sheet.merge_cells(start_row=fila, start_column=offset_izquierdo, end_row=fila, end_column=columna_euros+1)
-	sheet.cell(column = offset_izquierdo,row = fila, value = "Asciende el presupuesto general a la expresada cantidad de " + str(cantidadenletra) + " EUROS")	
+	sheet.cell(column = offset_izquierdo,row = fila, value = "Asciende el presupuesto general a la expresada cantidad de " + str(cantidadenletra))	
 	sheet.cell(column = offset_izquierdo,row = fila).font = ft_normal
 	sheet.cell(column = offset_izquierdo,row = fila).alignment = Alignment(wrap_text = True)
 	rd = sheet.row_dimensions[fila]
@@ -239,9 +252,10 @@ def imprimir(conexion, obra, book):
 	sheet.cell(column = offset_izquierdo+3,row = fila, value = "El redactor del proyecto")
 	sheet.cell(column = offset_izquierdo+3,row = fila).font = ft_normal
 	
+	#ajuste del texto a la pagina
+	#sheet.sheet_properties.pageSetUpPr.fitToPage = True
 	
-				
-	book.save('appending.xlsx')
+	book.save('resumen.xlsx')
 	
 def as_text(value):
     if value is None:

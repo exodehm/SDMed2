@@ -52,7 +52,7 @@ class DialogoOpcionesPagina(QtWidgets.QDialog):
 		
 	def definirOrientacion(self):
 		if self.ui.radioButtonOrientacionHorizontal.isChecked():
-			self.informe.page_setup.orientation = self.informe.ORIENTATION_LANDSCAPE			
+			self.informe.page_setup.orientation = self.informe.ORIENTATION_LANDSCAPE
 		else:
 			self.informe.page_setup.orientation = self.informe.ORIENTATION_PORTRAIT
 		
