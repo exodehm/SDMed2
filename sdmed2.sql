@@ -5,7 +5,7 @@
 -- Dumped from database version 10.9 (Ubuntu 10.9-0ubuntu0.18.04.1)
 -- Dumped by pg_dump version 10.9 (Ubuntu 10.9-0ubuntu0.18.04.1)
 
--- Started on 2019-06-25 12:48:39 CEST
+-- Started on 2019-06-25 19:18:41 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1448,7 +1448,7 @@ $$;
 ALTER FUNCTION public.fecha_a_bc3(fecha date) OWNER TO postgres;
 
 --
--- TOC entry 316 (class 1255 OID 16795)
+-- TOC entry 315 (class 1255 OID 16795)
 -- Name: fx_letras(numeric); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2298,7 +2298,7 @@ $_$;
 ALTER FUNCTION public.mostrar_ruta(tabla character varying, codigo character varying) OWNER TO postgres;
 
 --
--- TOC entry 315 (class 1255 OID 25024)
+-- TOC entry 314 (class 1255 OID 25024)
 -- Name: numero_en_euro(numeric); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2677,7 +2677,7 @@ $_$;
 ALTER FUNCTION public.restaurar_lineas_borradas(_nombretabla character varying, _tipotabla integer) OWNER TO postgres;
 
 --
--- TOC entry 317 (class 1255 OID 25027)
+-- TOC entry 316 (class 1255 OID 25027)
 -- Name: total_cantidad_por_partida(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -2958,7 +2958,7 @@ END IF;
 ALTER FUNCTION public.ver_color_hijos(nombretabla character varying, codigopadre character varying, codigohijo character varying) OWNER TO postgres;
 
 --
--- TOC entry 318 (class 1255 OID 25028)
+-- TOC entry 317 (class 1255 OID 25028)
 -- Name: ver_conceptos_cantidad(character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -3239,7 +3239,7 @@ FOR var_r IN EXECUTE FORMAT('SELECT * FROM %I WHERE codhijo = $1 AND %s AND num_
 ALTER FUNCTION public.ver_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_certif integer) OWNER TO postgres;
 
 --
--- TOC entry 312 (class 1255 OID 16502)
+-- TOC entry 318 (class 1255 OID 25029)
 -- Name: ver_obra(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -3253,10 +3253,10 @@ punto char :='.';
 R record;
 
 BEGIN
-EXECUTE FORMAT (' WITH RECURSIVE tree AS(SELECT codpadre, codhijo, canpres, 1 AS depth, cast(posicion as text) as camino,posicion from %I
+EXECUTE FORMAT (' WITH RECURSIVE tree AS(SELECT codpadre, codhijo, canpres, cancert, 1 AS depth, cast(posicion as text) as camino,posicion from %I
 WHERE codpadre is NULL
 UNION ALL
-SELECT rel.codpadre, rel.codhijo, rel.canpres, depth+1, camino ||$1|| cast(rel.posicion as text) , rel.posicion
+SELECT rel.codpadre, rel.codhijo, rel.canpres, rel.cancert, depth+1, camino ||$1|| cast(rel.posicion as text) , rel.posicion
 FROM %I rel
 JOIN tree t ON rel.codpadre = t.codhijo
 )
@@ -3271,7 +3271,7 @@ END; $_$;
 ALTER FUNCTION public.ver_obra(_nombretabla character varying) OWNER TO postgres;
 
 --
--- TOC entry 313 (class 1255 OID 16503)
+-- TOC entry 312 (class 1255 OID 16503)
 -- Name: ver_precio(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -3342,7 +3342,7 @@ $$;
 ALTER FUNCTION public.ver_texto(nombretabla character varying, cod character varying) OWNER TO postgres;
 
 --
--- TOC entry 314 (class 1255 OID 16506)
+-- TOC entry 313 (class 1255 OID 16506)
 -- Name: ver_todas_certificaciones(character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -3706,7 +3706,7 @@ ALTER TABLE ONLY public."tCorrugados"
     ADD CONSTRAINT "tCorrugados_id_perfil_fkey" FOREIGN KEY (id_perfil) REFERENCES public.tipoperfiles(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2019-06-25 12:48:39 CEST
+-- Completed on 2019-06-25 19:18:42 CEST
 
 --
 -- PostgreSQL database dump complete
