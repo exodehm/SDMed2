@@ -5,7 +5,7 @@
 -- Dumped from database version 10.9 (Ubuntu 10.9-0ubuntu0.18.04.1)
 -- Dumped by pg_dump version 10.9 (Ubuntu 10.9-0ubuntu0.18.04.1)
 
--- Started on 2019-06-22 20:10:33 CEST
+-- Started on 2019-06-25 12:48:39 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -27,7 +27,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 3160 (class 0 OID 0)
+-- TOC entry 3162 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -36,7 +36,7 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- TOC entry 613 (class 1247 OID 16388)
+-- TOC entry 615 (class 1247 OID 16388)
 -- Name: tp_certificacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -49,7 +49,7 @@ CREATE TYPE public.tp_certificacion AS (
 ALTER TYPE public.tp_certificacion OWNER TO postgres;
 
 --
--- TOC entry 616 (class 1247 OID 16390)
+-- TOC entry 618 (class 1247 OID 16390)
 -- Name: tp_color; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -63,7 +63,7 @@ CREATE TYPE public.tp_color AS ENUM (
 ALTER TYPE public.tp_color OWNER TO postgres;
 
 --
--- TOC entry 698 (class 1247 OID 16399)
+-- TOC entry 700 (class 1247 OID 16399)
 -- Name: tp_concepto; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -84,7 +84,7 @@ CREATE TYPE public.tp_concepto AS (
 ALTER TYPE public.tp_concepto OWNER TO postgres;
 
 --
--- TOC entry 701 (class 1247 OID 16402)
+-- TOC entry 703 (class 1247 OID 16402)
 -- Name: tp_copiarconcepto; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -98,7 +98,7 @@ CREATE TYPE public.tp_copiarconcepto AS (
 ALTER TYPE public.tp_copiarconcepto OWNER TO postgres;
 
 --
--- TOC entry 704 (class 1247 OID 16405)
+-- TOC entry 706 (class 1247 OID 16405)
 -- Name: tp_relacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -115,7 +115,7 @@ CREATE TYPE public.tp_relacion AS (
 ALTER TYPE public.tp_relacion OWNER TO postgres;
 
 --
--- TOC entry 707 (class 1247 OID 16408)
+-- TOC entry 709 (class 1247 OID 16408)
 -- Name: tp_copiarrelacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -129,7 +129,7 @@ CREATE TYPE public.tp_copiarrelacion AS (
 ALTER TYPE public.tp_copiarrelacion OWNER TO postgres;
 
 --
--- TOC entry 710 (class 1247 OID 16411)
+-- TOC entry 712 (class 1247 OID 16411)
 -- Name: tp_guardarconcepto; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -143,7 +143,7 @@ CREATE TYPE public.tp_guardarconcepto AS (
 ALTER TYPE public.tp_guardarconcepto OWNER TO postgres;
 
 --
--- TOC entry 713 (class 1247 OID 16414)
+-- TOC entry 715 (class 1247 OID 16414)
 -- Name: tp_medicion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -166,7 +166,7 @@ CREATE TYPE public.tp_medicion AS (
 ALTER TYPE public.tp_medicion OWNER TO postgres;
 
 --
--- TOC entry 716 (class 1247 OID 16417)
+-- TOC entry 718 (class 1247 OID 16417)
 -- Name: tp_guardarmedicion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -180,7 +180,7 @@ CREATE TYPE public.tp_guardarmedicion AS (
 ALTER TYPE public.tp_guardarmedicion OWNER TO postgres;
 
 --
--- TOC entry 719 (class 1247 OID 16420)
+-- TOC entry 721 (class 1247 OID 16420)
 -- Name: tp_guardarrelacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -194,7 +194,7 @@ CREATE TYPE public.tp_guardarrelacion AS (
 ALTER TYPE public.tp_guardarrelacion OWNER TO postgres;
 
 --
--- TOC entry 722 (class 1247 OID 16423)
+-- TOC entry 724 (class 1247 OID 16423)
 -- Name: tp_lineamedicion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -216,7 +216,7 @@ CREATE TYPE public.tp_lineamedicion AS (
 ALTER TYPE public.tp_lineamedicion OWNER TO postgres;
 
 --
--- TOC entry 725 (class 1247 OID 16426)
+-- TOC entry 727 (class 1247 OID 16426)
 -- Name: tp_partida; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -2677,6 +2677,41 @@ $_$;
 ALTER FUNCTION public.restaurar_lineas_borradas(_nombretabla character varying, _tipotabla integer) OWNER TO postgres;
 
 --
+-- TOC entry 317 (class 1255 OID 25027)
+-- Name: total_cantidad_por_partida(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.total_cantidad_por_partida(nombretabla character varying, codigohijo character varying) RETURNS numeric
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE
+r record;
+tablarelacion character varying;
+codigo_abuelo character varying;
+cantidad_total numeric := 0;
+cantidad_padre numeric := 0;
+BEGIN
+tablarelacion := nombretabla||'_Relacion';
+FOR r in EXECUTE FORMAT('SELECT codpadre, canpres FROM %I WHERE codhijo = $1',tablarelacion) USING codigohijo
+LOOP
+	EXECUTE FORMAT ('SELECT codpadre, canpres FROM %I WHERE codhijo = $1',tablarelacion) USING r.codpadre INTO codigo_abuelo, cantidad_padre;
+	
+	IF codigo_abuelo IS NOT NULL THEN
+		--RAISE NOTICE 'Lista : %, %, %',r.codpadre,r.canpres,cantidad_padre;
+		cantidad_total = cantidad_total + r.canpres * (total_cantidad_por_partida(nombretabla,r.codpadre));
+	--	RAISE NOTICE 'La cantidad total es: % * % = %',cantidad_padre,r.canpres,cantidad_total;
+	ELSE
+		cantidad_total = cantidad_total + r.canpres * cantidad_padre;	
+	END IF;	
+END LOOP;
+RETURN cantidad_total;
+END;
+$_$;
+
+
+ALTER FUNCTION public.total_cantidad_por_partida(nombretabla character varying, codigohijo character varying) OWNER TO postgres;
+
+--
 -- TOC entry 303 (class 1255 OID 16493)
 -- Name: ultimo_paso(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
@@ -2921,6 +2956,41 @@ END IF;
 
 
 ALTER FUNCTION public.ver_color_hijos(nombretabla character varying, codigopadre character varying, codigohijo character varying) OWNER TO postgres;
+
+--
+-- TOC entry 318 (class 1255 OID 25028)
+-- Name: ver_conceptos_cantidad(character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.ver_conceptos_cantidad(_nombretabla character varying, _tipo_concepto integer DEFAULT 0) RETURNS TABLE(codigo character varying, cantidad numeric, ud character varying, resumen character varying, precio numeric, importe numeric)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE 
+    var_r record;
+    tablaconceptos character varying := _nombretabla||'_Conceptos';
+    tablarelacion character varying := _nombretabla || '_Relacion';
+    str_null_case character varying;
+    cadenafiltro character varying :='';
+BEGIN
+--si el tipo_concepto es mayor que uno filtro la seleccion y creando la cadena
+IF (_tipo_concepto =1 OR _tipo_concepto =2 OR _tipo_concepto =3) THEN
+	cadenafiltro := ' WHERE naturaleza = '||quote_literal(_tipo_concepto);
+END IF;
+FOR var_r IN EXECUTE FORMAT('SELECT codigo,ud,resumen,preciomed FROM %I %s ORDER BY naturaleza, codigo',tablaconceptos,cadenafiltro)
+	LOOP
+		codigo := var_r.codigo;
+		cantidad = total_cantidad_por_partida(_nombretabla,codigo);
+		ud := var_r.ud;
+		resumen :=var_r.resumen;
+		precio :=var_r.preciomed;
+		importe:= cantidad*precio;
+		RETURN NEXT;
+	END LOOP;
+END;
+$$;
+
+
+ALTER FUNCTION public.ver_conceptos_cantidad(_nombretabla character varying, _tipo_concepto integer) OWNER TO postgres;
 
 --
 -- TOC entry 308 (class 1255 OID 16498)
@@ -3529,7 +3599,7 @@ CREATE TABLE public.tipoperfiles (
 ALTER TABLE public.tipoperfiles OWNER TO postgres;
 
 --
--- TOC entry 3025 (class 2606 OID 16941)
+-- TOC entry 3027 (class 2606 OID 16941)
 -- Name: CENZANO_Conceptos CENZANO_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3538,7 +3608,7 @@ ALTER TABLE ONLY public."CENZANO_Conceptos"
 
 
 --
--- TOC entry 3029 (class 2606 OID 16960)
+-- TOC entry 3031 (class 2606 OID 16960)
 -- Name: CENZANO_Mediciones CENZANO_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3547,7 +3617,7 @@ ALTER TABLE ONLY public."CENZANO_Mediciones"
 
 
 --
--- TOC entry 3027 (class 2606 OID 16949)
+-- TOC entry 3029 (class 2606 OID 16949)
 -- Name: CENZANO_Relacion CENZANO_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3556,7 +3626,7 @@ ALTER TABLE ONLY public."CENZANO_Relacion"
 
 
 --
--- TOC entry 3015 (class 2606 OID 16656)
+-- TOC entry 3017 (class 2606 OID 16656)
 -- Name: tipoperfiles PerfilesY_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3565,7 +3635,7 @@ ALTER TABLE ONLY public.tipoperfiles
 
 
 --
--- TOC entry 3017 (class 2606 OID 16691)
+-- TOC entry 3019 (class 2606 OID 16691)
 -- Name: PruebaBBDDVacia_Conceptos PruebaBBDDVacia_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3574,7 +3644,7 @@ ALTER TABLE ONLY public."PruebaBBDDVacia_Conceptos"
 
 
 --
--- TOC entry 3023 (class 2606 OID 16785)
+-- TOC entry 3025 (class 2606 OID 16785)
 -- Name: PruebaBBDDVacia_GuardarRelaciones PruebaBBDDVacia_GuardarRelaciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3583,7 +3653,7 @@ ALTER TABLE ONLY public."PruebaBBDDVacia_GuardarRelaciones"
 
 
 --
--- TOC entry 3021 (class 2606 OID 16710)
+-- TOC entry 3023 (class 2606 OID 16710)
 -- Name: PruebaBBDDVacia_Mediciones PruebaBBDDVacia_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3592,7 +3662,7 @@ ALTER TABLE ONLY public."PruebaBBDDVacia_Mediciones"
 
 
 --
--- TOC entry 3019 (class 2606 OID 16699)
+-- TOC entry 3021 (class 2606 OID 16699)
 -- Name: PruebaBBDDVacia_Relacion PruebaBBDDVacia_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3601,7 +3671,7 @@ ALTER TABLE ONLY public."PruebaBBDDVacia_Relacion"
 
 
 --
--- TOC entry 3011 (class 2606 OID 16670)
+-- TOC entry 3013 (class 2606 OID 16670)
 -- Name: perfiles perfiles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3610,7 +3680,7 @@ ALTER TABLE ONLY public.perfiles
 
 
 --
--- TOC entry 3013 (class 2606 OID 16672)
+-- TOC entry 3015 (class 2606 OID 16672)
 -- Name: tCorrugados tCorrugados_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3619,7 +3689,7 @@ ALTER TABLE ONLY public."tCorrugados"
 
 
 --
--- TOC entry 3030 (class 2606 OID 16673)
+-- TOC entry 3032 (class 2606 OID 16673)
 -- Name: perfiles perfiles_id_tipoperfil_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3628,7 +3698,7 @@ ALTER TABLE ONLY public.perfiles
 
 
 --
--- TOC entry 3031 (class 2606 OID 16678)
+-- TOC entry 3033 (class 2606 OID 16678)
 -- Name: tCorrugados tCorrugados_id_perfil_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3636,7 +3706,7 @@ ALTER TABLE ONLY public."tCorrugados"
     ADD CONSTRAINT "tCorrugados_id_perfil_fkey" FOREIGN KEY (id_perfil) REFERENCES public.tipoperfiles(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2019-06-22 20:10:33 CEST
+-- Completed on 2019-06-25 12:48:39 CEST
 
 --
 -- PostgreSQL database dump complete
