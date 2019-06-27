@@ -152,7 +152,7 @@
              </item>
              <item>
               <property name="text">
-               <string>Procentajes</string>
+               <string>Porcentajes</string>
               </property>
              </item>
              <item>
@@ -168,12 +168,73 @@
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="tableWidget"/>
-           </item>
-           <item>
             <widget class="QStackedWidget" name="stackedWidget">
-             <widget class="QWidget" name="page"/>
-             <widget class="QWidget" name="page_2"/>
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="page">
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <item>
+                <widget class="QTableWidget" name="tablaDatoGenerales"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="page_2">
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_3"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="page_3">
+              <layout class="QVBoxLayout" name="verticalLayout_8">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_4"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="page_4">
+              <layout class="QVBoxLayout" name="verticalLayout_9">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_5"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="page_5">
+              <layout class="QVBoxLayout" name="verticalLayout_10">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_6"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="page_6">
+              <layout class="QVBoxLayout" name="verticalLayout_11">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_7"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="page_7">
+              <layout class="QVBoxLayout" name="verticalLayout_12">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_8"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="page_8">
+              <layout class="QVBoxLayout" name="verticalLayout_13">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_9"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="page_9">
+              <layout class="QVBoxLayout" name="verticalLayout_14">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_10"/>
+               </item>
+              </layout>
+             </widget>
             </widget>
            </item>
           </layout>
