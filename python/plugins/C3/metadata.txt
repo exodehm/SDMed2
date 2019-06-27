@@ -1,7 +1,7 @@
 ; the next section is mandatory
 
 [general]
-name=Resumen de presupuesto
+name=03 Resumen de presupuesto
 email=d.gis.consultores@gmail.com
 author=D-GIS
 qgisMinimumVersion=2.0

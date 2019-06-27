@@ -1,7 +1,7 @@
 ; the next section is mandatory
 
 [general]
-name=Imprimidor chachi piruli
+name=00 Imprimidor chachi piruli
 email=d.gis.consultores@gmail.com
 author=D-GIS
 qgisMinimumVersion=2.0

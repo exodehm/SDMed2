@@ -40,6 +40,12 @@ def imprimir(conexion, obra, book):
 	contador = 0
 	cantidad = 0
 	ancho_columnas = 0
+	#datos para calculo de totales
+	consulta.exec_("SELECT (porcentajes).\"zPorGastosGenerales\",(porcentajes).\"zPorBenIndustrial\",(porcentajes).\"zPorIVAEjecucion\" FROM \"" + obra + "_Propiedades\"")
+	while consulta.next():
+		gastos_generales = consulta.value(0)
+		beneficio_industrial = consulta.value(1)
+		IVA = consulta.value(2)
 	#fuentes
 	ft_resaltada = Font(name='Arial', size=11, bold=True)
 	ft_normal = Font(name='Arial', size=10, bold=False)
@@ -84,8 +90,7 @@ def imprimir(conexion, obra, book):
 		if contador == 0:
 			fila_inicial = fila		
 		if contador == consulta.size()-1:
-			fila_final = fila
-		
+			fila_final = fila		
 		fila = fila + 1
 		contador = contador +1
 		columna = offset_izquierdo
@@ -119,10 +124,7 @@ def imprimir(conexion, obra, book):
 	sheet[coordenadaEM]="=SUM("+cadena_rango+")"
 	sheet[coordenadaEM].font = ft_resaltada #negritas
 	sheet[coordenadaEM].border = Border(top=Side(style='thin'))#linea superior 
-	sheet[coordenadaEM].number_format = '#,##0.00'
-	#GG+BI
-	gastos_generales = 13
-	beneficio_industrial = 6
+	sheet[coordenadaEM].number_format = '#,##0.00'	
 	#GG
 	fila = fila +1
 	sheet.merge_cells(start_row=fila, start_column=offset_izquierdo, end_row=fila, end_column=columna_euros-3)
@@ -178,8 +180,7 @@ def imprimir(conexion, obra, book):
 	sheet[coordenadaPC].border = Border(top=Side(style='thin'))#linea superior 
 	sheet[coordenadaPC].font = ft_resaltada #negritas
 	sheet[coordenadaPC].number_format = '#,##0.00'
-	#iva
-	IVA =21
+	#iva	
 	fila = fila +1
 	sheet.merge_cells(start_row=fila, start_column=offset_izquierdo, end_row=fila, end_column=columna_euros-3)
 	coordenada_leyenda_IVA = get_column_letter(1)+str(fila)

@@ -1,7 +1,7 @@
 ; the next section is mandatory
 
 [general]
-name=Listado de Precios Auxiliares
+name=01 Listado de Precios Auxiliares
 email=d.gis.consultores@gmail.com
 author=SDMed
 SDMedMinimumVersion=0.1
