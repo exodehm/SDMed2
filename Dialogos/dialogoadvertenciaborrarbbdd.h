@@ -12,7 +12,7 @@ class DialogoBorrarBBDD : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogoBorrarBBDD(QStringList datos, QWidget *parent = 0);
+    explicit DialogoBorrarBBDD(QStringList datos, QWidget *parent = nullptr);
     ~DialogoBorrarBBDD();
     bool Exportar();
 

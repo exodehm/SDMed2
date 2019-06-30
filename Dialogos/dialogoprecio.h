@@ -15,7 +15,7 @@ class DialogoPrecio : public QDialog
 
 public:
 
-    explicit DialogoPrecio(QString titulo, QWidget *parent = 0);
+    explicit DialogoPrecio(QString titulo, QWidget *parent = nullptr);
     ~DialogoPrecio();
     int Respuesta();
 

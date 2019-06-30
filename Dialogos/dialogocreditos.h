@@ -12,7 +12,7 @@ class DialogoCreditos : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogoCreditos(QWidget *parent = 0);
+    explicit DialogoCreditos(QWidget *parent = nullptr);
     ~DialogoCreditos();
 
 private:

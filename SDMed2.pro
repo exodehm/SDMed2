@@ -62,7 +62,9 @@ SOURCES += main.cpp\
     Tablas/filtrotablamediciones.cpp \
     Tablas/marca.cpp \
     Dialogos/dialogoconexionbbdd.cpp \
-    Dialogos/dialogodatosgenerales.cpp
+    Dialogos/dialogodatosgenerales.cpp \
+    Tablas/tablapropiedades.cpp \
+    Modelos/PropiedadesModel.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -114,7 +116,9 @@ HEADERS  += mainwindow.h \
     Tablas/filtrotablamediciones.h \
     Tablas/marca.h \
     Dialogos/dialogoconexionbbdd.h \
-    Dialogos/dialogodatosgenerales.h
+    Dialogos/dialogodatosgenerales.h \
+    Tablas/tablapropiedades.h \
+    Modelos/PropiedadesModel.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \

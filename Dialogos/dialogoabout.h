@@ -15,7 +15,7 @@ class DialogoAbout : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogoAbout(QWidget *parent = 0);
+    explicit DialogoAbout(QWidget *parent = nullptr);
     ~DialogoAbout();
 
 private slots:

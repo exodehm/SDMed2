@@ -12,7 +12,7 @@ class DialogoLicencia : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogoLicencia(QWidget *parent = 0);
+    explicit DialogoLicencia(QWidget *parent = nullptr);
     ~DialogoLicencia();
 
 private:

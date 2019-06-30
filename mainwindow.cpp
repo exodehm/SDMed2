@@ -528,8 +528,11 @@ void MainWindow::ActionAjustarPresupuesto()
 
 void MainWindow::ActionPropiedadesObra()
 {
-    DialogoDatosGenerales* d = new DialogoDatosGenerales(this);
-    int res = d->exec();
+    if (HayObrasAbiertas())
+    {
+        DialogoDatosGenerales* d = new DialogoDatosGenerales((*obraActual)->LeeTabla(),db);
+        int res = d->exec();
+    }
 }
 
 void MainWindow::AcercaDe()

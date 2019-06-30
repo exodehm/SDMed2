@@ -18,7 +18,7 @@ class DialogoCertificaciones : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogoCertificaciones(QString tabla,QWidget *parent = 0);
+    explicit DialogoCertificaciones(QString tabla,QWidget *parent = nullptr);
     ~DialogoCertificaciones();
     QString LeeFecha();
     QStringList CertificacionActual();

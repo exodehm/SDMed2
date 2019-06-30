@@ -12,7 +12,7 @@ class DialogoConexionBBDD : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogoConexionBBDD(QWidget *parent = 0);
+    explicit DialogoConexionBBDD(QWidget *parent = nullptr);
     ~DialogoConexionBBDD();
 
 private:
