@@ -5,7 +5,7 @@
 -- Dumped from database version 10.9 (Ubuntu 10.9-0ubuntu0.18.04.1)
 -- Dumped by pg_dump version 10.9 (Ubuntu 10.9-0ubuntu0.18.04.1)
 
--- Started on 2019-07-06 08:22:08 CEST
+-- Started on 2019-07-06 22:17:21 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -27,7 +27,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 3202 (class 0 OID 0)
+-- TOC entry 3203 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -36,7 +36,7 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- TOC entry 625 (class 1247 OID 16388)
+-- TOC entry 626 (class 1247 OID 16388)
 -- Name: tp_certificacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -49,7 +49,7 @@ CREATE TYPE public.tp_certificacion AS (
 ALTER TYPE public.tp_certificacion OWNER TO postgres;
 
 --
--- TOC entry 628 (class 1247 OID 16390)
+-- TOC entry 629 (class 1247 OID 16390)
 -- Name: tp_color; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -63,7 +63,7 @@ CREATE TYPE public.tp_color AS ENUM (
 ALTER TYPE public.tp_color OWNER TO postgres;
 
 --
--- TOC entry 710 (class 1247 OID 16399)
+-- TOC entry 711 (class 1247 OID 16399)
 -- Name: tp_concepto; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -84,7 +84,7 @@ CREATE TYPE public.tp_concepto AS (
 ALTER TYPE public.tp_concepto OWNER TO postgres;
 
 --
--- TOC entry 713 (class 1247 OID 16402)
+-- TOC entry 714 (class 1247 OID 16402)
 -- Name: tp_copiarconcepto; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -98,7 +98,7 @@ CREATE TYPE public.tp_copiarconcepto AS (
 ALTER TYPE public.tp_copiarconcepto OWNER TO postgres;
 
 --
--- TOC entry 716 (class 1247 OID 16405)
+-- TOC entry 717 (class 1247 OID 16405)
 -- Name: tp_relacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -115,7 +115,7 @@ CREATE TYPE public.tp_relacion AS (
 ALTER TYPE public.tp_relacion OWNER TO postgres;
 
 --
--- TOC entry 719 (class 1247 OID 16408)
+-- TOC entry 720 (class 1247 OID 16408)
 -- Name: tp_copiarrelacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -129,7 +129,7 @@ CREATE TYPE public.tp_copiarrelacion AS (
 ALTER TYPE public.tp_copiarrelacion OWNER TO postgres;
 
 --
--- TOC entry 722 (class 1247 OID 16411)
+-- TOC entry 723 (class 1247 OID 16411)
 -- Name: tp_guardarconcepto; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -143,7 +143,7 @@ CREATE TYPE public.tp_guardarconcepto AS (
 ALTER TYPE public.tp_guardarconcepto OWNER TO postgres;
 
 --
--- TOC entry 725 (class 1247 OID 16414)
+-- TOC entry 726 (class 1247 OID 16414)
 -- Name: tp_medicion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -166,7 +166,7 @@ CREATE TYPE public.tp_medicion AS (
 ALTER TYPE public.tp_medicion OWNER TO postgres;
 
 --
--- TOC entry 728 (class 1247 OID 16417)
+-- TOC entry 729 (class 1247 OID 16417)
 -- Name: tp_guardarmedicion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -180,7 +180,7 @@ CREATE TYPE public.tp_guardarmedicion AS (
 ALTER TYPE public.tp_guardarmedicion OWNER TO postgres;
 
 --
--- TOC entry 731 (class 1247 OID 16420)
+-- TOC entry 732 (class 1247 OID 16420)
 -- Name: tp_guardarrelacion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -194,7 +194,7 @@ CREATE TYPE public.tp_guardarrelacion AS (
 ALTER TYPE public.tp_guardarrelacion OWNER TO postgres;
 
 --
--- TOC entry 734 (class 1247 OID 16423)
+-- TOC entry 735 (class 1247 OID 16423)
 -- Name: tp_lineamedicion; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -216,7 +216,7 @@ CREATE TYPE public.tp_lineamedicion AS (
 ALTER TYPE public.tp_lineamedicion OWNER TO postgres;
 
 --
--- TOC entry 737 (class 1247 OID 16426)
+-- TOC entry 738 (class 1247 OID 16426)
 -- Name: tp_partida; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -1187,18 +1187,24 @@ DECLARE
 valores text[] := '{"Variable", "Tipo", "Valor","Nombre"}';
 jsonb_datos_generales text;
 jsonb_porcentajes text;
+jsonb_proyectista text;
+jsonb_direccion_obra text;
+jsonb_direccion_ejecucion_obra text;
 res text;
 BEGIN
 SELECT generar_json_datos_generales(_codigo,valores) INTO jsonb_datos_generales;
 SELECT generar_json_porcentajes(valores) INTO jsonb_porcentajes;
+SELECT generar_json_datos_intervinientes('Proyectista', valores) INTO jsonb_proyectista;
+SELECT generar_json_datos_intervinientes('Director de obra', valores) INTO jsonb_direccion_obra;
+SELECT generar_json_datos_intervinientes('Director de ejecución', valores) INTO jsonb_direccion_ejecucion_obra;
 EXECUTE FORMAT ('CREATE TABLE IF NOT EXISTS %I (
 		id SERIAL NOT NULL PRIMARY KEY, 
 		propiedades JSONB NOT NULL)',_codigo||'_Propiedades'
 		);
-EXECUTE FORMAT ('INSERT INTO %I (propiedades) VALUES (%s), (%s)',_codigo||'_Propiedades', jsonb_datos_generales,jsonb_porcentajes);
+EXECUTE FORMAT ('INSERT INTO %I (propiedades) VALUES (%s),(%s),(%s),(%s),(%s)',_codigo||'_Propiedades', jsonb_datos_generales,jsonb_porcentajes,jsonb_proyectista,jsonb_direccion_obra,jsonb_direccion_ejecucion_obra);
 
-res = FORMAT ('INSERT INTO %I (propiedades) VALUES (%s), (%s)',_codigo||'_Propiedades', jsonb_datos_generales, jsonb_porcentajes);
-raise notice '% ',res;
+--res = FORMAT ('INSERT INTO %I (propiedades) VALUES (%s),(%s),(%s)',_codigo||'_Propiedades', jsonb_datos_generales, jsonb_porcentajes);
+--raise notice '% ',res;
 RETURN 0;
 EXCEPTION 
     WHEN others THEN
@@ -1554,7 +1560,7 @@ $$;
 ALTER FUNCTION public.fx_letras(numero numeric) OWNER TO postgres;
 
 --
--- TOC entry 328 (class 1255 OID 25759)
+-- TOC entry 329 (class 1255 OID 25759)
 -- Name: generar_json_datos_generales(character varying, text[]); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1616,7 +1622,79 @@ $_$;
 ALTER FUNCTION public.generar_json_datos_generales(_nombretabla character varying, _valores text[]) OWNER TO postgres;
 
 --
--- TOC entry 327 (class 1255 OID 25747)
+-- TOC entry 327 (class 1255 OID 25952)
+-- Name: generar_json_datos_intervinientes(character varying, text[]); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.generar_json_datos_intervinientes(_interviniente character varying, _valores text[]) RETURNS text
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+cadena_jsonb text := '';
+variables text[];
+nombres text[];
+valor text[];
+j integer := 1;
+tam_array_valores integer;
+prefijo character varying;
+sufijo character varying;
+primer_valor character varying;
+
+BEGIN
+--hallo el prefijo, sufijo y primer valor
+IF _interviniente = 'Proyectista' THEN
+	prefijo := 'Pry';
+	sufijo := 'del proyecto';
+	primer_valor :='El redactor del proyecto';
+ELSIF _interviniente = 'Director de obra' THEN
+	prefijo := 'Dir';
+	sufijo := 'de la dirección de obra';
+	primer_valor :='La dirección facultativa';
+ELSIF _interviniente = 'Director de ejecución' THEN
+	prefijo := 'Deo';
+	sufijo := 'del director de la ejecución de la obra';
+	primer_valor :='La dirección facultativa';
+END IF;
+--defino arrays
+variables := FORMAT('{"z%sEncabezamiento","z%sNombre1","z%sNombre2","z%sDirección","z%sCiudad","z%sProvincia","z%sCPostal","z%sPaís","z%sTeléfono","z%sTeléfono2","z%sFax","z%sCorreo","z%sNIF"}',prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo);
+nombres := FORMAT('{"Encabezamiento %s","Nombre 1 %s","Nombre 2 %s","Dirección %s","Ciudad %s","Provincia %s","Código postal %s","País %s","Teléfono 1 %s","Teléfono 2 %s","Fax %s","Correo electrónico %s","NIF %s"}',sufijo,sufijo,sufijo,sufijo,sufijo,sufijo,sufijo,sufijo,sufijo,sufijo,sufijo,sufijo,sufijo);
+--relleno el array valor con el primer valor estandar 
+valor := array_append(valor,FORMAT(quote_ident('%s'),primer_valor));
+FOR i IN 2 .. array_upper(variables,1) LOOP
+	valor := array_append(valor,'""');--resto de valores
+END LOOP;
+--cadena inicial
+cadena_jsonb = FORMAT(CONCAT (cadena_jsonb, '''{"Propiedad" : %s , "Valor" : [{"'),quote_ident(_interviniente));
+SELECT array_length(_valores, 1) INTO tam_array_valores;
+FOR i IN array_lower(variables,1) .. array_upper(variables,1) LOOP	
+		cadena_jsonb = CONCAT (cadena_jsonb, _valores[j],'" : "');
+		cadena_jsonb = CONCAT (cadena_jsonb, variables[i],'" , "');
+		j=j+1;
+		cadena_jsonb = CONCAT (cadena_jsonb, _valores[j],'" : "');
+		cadena_jsonb = CONCAT (cadena_jsonb, 'A','" , "');
+		j=j+1;
+		cadena_jsonb = CONCAT (cadena_jsonb, _valores[j],'" : ');
+		cadena_jsonb = CONCAT (cadena_jsonb, valor[i],' , "');
+		j=j+1;
+		cadena_jsonb = CONCAT (cadena_jsonb, _valores[j],'" : "');
+		cadena_jsonb = CONCAT (cadena_jsonb, nombres[i]);		
+		IF (i < array_length(variables,1)) THEN
+			cadena_jsonb = CONCAT (cadena_jsonb,'"},{"');
+		END IF;		
+		j=1;					
+END LOOP;
+--cadena final
+cadena_jsonb = CONCAT (cadena_jsonb, '"}]}''');
+RAISE INFO  '%', cadena_jsonb;
+RETURN cadena_jsonb;
+END;
+$$;
+
+
+ALTER FUNCTION public.generar_json_datos_intervinientes(_interviniente character varying, _valores text[]) OWNER TO postgres;
+
+--
+-- TOC entry 328 (class 1255 OID 25747)
 -- Name: generar_json_porcentajes(text[]); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -3588,7 +3666,7 @@ CREATE TABLE public."CENZANO_Mediciones" OF public.tp_medicion (
 ALTER TABLE public."CENZANO_Mediciones" OWNER TO postgres;
 
 --
--- TOC entry 231 (class 1259 OID 25885)
+-- TOC entry 231 (class 1259 OID 26000)
 -- Name: CENZANO_Propiedades; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3601,7 +3679,7 @@ CREATE TABLE public."CENZANO_Propiedades" (
 ALTER TABLE public."CENZANO_Propiedades" OWNER TO postgres;
 
 --
--- TOC entry 230 (class 1259 OID 25883)
+-- TOC entry 230 (class 1259 OID 25998)
 -- Name: CENZANO_Propiedades_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -3617,7 +3695,7 @@ CREATE SEQUENCE public."CENZANO_Propiedades_id_seq"
 ALTER TABLE public."CENZANO_Propiedades_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 3203 (class 0 OID 0)
+-- TOC entry 3204 (class 0 OID 0)
 -- Dependencies: 230
 -- Name: CENZANO_Propiedades_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -3854,7 +3932,7 @@ CREATE TABLE public.tipoperfiles (
 ALTER TABLE public.tipoperfiles OWNER TO postgres;
 
 --
--- TOC entry 3043 (class 2604 OID 25888)
+-- TOC entry 3044 (class 2604 OID 26003)
 -- Name: CENZANO_Propiedades id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3862,7 +3940,7 @@ ALTER TABLE ONLY public."CENZANO_Propiedades" ALTER COLUMN id SET DEFAULT nextva
 
 
 --
--- TOC entry 3057 (class 2606 OID 16941)
+-- TOC entry 3058 (class 2606 OID 16941)
 -- Name: CENZANO_Conceptos CENZANO_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3871,7 +3949,7 @@ ALTER TABLE ONLY public."CENZANO_Conceptos"
 
 
 --
--- TOC entry 3061 (class 2606 OID 16960)
+-- TOC entry 3062 (class 2606 OID 16960)
 -- Name: CENZANO_Mediciones CENZANO_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3880,7 +3958,7 @@ ALTER TABLE ONLY public."CENZANO_Mediciones"
 
 
 --
--- TOC entry 3071 (class 2606 OID 25893)
+-- TOC entry 3072 (class 2606 OID 26008)
 -- Name: CENZANO_Propiedades CENZANO_Propiedades_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3889,7 +3967,7 @@ ALTER TABLE ONLY public."CENZANO_Propiedades"
 
 
 --
--- TOC entry 3059 (class 2606 OID 16949)
+-- TOC entry 3060 (class 2606 OID 16949)
 -- Name: CENZANO_Relacion CENZANO_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3898,7 +3976,7 @@ ALTER TABLE ONLY public."CENZANO_Relacion"
 
 
 --
--- TOC entry 3063 (class 2606 OID 25200)
+-- TOC entry 3064 (class 2606 OID 25200)
 -- Name: DSFDFS_Conceptos DSFDFS_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3907,7 +3985,7 @@ ALTER TABLE ONLY public."DSFDFS_Conceptos"
 
 
 --
--- TOC entry 3069 (class 2606 OID 25239)
+-- TOC entry 3070 (class 2606 OID 25239)
 -- Name: DSFDFS_GuardarRelaciones DSFDFS_GuardarRelaciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3916,7 +3994,7 @@ ALTER TABLE ONLY public."DSFDFS_GuardarRelaciones"
 
 
 --
--- TOC entry 3067 (class 2606 OID 25219)
+-- TOC entry 3068 (class 2606 OID 25219)
 -- Name: DSFDFS_Mediciones DSFDFS_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3925,7 +4003,7 @@ ALTER TABLE ONLY public."DSFDFS_Mediciones"
 
 
 --
--- TOC entry 3065 (class 2606 OID 25208)
+-- TOC entry 3066 (class 2606 OID 25208)
 -- Name: DSFDFS_Relacion DSFDFS_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3934,7 +4012,7 @@ ALTER TABLE ONLY public."DSFDFS_Relacion"
 
 
 --
--- TOC entry 3049 (class 2606 OID 16656)
+-- TOC entry 3050 (class 2606 OID 16656)
 -- Name: tipoperfiles PerfilesY_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3943,7 +4021,7 @@ ALTER TABLE ONLY public.tipoperfiles
 
 
 --
--- TOC entry 3051 (class 2606 OID 16691)
+-- TOC entry 3052 (class 2606 OID 16691)
 -- Name: PruebaBBDDVacia_Conceptos PruebaBBDDVacia_Conceptos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3952,7 +4030,7 @@ ALTER TABLE ONLY public."PruebaBBDDVacia_Conceptos"
 
 
 --
--- TOC entry 3055 (class 2606 OID 16710)
+-- TOC entry 3056 (class 2606 OID 16710)
 -- Name: PruebaBBDDVacia_Mediciones PruebaBBDDVacia_Mediciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3961,7 +4039,7 @@ ALTER TABLE ONLY public."PruebaBBDDVacia_Mediciones"
 
 
 --
--- TOC entry 3053 (class 2606 OID 16699)
+-- TOC entry 3054 (class 2606 OID 16699)
 -- Name: PruebaBBDDVacia_Relacion PruebaBBDDVacia_Relacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3970,7 +4048,7 @@ ALTER TABLE ONLY public."PruebaBBDDVacia_Relacion"
 
 
 --
--- TOC entry 3045 (class 2606 OID 16670)
+-- TOC entry 3046 (class 2606 OID 16670)
 -- Name: perfiles perfiles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3979,7 +4057,7 @@ ALTER TABLE ONLY public.perfiles
 
 
 --
--- TOC entry 3047 (class 2606 OID 16672)
+-- TOC entry 3048 (class 2606 OID 16672)
 -- Name: tCorrugados tCorrugados_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3988,7 +4066,7 @@ ALTER TABLE ONLY public."tCorrugados"
 
 
 --
--- TOC entry 3072 (class 2606 OID 16673)
+-- TOC entry 3073 (class 2606 OID 16673)
 -- Name: perfiles perfiles_id_tipoperfil_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3997,7 +4075,7 @@ ALTER TABLE ONLY public.perfiles
 
 
 --
--- TOC entry 3073 (class 2606 OID 16678)
+-- TOC entry 3074 (class 2606 OID 16678)
 -- Name: tCorrugados tCorrugados_id_perfil_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4005,7 +4083,7 @@ ALTER TABLE ONLY public."tCorrugados"
     ADD CONSTRAINT "tCorrugados_id_perfil_fkey" FOREIGN KEY (id_perfil) REFERENCES public.tipoperfiles(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2019-07-06 08:22:08 CEST
+-- Completed on 2019-07-06 22:17:21 CEST
 
 --
 -- PostgreSQL database dump complete
