@@ -14,6 +14,8 @@ public:
     int columnCount(const QModelIndex& parent) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     QVariant data(const QModelIndex& index,int role = Qt::DisplayRole) const;*/
+    bool setData(const QModelIndex & index, const QVariant& value, int role) override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     void ActualizarDatos(const QStringList& ruta);
     void PrepararCabecera(/*QList<QList<QVariant>>&datos*/);
@@ -25,6 +27,7 @@ public:
 
  private:
     QString m_tabla;
+    QString m_propiedad;
 };
 
 #endif // PROPIEDADESMODEL_H
