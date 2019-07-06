@@ -40,12 +40,6 @@ def imprimir(conexion, obra, book):
 	contador = 0
 	cantidad = 0
 	ancho_columnas = 0
-	#datos para calculo de totales
-	consulta.exec_("SELECT (porcentajes).\"zPorGastosGenerales\",(porcentajes).\"zPorBenIndustrial\",(porcentajes).\"zPorIVAEjecucion\" FROM \"" + obra + "_Propiedades\"")
-	while consulta.next():
-		gastos_generales = consulta.value(0)
-		beneficio_industrial = consulta.value(1)
-		IVA = consulta.value(2)
 	#fuentes
 	ft_resaltada = Font(name='Arial', size=11, bold=True)
 	ft_normal = Font(name='Arial', size=10, bold=False)
@@ -126,6 +120,13 @@ def imprimir(conexion, obra, book):
 	sheet[coordenadaEM].border = Border(top=Side(style='thin'))#linea superior 
 	sheet[coordenadaEM].number_format = '#,##0.00'	
 	#GG
+	#consulta para hallar el dato GG
+	gastos_generales = 0.0
+	consulta.exec_("SELECT datos->>'Valor' FROM (SELECT jsonb_array_elements(propiedades->'Valor') AS datos \
+				FROM \"" + obra + "_Propiedades\" \
+				WHERE propiedades->>'Propiedad' = 'Porcentajes') AS subdatos WHERE datos->>'Variable' = 'zPorGastosGenerales'")	
+	while consulta.next():
+		gastos_generales = float(consulta.value(0))	
 	fila = fila +1
 	sheet.merge_cells(start_row=fila, start_column=offset_izquierdo, end_row=fila, end_column=columna_euros-3)
 	coordenada_leyenda_GG = get_column_letter(1)+str(fila)
@@ -140,6 +141,13 @@ def imprimir(conexion, obra, book):
 	coordenada_punteado_GG = get_column_letter(columna_euros-2)+str(fila)#punteado
 	sheet[coordenada_punteado_GG].border = Border(bottom=Side(style='dotted'))#punteado	
 	#BI
+	#consulta para hallar el dato BI
+	beneficio_industrial = 0.0
+	consulta.exec_("SELECT datos->>'Valor' FROM (SELECT jsonb_array_elements(propiedades->'Valor') AS datos \
+				FROM \"" + obra + "_Propiedades\" \
+				WHERE propiedades->>'Propiedad' = 'Porcentajes') AS subdatos WHERE datos->>'Variable' = 'zPorBenIndustrial'")	
+	while consulta.next():
+		beneficio_industrial = float(consulta.value(0))	
 	fila = fila +1
 	sheet.merge_cells(start_row=fila, start_column=offset_izquierdo, end_row=fila, end_column=columna_euros-3)
 	coordenada_leyenda_BI = get_column_letter(1)+str(fila)
@@ -180,7 +188,14 @@ def imprimir(conexion, obra, book):
 	sheet[coordenadaPC].border = Border(top=Side(style='thin'))#linea superior 
 	sheet[coordenadaPC].font = ft_resaltada #negritas
 	sheet[coordenadaPC].number_format = '#,##0.00'
-	#iva	
+	#iva
+	#consulta para hallar el dato IVA
+	IVA = 0.0
+	consulta.exec_("SELECT datos->>'Valor' FROM (SELECT jsonb_array_elements(propiedades->'Valor') AS datos \
+				FROM \"" + obra + "_Propiedades\" \
+				WHERE propiedades->>'Propiedad' = 'Porcentajes') AS subdatos WHERE datos->>'Variable' = 'zPorIVAEjecucion'")	
+	while consulta.next():
+		IVA = float(consulta.value(0))	
 	fila = fila +1
 	sheet.merge_cells(start_row=fila, start_column=offset_izquierdo, end_row=fila, end_column=columna_euros-3)
 	coordenada_leyenda_IVA = get_column_letter(1)+str(fila)
