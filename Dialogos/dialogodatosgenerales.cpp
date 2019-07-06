@@ -14,12 +14,11 @@ DialogoDatosGenerales::DialogoDatosGenerales(QString tabla, QSqlDatabase db, QWi
     ui->setupUi(this);
     m_tabla_propiedades = new TablaPropiedades(tabla);
     m_tabla_propiedades->setObjectName(QStringLiteral("tablaDatos"));
-
     ui->verticalLayout->addWidget(m_tabla_propiedades);
     //m_modelo_tabla_datos = new QSqlTableModel(this);
     QSqlQueryModel * modeloCombo=new QSqlQueryModel(this);
     QSqlQuery *consulta=new QSqlQuery(db);
-    consulta->prepare("SELECT propiedades->>'Propiedad' FROM \"" + tabla + "_Propiedades\"");
+    consulta->prepare("SELECT propiedades->>'Propiedad' FROM \"" + tabla + "_Propiedades\" ORDER BY id");
     consulta->exec();
     //qDebug()<<consulta->executedQuery();
     modeloCombo->setQuery(*consulta);
@@ -27,9 +26,9 @@ DialogoDatosGenerales::DialogoDatosGenerales(QString tabla, QSqlDatabase db, QWi
     //ui->tablaDatos->setModel(m_modelo_tabla_datos);
     //RellenarTabla(ui->comboBox_Datos->currentText());
     QString propiedad = ui->comboBox_Datos->currentText();
-    m_tabla_propiedades->ActualizarDatos(propiedad);
+    m_tabla_propiedades->ActualizarDatosPropiedades(propiedad);
     QObject::connect(ui->pushButton_Ok,SIGNAL(clicked(bool)),this,SLOT(accept()));
-    QObject::connect(ui->comboBox_Datos,SIGNAL(currentIndexChanged(QString)),m_tabla_propiedades,SLOT(ActualizarDatos(QString)));
+    QObject::connect(ui->comboBox_Datos,SIGNAL(currentIndexChanged(QString)),m_tabla_propiedades,SLOT(ActualizarDatosPropiedades(QString)));
 
 }
 

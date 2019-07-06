@@ -51,6 +51,6 @@ void MiUndoStack::Push(const QStringList &ruta, int tablaactiva, QUndoCommand *c
 {
     GuardarPosicion(ruta,tablaactiva);
     push(comando);
-    qDebug()<<"Pushhh";
+    //qDebug()<<"Pushhh";
 }
 
