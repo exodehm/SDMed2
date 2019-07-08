@@ -260,14 +260,59 @@ def imprimir(conexion, obra, book):
 	sheet.cell(column = offset_izquierdo,row = fila).alignment = Alignment(horizontal="center", vertical="center")
 	sheet.cell(column = offset_izquierdo,row = fila).font = ft_normal
 	
-	#firmas
+	#firmas-datos
 	fila = fila + 4
-	#sheet.merge_cells(start_row=fila, start_column=offset_izquierdo, end_row=fila, end_column=offset_izquierdo+3)
-	sheet.cell(column = offset_izquierdo,row = fila, value = "El promotor")
+	encabezado_firma_proyectista = ""
+	nombre_proyectista1 = ""
+	nombre_proyectista2 = ""
+	encabezado_firma_promotor = ""
+	nombre_promotor1 = ""
+	nombre_promotor2 = ""
+	consulta.exec_("SELECT datos->>'Valor' FROM (SELECT jsonb_array_elements(propiedades->'Valor') AS datos \
+				FROM \"" + obra + "_Propiedades\" \
+				WHERE propiedades->>'Propiedad' = 'Proyectista') AS subdatos WHERE datos->>'Variable' = 'zPryEncabezamiento'")
+	while consulta.next():
+		encabezado_firma_proyectista = consulta.value(0)
+	consulta.exec_("SELECT datos->>'Valor' FROM (SELECT jsonb_array_elements(propiedades->'Valor') AS datos \
+				FROM \"" + obra + "_Propiedades\" \
+				WHERE propiedades->>'Propiedad' = 'Proyectista') AS subdatos WHERE datos->>'Variable' = 'zPryNombre1'")
+	while consulta.next():
+		nombre_proyectista1 = consulta.value(0)
+	consulta.exec_("SELECT datos->>'Valor' FROM (SELECT jsonb_array_elements(propiedades->'Valor') AS datos \
+				FROM \"" + obra + "_Propiedades\" \
+				WHERE propiedades->>'Propiedad' = 'Proyectista') AS subdatos WHERE datos->>'Variable' = 'zPryNombre2'")
+	while consulta.next():
+		nombre_proyectista2 = consulta.value(0)
+	consulta.exec_("SELECT datos->>'Valor' FROM (SELECT jsonb_array_elements(propiedades->'Valor') AS datos \
+				FROM \"" + obra + "_Propiedades\" \
+				WHERE propiedades->>'Propiedad' = 'El promotor') AS subdatos WHERE datos->>'Variable' = 'zProEncabezamiento'")
+	while consulta.next():
+		encabezado_firma_promotor = consulta.value(0)
+	consulta.exec_("SELECT datos->>'Valor' FROM (SELECT jsonb_array_elements(propiedades->'Valor') AS datos \
+				FROM \"" + obra + "_Propiedades\" \
+				WHERE propiedades->>'Propiedad' = 'El promotor') AS subdatos WHERE datos->>'Variable' = 'zProNombre1'")
+	while consulta.next():
+		nombre_promotor1 = consulta.value(0)
+	consulta.exec_("SELECT datos->>'Valor' FROM (SELECT jsonb_array_elements(propiedades->'Valor') AS datos \
+				FROM \"" + obra + "_Propiedades\" \
+				WHERE propiedades->>'Propiedad' = 'El promotor') AS subdatos WHERE datos->>'Variable' = 'zProNombre2'")
+	while consulta.next():
+		nombre_promotor2 = consulta.value(0)
+	#firmas-situar
+	sheet.cell(column = offset_izquierdo,row = fila).font = ft_resaltada
+	sheet.cell(column = offset_izquierdo,row = fila, value = encabezado_firma_promotor)	
+	sheet.cell(column = offset_izquierdo+4,row = fila).font = ft_resaltada
+	sheet.cell(column = offset_izquierdo+4,row = fila, value = encabezado_firma_proyectista)
+	fila = fila + 3
 	sheet.cell(column = offset_izquierdo,row = fila).font = ft_normal
-	sheet.cell(column = offset_izquierdo+3,row = fila, value = "El redactor del proyecto")
-	sheet.cell(column = offset_izquierdo+3,row = fila).font = ft_normal
-	
+	sheet.cell(column = offset_izquierdo,row = fila, value = nombre_promotor1)		
+	sheet.cell(column = offset_izquierdo+4,row = fila).font = ft_normal
+	sheet.cell(column = offset_izquierdo+4,row = fila, value = nombre_proyectista1)
+	fila = fila + 1
+	sheet.cell(column = offset_izquierdo,row = fila).font = ft_normal
+	sheet.cell(column = offset_izquierdo,row = fila, value = nombre_promotor2)	
+	sheet.cell(column = offset_izquierdo+4,row = fila).font = ft_normal
+	sheet.cell(column = offset_izquierdo+4,row = fila, value = nombre_proyectista2)	
 	#ajuste del texto a la pagina
 	#sheet.sheet_properties.pageSetUpPr.fitToPage = True
 	
