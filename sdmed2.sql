@@ -5,7 +5,7 @@
 -- Dumped from database version 10.9 (Ubuntu 10.9-0ubuntu0.18.04.1)
 -- Dumped by pg_dump version 10.9 (Ubuntu 10.9-0ubuntu0.18.04.1)
 
--- Started on 2019-07-06 22:17:21 CEST
+-- Started on 2019-07-08 13:28:29 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -752,7 +752,7 @@ $_$;
 ALTER FUNCTION public.borrar_lineas_principal(_nombretabla character varying, _codigopadre character varying, _codigoshijo character varying[], _guardar boolean) OWNER TO postgres;
 
 --
--- TOC entry 326 (class 1255 OID 16440)
+-- TOC entry 325 (class 1255 OID 16440)
 -- Name: borrar_obra(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1081,7 +1081,7 @@ $_$;
 ALTER FUNCTION public.copiar_medicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _lineas integer[]) OWNER TO postgres;
 
 --
--- TOC entry 325 (class 1255 OID 16448)
+-- TOC entry 324 (class 1255 OID 16448)
 -- Name: crear_obra(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1176,7 +1176,7 @@ $$;
 ALTER FUNCTION public.crear_tabla_mediciones(codigo character varying) OWNER TO postgres;
 
 --
--- TOC entry 322 (class 1255 OID 25760)
+-- TOC entry 329 (class 1255 OID 25760)
 -- Name: crear_tabla_propiedades(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1190,18 +1190,23 @@ jsonb_porcentajes text;
 jsonb_proyectista text;
 jsonb_direccion_obra text;
 jsonb_direccion_ejecucion_obra text;
-res text;
+jsonb_promotor text;
+jsonb_constructor text;
+--res text;
 BEGIN
 SELECT generar_json_datos_generales(_codigo,valores) INTO jsonb_datos_generales;
 SELECT generar_json_porcentajes(valores) INTO jsonb_porcentajes;
 SELECT generar_json_datos_intervinientes('Proyectista', valores) INTO jsonb_proyectista;
 SELECT generar_json_datos_intervinientes('Director de obra', valores) INTO jsonb_direccion_obra;
 SELECT generar_json_datos_intervinientes('Director de ejecución', valores) INTO jsonb_direccion_ejecucion_obra;
+SELECT generar_json_datos_intervinientes('El promotor', valores) INTO jsonb_promotor;
+SELECT generar_json_datos_intervinientes('El constructor', valores) INTO jsonb_constructor;
 EXECUTE FORMAT ('CREATE TABLE IF NOT EXISTS %I (
 		id SERIAL NOT NULL PRIMARY KEY, 
 		propiedades JSONB NOT NULL)',_codigo||'_Propiedades'
 		);
-EXECUTE FORMAT ('INSERT INTO %I (propiedades) VALUES (%s),(%s),(%s),(%s),(%s)',_codigo||'_Propiedades', jsonb_datos_generales,jsonb_porcentajes,jsonb_proyectista,jsonb_direccion_obra,jsonb_direccion_ejecucion_obra);
+EXECUTE FORMAT ('INSERT INTO %I (propiedades) VALUES (%s),(%s),(%s),(%s),(%s),(%s),(%s)',_codigo||'_Propiedades', 
+	jsonb_datos_generales,jsonb_porcentajes,jsonb_proyectista,jsonb_direccion_obra,jsonb_direccion_ejecucion_obra,jsonb_promotor,jsonb_constructor);
 
 --res = FORMAT ('INSERT INTO %I (propiedades) VALUES (%s),(%s),(%s)',_codigo||'_Propiedades', jsonb_datos_generales, jsonb_porcentajes);
 --raise notice '% ',res;
@@ -1560,7 +1565,7 @@ $$;
 ALTER FUNCTION public.fx_letras(numero numeric) OWNER TO postgres;
 
 --
--- TOC entry 329 (class 1255 OID 25759)
+-- TOC entry 328 (class 1255 OID 25759)
 -- Name: generar_json_datos_generales(character varying, text[]); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1622,7 +1627,7 @@ $_$;
 ALTER FUNCTION public.generar_json_datos_generales(_nombretabla character varying, _valores text[]) OWNER TO postgres;
 
 --
--- TOC entry 327 (class 1255 OID 25952)
+-- TOC entry 326 (class 1255 OID 25952)
 -- Name: generar_json_datos_intervinientes(character varying, text[]); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -1644,7 +1649,7 @@ BEGIN
 --hallo el prefijo, sufijo y primer valor
 IF _interviniente = 'Proyectista' THEN
 	prefijo := 'Pry';
-	sufijo := 'del proyecto';
+	sufijo := 'del proyectista';
 	primer_valor :='El redactor del proyecto';
 ELSIF _interviniente = 'Director de obra' THEN
 	prefijo := 'Dir';
@@ -1654,6 +1659,14 @@ ELSIF _interviniente = 'Director de ejecución' THEN
 	prefijo := 'Deo';
 	sufijo := 'del director de la ejecución de la obra';
 	primer_valor :='La dirección facultativa';
+ELSIF _interviniente = 'El promotor' THEN
+	prefijo := 'Pro';
+	sufijo := 'del promotor';
+	primer_valor :='El promotor';
+ELSIF _interviniente = 'El constructor' THEN
+	prefijo := 'Con';
+	sufijo := 'de la empresa constructora';
+	primer_valor :='La empresa constructora';
 END IF;
 --defino arrays
 variables := FORMAT('{"z%sEncabezamiento","z%sNombre1","z%sNombre2","z%sDirección","z%sCiudad","z%sProvincia","z%sCPostal","z%sPaís","z%sTeléfono","z%sTeléfono2","z%sFax","z%sCorreo","z%sNIF"}',prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo,prefijo);
@@ -1694,7 +1707,7 @@ $$;
 ALTER FUNCTION public.generar_json_datos_intervinientes(_interviniente character varying, _valores text[]) OWNER TO postgres;
 
 --
--- TOC entry 328 (class 1255 OID 25747)
+-- TOC entry 327 (class 1255 OID 25747)
 -- Name: generar_json_porcentajes(text[]); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -3187,7 +3200,7 @@ END IF;
 ALTER FUNCTION public.ver_color_hijos(nombretabla character varying, codigopadre character varying, codigohijo character varying) OWNER TO postgres;
 
 --
--- TOC entry 323 (class 1255 OID 25028)
+-- TOC entry 322 (class 1255 OID 25028)
 -- Name: ver_conceptos_cantidad(character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -3468,7 +3481,7 @@ FOR var_r IN EXECUTE FORMAT('SELECT * FROM %I WHERE codhijo = $1 AND %s AND num_
 ALTER FUNCTION public.ver_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_certif integer) OWNER TO postgres;
 
 --
--- TOC entry 324 (class 1255 OID 25029)
+-- TOC entry 323 (class 1255 OID 25029)
 -- Name: ver_obra(character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -3666,7 +3679,7 @@ CREATE TABLE public."CENZANO_Mediciones" OF public.tp_medicion (
 ALTER TABLE public."CENZANO_Mediciones" OWNER TO postgres;
 
 --
--- TOC entry 231 (class 1259 OID 26000)
+-- TOC entry 231 (class 1259 OID 26022)
 -- Name: CENZANO_Propiedades; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -3679,7 +3692,7 @@ CREATE TABLE public."CENZANO_Propiedades" (
 ALTER TABLE public."CENZANO_Propiedades" OWNER TO postgres;
 
 --
--- TOC entry 230 (class 1259 OID 25998)
+-- TOC entry 230 (class 1259 OID 26020)
 -- Name: CENZANO_Propiedades_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -3932,7 +3945,7 @@ CREATE TABLE public.tipoperfiles (
 ALTER TABLE public.tipoperfiles OWNER TO postgres;
 
 --
--- TOC entry 3044 (class 2604 OID 26003)
+-- TOC entry 3044 (class 2604 OID 26025)
 -- Name: CENZANO_Propiedades id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -3958,7 +3971,7 @@ ALTER TABLE ONLY public."CENZANO_Mediciones"
 
 
 --
--- TOC entry 3072 (class 2606 OID 26008)
+-- TOC entry 3072 (class 2606 OID 26030)
 -- Name: CENZANO_Propiedades CENZANO_Propiedades_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4083,7 +4096,7 @@ ALTER TABLE ONLY public."tCorrugados"
     ADD CONSTRAINT "tCorrugados_id_perfil_fkey" FOREIGN KEY (id_perfil) REFERENCES public.tipoperfiles(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2019-07-06 22:17:21 CEST
+-- Completed on 2019-07-08 13:28:29 CEST
 
 --
 -- PostgreSQL database dump complete
