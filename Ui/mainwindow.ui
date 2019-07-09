@@ -505,6 +505,8 @@
     <addaction name="actionObra_3"/>
     <addaction name="actionObra_4"/>
     <addaction name="actionObra_5"/>
+    <addaction name="actionImprimir"/>
+    <addaction name="separator"/>
     <addaction name="action_Salir"/>
     <addaction name="separator"/>
    </widget>
@@ -1017,7 +1019,7 @@
      <normaloff>:/images/imprimir.png</normaloff>:/images/imprimir.png</iconset>
    </property>
    <property name="text">
-    <string>Imprimir</string>
+    <string>Imprimir...</string>
    </property>
    <property name="toolTip">
     <string>Imprimir</string>
