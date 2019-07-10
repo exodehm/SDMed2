@@ -4,6 +4,7 @@
 import imp
 import os
 import sys
+import operator
 from PyQt5 import QtCore, QtGui, QtWidgets, QtSql
 from DialogoImprimir import DialogoImprimir
 
@@ -25,8 +26,10 @@ def getPlugins(ruta):
 		if datosplugins:#solo añadire los plugins si hay una seccion [general] bien formada
 			info = imp.find_module(MainModule, [location])
 			dict_datos = {"name": i, "info": info}
+			#print (dict_datos)
 			dict_datos.update(datosplugins)
-			plugins.append(dict_datos)			
+			plugins.append(dict_datos)
+	plugins = sorted(plugins, key = lambda k:k['name']) #ordeno la lista antes de retornarla
 	return plugins
 
 
