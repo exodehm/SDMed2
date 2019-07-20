@@ -24,6 +24,8 @@ private:
 
 private slots:
     bool ProbarConexion();
+    void GuardarDatosConexion();
+    void ActivarCheckConexionAutomatica(int estado);
 };
 
 #endif // DIALOGOCONEXIONBBDD_H

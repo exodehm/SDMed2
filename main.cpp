@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("sdsoft.com");
     QCoreApplication::setApplicationName("SDMed2");
     QCoreApplication::setApplicationVersion(QT_VERSION_STR);
+    QSettings::setDefaultFormat(QSettings::IniFormat);
 
     MainWindow m;
     m.show();

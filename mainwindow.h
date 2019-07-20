@@ -26,6 +26,8 @@ public:
     ~MainWindow();
     QString strippedName(const QString &fullFileName);
     //QString CodigoBC3(const QString& nombrefichero);
+    void writeSettings();
+    void readSettings();
 
 
 
@@ -102,9 +104,6 @@ private:
     //combo certificacion actual
     QLabel* labelCertificacionActual[2];
 
-    QDir ruta;    
-
-    void writeSettings();
-    void readSettings();
+    QDir ruta;
 };
 #endif // MAINWINDOW_H

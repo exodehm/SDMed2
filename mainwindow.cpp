@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     {
         ui->setupUi(this);
+        setWindowTitle(QCoreApplication::applicationName());
         //seccion ver medicion/certificacion
         labelVerMedCert = new QLabel("Ver:");
         comboMedCert = new QComboBox;
@@ -44,13 +45,54 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         labelCertificacionActual[1] = new QLabel(tr(""));
         ui->CertBar->addWidget(labelCertificacionActual[0]);
         ui->CertBar->addWidget(labelCertificacionActual[1]);
-        setupActions();        
+        setupActions();
+        readSettings();
     }  
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::writeSettings()
+{
+    QSettings settings;
+
+    settings.beginGroup("mainwindow");
+    settings.setValue("size", this->size());
+    settings.endGroup();
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings;
+    resize(settings.value("mainwindow/size", QSize(250,200)).toSize());
+    bool conectar = settings.value("conexionBBDD/conexion automatica",false).toBool();
+    if (conectar)
+    {
+        db = QSqlDatabase::addDatabase(settings.value("conexionBBDD/driverdb").toString());
+        db.setHostName(settings.value("conexionBBDD/servidor").toString());
+        db.setDatabaseName(settings.value("conexionBBDD/database").toString());
+        db.setPort(settings.value("conexionBBDD/puerto").toInt());
+        db.setUserName(settings.value("conexionBBDD/usuario").toString());
+        db.setPassword(settings.value("conexionBBDD/password").toString());
+        if (db.open())
+        {
+            ActivarBotonesBasicos(true);
+        }
+        else
+        {
+            QMessageBox msgBox;
+            msgBox.setText(db.lastError().text());
+            msgBox.exec();
+        }
+    }
+    else
+    {
+        qDebug()<<"Chasco carrasco";
+    }
+
 }
 
 /*QString MainWindow::CodigoBC3(const QString &nombrefichero)
@@ -349,6 +391,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
 void MainWindow::ActionSalir()
 {
     db.close();
+    writeSettings();
     qApp->quit();
 }
 
@@ -576,10 +619,10 @@ void MainWindow::ActivarDesactivarBotonesPila(int indice)
 
 void MainWindow::ActivarBotonesBasicos(bool activar)
 {
-    ui->actionNuevo->setEnabled(activar);
-    ui->actionImportar->setEnabled(activar);
-    ui->actionExportar->setEnabled(activar);
-    ui->actionCopiar->setEnabled(activar);
-    ui->menuImportar->setEnabled(activar);
-    ui->menuExportar->setEnabled(activar);
+    ui->actionNuevo->setEnabled(db.open());
+    ui->actionImportar->setEnabled(db.open());
+    ui->actionExportar->setEnabled(db.open());
+    ui->actionCopiar->setEnabled(db.open());
+    ui->menuImportar->setEnabled(db.open());
+    ui->menuExportar->setEnabled(db.open());
 }
