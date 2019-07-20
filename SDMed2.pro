@@ -34,7 +34,6 @@ SOURCES += main.cpp\
     iconos.cpp \
     Modelos/treeitem.cpp \
     Modelos/TreeModel.cpp \
-    Dialogos/dialogotablaslistadoobras.cpp \
     Ficheros/abrirguardarbc3.cpp \
     Dialogos/dialogoadvertenciaborrarbbdd.cpp \
     Modelos/Modelobase.cpp \
@@ -64,7 +63,9 @@ SOURCES += main.cpp\
     Dialogos/dialogoconexionbbdd.cpp \
     Dialogos/dialogodatosgenerales.cpp \
     Tablas/tablapropiedades.cpp \
-    Modelos/PropiedadesModel.cpp
+    Modelos/PropiedadesModel.cpp \
+    Delegados/delegadotablapropiedades.cpp \
+    Dialogos/dialogogestionobras.cpp
 
 HEADERS  += mainwindow.h \
     Dialogos/dialogoabout.h \
@@ -88,7 +89,6 @@ HEADERS  += mainwindow.h \
     Modelos/treeitem.h \
     Modelos/TreeModel.h \
     defs.h \
-    Dialogos/dialogotablaslistadoobras.h \
     Ficheros/abrirguardarbc3.h \
     Dialogos/dialogoadvertenciaborrarbbdd.h \
     Modelos/Modelobase.h \
@@ -118,7 +118,9 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogoconexionbbdd.h \
     Dialogos/dialogodatosgenerales.h \
     Tablas/tablapropiedades.h \
-    Modelos/PropiedadesModel.h
+    Modelos/PropiedadesModel.h \
+    Delegados/delegadotablapropiedades.h \
+    Dialogos/dialogogestionobras.h
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
@@ -128,13 +130,13 @@ FORMS    += Ui/mainwindow.ui \
     Ui/dialogosuprimirmedicion.ui \
     Ui/dialogodatoscodigoresumen.ui \
     Editor/editor.ui \
-    Ui/dialogotablaslistadoobras.ui \
     Ui/dialogoadvertenciaborrarbbdd.ui \
     Ui/dialogocertificaciones.ui \
     Ui/dialogoajustar.ui \    
     Ui/dialogoeditorformulasmedicion.ui \    
     Ui/dialogoconexionbbdd.ui \
-    Ui/dialogodatosgenerales.ui
+    Ui/dialogodatosgenerales.ui \
+    Ui/dialogogestionobras.ui
 
 
 QT += sql

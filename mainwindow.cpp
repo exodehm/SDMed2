@@ -6,10 +6,9 @@
 #include "./Ficheros/exportarBC3.h"
 #include "./Dialogos/dialogoabout.h"
 #include "./Dialogos/dialogodatoscodigoresumen.h"
-#include "./Dialogos/dialogotablaslistadoobras.h"
-#include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
-#include "./Dialogos/dialogoconexionbbdd.h"
+#include "./Dialogos/dialogogestionobras.h"
 #include "./Dialogos/dialogodatosgenerales.h"
+#include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
 #include "./imprimir.h"
 #include "./miundostack.h"
 
@@ -26,13 +25,6 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-    db= QSqlDatabase::addDatabase("QPSQL");
-    db.setHostName("127.0.0.1");
-    db.setPort(5432);
-    db.setDatabaseName("sdmed");
-    db.setUserName("postgres");
-    db.setPassword("melo1cotonero");
-    if (db.open())
     {
         ui->setupUi(this);
         //seccion ver medicion/certificacion
@@ -52,12 +44,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         labelCertificacionActual[1] = new QLabel(tr(""));
         ui->CertBar->addWidget(labelCertificacionActual[0]);
         ui->CertBar->addWidget(labelCertificacionActual[1]);
-        setupActions();
-    }
-    else
-    {
-        QMessageBox::warning(this,"Aviso mortal","No se puede abrir la BBDD");
-    }
+        setupActions();        
+    }  
 }
 
 MainWindow::~MainWindow()
@@ -97,54 +85,13 @@ MainWindow::~MainWindow()
     return QString();
 }*/
 
-QList<QList<QVariant>> MainWindow::VerObrasEnBBDD()
-{
-    QList<QList<QVariant>> listadoobras;
-    QList<QVariant> obra;
-    QSqlQuery consultacodigos;
-    QSqlQuery consultaresumenes;
-    QString cadenaconsultacodigos = "SELECT table_name FROM INFORMATION_SCHEMA.TABLES \
-            WHERE TABLE_SCHEMA = 'public' AND table_name like '%\\_Conceptos';";
-    consultacodigos.exec (cadenaconsultacodigos);
-    while (consultacodigos.next())
-    {
-        QString nombrecodigo = consultacodigos.value(0).toString();
-        nombrecodigo.remove("_Conceptos");
-        QVariant nombrecodigoV(nombrecodigo);
-        obra.append(nombrecodigoV);
-        QString cadenaconsultaresumen = "SELECT resumen from \"" + \
-                consultacodigos.value(0).toString() + "\" WHERE codigo = '" + nombrecodigo + "';";
-        qDebug()<<cadenaconsultaresumen;
-        consultaresumenes.exec(cadenaconsultaresumen);
-        while (consultaresumenes.next())
-        {
-            obra.append(consultaresumenes.value(0));
-        }
-        //ahora vemos si la obra esta abierta     
-        bool obraabierta = false;
-        for (auto elem : ListaObras)
-        {
-            qDebug()<<"Listado de obras abiertas: "<<elem->LeeTabla()<<"<-->"<<elem->LeeResumen();
-            if (nombrecodigo == elem->LeeTabla())
-            {
-                obraabierta = true;
-            }
-        }
-        obra.append(obraabierta);
-        obraabierta = false;
-        listadoobras.append(obra);
-        obra.clear();
-    }
-    return listadoobras;
-}
-
 void MainWindow::ActionNuevo()
 {
     DialogoDatosCodigoResumen* cuadro = new DialogoDatosCodigoResumen(this);
     if (cuadro->exec())
     {
         QString cadenaconsulta = "SELECT crear_obra ('" + cuadro->LeeCodigo() + "','" + cuadro->LeeResumen() + "');";
-        qDebug()<<"la comsulta es: "<<cadenaconsulta;
+        qDebug()<<"la consulta es: "<<cadenaconsulta;
         QSqlQuery consulta (cadenaconsulta);
         //la consulta genera las tablas y retorna 0 si todo esta correcto. Si no puede hacerlo retorna -1
         int res = -1;
@@ -192,14 +139,14 @@ bool MainWindow::ActionImportar()
                 codigoBC3 = datos.at(1);
                 resumenBC3 = datos.at(3);
                 codigoBC3.remove('#');
-                foreach (QList<QVariant> l, VerObrasEnBBDD())
+                /*foreach (QList<QVariant> l, VerObrasEnBBDD())
                 {
                     qDebug()<<l.at(0);
                     if (codigoBC3 == l.at(0).toString())
                     {
                         existecodigo = true;
                     }
-                }
+                }*/
                 break;
             }
         }
@@ -223,27 +170,17 @@ bool MainWindow::ActionImportar()
 
 bool MainWindow::ActionAbrirBBDD()
 {
-    QList<QList<QVariant>>ListaObrasenBDD = VerObrasEnBBDD();
-    if (ListaObrasenBDD.isEmpty())
-    {        
-        QMessageBox::warning(this, tr("Aviso"),
-                                             tr("Actualmente no hay obras en la BBDD"),
-                                             QMessageBox::Yes | QMessageBox::Default);
-    }
-    else
+    DialogoGestionObras* cuadro = new DialogoGestionObras(ListaObras, db, this);
+    QObject::connect(cuadro,SIGNAL(BorrarObra(QStringList)),this,SLOT(BorrarBBDD(QStringList)));
+    QObject::connect(cuadro,SIGNAL(ActivarBotones(bool)),this,SLOT(ActivarBotonesBasicos(bool)));
+    if (cuadro->exec())
     {
-        DialogoTablaListadosObras* cuadro = new DialogoTablaListadosObras(ListaObrasenBDD, this);
-        QObject::connect(cuadro,SIGNAL(BorrarObra(QStringList)),this,SLOT(BorrarBBDD(QStringList)));
-        QObject::connect(cuadro,SIGNAL(CambiarResumenObra(QString, QString)),this,SLOT(CambiarResumenObra(QString, QString)));
-        if (cuadro->exec())
+        foreach (QStringList l, cuadro->listaNombreObrasAbrir())
         {
-            foreach (QStringList l, cuadro->listaNombreObrasAbrir())
-            {
-                AnadirObraAVentanaPrincipal(l.at(0),l.at(1));
-            }
+            AnadirObraAVentanaPrincipal(l.at(0),l.at(1));
         }
-        delete cuadro;
     }
+    delete cuadro;
     return true;
 }
 
@@ -282,40 +219,14 @@ bool MainWindow::BorrarBBDD(QStringList datosobra)
         }
         //tercera accion, borrar la obra de la BBDD
         QString cadenaborrartablacodigo = "SELECT borrar_obra ('"+datosobra.at(0)+"');";
-        qDebug()<<cadenaborrartablacodigo;
+        //qDebug()<<cadenaborrartablacodigo;
         QSqlQuery consulta;
         consulta.exec(cadenaborrartablacodigo);
-        qDebug()<<sender();
+        //qDebug()<<sender();
         std::advance (it,1);
     }
     return true;
 }
-
-void MainWindow::CambiarResumenObra(QString codigo, QString resumen)
-{
-    QMessageBox::StandardButton respuesta = QMessageBox::question(
-                this,
-                tr("Aviso"),
-                tr("Se cambiara el resumen de la obra. ¿Realmente desea continuar?"),
-                QMessageBox::No | QMessageBox::Default,
-                QMessageBox::Yes);
-    if (respuesta == QMessageBox::Yes)
-    {
-        QString consultacambiarresumenobra = "SELECT cambiar_resumen_obra ('"+codigo+"','" + resumen + "')";
-        QSqlQuery consulta;
-        consulta.exec(consultacambiarresumenobra);
-    }
-    else
-    {
-        qDebug()<<"Volver a poner lo que hubiera";
-        DialogoTablaListadosObras* d = qobject_cast<DialogoTablaListadosObras*>(sender());
-        if (d)
-        {
-            d->CargarDatos();
-        }
-    }
-}
-
 
 bool MainWindow::Exportar(QString nombrefichero)
 {
@@ -332,7 +243,7 @@ bool MainWindow::Exportar(QString nombrefichero)
     {
         d.selectFile((*obraActual)->LeeTabla());
     }
-    if (d.exec())
+    /*if (d.exec())
     {
         QString fileName = d.selectedFiles()[0];
         if (fileName.isEmpty())
@@ -351,7 +262,7 @@ bool MainWindow::Exportar(QString nombrefichero)
             }
             return GuardarObra(fileName + extension);
         }
-    }
+    }*/
     return false;
 }
 
@@ -531,7 +442,7 @@ void MainWindow::ActionPropiedadesObra()
     if (HayObrasAbiertas())
     {
         DialogoDatosGenerales* d = new DialogoDatosGenerales((*obraActual)->LeeTabla(),db);
-        int res = d->exec();
+        d->exec();
     }
 }
 
@@ -661,4 +572,14 @@ void MainWindow::ActivarDesactivarBotonesPila(int indice)
     ui->actionDeshacer->setEnabled(indice!=0);
     ui->actionRehacer->setEnabled(indice<(*obraActual)->Pila()->count());
     ui->actionGuardar->setEnabled(indice!=0);
+}
+
+void MainWindow::ActivarBotonesBasicos(bool activar)
+{
+    ui->actionNuevo->setEnabled(activar);
+    ui->actionImportar->setEnabled(activar);
+    ui->actionExportar->setEnabled(activar);
+    ui->actionCopiar->setEnabled(activar);
+    ui->menuImportar->setEnabled(activar);
+    ui->menuExportar->setEnabled(activar);
 }

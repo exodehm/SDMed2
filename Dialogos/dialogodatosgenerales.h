@@ -16,7 +16,7 @@ class DialogoDatosGenerales : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogoDatosGenerales(QString tabla, QSqlDatabase db, QWidget *parent = nullptr);
+    explicit DialogoDatosGenerales(const QString& tabla, QSqlDatabase db, QWidget *parent = nullptr);
     ~DialogoDatosGenerales();
 
 private slots:

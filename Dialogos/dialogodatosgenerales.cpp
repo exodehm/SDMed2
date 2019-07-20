@@ -9,7 +9,7 @@
 #include <QSqlTableModel>
 
 
-DialogoDatosGenerales::DialogoDatosGenerales(QString tabla, QSqlDatabase db, QWidget *parent) : m_tabla(tabla), QDialog(parent), ui(new Ui::DialogoDatosGenerales)
+DialogoDatosGenerales::DialogoDatosGenerales(const QString& tabla, QSqlDatabase db, QWidget *parent) : m_tabla(tabla), QDialog(parent), ui(new Ui::DialogoDatosGenerales)
 {
     ui->setupUi(this);
     m_tabla_propiedades = new TablaPropiedades(tabla);
@@ -29,7 +29,6 @@ DialogoDatosGenerales::DialogoDatosGenerales(QString tabla, QSqlDatabase db, QWi
     m_tabla_propiedades->ActualizarDatosPropiedades(propiedad);
     QObject::connect(ui->pushButton_Ok,SIGNAL(clicked(bool)),this,SLOT(accept()));
     QObject::connect(ui->comboBox_Datos,SIGNAL(currentIndexChanged(QString)),m_tabla_propiedades,SLOT(ActualizarDatosPropiedades(QString)));
-
 }
 
 DialogoDatosGenerales::~DialogoDatosGenerales()

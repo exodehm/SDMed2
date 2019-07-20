@@ -2,6 +2,7 @@
 #define DIALOGOCONEXIONBBDD_H
 
 #include <QDialog>
+#include <QSqlDatabase>
 
 namespace Ui {
 class DialogoConexionBBDD;
@@ -12,11 +13,17 @@ class DialogoConexionBBDD : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogoConexionBBDD(QWidget *parent = nullptr);
+    explicit DialogoConexionBBDD(QSqlDatabase *db, QWidget *parent = nullptr);
+    bool HayConexion();
     ~DialogoConexionBBDD();
 
 private:
     Ui::DialogoConexionBBDD *ui;
+    QSqlDatabase* m_db;
+    bool m_conectado;
+
+private slots:
+    bool ProbarConexion();
 };
 
 #endif // DIALOGOCONEXIONBBDD_H

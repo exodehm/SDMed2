@@ -37,6 +37,7 @@ public:
 
     const QString& LeeTabla() const;
     const QString& LeeResumen() const;
+    void CambiarCodigoObra (const QString& nuevocodigo);
     const float LeePrecio(const QString& codigo = "");
     //certificaciones    
     bool HayCertificacion();

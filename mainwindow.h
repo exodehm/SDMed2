@@ -26,7 +26,7 @@ public:
     ~MainWindow();
     QString strippedName(const QString &fullFileName);
     //QString CodigoBC3(const QString& nombrefichero);
-    QList<QList<QVariant> > VerObrasEnBBDD();
+
 
 
 private slots:
@@ -35,7 +35,6 @@ private slots:
     bool ActionImportar();
     bool ActionAbrirBBDD();
     bool BorrarBBDD(QStringList datosobra);
-    void CambiarResumenObra(QString codigo, QString resumen);
     //bool Guardar();
     bool Exportar(QString nombreFichero=QString());
     bool GuardarObra(QString nombreFichero);
@@ -70,6 +69,8 @@ private slots:
     void CambiarLabelCertificacionActual(QStringList certActual);
 
     void ActivarDesactivarBotonesPila(int indice);
+
+    void ActivarBotonesBasicos(bool activar);
 
 protected:
     void setupActions();

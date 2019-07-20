@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>499</width>
-    <height>347</height>
+    <height>355</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Ajustes de conexión</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -76,6 +76,13 @@
         </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="boton_ProbarConexion">
+       <property name="text">
+        <string>Probar conexion</string>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="verticalSpacer">

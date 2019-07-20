@@ -10,7 +10,7 @@ class TablaPropiedades : public TablaBase
 {
     Q_OBJECT
 public:
-    TablaPropiedades(const QString& tabla, /*const QStringList& ruta, */QWidget *parent=nullptr);
+    TablaPropiedades(const QString& tabla, QWidget *parent=nullptr);
 
 public slots:
     void ActualizarDatosPropiedades(const QString& propiedad);

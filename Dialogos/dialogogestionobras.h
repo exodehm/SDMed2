@@ -2,35 +2,42 @@
 #define DIALOGOTABLASLISTADOOBRAS_H
 
 #include <QDialog>
+#include <QSqlDatabase>
 
-class MetaObra;
+class Instancia;
+class QTableWidgetItem;
 
 namespace Ui {
-class DialogoTablasListadoObras;
+class DialogoGestionObras;
 }
 
-class DialogoTablaListadosObras : public QDialog
+class DialogoGestionObras : public QDialog
 {
     Q_OBJECT
-
-public:
-    explicit DialogoTablaListadosObras(const QList<QList<QVariant> > &listadoobrasenBBDD, QWidget *parent = nullptr);
-    ~DialogoTablaListadosObras();
-    void CargarDatos();
-
     enum eColumnas{CODIGO,RESUMEN,ABRIR,BORRAR};
+public:    
+    explicit DialogoGestionObras(std::list<Instancia*>&ListaObras, QSqlDatabase& db, QWidget *parent = nullptr);
+    ~DialogoGestionObras();
+    void LlenarTabla();
+    bool EstaAbierta(QString codigo);
 
 public slots:
     QList<QStringList> listaNombreObrasAbrir();
     void Borrar();
-    void MostrarCambioTitulo(int fila, int columna);
+
+private slots:
+    bool ConectarBBDD();    
 
 signals:
     void BorrarObra(QStringList datosobra);
-    void CambiarResumenObra(QString codigo, QString resumen);
+    void ActivarBotones(bool);
+    //void CambiarResumenObra(QString codigo, QString resumen);
 
 private:
-    Ui::DialogoTablasListadoObras *ui;
+    Ui::DialogoGestionObras *ui;
+    QSqlDatabase* m_db;
+    std::list<Instancia*>::iterator primer_elemento;
+    std::list<Instancia*>::iterator ultimo_elemento;
 };
 
 #endif // DIALOGOTABLASLISTADOOBRAS_H

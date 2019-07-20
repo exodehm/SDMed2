@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogoTablasListadoObras</class>
- <widget class="QDialog" name="DialogoTablasListadoObras">
+ <class>DialogoGestionObras</class>
+ <widget class="QDialog" name="DialogoGestionObras">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,13 +11,37 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Obras en la BBDD</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QTableWidget" name="tabla"/>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="botonConectarBBDD">
+         <property name="text">
+          <string>Conectar BBDD</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
      <item>
       <spacer name="verticalSpacer">
@@ -51,7 +75,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DialogoTablasListadoObras</receiver>
+   <receiver>DialogoGestionObras</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -67,7 +91,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DialogoTablasListadoObras</receiver>
+   <receiver>DialogoGestionObras</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

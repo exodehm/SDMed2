@@ -137,6 +137,11 @@ const QString& Instancia::LeeResumen() const
     return resumen;
 }
 
+void Instancia::CambiarCodigoObra(const QString &nuevocodigo)
+{
+    tabla = nuevocodigo;
+}
+
 const float Instancia::LeePrecio(const QString &codigo)
 {
     QString leerpreciodecodigo = "SELECT * FROM ver_precio('"+tabla+"','"+codigo+"')";

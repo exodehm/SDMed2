@@ -470,12 +470,18 @@
      <string>&amp;Archivo</string>
     </property>
     <widget class="QMenu" name="menuImportar">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="title">
       <string>Importar</string>
      </property>
      <addaction name="actionImportarFIEBCD"/>
     </widget>
     <widget class="QMenu" name="menuExportar">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="title">
       <string>Exportar</string>
      </property>
@@ -643,6 +649,9 @@
    <addaction name="separator"/>
   </widget>
   <action name="actionNuevo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../recursos.qrc">
      <normaloff>:/images/new.png</normaloff>:/images/new.png</iconset>
@@ -716,6 +725,9 @@
    </property>
   </action>
   <action name="actionCopiar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../recursos.qrc">
      <normaloff>:/images/copy.png</normaloff>:/images/copy.png</iconset>
@@ -854,6 +866,9 @@
    </property>
   </action>
   <action name="actionImportarFIEBCD">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>FIEBCD</string>
    </property>
@@ -984,6 +999,9 @@
    </property>
   </action>
   <action name="actionImportar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../recursos.qrc">
      <normaloff>:/images/importar.png</normaloff>:/images/importar.png</iconset>

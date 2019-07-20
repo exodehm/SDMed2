@@ -188,9 +188,3 @@ int ModeloBase::FilaVacia()
         return -1;
     }
 }
-
-/*void ModeloBase::ActualizarIds(QString idpadre, QString idhijo)
-{
-    codigopadre=idpadre;
-    codigohijo=idhijo;
-}*/
