@@ -15,6 +15,7 @@ class DialogoConexionBBDD : public QDialog
 public:
     explicit DialogoConexionBBDD(QSqlDatabase *db, QWidget *parent = nullptr);
     bool HayConexion();
+    void ReadSettings();
     ~DialogoConexionBBDD();
 
 private:

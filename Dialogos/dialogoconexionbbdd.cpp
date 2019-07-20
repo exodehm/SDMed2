@@ -11,10 +11,7 @@ DialogoConexionBBDD::DialogoConexionBBDD(QSqlDatabase* db, QWidget *parent) : QD
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     m_db = db;
     m_conectado = false;
-    ui->lineEdit_Puerto->setText("5432");
-    ui->lineEdit_Servidor->setText("localhost");
-    ui->lineEdit_BBDD->setText("sdmed");
-    ui->lineEdit_NombreUsuario->setText("postgres");
+    ReadSettings();
     QObject::connect(ui->boton_ProbarConexion,SIGNAL(clicked(bool)),this,SLOT(ProbarConexion()));
     QObject::connect(ui->checkBox_GuardarNombre,SIGNAL(stateChanged(int)),this,SLOT(ActivarCheckConexionAutomatica(int)));
     QObject::connect(ui->checkBox_GuardarPassword,SIGNAL(stateChanged(int)),this,SLOT(ActivarCheckConexionAutomatica(int)));
@@ -24,6 +21,17 @@ DialogoConexionBBDD::DialogoConexionBBDD(QSqlDatabase* db, QWidget *parent) : QD
 bool DialogoConexionBBDD::HayConexion()
 {
     return m_conectado;
+}
+
+void DialogoConexionBBDD::ReadSettings()
+{
+    QSettings settings;
+    ui->lineEdit_NombreConexion->setText(settings.value("conexionBBDD/nombreconexion").toString());
+    ui->lineEdit_Servidor->setText(settings.value("conexionBBDD/servidor").toString());
+    ui->lineEdit_BBDD->setText(settings.value("conexionBBDD/database").toString());
+    ui->lineEdit_Puerto->setText(settings.value("conexionBBDD/puerto").toString());
+    ui->lineEdit_NombreUsuario->setText(settings.value("conexionBBDD/usuario").toString());
+    ui->lineEdit_PassWord->setText(settings.value("conexionBBDD/password").toString());
 }
 
 DialogoConexionBBDD::~DialogoConexionBBDD()
@@ -74,8 +82,22 @@ void DialogoConexionBBDD::GuardarDatosConexion()
     settings.setValue("servidor", ui->lineEdit_Servidor->text());
     settings.setValue("puerto", ui->lineEdit_Puerto->text());
     settings.setValue("database", ui->lineEdit_BBDD->text());
-    settings.setValue("usuario", ui->lineEdit_NombreUsuario->text());
-    settings.setValue("password", ui->lineEdit_PassWord->text());
+    if (ui->checkBox_GuardarNombre->isChecked())
+    {
+        settings.setValue("usuario", ui->lineEdit_NombreUsuario->text());
+    }
+    else
+    {
+        settings.setValue("usuario", QString());
+    }
+    if (ui->checkBox_GuardarPassword->isChecked())
+    {
+        settings.setValue("password", ui->lineEdit_PassWord->text());
+    }
+    else
+    {
+        settings.setValue("password", QString());
+    }
     settings.endGroup();
 }
 
