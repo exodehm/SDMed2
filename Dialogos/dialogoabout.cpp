@@ -1,3 +1,5 @@
+#include <QApplication>
+
 #include "dialogoabout.h"
 #include "ui_dialogoabout.h"
 
@@ -7,6 +9,7 @@ DialogoAbout::DialogoAbout(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->label->setOpenExternalLinks(true);
+    ui->labelTitulo->setText(QApplication::applicationName()+" v"+QApplication::applicationVersion());
     QObject::connect(ui->botonCreditos,SIGNAL(clicked(bool)),this,SLOT(VerCreditos()));
     QObject::connect(ui->botonLicencia,SIGNAL(clicked(bool)),this,SLOT(VerLicencia()));
 }

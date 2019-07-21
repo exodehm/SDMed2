@@ -273,6 +273,7 @@ bool MainWindow::BorrarBBDD(QStringList datosobra)
 bool MainWindow::Exportar(QString nombrefichero)
 {
     qDebug()<<"nombreficero original "<<nombrefichero;
+    QString extensionBC3 = ".bc3";
     if (nombrefichero.isEmpty())
     {
         if (*obraActual)
@@ -281,53 +282,11 @@ bool MainWindow::Exportar(QString nombrefichero)
             qDebug()<<"nombreficero original 1"<<nombrefichero;
         }
     }
+    nombrefichero.append(extensionBC3);
     nombrefichero = QFileDialog::getSaveFileName(this,tr("Guardar BC3"),\
                                                          QDir::homePath()+"/"+nombrefichero,\
                                                          tr("Archivos BC3 (*.bc3)"));
-
-    QString extensionBC3 = ".bc3";
-    nombrefichero.append(extensionBC3);
-    qDebug()<<"nomrbe fichero"<<nombrefichero;
     return GuardarObra(nombrefichero);
-    /*QFileDialog d;
-    d.setOptions(QFileDialog::DontUseNativeDialog);  // with or without this
-    d.setFileMode(QFileDialog::AnyFile);
-    d.setAcceptMode(QFileDialog::AcceptSave);
-    d.setDirectory(".");
-    if (!nombrefichero.isEmpty())
-    {
-        d.selectFile(nombrefichero);
-    }
-    if (*obraActual)
-    {
-        d.selectFile((*obraActual)->LeeTabla());
-    }
-    qDebug()<<"exportar "<<nombrefichero;
-    if (d.exec())
-    {
-        QString fileName = d.selectedFiles()[0];
-        qDebug()<<"filename original "<<fileName;
-        if (fileName.isEmpty())
-        {
-            return false;
-        }
-        else
-        {
-            QString extension = d.selectedNameFilter();
-            qDebug()<<"extension "<<extension;
-            int tam_extension = extension.length()-extension.lastIndexOf('.');
-            extension = extension.right(tam_extension);
-            qDebug()<<"extension "<<extension;
-            extension.remove(')');
-            qDebug()<<"extension "<<extension;
-            if (fileName.right(4)==".bc3" || fileName.right(5)==".xlsx")
-            {
-                fileName=fileName.left(fileName.size()-extension.size());
-            }
-            return GuardarObra(fileName + extension);
-        }
-    }*/
-    return false;
 }
 
 bool MainWindow::GuardarObra(QString nombreFichero)
