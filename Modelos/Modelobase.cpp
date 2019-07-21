@@ -179,7 +179,7 @@ int ModeloBase::FilaVacia()
 {
     if (m_hayFilaVacia)
     {
-        qDebug()<<"Fila vacia en: "<<m_filavacia;
+        //qDebug()<<"Fila vacia en: "<<m_filavacia;
         return m_filavacia;
     }
     else

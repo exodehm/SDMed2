@@ -14,10 +14,7 @@ public:
     void Escribir(QFile& fichero);
     void EscribirRegistroV(QString& cadena);
     void EscribirRegistroK(QString &cadena);
-    void EscribirRegistroC(QString &cadena);
-    void EscribirRegistroD(QString &cadena);
-    void EscribirRegistroM( QString &cadena);
-    void EscribirRegistroT(QString &cadena);
+    void EscribirRegistrosCDMT(QString &cadena);
 
     bool esRaiz(const QString &S);
     void quitarSimbolos(QString &codigo);

@@ -110,6 +110,12 @@ void AbrirGuardarBC3::procesarConceptos(QStringList &registroC)
         precio=datos.at(3);
         fecha = datos.at(4);
         naturaleza=datos.at(5);
+        //en el caso de la importacion de BC3 y a falta de mejor solucion, sustituyo las naturalezas
+        //que no estan definidas por partidas
+        if (naturaleza == "0")
+        {
+            naturaleza = "7";
+        }
         QString cadenainsertar = "SELECT insertar_concepto('"+codigo+"','"+codigopartida+"','"+ud+"','"+resumen+"','','"+precio+"','"+naturaleza+"','"+fecha+"');";
         //qDebug()<<"Cadena insertar: "<<cadenainsertar;
         consulta.exec(cadenainsertar);
