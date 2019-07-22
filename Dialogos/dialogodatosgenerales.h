@@ -21,6 +21,7 @@ public:
 
 private slots:
     void RellenarTabla(const QString& propiedad);
+    void ActualizarCI(const QString &nuevoCI);
 
 private:
     Ui::DialogoDatosGenerales *ui;
@@ -29,6 +30,7 @@ private:
     //QSqlTableModel* m_modelo_tabla_datos;
     QSqlQueryModel * m_modelo_tabla_datos;
     TablaPropiedades* m_tabla_propiedades;
+    QSqlQuery *consulta;
 };
 
 #endif // DIALOGODATOSGENERALES_H

@@ -17,7 +17,7 @@ DialogoDatosGenerales::DialogoDatosGenerales(const QString& tabla, QSqlDatabase 
     ui->verticalLayout->addWidget(m_tabla_propiedades);
     //m_modelo_tabla_datos = new QSqlTableModel(this);
     QSqlQueryModel * modeloCombo=new QSqlQueryModel(this);
-    QSqlQuery *consulta=new QSqlQuery(db);
+    consulta=new QSqlQuery(db);
     consulta->prepare("SELECT propiedades->>'Propiedad' FROM \"" + tabla + "_Propiedades\" ORDER BY id");
     consulta->exec();
     //qDebug()<<consulta->executedQuery();
@@ -27,8 +27,16 @@ DialogoDatosGenerales::DialogoDatosGenerales(const QString& tabla, QSqlDatabase 
     //RellenarTabla(ui->comboBox_Datos->currentText());
     QString propiedad = ui->comboBox_Datos->currentText();
     m_tabla_propiedades->ActualizarDatosPropiedades(propiedad);
+    //cuadro Costes Indirectos
+    consulta->exec("SELECT propiedades->>'Valor' FROM \"" + m_tabla + "_Propiedades\" WHERE propiedades->>'Propiedad' = 'Costes indirectos'");
+    qDebug()<<consulta->lastQuery();
+    while (consulta->next())
+    {
+        ui->lineEditCostesIndirectos->setText(consulta->value(0).toString());
+    }
     QObject::connect(ui->pushButton_Ok,SIGNAL(clicked(bool)),this,SLOT(accept()));
     QObject::connect(ui->comboBox_Datos,SIGNAL(currentIndexChanged(QString)),m_tabla_propiedades,SLOT(ActualizarDatosPropiedades(QString)));
+    QObject::connect(ui->lineEditCostesIndirectos,SIGNAL(textChanged(QString)),this,SLOT(ActualizarCI(QString)));
 }
 
 DialogoDatosGenerales::~DialogoDatosGenerales()
@@ -45,4 +53,11 @@ void DialogoDatosGenerales::RellenarTabla(const QString &propiedad)
     //qDebug()<<"Rellenar la tabla con la consulta: "<<cadenaConsulta;
     //m_consulta->exec(cadenaConsulta);
     m_modelo_tabla_datos->setQuery(cadenaConsulta);
+}
+
+void DialogoDatosGenerales::ActualizarCI(const QString &nuevoCI)
+{
+    consulta->exec("UPDATE \"" + m_tabla + "_Propiedades\" SET propiedades = jsonb_set(propiedades, '{\"Valor\"}', '\""+nuevoCI+"\"') \
+                        WHERE propiedades->>'Propiedad' = 'Costes indirectos'");
+    qDebug()<<consulta->lastQuery();
 }
