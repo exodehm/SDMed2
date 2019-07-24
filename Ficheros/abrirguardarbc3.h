@@ -18,7 +18,7 @@ public:
 
     QString LeeCodigo() const;
     QString LeeResumen() const;
-    void quitarSimbolos(QString& codigo);
+    bool quitarSimbolos(QString& codigo);
 
 private:
     QSqlQuery consulta;

@@ -58,6 +58,9 @@ void DialogoDatosGenerales::RellenarTabla(const QString &propiedad)
 void DialogoDatosGenerales::ActualizarCI(const QString &nuevoCI)
 {
     consulta->exec("UPDATE \"" + m_tabla + "_Propiedades\" SET propiedades = jsonb_set(propiedades, '{\"Valor\"}', '\""+nuevoCI+"\"') \
-                        WHERE propiedades->>'Propiedad' = 'Costes indirectos'");
-    qDebug()<<consulta->lastQuery();
+                   WHERE propiedades->>'Propiedad' = 'Costes indirectos'");
+            //qDebug()<<consulta->lastQuery();
+            consulta->exec("SELECT recalcular ('"+m_tabla+"')");
+            qDebug()<<consulta->lastQuery();
+            //emit CambioCostesIndirectos();
 }

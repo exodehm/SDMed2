@@ -74,6 +74,8 @@ private slots:
 
     void ActivarBotonesBasicos(bool activar);
 
+    void ActualizarDatosObra();
+
 protected:
     void setupActions();
     void closeEvent(QCloseEvent* event);

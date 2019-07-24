@@ -54,7 +54,7 @@ void DialogoGestionObras::LlenarTabla()
         while (consultaresumenes.next())
         {
             resumen = consultaresumenes.value(0).toString();
-        }
+        }        
         //ahora relleno la fila
         for (int columna=0;columna<ui->tabla->columnCount();columna++)
         {
@@ -62,31 +62,31 @@ void DialogoGestionObras::LlenarTabla()
             {
                 QTableWidgetItem *item = new QTableWidgetItem(codigo);
                 item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-                ui->tabla->setItem(fila,columna,item);
+                ui->tabla->setItem(fila,columna,item);                
             }
             else if (columna==eColumnas::RESUMEN)
             {
                 QTableWidgetItem *item = new QTableWidgetItem(resumen);
                 item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-                ui->tabla->setItem(fila,columna,item);
+                ui->tabla->setItem(fila,columna,item);                
             }
             else if (columna==eColumnas::ABRIR)
             {
                 QCheckBox* itemcheck = new QCheckBox(this);
                 itemcheck->setEnabled(!EstaAbierta(codigo));
                 QObject::connect(itemcheck,SIGNAL(clicked(bool)),this,SLOT(listaNombreObrasAbrir()));
-                ui->tabla->setCellWidget(fila,columna,itemcheck);
+                ui->tabla->setCellWidget(fila,columna,itemcheck);                
             }
             else if (columna==eColumnas::BORRAR)
             {
                 QPushButton* btn_borrar = new QPushButton(tr("Borrar"));//,ui->tabla);
                 btn_borrar->setObjectName(QString("%1").arg(fila));
                 QObject::connect(btn_borrar,SIGNAL(clicked(bool)),this,SLOT(Borrar()));
-                ui->tabla->setCellWidget(fila,columna,btn_borrar);
+                ui->tabla->setCellWidget(fila,columna,btn_borrar);                
             }
         }
         fila++;//paso a la siguiente fila        
-    }
+    }    
     ui->tabla->resizeColumnsToContents();
 }
 
@@ -99,6 +99,7 @@ bool DialogoGestionObras::EstaAbierta(QString codigo)
         {
             return true;
         }
+        it++;
     }
     return false;
 }

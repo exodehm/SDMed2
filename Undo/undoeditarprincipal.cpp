@@ -79,6 +79,7 @@ void UndoEditarNaturaleza::undo()
 void UndoEditarNaturaleza::redo()
 {
     QString cadenaconsulta = "SELECT modificar_naturaleza('" +m_tabla+ "','" +m_codigohijo+ "'," +m_datoNuevo.toString()+ ");";
+    qDebug()<<cadenaconsulta;
     m_consulta.exec(cadenaconsulta);
 }
 
@@ -112,6 +113,7 @@ void UndoEditarCantidad::redo()
     QString cadenaconsulta = "SELECT modificar_cantidad('" +m_tabla+ "','" +m_codigopadre + "','" +m_codigohijo+ "','" +
             m_columnaCantidad +"','t','"+ m_datoNuevo.toString()+ "');";
     m_consulta.exec(cadenaconsulta);
+    qDebug()<<cadenaconsulta;
     while (m_consulta.next())
     {
         m_hayMedicion = m_consulta.value(0).toBool();

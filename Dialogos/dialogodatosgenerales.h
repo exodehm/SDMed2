@@ -23,6 +23,9 @@ private slots:
     void RellenarTabla(const QString& propiedad);
     void ActualizarCI(const QString &nuevoCI);
 
+signals:
+    void CambioCostesIndirectos();
+
 private:
     Ui::DialogoDatosGenerales *ui;
     QString m_tabla;

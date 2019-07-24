@@ -219,7 +219,7 @@ bool MainWindow::ActionAbrirBBDD()
     {
         foreach (QStringList l, cuadro->listaNombreObrasAbrir())
         {
-            AnadirObraAVentanaPrincipal(l.at(0),l.at(1));
+            AnadirObraAVentanaPrincipal(l.at(0),l.at(1));            
         }
     }
     delete cuadro;
@@ -466,6 +466,7 @@ void MainWindow::ActionPropiedadesObra()
     if (HayObrasAbiertas())
     {
         DialogoDatosGenerales* d = new DialogoDatosGenerales((*obraActual)->LeeTabla(),db);
+        QObject::connect(d,SIGNAL(CambioCostesIndirectos()),this,SLOT(ActualizarDatosObra()));
         d->exec();
     }
 }
@@ -606,4 +607,10 @@ void MainWindow::ActivarBotonesBasicos(bool activar)
     ui->actionCopiar->setEnabled(db.open());
     ui->menuImportar->setEnabled(db.open());
     ui->menuExportar->setEnabled(db.open());
+}
+
+void MainWindow::ActualizarDatosObra()
+{
+    qDebug()<<"Actualizar en main";
+    (*obraActual)->RefrescarVista();
 }

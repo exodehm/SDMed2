@@ -79,7 +79,7 @@ int AbrirGuardarBC3::crearObra(QStringList &registroC)
             consulta.exec(cadenaCrearObra);
             while (consulta.next())
             {
-                   res =  consulta.value(0).toInt();
+                res =  consulta.value(0).toInt();
             }
             if (res !=0)//por ahora solo tratamos el 0 y aqui. Susceptible de corregir
             {
@@ -104,17 +104,26 @@ void AbrirGuardarBC3::procesarConceptos(QStringList &registroC)
         QStringList datos = linea.split("|");
         QString codigopartida,ud,resumen,precio,fecha,naturaleza;
         codigopartida=datos.at(0);
-        quitarSimbolos(codigopartida);
+        bool capitulo = quitarSimbolos(codigopartida);
         ud=datos.at(1);
         resumen=datos.at(2);
         precio=datos.at(3);
         fecha = datos.at(4);
         naturaleza=datos.at(5);
-        //en el caso de la importacion de BC3 y a falta de mejor solucion, sustituyo las naturalezas
-        //que no estan definidas por partidas
-        if (naturaleza == "0")
+        if (naturaleza=="0")
         {
-            naturaleza = "7";
+            if (capitulo)
+            {
+                naturaleza = "6";
+            }
+            else
+            {
+                naturaleza = "7";
+            }
+        }
+        else
+        {
+            naturaleza=datos.at(5);
         }
         QString cadenainsertar = "SELECT insertar_concepto('"+codigo+"','"+codigopartida+"','"+ud+"','"+resumen+"','','"+precio+"','"+naturaleza+"','"+fecha+"');";
         //qDebug()<<"Cadena insertar: "<<cadenainsertar;
@@ -132,15 +141,15 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
     {
         qDebug()<<"Linea D: "<<linea;
         QStringList lista = linea.split("|");
-        qDebug()<<"Tamaño linea D: "<<lista.size();
+        //qDebug()<<"Tamaño linea D: "<<lista.size();
         QString padre = lista.at(0);
-        qDebug()<<"PAdre: "<<padre;
+        //qDebug()<<"PAdre: "<<padre;
         quitarSimbolos(padre);
         int nHijos=(linea.count("\\")/3);
-        qDebug()<<"Hijos nº "<<nHijos;
+        //qDebug()<<"Hijos nº "<<nHijos;
         int nCampos = lista.size()-1;
         QString resto;
-        qDebug()<<"resto "<<resto;
+        //qDebug()<<"resto "<<resto;
         if (nCampos == 2)
         {
             resto = lista.at(1);
@@ -149,12 +158,11 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
         {
             resto = lista.at(2);
         }
-        qDebug()<<"Hasta aqui";
         QString registros[3]; //nombrehijo, factor, cantidad
         QStringList relaciones = resto.split("\\");
         for (int i=0; i<nHijos; i++)
         {
-            qDebug()<<"Vuelta "<<i<<nHijos<<" - "<<relaciones.size()<<"Num hjijos: "<<nHijos;
+            //qDebug()<<"Vuelta "<<i<<nHijos<<" - "<<relaciones.size()<<"Num hjijos: "<<nHijos;
             for (int j=0;j<3;j++)
             {
                 registros[j] = relaciones.first();
@@ -164,7 +172,7 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
             QString cadenainsertar = "SELECT insertar_partida('"+ codigo + "','"+padre+"','"+registros[0]+"','-1','"+ registros[2]+"');" ;
 
             qDebug()<<"Cadena insertar: "<<cadenainsertar;
-            consulta.exec(cadenainsertar);            
+            consulta.exec(cadenainsertar);
         }
     }
 }
@@ -217,14 +225,16 @@ void AbrirGuardarBC3::procesarTexto(const QStringList& registroT)
     }
 }
 
-void AbrirGuardarBC3::quitarSimbolos (QString& codigo)
+bool AbrirGuardarBC3::quitarSimbolos(QString& codigo)
 {
-    //int posicion=-1;
+    //quita el caracter # en caso de que lo hubiera y retorna true. Si no lo hay se limita a retornar false
     int posicion = codigo.indexOf('#');
     if (posicion>0 || posicion==0)
     {
         codigo.truncate(posicion);
+        return true;
     }
+    return false;
 }
 
 
