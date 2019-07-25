@@ -46,8 +46,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->CertBar->addWidget(labelCertificacionActual[0]);
         ui->CertBar->addWidget(labelCertificacionActual[1]);
         setupActions();
-        readSettings();
-    }  
+        readSettings();        
+    }
 }
 
 MainWindow::~MainWindow()

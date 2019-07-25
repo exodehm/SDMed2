@@ -204,7 +204,7 @@ void AbrirGuardarBC3::procesarMediciones(QStringList &registroM)
                 }
             }
             cadenainsertarmedicion = "SELECT insertar_lineas_medcert('"+codigo+"','"+padre+"','"+hijo+"','"+num_lineas+"','"+\
-                    QString::number(i)+"','"+num_cert+"','"+conceptos[0]+"','"+conceptos[1]+"','"+conceptos[2]+"','"+conceptos[3]+"','"+conceptos[4]+"','"+conceptos[5]+"');";
+                    QString::number(i)+"','"+num_cert+"',"+conceptos[0]+",'"+conceptos[1]+"',"+conceptos[2]+","+conceptos[3]+","+conceptos[4]+","+conceptos[5]+");";
             qDebug()<<"cadena insertar medicion"<<cadenainsertarmedicion;
             consulta.exec(cadenainsertarmedicion);
         }

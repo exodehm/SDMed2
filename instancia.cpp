@@ -115,6 +115,7 @@ void Instancia::GenerarUI()
     certActual = LeerCertifActual();
     ActualizarCertificacionEnModelo();
 
+
     /************signals y slots*****************/
     QObject::connect(tablaPrincipal,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(BajarNivel()));
     QObject::connect(tablaPrincipal->CabeceraDeTabla(),SIGNAL(sectionDoubleClicked(int)),this,SLOT(SubirNivel()));   
@@ -366,7 +367,7 @@ void Instancia::AjustarPresupuesto()
     int res = d->exec();
     if (res==1)
     {
-        pila->push(new UndoAjustarPresupuesto(QString::number(LeePrecio()),d->LeePrecioParaAjustar()));
+        pila->push(new UndoAjustarPresupuesto(tabla,QString::number(LeePrecio()),d->LeePrecioParaAjustar()));
     }
 }
 
@@ -442,7 +443,7 @@ void Instancia::RefrescarVista()
     /*arbol->resizeColumnToContents(tipoColumna::CODIGO);
     arbol->resizeColumnToContents(tipoColumna::NATURALEZA);
     arbol->resizeColumnToContents(tipoColumna::UD);
-    arbol->resizeColumnToContents(tipoColumna::RESUMEN);*/
+    arbol->resizeColumnToContents(tipoColumna::RESUMEN);*/    
 }
 
 void Instancia::Copiar()
