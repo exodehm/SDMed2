@@ -9,9 +9,10 @@
 
 class MiUndoStack;
 class QSplitter;
-class QHeaderView;
+class QHBoxLayout;
 class QVBoxLayout;
 class QTabWidget;
+class QPushButton;
 
 class MedCertModel;
 class ModeloBase;
@@ -19,6 +20,7 @@ class TreeModel;
 class VistaArbol;
 class TablaBase;
 class Editor;
+class QIcon;
 
 class Instancia : public QWidget
 {
@@ -74,6 +76,7 @@ public slots:
     void GuardarTextoPartida();
     void SincronizarArbolTablal();
     void ActualizarTablaMedCertActiva(int indice);
+    void MaxMinTablaPrincipal();
 
 signals:
     void CopiarP();
@@ -84,7 +87,7 @@ signals:
     void CambiarLabelCertActual(QStringList);
 
 private:
-    QHeaderView* cabeceraTablaP;
+    //QHeaderView* cabeceraTablaP;
     //modelos
     ModeloBase* modeloTablaP;   
     TreeModel* modeloArbol;
@@ -110,9 +113,14 @@ private:
     QSqlQuery consulta;
     QString tabla,resumen;
     QString textoPartidaInicial;
-
     QStringList ruta, certActual;
     int m_tablamedcertactiva;
+    QWidget *topWidget;
+    QHBoxLayout* m_botoneraTablaPrincipal;
+    QVBoxLayout* m_lienzoTablaPrincipal;
+    QPushButton *m_Btnmax;
+    bool m_Maximizado;
+    QIcon *m_IconMax, *m_IconMin;
 };
 
 #endif // INSTANCIA_H

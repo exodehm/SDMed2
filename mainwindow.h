@@ -13,9 +13,8 @@ class MainWindow;
 class Instancia;
 class QLabel;
 class QComboBox;
-class QLabel;
-class QComboBox;
 class QPushButton;
+
 
 class MainWindow : public QMainWindow
 {

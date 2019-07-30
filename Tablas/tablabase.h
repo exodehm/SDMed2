@@ -19,6 +19,7 @@
 #include "../Modelos/PrincipalModel.h"
 
 class ModeloBase;
+class QPushButton;
 
 class TablaBase : public QTableView
 {
@@ -71,6 +72,8 @@ protected:
     bool* celdaBloqueada;
     QSignalMapper* mapperH;
     QSignalMapper* mapperV;
+
+    QPushButton* btn;
 };
 
 #endif // TABLABASE_H

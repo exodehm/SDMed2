@@ -36,6 +36,7 @@
 #include <QTabWidget>
 #include <QMessageBox>
 #include <QSqlRecord>
+#include <QWidget>
 
 Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resumen(res),QWidget(parent)
 {
@@ -68,8 +69,26 @@ void Instancia::GenerarUI()
     separadorTablas = new QSplitter(Qt::Vertical);
 
     //tabla principal
+    topWidget = new QWidget;
+    m_botoneraTablaPrincipal =  new QHBoxLayout;        
+    m_IconMax = new QIcon("/home/david/programacion/Qt/SDMed2/SDMed2/images/maximizar.png");
+    m_IconMin = new QIcon("/home/david/programacion/Qt/SDMed2/SDMed2/images/minimizar.png");
+    m_Btnmax = new QPushButton;
+    m_Btnmax->setIcon(*m_IconMax);
+    m_Btnmax->setIconSize(QSize(18,18));
+    const QSize BUTTON_SIZE = QSize(25, 25);
+    m_Btnmax->setMaximumSize(BUTTON_SIZE);
+    QObject::connect(m_Btnmax,SIGNAL(clicked(bool)),this,SLOT(MaxMinTablaPrincipal()));
+    m_Maximizado = false;
+    m_botoneraTablaPrincipal->addStretch();
+    m_botoneraTablaPrincipal->addWidget(m_Btnmax);
+
+    m_lienzoTablaPrincipal = new QVBoxLayout;
     tablaPrincipal = new TablaPrincipal(tabla, ruta, pila);
-    separadorTablas->addWidget(tablaPrincipal);
+    m_lienzoTablaPrincipal->addLayout(m_botoneraTablaPrincipal);
+    m_lienzoTablaPrincipal->addWidget(tablaPrincipal);
+    topWidget->setLayout(m_lienzoTablaPrincipal);
+    separadorTablas->addWidget(topWidget);
 
     //tablas medicion y certificacion
     separadorTablasMedCert = new QTabWidget;
@@ -114,7 +133,6 @@ void Instancia::GenerarUI()
     MostrarDeSegun(0);
     certActual = LeerCertifActual();
     ActualizarCertificacionEnModelo();
-
 
     /************signals y slots*****************/
     QObject::connect(tablaPrincipal,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(BajarNivel()));
@@ -443,7 +461,12 @@ void Instancia::RefrescarVista()
     /*arbol->resizeColumnToContents(tipoColumna::CODIGO);
     arbol->resizeColumnToContents(tipoColumna::NATURALEZA);
     arbol->resizeColumnToContents(tipoColumna::UD);
-    arbol->resizeColumnToContents(tipoColumna::RESUMEN);*/    
+    arbol->resizeColumnToContents(tipoColumna::RESUMEN);*/
+    qDebug()<<"Tamaño de los splitters ";
+    foreach (int tam, separadorPrincipal->sizes())
+    {
+        qDebug()<<tam;
+    }
 }
 
 void Instancia::Copiar()
@@ -559,6 +582,23 @@ void Instancia::SincronizarArbolTablal()
 void Instancia::ActualizarTablaMedCertActiva(int indice)
 {
     m_tablamedcertactiva = indice;
+}
+
+void Instancia::MaxMinTablaPrincipal()
+{
+    m_Maximizado = !m_Maximizado;
+    if (m_Maximizado)
+    {
+        QList<int> tams = {separadorTablas->size().height(),0,0};
+        separadorTablas->setSizes(tams);
+        m_Btnmax->setIcon(*m_IconMax);
+    }
+    else
+    {
+        QList<int> tams = {100,100,100};
+        separadorTablas->setSizes(tams);
+        m_Btnmax->setIcon(*m_IconMin);
+    }
 }
 
 void Instancia::CopiarMedicionTablaM()

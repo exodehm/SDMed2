@@ -1,6 +1,7 @@
 #include "tablabase.h"
 #include "./filtrotablabase.h"
 #include <QDebug>
+#include <QPushButton>
 
 TablaBase::TablaBase(QWidget *parent): QTableView(parent)
 {   
@@ -23,6 +24,8 @@ TablaBase::TablaBase(QWidget *parent): QTableView(parent)
     setEditTriggers(QAbstractItemView::SelectedClicked | QAbstractItemView::AnyKeyPressed);
 
     cabeceraHorizontal->setSectionResizeMode(QHeaderView::Fixed);
+    btn = new QPushButton;
+    cabeceraHorizontal->addScrollBarWidget(btn,Qt::AlignCenter);
     alturaFilas->setDefaultSectionSize(24);
 
     QObject::connect(cabeceraHorizontal, SIGNAL(customContextMenuRequested(QPoint)), SLOT(MostrarMenuCabecera(QPoint)));

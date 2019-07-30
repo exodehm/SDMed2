@@ -12,13 +12,15 @@
         <file>images/close.png</file>
         <file>images/Adelante.png</file>
         <file>images/Atras.png</file>
-		<file>images/deshacer.png</file>
-		<file>images/rehacer.png</file>
-		<file>images/SubirTodo.png</file>		
-		<file>images/tree.png</file>
-		<file>images/importar.png</file>
-		<file>images/exportar.png</file>
-		<file>images/database.png</file>
-		<file>images/imprimir.png</file>
+        <file>images/deshacer.png</file>
+        <file>images/rehacer.png</file>
+        <file>images/SubirTodo.png</file>
+        <file>images/tree.png</file>
+        <file>images/importar.png</file>
+        <file>images/exportar.png</file>
+        <file>images/database.png</file>
+        <file>images/imprimir.png</file>
+        <file>images/maximizar.png</file>
+        <file>images/minimizar.png</file>
     </qresource>
 </RCC>
