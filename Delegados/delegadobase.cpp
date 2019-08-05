@@ -1,9 +1,16 @@
 #include "delegadobase.h"
 #include <QPainter>
+#include <QKeyEvent>
 
 DelegadoBase::DelegadoBase(QObject *parent):QStyledItemDelegate(parent)
 {
-
+    m_color_importe_bloqueado = QColor(Qt::red);
+    m_color_importe_con_descomposicion = QColor(Qt::magenta);
+    m_color_importe_sin_descomposicion = QColor(Qt::black);
+    m_color_precio_parcial_subtotal = QColor(Qt::darkMagenta);
+    m_color_fondo_subtotal_normal = QColor(Qt::yellow);
+    m_color_fondo_subtotal_parcial = QColor(190,252,253);
+    m_color_fondo_subtotal_acumulado = QColor(241,137,219);
 }
 
 bool DelegadoBase::eventFilter(QObject *obj, QEvent* event)

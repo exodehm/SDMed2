@@ -6,9 +6,9 @@ DelegadoNumerosBase::DelegadoNumerosBase(QObject *parent):DelegadoBase(parent)
 {
     rx = new QRegExp("[-]{0,1}[0-9]{0,5}[\\,\\.]{1}[0-9]{1,3}");
     colores[color::NODEFINIDO] = QColor();
-    colores[color::NORMAL] = QColor(Qt::black);
-    colores[color::BLOQUEADO] = QColor(Qt::red);
-    colores[color::DESCOMPUESTO] = QColor(Qt::magenta);
+    colores[color::NORMAL] = m_color_importe_sin_descomposicion;
+    colores[color::BLOQUEADO] = m_color_importe_bloqueado;
+    colores[color::DESCOMPUESTO] = m_color_importe_con_descomposicion;
 }
 
 QWidget* DelegadoNumerosBase::createEditor(QWidget * parent, const QStyleOptionViewItem& option, const QModelIndex& index) const

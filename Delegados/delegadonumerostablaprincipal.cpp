@@ -22,7 +22,7 @@ void DelegadoNumerosTablaPrincipal::paint( QPainter *painter,const QStyleOptionV
             }
         }
         painter->save();
-        //qDebug()<<"Indice: "<<indice.row()<<" - "<<indice.column()<<"-"<<indice.data().toString()<<"-"<<modelo->LeeColorS(indice.row(),indice.column());
+        //qDebug()<<"Indice: "<<indice.row()<<" - "<<indice.column()<<"-"<<indice.data().toString()<<"-"<<modelo->LeeColor(indice.row(),indice.column());
         painter->setPen(colores[modelo->LeeColor(indice.row()+1,indice.column())]);
         if (option.showDecorationSelected && (option.state & QStyle::State_Selected)){
             if (option.state & QStyle::State_Active)

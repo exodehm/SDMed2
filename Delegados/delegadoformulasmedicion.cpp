@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include <QApplication>
 #include <QPainter>
+#include <QMouseEvent>
 #include <QStyleOptionViewItemV4>
 
 DelegadoFormulasMedicion::DelegadoFormulasMedicion(QObject *parent):DelegadoBase(parent)

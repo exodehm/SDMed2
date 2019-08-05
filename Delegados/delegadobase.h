@@ -3,24 +3,26 @@
 
 #include <QStyledItemDelegate>
 #include <QLineEdit>
-#include <QKeyEvent>
 #include <QDebug>
 
-//#include "./include/Obra.h"
 #include "./defs.h"
 
 class DelegadoBase : public QStyledItemDelegate
 {
     Q_OBJECT
-public:
 
+public:
     explicit DelegadoBase(QObject* parent=nullptr);
-    //void paint( QPainter *painter,const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-    //QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
     bool eventFilter(QObject *obj, QEvent* event);
 
-    //QString displayText(const QVariant & value, const QLocale & locale ) const;
+protected:
+    QColor m_color_importe_bloqueado;
+    QColor m_color_importe_con_descomposicion;
+    QColor m_color_importe_sin_descomposicion;
+    QColor m_color_precio_parcial_subtotal;
+    QColor m_color_fondo_subtotal_normal;
+    QColor m_color_fondo_subtotal_parcial;
+    QColor m_color_fondo_subtotal_acumulado;
 
 };
-
 #endif // DELEGADOBASE_H
