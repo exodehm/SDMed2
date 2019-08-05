@@ -10,7 +10,7 @@ DelegadoBase::DelegadoBase(QObject *parent):QStyledItemDelegate(parent)
     m_color_precio_parcial_subtotal = QColor(Qt::darkMagenta);
     m_color_fondo_subtotal_normal = QColor(Qt::yellow);
     m_color_fondo_subtotal_parcial = QColor(190,252,253);
-    m_color_fondo_subtotal_acumulado = QColor(241,137,219);
+    m_color_fondo_subtotal_acumulado = QColor(241,192,137);
 }
 
 bool DelegadoBase::eventFilter(QObject *obj, QEvent* event)
