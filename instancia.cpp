@@ -68,31 +68,51 @@ void Instancia::GenerarUI()
     arbol->setVisible(false);
     separadorTablas = new QSplitter(Qt::Vertical);
 
+    const QSize BUTTON_SIZE = QSize(25, 25);
+    m_Maximizado = false;
     //tabla principal
-    topWidget = new QWidget;
+    m_PanelTablaP = new QWidget;
     m_botoneraTablaPrincipal =  new QHBoxLayout;        
     m_IconMax = new QIcon("/home/david/programacion/Qt/SDMed2/SDMed2/images/maximizar.png");
     m_IconMin = new QIcon("/home/david/programacion/Qt/SDMed2/SDMed2/images/minimizar.png");
-    m_Btnmax = new QPushButton;
-    m_Btnmax->setIcon(*m_IconMax);
-    m_Btnmax->setIconSize(QSize(18,18));
-    const QSize BUTTON_SIZE = QSize(25, 25);
-    m_Btnmax->setMaximumSize(BUTTON_SIZE);
-    QObject::connect(m_Btnmax,SIGNAL(clicked(bool)),this,SLOT(MaxMinTablaPrincipal()));
-    m_Maximizado = false;
+    m_BtnmaxminTablaP = new QPushButton;
+    m_BtnmaxminTablaP->setIcon(*m_IconMax);
+    m_BtnmaxminTablaP->setIconSize(QSize(18,18));
+    m_BtnmaxminTablaP->setMaximumSize(BUTTON_SIZE);
+    m_BtnmaxminTablaP->setObjectName("BtnP");
+    QObject::connect(m_BtnmaxminTablaP,SIGNAL(clicked(bool)),this,SLOT(MaxMinPanel()));
+
     m_botoneraTablaPrincipal->addStretch();
-    m_botoneraTablaPrincipal->addWidget(m_Btnmax);
+    m_botoneraTablaPrincipal->addWidget(m_BtnmaxminTablaP);
 
     m_lienzoTablaPrincipal = new QVBoxLayout;
     tablaPrincipal = new TablaPrincipal(tabla, ruta, pila);
     m_lienzoTablaPrincipal->addLayout(m_botoneraTablaPrincipal);
     m_lienzoTablaPrincipal->addWidget(tablaPrincipal);
-    topWidget->setLayout(m_lienzoTablaPrincipal);
-    separadorTablas->addWidget(topWidget);
+    m_PanelTablaP->setLayout(m_lienzoTablaPrincipal);
+    separadorTablas->addWidget(m_PanelTablaP);
 
     //tablas medicion y certificacion
-    separadorTablasMedCert = new QTabWidget;
-    separadorTablas->addWidget(separadorTablasMedCert);
+    m_PanelTablasMC = new QWidget;
+    m_botoneraTablaMediciones = new QHBoxLayout;
+    m_BtnmaxminTablaMC = new QPushButton;
+    m_BtnmaxminTablaMC->setIcon(*m_IconMax);
+    m_BtnmaxminTablaMC->setIconSize(QSize(18,18));
+    m_BtnmaxminTablaMC->setMaximumSize(BUTTON_SIZE);
+    m_BtnmaxminTablaMC->setObjectName("BtnMC");
+    QObject::connect(m_BtnmaxminTablaMC,SIGNAL(clicked(bool)),this,SLOT(MaxMinPanel()));
+    m_botoneraTablaMediciones->addStretch();
+    m_botoneraTablaMediciones->addWidget(m_BtnmaxminTablaMC);
+
+    m_TabWidgetTablasMedCert = new QTabWidget;
+    m_lienzoTablaMediciones = new QVBoxLayout;
+    m_lienzoTablaMediciones->addLayout(m_botoneraTablaMediciones);
+    m_lienzoTablaMediciones->addWidget(m_TabWidgetTablasMedCert);
+    m_PanelTablasMC->setLayout(m_lienzoTablaMediciones);
+    separadorTablas->addWidget(m_PanelTablasMC);
+
+
+    //separadorTablas->addWidget(separadorTablasMedCert);
     //Tabla Medicion
     InsertarTablaMedCert(0);//0 es la tabla de mediciones
     //Tablas de certificacion
@@ -108,8 +128,8 @@ void Instancia::GenerarUI()
     buton->setFlat(true);
     buton->setToolTip(tr("Añadir certificacion"));
     QObject::connect(buton,SIGNAL(clicked(bool)),this,SLOT(AdministrarCertificaciones()));
-    separadorTablasMedCert->addTab(buton,icono,"");
-    separadorTablas->addWidget(separadorTablasMedCert);
+    m_TabWidgetTablasMedCert->addTab(buton,icono,"");
+    //separadorTablas->addWidget(separadorTablasMedCert);
 
     //editor
     editor = new Editor;//(separadorTablas);
@@ -140,7 +160,7 @@ void Instancia::GenerarUI()
     QObject::connect(tablaPrincipal,SIGNAL(Copiar()),this,SLOT(Copiar()));
     QObject::connect(tablaPrincipal,SIGNAL(Pegar()),this,SLOT(Pegar()));
     //QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
-    QObject::connect(separadorTablasMedCert,SIGNAL(currentChanged(int)),this,SLOT(ActualizarTablaMedCertActiva(int)));
+    QObject::connect(m_TabWidgetTablasMedCert,SIGNAL(currentChanged(int)),this,SLOT(ActualizarTablaMedCertActiva(int)));
     QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(ActivarDesactivarUndoRedo(int)));
     QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
     QObject::connect(arbol,SIGNAL(clicked(QModelIndex)),this,SLOT(SincronizarArbolTablal()));
@@ -229,7 +249,7 @@ void Instancia::InsertarTablaMedCert(int num_certif)
     QObject::connect(tablaMC,SIGNAL(Copiar()),this,SLOT(Copiar()));
     QObject::connect(tablaMC,SIGNAL(Pegar()),this,SLOT(Pegar()));
     Listadotablasmedcert.append(tablaMC);
-    separadorTablasMedCert->insertTab(num_certif,tablaMC,tablaMC->objectName());
+    m_TabWidgetTablasMedCert->insertTab(num_certif,tablaMC,tablaMC->objectName());
 }
 
 void Instancia::ExportarXLSS(QString nombreFichero)
@@ -414,7 +434,7 @@ void Instancia::Undo()
     m_tablamedcertactiva = pos.second;
     codigopadre = ruta.at(ruta.size()-2);
     codigohijo = ruta.at(ruta.size()-1);
-    separadorTablasMedCert->setCurrentIndex(m_tablamedcertactiva);
+    m_TabWidgetTablasMedCert->setCurrentIndex(m_tablamedcertactiva);
     pila->Undo();
     pila->GuardarPosicion(ruta,m_tablamedcertactiva);
 }
@@ -426,7 +446,7 @@ void Instancia::Redo()
     m_tablamedcertactiva = pos.second;
     codigopadre = ruta.at(ruta.size()-2);
     codigohijo = ruta.at(ruta.size()-1);
-    separadorTablasMedCert->setCurrentIndex(m_tablamedcertactiva);
+    m_TabWidgetTablasMedCert->setCurrentIndex(m_tablamedcertactiva);
     pila->Redo();
     pila->GuardarPosicion(ruta,m_tablamedcertactiva);
 }
@@ -452,21 +472,16 @@ void Instancia::RefrescarVista()
     PrincipalModel *m = qobject_cast<PrincipalModel*>(tablaPrincipal->model());
     if (m)
     {
-        separadorTablasMedCert->setVisible(m->EsPartida());//solo se ve si es partida(Nat == 7)
+        //separadorTablasMedCert->setVisible(m->EsPartida());//solo se ve si es partida(Nat == 7)
+        m_PanelTablasMC->setVisible(m->EsPartida());//solo se ve si es partida(Nat == 7)
     }
-    //separadorTablasMedCert->setVisible(modeloTablaP->EsPartida());//solo se ve si es partida(Nat == 7)
     //modeloArbol->ActualizarDatos(tabla);
     //modeloArbol->layoutChanged();
     //arbol->expandAll();
     /*arbol->resizeColumnToContents(tipoColumna::CODIGO);
     arbol->resizeColumnToContents(tipoColumna::NATURALEZA);
     arbol->resizeColumnToContents(tipoColumna::UD);
-    arbol->resizeColumnToContents(tipoColumna::RESUMEN);*/
-    qDebug()<<"Tamaño de los splitters ";
-    foreach (int tam, separadorPrincipal->sizes())
-    {
-        qDebug()<<tam;
-    }
+    arbol->resizeColumnToContents(tipoColumna::RESUMEN);*/    
 }
 
 void Instancia::Copiar()
@@ -584,20 +599,31 @@ void Instancia::ActualizarTablaMedCertActiva(int indice)
     m_tablamedcertactiva = indice;
 }
 
-void Instancia::MaxMinTablaPrincipal()
+void Instancia::MaxMinPanel()
 {
+    qDebug()<<sender()->objectName();
     m_Maximizado = !m_Maximizado;
     if (m_Maximizado)
     {
-        QList<int> tams = {separadorTablas->size().height(),0,0};
-        separadorTablas->setSizes(tams);
-        m_Btnmax->setIcon(*m_IconMax);
+        if (sender()->objectName()=="BtnP")
+        {
+            QList<int> tams = {1,0,0};
+            separadorTablas->setSizes(tams);
+            m_BtnmaxminTablaP->setIcon(*m_IconMin);
+        }
+        else
+        {
+            QList<int> tams = {0,1,0};
+            separadorTablas->setSizes(tams);
+            m_BtnmaxminTablaMC->setIcon(*m_IconMin);
+        }
     }
     else
     {
-        QList<int> tams = {100,100,100};
+        QList<int> tams = {1,1,1};
         separadorTablas->setSizes(tams);
-        m_Btnmax->setIcon(*m_IconMin);
+        m_BtnmaxminTablaP->setIcon(*m_IconMax);
+        m_BtnmaxminTablaMC->setIcon(*m_IconMax);
     }
 }
 
@@ -667,7 +693,7 @@ void Instancia::BorrarCertificacion(QString fecha_certificacion)
     auto iterador = Listadotablasmedcert.begin();
     std::advance(iterador,num_certificacion);
     Listadotablasmedcert.erase(iterador);
-    separadorTablasMedCert->removeTab(num_certificacion);
+    m_TabWidgetTablasMedCert->removeTab(num_certificacion);
     iterador = Listadotablasmedcert.begin();//lo llevo de nuevo al origen
     ++iterador;//ahora lo avanzo una unidad hasta la tabla de certificaciones
     int i = 1;
@@ -679,8 +705,8 @@ void Instancia::BorrarCertificacion(QString fecha_certificacion)
         {
             m->CambiarNumeroCertificacion(i);
         }
-        separadorTablasMedCert->removeTab(i);
-        separadorTablasMedCert->insertTab(i,*iterador,(*iterador)->objectName());
+        m_TabWidgetTablasMedCert->removeTab(i);
+        m_TabWidgetTablasMedCert->insertTab(i,*iterador,(*iterador)->objectName());
         i++;
         ++iterador;
     }   

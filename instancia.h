@@ -76,7 +76,7 @@ public slots:
     void GuardarTextoPartida();
     void SincronizarArbolTablal();
     void ActualizarTablaMedCertActiva(int indice);
-    void MaxMinTablaPrincipal();
+    void MaxMinPanel();
 
 signals:
     void CopiarP();
@@ -87,7 +87,6 @@ signals:
     void CambiarLabelCertActual(QStringList);
 
 private:
-    //QHeaderView* cabeceraTablaP;
     //modelos
     ModeloBase* modeloTablaP;   
     TreeModel* modeloArbol;
@@ -97,15 +96,27 @@ private:
     QSplitter* separadorPrincipal;
     QSplitter* separadorTablas;
 
-    //tablas, editor y arbol
-    QTabWidget* separadorTablasMedCert;
-
+    //panel superior (tabla principal)
+    QWidget *m_PanelTablaP;
+    QHBoxLayout* m_botoneraTablaPrincipal;
+    QVBoxLayout* m_lienzoTablaPrincipal;
+    QPushButton *m_BtnmaxminTablaP;
     TablaBase* tablaPrincipal;
-    QList<TablaBase*>Listadotablasmedcert;
+    //panel intermedio (tablas mediciones y certificaciones)
+    QWidget *m_PanelTablasMC;
+    QHBoxLayout* m_botoneraTablaMediciones;
+    QVBoxLayout* m_lienzoTablaMediciones;
+    QPushButton* m_BtnmaxminTablaMC;
+    QTabWidget* m_TabWidgetTablasMedCert;
+    //panel inferior (editor)
     Editor* editor;
+    //panel derecho (arbol)
     VistaArbol* arbol;
 
-    QModelIndex indiceActual;
+    QList<TablaBase*>Listadotablasmedcert;
+    bool m_Maximizado;
+    QIcon *m_IconMax, *m_IconMin;
+    //QModelIndex indiceActual;
 
     MiUndoStack* pila;
 
@@ -115,12 +126,6 @@ private:
     QString textoPartidaInicial;
     QStringList ruta, certActual;
     int m_tablamedcertactiva;
-    QWidget *topWidget;
-    QHBoxLayout* m_botoneraTablaPrincipal;
-    QVBoxLayout* m_lienzoTablaPrincipal;
-    QPushButton *m_Btnmax;
-    bool m_Maximizado;
-    QIcon *m_IconMax, *m_IconMin;
 };
 
 #endif // INSTANCIA_H
