@@ -48,10 +48,10 @@ bool FiltroTablaMediciones::eventFilter(QObject *obj, QEvent *event)
             m_botonFormula->setVisible(m_currentIndex.isValid() && m_currentIndex.column() == tipoColumnaTMedCert::FORMULA);
             if( m_botonFormula->isVisible())
             {
-              QRect rect = m_tabla->visualRect(m_currentIndex);
-              QPoint point = rect.topRight();
-              point.setX(point.x() - m_botonFormula->width());
-              m_botonFormula->move(m_tabla->viewport()->mapToParent(point));
+                QRect rect = m_tabla->visualRect(m_currentIndex);
+                QPoint point = rect.topRight();
+                point.setX(point.x() - m_botonFormula->width());
+                m_botonFormula->move(m_tabla->viewport()->mapToParent(point));
             }
 
             QPoint point = DibujarMarcasSeleccionRestringida().bottomRight();
@@ -94,15 +94,18 @@ bool FiltroTablaMediciones::eventFilter(QObject *obj, QEvent *event)
     {
         m_botonPulsado = false;
         m_tabla->setCursor(Qt::ArrowCursor);
-        m_currentIndex = m_tabla->selectionModel()->selectedIndexes().last();
-        //m_tabla->selectionModel()->selectedIndexes().clear();
-        //si estoy en modo restringido efectuo una accion al soltar el boton del raton
-        if (m_modoRestringido == true)
+        if (!m_tabla->selectionModel()->selectedIndexes().isEmpty())//me aseguro de que haya elementos seleccionados para ejecutar esta parte
         {
-            MedicionModel *m = qobject_cast<MedicionModel*>(m_tabla->model());
-            if (m)
+            m_currentIndex = m_tabla->selectionModel()->selectedIndexes().last();
+            //m_tabla->selectionModel()->selectedIndexes().clear();
+            //si estoy en modo restringido efectuo una accion al soltar el boton del raton
+            if (m_modoRestringido == true)
             {
-                m->IgualarDatoColumna(m_tabla->selectionModel()->selectedIndexes());
+                MedicionModel *m = qobject_cast<MedicionModel*>(m_tabla->model());
+                if (m)
+                {
+                    m->IgualarDatoColumna(m_tabla->selectionModel()->selectedIndexes());
+                }
             }
         }
         m_modoRestringido = false;

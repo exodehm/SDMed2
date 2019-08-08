@@ -118,7 +118,7 @@ void TablaMed::CambiarTipoSubtotalParcial()
 
 void TablaMed::CambiarTipoSubtotal()
 {
-    int tipo;
+    int tipo=0;
     QString accion = sender()->objectName();
     if (accion == "AccionSubtotalNormal")
     {
