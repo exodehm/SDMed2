@@ -26,21 +26,21 @@ void DelegadoNumerosTablaMedCert::paint( QPainter *painter,const QStyleOptionVie
         {
             painter->save();
             //por defecto el fondo es amarillo
-            painter->setPen(m_color_fondo_subtotal_normal);
-            painter->setBrush(m_color_fondo_subtotal_normal);
+            painter->setBrush(Qt::yellow);
+            painter->setPen(Qt::yellow);
             //miro el tipo (la siguiente columna) por si ha que cambiar el fondo
             const QAbstractItemModel * model = index.model();
             int tipo = model->data(model->index(index.row(), index.column()+1), Qt::DisplayRole).toInt();
             if (tipo == 1)//subtotal parcial
             {
-                painter->setPen(m_color_fondo_subtotal_parcial);
-                painter->setBrush(m_color_fondo_subtotal_parcial);
+                painter->setPen(colores[SUBTOTAL_PARCIAL].texto);
+                painter->setBrush(colores[SUBTOTAL_PARCIAL].fondo);
                 qDebug()<<"Tenemos un parcial";
             }
             else if (tipo == 2)//subtotal total
             {
-                painter->setPen(m_color_fondo_subtotal_acumulado);
-                painter->setBrush(m_color_fondo_subtotal_acumulado);
+                painter->setPen(colores[SUBTOTAL_ACUMULADO].texto);
+                painter->setBrush(colores[SUBTOTAL_ACUMULADO].fondo);
                 qDebug()<<"Tenemos un subtotal";
             }
             painter->drawRect(opt.rect);

@@ -13,6 +13,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
+    Delegados/delegadocodigos.cpp \
         mainwindow.cpp \
     Dialogos/dialogoabout.cpp \
     Dialogos/dialogocreditos.cpp \
@@ -68,6 +69,7 @@ SOURCES += main.cpp\
     Dialogos/dialogogestionobras.cpp
 
 HEADERS  += mainwindow.h \
+    Delegados/delegadocodigos.h \
     Dialogos/dialogoabout.h \
     Dialogos/dialogolicencia.h \
     Dialogos/dialogocreditos.h \

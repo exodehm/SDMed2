@@ -6,7 +6,6 @@
 #include <QPainter>
 
 #include "./delegadobase.h"
-//#include "./Modelos/PrincipalModel.h"
 
 
 class DelegadoNumerosBase : public DelegadoBase
@@ -21,8 +20,7 @@ public:
     QString displayText(const QVariant & value, const QLocale & locale) const;
 
 protected:
-    QRegExp* rx;
-    QColor colores[4];
+    QRegExp* rx;    
 };
 
 #endif // DELEGADONUMEROSBASE_H

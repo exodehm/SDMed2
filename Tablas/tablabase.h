@@ -15,6 +15,7 @@
 #include "../Delegados/delegadonumerostablaprincipal.h"
 #include "../Delegados/delegadonumerostablamedcert.h"
 #include "../Delegados/delegadoformulasmedicion.h"
+#include "../Delegados/delegadocodigos.h"
 //#include "../Modelos/MedCertModel.h"
 #include "../Modelos/PrincipalModel.h"
 
@@ -69,6 +70,7 @@ protected:
     DelegadoColumnasBloqueadas* dlgCB;
     DelegadoFormulasMedicion* dlgFM;
     DelegadoIconos* dlgIco;
+    DelegadoCodigos* dlgCO;
     bool* celdaBloqueada;
     QSignalMapper* mapperH;
     QSignalMapper* mapperV;

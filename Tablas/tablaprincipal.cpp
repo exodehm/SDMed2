@@ -19,7 +19,7 @@ TablaPrincipal::TablaPrincipal(const QString &tabla, const QStringList &ruta, Mi
     celdaBloqueada[tipoColumnaTPrincipal::PORCERTPRES]=true;
     celdaBloqueada[tipoColumnaTPrincipal::IMPPRES]=true;
     celdaBloqueada[tipoColumnaTPrincipal::IMPCERT]=true;
-    setItemDelegateForColumn(tipoColumnaTPrincipal::CODIGO,dlgBA);
+    setItemDelegateForColumn(tipoColumnaTPrincipal::CODIGO,dlgCO);
     setItemDelegateForColumn(tipoColumnaTPrincipal::UD,dlgBA);
     setItemDelegateForColumn(tipoColumnaTPrincipal::RESUMEN,dlgBA);
     setItemDelegateForColumn(tipoColumnaTPrincipal::CANPRES,dlgNumTablaP);

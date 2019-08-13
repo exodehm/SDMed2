@@ -6,7 +6,7 @@ DelegadoNumerosTablaPrincipal::DelegadoNumerosTablaPrincipal(QObject *parent):De
 
 }
 
-void DelegadoNumerosTablaPrincipal::paint( QPainter *painter,const QStyleOptionViewItem &option, const QModelIndex &index ) const
+void DelegadoNumerosTablaPrincipal::paint(QPainter *painter,const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     QAbstractItemModel *model =const_cast<QAbstractItemModel *>(index.model());
     PrincipalModel* modelo = qobject_cast<PrincipalModel*>(model);
@@ -23,7 +23,8 @@ void DelegadoNumerosTablaPrincipal::paint( QPainter *painter,const QStyleOptionV
         }
         painter->save();
         //qDebug()<<"Indice: "<<indice.row()<<" - "<<indice.column()<<"-"<<indice.data().toString()<<"-"<<modelo->LeeColor(indice.row(),indice.column());
-        painter->setPen(colores[modelo->LeeColor(indice.row()+1,indice.column())]);
+        painter->setPen(colores[modelo->LeeColor(indice.row()+1,indice.column())].texto);
+        painter->setBrush(colores[modelo->LeeColor(indice.row()+1,indice.column())].fondo);
         if (option.showDecorationSelected && (option.state & QStyle::State_Selected)){
             if (option.state & QStyle::State_Active)
             {
