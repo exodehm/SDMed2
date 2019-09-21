@@ -151,5 +151,10 @@ RESOURCES += \
     iconos.qrc
 
 LIBS += -L /usr/local/lib/python3.6 -lpython3.6m
-INCLUDEPATH += /usr/include/python3.6m
+unix{
+    INCLUDEPATH += /usr/include/python3.6m
+}
+win32{
+    INCLUDEPATH += la_otra_ruta
+}
 DEPENDPATH +=  /usr/include/python3.6m

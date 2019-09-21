@@ -66,7 +66,7 @@ bool DialogoConexionBBDD::ProbarConexion()
         m_conectado = true;
         return true;
     }
-    QMessageBox::critical(0, QObject::tr("Error de conexión"), m_db->lastError().text());
+    QMessageBox::critical(nullptr, QObject::tr("Error de conexión"), m_db->lastError().text());
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     m_conectado = false;
     return false;

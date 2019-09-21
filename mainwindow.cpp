@@ -90,7 +90,7 @@ void MainWindow::readSettings()
     }
     else
     {
-        qDebug()<<"Chasco carrasco";
+        qDebug()<<"Chasco carrasco $1";
     }
 
 }
