@@ -93,7 +93,7 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return 0;
+        return nullptr;
 
     return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
 }
@@ -112,7 +112,7 @@ void TreeModel::ActualizarDatos(const QString &tabla)
     {
         rootItem = nullptr;
     }
-    TreeItem* itemsuperior;
+    TreeItem* itemsuperior = nullptr;
     int nivel=0;
     int nivelanterior=0;
     //cabecera
@@ -120,20 +120,21 @@ void TreeModel::ActualizarDatos(const QString &tabla)
     rootData << tr("Código")<<tr("Nat.")<<tr("Ud.")<<tr("Resumen")<<tr("Precio");
     rootItem = new TreeItem(rootData);
     //datos
-    QString consultaArbol = "SELECT * FROM recorrer_principal ('"+tabla+"');";
+    //QString consultaArbol = "SELECT * FROM recorrer_principal ('"+tabla+"');";
+    QString consultaArbol = "SELECT * FROM recorrercte ('"+tabla+"');";
     qDebug()<<consultaArbol;
     consulta.exec(consultaArbol);
     QSqlRecord rec = consulta.record();
     while (consulta.next())
     {
         QList<QVariant> ObraData;
-        ObraData<<consulta.value(rec.indexOf("codigo"))\
-               <<consulta.value(rec.indexOf("naturaleza"))\
-              <<consulta.value(rec.indexOf("ud"))\
-             <<consulta.value(rec.indexOf("resumen"))\
-            <<consulta.value(rec.indexOf("preciomed"));
+        ObraData<<consulta.value(rec.indexOf("ret_codigo"))\
+               <<consulta.value(rec.indexOf("ret_naturaleza"))\
+              <<consulta.value(rec.indexOf("ret_ud"))\
+             <<consulta.value(rec.indexOf("ret_resumen"))\
+            <<consulta.value(rec.indexOf("ret_preciomed"));
         nivelanterior = nivel;
-        nivel = consulta.value(rec.indexOf("nivel")).toInt();
+        nivel = consulta.value(rec.indexOf("ret_depth")).toInt();
         if (nivel == 0)//primer elemento
         {
             TreeItem* unItem = new TreeItem(ObraData,rootItem);
@@ -144,6 +145,7 @@ void TreeModel::ActualizarDatos(const QString &tabla)
         else
         {
             int subirnivel = nivelanterior-nivel+1;
+            qDebug()<<"Subir nivel "<<subirnivel;
             for (int i=0;i<subirnivel;i++)
             {
                 itemsuperior = itemsuperior->parentItem();
