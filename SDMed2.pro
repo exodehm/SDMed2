@@ -50,7 +50,6 @@ SOURCES += main.cpp\
     Tablas/tablacert.cpp \
     Tablas/tablamed.cpp \
     Ficheros/exportarBC3.cpp \
-    Ficheros/exportarXLS.cpp \
     imprimir.cpp \
     Undo/undoajustar.cpp \
     Dialogos/dialogoajustar.cpp \
@@ -106,7 +105,6 @@ HEADERS  += mainwindow.h \
     Tablas/tablacert.h \
     Tablas/tablamed.h \
     Ficheros/exportarBC3.h \
-    Ficheros/exportarXLS.h \
     imprimir.h \
     Undo/undoajustar.h \
     Dialogos/dialogoajustar.h \
@@ -147,18 +145,22 @@ CONFIG += c++11
 
 RESOURCES += \
     fuentes.qrc \
+    pythonpaths.qrc \
     recursos.qrc \
     Editor/iconosEditor.qrc \
     iconos.qrc
 
-LIBS += -L /usr/local/lib/python3.6 -lpython3.6m
-unix{
+
+unix
+{
     INCLUDEPATH += /usr/include/python3.6m
+    LIBS += -L /usr/local/lib/python3.6 -lpython3.6m
+    DEPENDPATH +=  /usr/include/python3.6m
 }
-win32{
-    INCLUDEPATH += la_otra_ruta
+win32
+{
+    INCLUDEPATH += c:\Program Files\Python\include
 }
-DEPENDPATH +=  /usr/include/python3.6m
 
 DISTFILES += \
     Fuentes/Comfortaa-Regular.ttf

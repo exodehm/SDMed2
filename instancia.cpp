@@ -13,7 +13,7 @@
 
 #include "./defs.h"
 
-#include "./Ficheros/exportarXLS.h"
+//#include "./Ficheros/exportarXLS.h"
 
 #include "./Undo/undoeditarprincipal.h"
 #include "./Undo/undoajustar.h"
@@ -254,6 +254,7 @@ void Instancia::InsertarTablaMedCert(int num_certif)
 
 void Instancia::ExportarXLSS(QString nombreFichero)
 {
+    qDebug()<<"exortat xls";
     QString cadenaconsulta = "WITH RECURSIVE tree AS(\
             SELECT codpadre, codhijo, canpres, cancert, 1 AS depth, cast(posicion as text) as camino,posicion from \"PRUEBASCOMP_Relacion\"\
             WHERE codpadre is NULL\
@@ -288,7 +289,7 @@ void Instancia::ExportarXLSS(QString nombreFichero)
             qDebug()<<tabladatos.at(i).at(j);
         }
     }*/
-    XLS::crearFuncion(nombreFichero,tabladatos);
+    //XLS::crearFuncion(nombreFichero,tabladatos);
     //ExportarXLS exportador(tabla.toUtf8().constData(),nombreFichero.toUtf8().constData(),consulta);
 }
 

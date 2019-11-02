@@ -316,7 +316,9 @@ bool MainWindow::GuardarObra(QString nombreFichero)
 void MainWindow::ActionImprimir()
 {   
     //Imprimir impresor("/home/david/programacion/Qt/SDMed2/SDMed2/python/","plugin_loader","iniciar", db);
-    QString ruta = "/home/david/programacion/Qt/SDMed2/SDMed2/python/";
+    qDebug()<<"Current path"<<QDir::currentPath();
+    QString ruta = QDir::currentPath()+"/python";
+    //QString ruta = "/home/david/programacion/Qt/SDMed2/SDMed2/python/";
     QString pModulo = "plugin_loader";
     QString pFuncion = "iniciar";
     QStringList pArgumentos;
