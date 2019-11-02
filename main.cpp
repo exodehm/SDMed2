@@ -1,5 +1,7 @@
 #include <QApplication>
 #include <QStyleFactory>
+#include <QFontDatabase>
+#include <QDebug>
 
 #include "mainwindow.h"
 
@@ -12,15 +14,13 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("sdsoft.com");
     QCoreApplication::setApplicationName("SDMed2");
     QCoreApplication::setApplicationVersion("0.1 beta");
-    QApplication::setStyle(QStyleFactory::create("Motif"));
-    QSettings::setDefaultFormat(QSettings::IniFormat);
-    /*QPalette p;
-    p = qApp->palette();
-    p.setColor(QPalette::Window, QColor(53,53,53));
-    p.setColor(QPalette::Button, QColor(53,53,53));
-    p.setColor(QPalette::Highlight, QColor(142,45,197));
-    p.setColor(QPalette::ButtonText, QColor(255,255,255));
-    qApp->setPalette(p);*/
+    //QApplication::setStyle(QStyleFactory::create("Motif"));
+
+    int id = QFontDatabase::addApplicationFont(":/Fuentes/Comfortaa-Regular.ttf");
+    qDebug()<<id;
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    QFont font(family,10);
+    qApp->setFont(font);
 
     MainWindow m;
     m.show();

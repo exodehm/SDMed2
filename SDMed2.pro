@@ -146,6 +146,7 @@ QT += sql
 CONFIG += c++11
 
 RESOURCES += \
+    fuentes.qrc \
     recursos.qrc \
     Editor/iconosEditor.qrc \
     iconos.qrc
@@ -158,3 +159,6 @@ win32{
     INCLUDEPATH += la_otra_ruta
 }
 DEPENDPATH +=  /usr/include/python3.6m
+
+DISTFILES += \
+    Fuentes/Comfortaa-Regular.ttf

@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Ajustes de conexión</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -143,6 +146,9 @@
       <widget class="QCheckBox" name="checkBox_ConexionAutomatica">
        <property name="enabled">
         <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Conectar automáticamente la próxima vez</string>
