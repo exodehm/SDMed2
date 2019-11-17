@@ -11,7 +11,7 @@
 #include <QDebug>
 
 MedicionModel::MedicionModel(const QString &tabla, const QStringList &ruta, int fase, MiUndoStack *p, QObject *parent):
-    num_cert(fase), ModeloBase(tabla, ruta, p, parent)
+    ModeloBase(tabla, ruta, p, parent), num_cert(fase)
 {    
     if (num_cert == 0)
     {
@@ -69,7 +69,7 @@ Qt::ItemFlags MedicionModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
     {
-        return 0;
+        return nullptr;
     }
     if (index.column()!=tipoColumnaTMedCert::FORMULA && index.column()!=tipoColumnaTMedCert::PARCIAL && index.column()!=tipoColumnaTMedCert::SUBTOTAL)
     {
@@ -126,14 +126,17 @@ void MedicionModel::Certificar(const QList<int> &filas)
     QVariant V(desc);
     QString cadenacertificacionactiva = "SELECT * FROM ver_certificacion_actual('"+m_tabla+"')";
     m_consulta.exec(cadenacertificacionactiva);
-    int certificacionActiva;
+    int certificacionActiva=-1;
     while (m_consulta.next())
     {
         certificacionActiva = m_consulta.value(0).toInt();
     }
-    //en este caso no guardo la tabla activa cuando certifico (que sería la tabla de mediciones), sino la tabla en la que
-    //voy a certificar
-    m_pila->Push(m_ruta,certificacionActiva,new UndoCertificarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,filas,num_cert,V));
+    if (certificacionActiva>0)
+    {
+        //en este caso no guardo la tabla activa cuando certifico (que sería la tabla de mediciones), sino la tabla en la que
+        //voy a certificar
+        m_pila->Push(m_ruta,certificacionActiva,new UndoCertificarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,filas,num_cert,V));
+    }
 }
 
 void MedicionModel::BorrarFilas(const QList<int>& filas)
@@ -146,7 +149,7 @@ void MedicionModel::BorrarFilas(const QList<int>& filas)
 
 void MedicionModel::InsertarFila(int fila)
 {
-    QString desc="Insertar linea medicion en fila: "+fila;
+    QString desc="Insertar linea medicion en fila: "+ QString::number(fila);
     qDebug()<<desc;
     QVariant V(desc);
     m_pila->Push(m_ruta,num_cert, new UndoInsertarLineaMedicion(m_tabla,m_codigopadre,m_codigohijo,1,fila,num_cert, V));

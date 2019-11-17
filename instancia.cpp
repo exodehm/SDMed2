@@ -38,7 +38,7 @@
 #include <QSqlRecord>
 #include <QWidget>
 
-Instancia::Instancia(QString cod, QString res, QWidget *parent):tabla(cod),resumen(res),QWidget(parent)
+Instancia::Instancia(QString cod, QString res, QWidget *parent):QWidget(parent), tabla(cod), resumen(res)
 {
     codigopadre ="";
     codigohijo = cod;
@@ -73,8 +73,8 @@ void Instancia::GenerarUI()
     //tabla principal
     m_PanelTablaP = new QWidget;
     m_botoneraTablaPrincipal =  new QHBoxLayout;        
-    m_IconMax = new QIcon("/home/david/programacion/Qt/SDMed2/SDMed2/images/maximizar.png");
-    m_IconMin = new QIcon("/home/david/programacion/Qt/SDMed2/SDMed2/images/minimizar.png");
+    m_IconMax = new QIcon("../SDMed2/images/maximizar.png");
+    m_IconMin = new QIcon("../SDMed2/images/minimizar.png");
     m_BtnmaxminTablaP = new QPushButton;
     m_BtnmaxminTablaP->setIcon(*m_IconMax);
     m_BtnmaxminTablaP->setIconSize(QSize(18,18));
@@ -111,7 +111,6 @@ void Instancia::GenerarUI()
     m_PanelTablasMC->setLayout(m_lienzoTablaMediciones);
     separadorTablas->addWidget(m_PanelTablasMC);
 
-
     //separadorTablas->addWidget(separadorTablasMedCert);
     //Tabla Medicion
     InsertarTablaMedCert(0);//0 es la tabla de mediciones
@@ -123,12 +122,12 @@ void Instancia::GenerarUI()
      InsertarTablaMedCert(consulta.value(0).toInt());
     }
     //ultimo elemento del tab. Un boton para añadir mas certificaciones
-    QIcon icono ("/home/david/programacion/Qt/SDMed2/SDMed2/Iconos/plus.png");
+    QIcon icono ("../SDMed2/Iconos/plus.png");
     QPushButton* buton = new QPushButton(icono,"");
     buton->setFlat(true);
     buton->setToolTip(tr("Añadir certificacion"));
     QObject::connect(buton,SIGNAL(clicked(bool)),this,SLOT(AdministrarCertificaciones()));
-    m_TabWidgetTablasMedCert->addTab(buton,icono,"");
+    m_TabWidgetTablasMedCert->addTab(buton,icono,"");    
     //separadorTablas->addWidget(separadorTablasMedCert);
 
     //editor
@@ -181,12 +180,12 @@ void Instancia::CambiarCodigoObra(const QString &nuevocodigo)
     tabla = nuevocodigo;
 }
 
-const float Instancia::LeePrecio(const QString &codigo)
+float Instancia::LeePrecio(const QString &codigo)
 {
     QString leerpreciodecodigo = "SELECT * FROM ver_precio('"+tabla+"','"+codigo+"')";
     qDebug()<<leerpreciodecodigo;
     consulta.exec(leerpreciodecodigo);
-    float preciodecodigo;
+    float preciodecodigo=0;
     while (consulta.next())
     {
         preciodecodigo = consulta.value(0).toFloat();
@@ -685,32 +684,35 @@ void Instancia::BorrarCertificacion(QString fecha_certificacion)
     qDebug()<<cadenaborrarcertificacion;
     consulta.exec(cadenaborrarcertificacion);
     //ahora hallo el nº de certificacion para reajustar las tablas
-    int num_certificacion;
+    int num_certificacion=-1;
     while (consulta.next())
     {
         num_certificacion = consulta.value(0).toInt();
         qDebug()<<"Numero de ce "<<num_certificacion;
     }
-    auto iterador = Listadotablasmedcert.begin();
-    std::advance(iterador,num_certificacion);
-    Listadotablasmedcert.erase(iterador);
-    m_TabWidgetTablasMedCert->removeTab(num_certificacion);
-    iterador = Listadotablasmedcert.begin();//lo llevo de nuevo al origen
-    ++iterador;//ahora lo avanzo una unidad hasta la tabla de certificaciones
-    int i = 1;
-    while (iterador!=Listadotablasmedcert.end())
+    if (num_certificacion>0)
     {
-        (*iterador)->setObjectName("Certificación nº "+ QString::number(i));
-        MedicionModel* m = qobject_cast<MedicionModel*>((*iterador)->model());
-        if (m)
+        auto iterador = Listadotablasmedcert.begin();
+        std::advance(iterador,num_certificacion);
+        Listadotablasmedcert.erase(iterador);
+        m_TabWidgetTablasMedCert->removeTab(num_certificacion);
+        iterador = Listadotablasmedcert.begin();//lo llevo de nuevo al origen
+        ++iterador;//ahora lo avanzo una unidad hasta la tabla de certificaciones
+        int i = 1;
+        while (iterador!=Listadotablasmedcert.end())
         {
-            m->CambiarNumeroCertificacion(i);
+            (*iterador)->setObjectName("Certificación nº "+ QString::number(i));
+            MedicionModel* m = qobject_cast<MedicionModel*>((*iterador)->model());
+            if (m)
+            {
+                m->CambiarNumeroCertificacion(i);
+            }
+            m_TabWidgetTablasMedCert->removeTab(i);
+            m_TabWidgetTablasMedCert->insertTab(i,*iterador,(*iterador)->objectName());
+            i++;
+            ++iterador;
         }
-        m_TabWidgetTablasMedCert->removeTab(i);
-        m_TabWidgetTablasMedCert->insertTab(i,*iterador,(*iterador)->objectName());
-        i++;
-        ++iterador;
-    }   
+    }
     RefrescarVista();
 }
 

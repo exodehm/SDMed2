@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     qDebug()<<id;
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
     QFont font(family,10);
-    qApp->setFont(font);
+    qApp->setFont(font); 
 
     MainWindow m;
     m.show();

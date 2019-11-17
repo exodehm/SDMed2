@@ -56,7 +56,8 @@ bool DialogoConexionBBDD::ProbarConexion()
     m_db->setPassword(ui->lineEdit_PassWord->text());
     if (m_db->open())
     {
-        ui->boton_ProbarConexion->setText(ui->boton_ProbarConexion->text().append(tr(". Conectado con éxito!!")));
+        //ui->boton_ProbarConexion->setText(ui->boton_ProbarConexion->text().append(tr(". Conectado con éxito!!")));
+        ui->boton_ProbarConexion->setText(tr("Conectado con éxito!!"));
         //solo si estan estos check activados se permite guardar y conectar automaticamente la proxima vez
         if (ui->checkBox_GuardarNombre->isChecked() && ui->checkBox_GuardarPassword->isChecked())
         {
@@ -66,6 +67,7 @@ bool DialogoConexionBBDD::ProbarConexion()
         m_conectado = true;
         return true;
     }
+    ui->boton_ProbarConexion->setText(tr("Error abriendo base de detos"));
     QMessageBox::critical(nullptr, QObject::tr("Error de conexión"), m_db->lastError().text());
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     m_conectado = false;

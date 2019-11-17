@@ -12,14 +12,14 @@ class MedicionModel : public ModeloBase
 public:
 
     MedicionModel(const QString &tabla, const QStringList& ruta, int fase,  MiUndoStack *p, QObject* parent=nullptr);
-    ~MedicionModel();
+    ~MedicionModel() override;
 
     bool setData(const QModelIndex & index, const QVariant& value, int role) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    void PrepararCabecera(/*QList<QList<QVariant>>&datos*/);
-    void Copiar(const QList<int> &filas);
-    void Pegar(int fila);
+    void PrepararCabecera(/*QList<QList<QVariant>>&datos*/) override;
+    void Copiar(const QList<int> &filas) override;
+    void Pegar(int fila) override;
     void Certificar(const QList<int> &filas) override;
     void BorrarFilas(const QList<int> &filas) override;
     void InsertarFila(int fila) override;

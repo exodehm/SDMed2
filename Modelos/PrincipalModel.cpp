@@ -56,29 +56,25 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
                 QString descripcion = "Editar codigo con el codigo: ";
                 m_pila->Push(m_ruta,0,new UndoEditarCodigo(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
                 return true;
-            }
-            break;
+            }            
         case tipoColumnaTPrincipal::NATURALEZA:
         {
             QString descripcion = "Editar resumen con el codigo: ";
             m_pila->Push(m_ruta,0,new UndoEditarNaturaleza(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
-        }
-            break;
+        }            
         case tipoColumnaTPrincipal::UD:
         {
             QString descripcion = "Editar ud con el codigo: ";
             m_pila->Push(m_ruta,0,new UndoEditarUnidad(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
-        }
-            break;
+        }            
         case tipoColumnaTPrincipal::RESUMEN:
         {
             QString descripcion = "Editar resumen con el codigo: ";            
             m_pila->Push(m_ruta,0,new UndoEditarResumen(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
-        }
-            break;
+        }            
         case tipoColumnaTPrincipal::CANPRES:
         case tipoColumnaTPrincipal::CANCERT:
         {
@@ -95,7 +91,7 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
             QString cadenahaymediciones = "SELECT hay_medcert ('"+ m_tabla + "','" + codpadre + "','" + codhijo+"','" + tipoCantidad+"');";
             m_consulta.exec(cadenahaymediciones);
             qDebug()<<cadenahaymediciones;
-            bool hayMedCert;
+            bool hayMedCert = false;
             while (m_consulta.next())
             {
                 hayMedCert = m_consulta.value(0).toBool();
@@ -110,14 +106,13 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
             }
             m_pila->Push(m_ruta,0,new UndoEditarCantidad(m_tabla, codpadre, codhijo, index.data(), value, tipoCantidad, descripcion));
             return true;
-        }
-            break;
+        }            
         case tipoColumnaTPrincipal::PRPRES:
         {
             QString descripcion = "Editar precio con el codigo: ";
             QString cadenahaydescompuesto = "SELECT hay_descomposicion ('"+ m_tabla + "','" + codhijo+"');";
             m_consulta.exec(cadenahaydescompuesto);
-            bool hayDescompuesto;
+            bool hayDescompuesto = false;
             while (m_consulta.next())
             {
                 hayDescompuesto = m_consulta.value(0).toBool();
@@ -139,8 +134,7 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
                 m_pila->Push(m_ruta,0,new UndoEditarPrecio(m_tabla, codpadre, codhijo, index.data(), value, precio::MODIFICAR, descripcion));
             }
             return true;
-        }
-            break;
+        }            
         default:
             break;
         }
@@ -151,7 +145,7 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
 
 bool PrincipalModel::removeRows(int fila, int numFilas, const QModelIndex& parent)
 {
-    Q_UNUSED(parent);
+    Q_UNUSED(parent)
     beginRemoveRows(QModelIndex(), fila, fila+numFilas-1);
     qDebug()<<"Borrar Fila en tabla principal: "<<fila;
     qDebug()<<m_datos.at(fila).at(0);
@@ -173,7 +167,7 @@ Qt::ItemFlags PrincipalModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
     {
-        return 0;
+        return nullptr;
     }
     if (index.column()!=tipoColumnaTPrincipal::IMPPRES && index.column()!=tipoColumnaTPrincipal::IMPCERT)
     {

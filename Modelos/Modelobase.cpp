@@ -9,12 +9,12 @@
 #include <QDebug>
 
 ModeloBase::ModeloBase(const QString &tabla, const QStringList &ruta, MiUndoStack *p, QObject *parent):
-    m_tabla(tabla), m_ruta(ruta), m_pila(p), QSqlQueryModel(parent)
+    QSqlQueryModel(parent), m_ruta(ruta), m_pila(p),  m_tabla(tabla)
 {
     m_codigopadre = ruta.at(ruta.size()-2);
     m_codigohijo = ruta.at(ruta.size()-1);
     m_hayFilaVacia=false;
-    m_naturalezapadre = (int)Naturaleza::CAPITULO;
+    m_naturalezapadre = static_cast<int>(Naturaleza::CAPITULO);
 }
 
 ModeloBase::~ModeloBase(){}
@@ -50,7 +50,7 @@ int ModeloBase::rowCount(const QModelIndex &parent) const
 
 int ModeloBase::columnCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
+    Q_UNUSED(parent)
     return NUM_COLUMNAS;
 }
 
@@ -153,7 +153,7 @@ QVariant ModeloBase::data(const QModelIndex &index, int role) const
 
 bool ModeloBase::insertRows(int row, int count, const QModelIndex &parent)
 {
-    Q_UNUSED(parent);
+    Q_UNUSED(parent)
     qDebug()<<"-Row: "<<row<<" -Count: "<<count;
     if (!HayFilaVacia())
     {
@@ -168,6 +168,7 @@ bool ModeloBase::insertRows(int row, int count, const QModelIndex &parent)
 bool ModeloBase::removeRows(int filaInicial, int numFilas, const QModelIndex &parent)
 {
     qDebug()<<"Remove rows en modelo base";
+    return false;
 }
 
 bool ModeloBase::HayFilaVacia()
