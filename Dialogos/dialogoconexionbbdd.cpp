@@ -4,11 +4,15 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QSqlError>
+#include <QTimer>
 
 DialogoConexionBBDD::DialogoConexionBBDD(QSqlDatabase* db, QWidget *parent) : QDialog(parent), ui(new Ui::DialogoConexionBBDD)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);    
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+    ui->boton_ProbarConexion->setText(estadoConexion.leyendaEstado[NORMAL]);
+    ui->boton_ProbarConexion->setStyleSheet(estadoConexion.colorEstado[NORMAL]);
+
     m_db = db;
     m_conectado = false;
     ReadSettings();
@@ -56,8 +60,8 @@ bool DialogoConexionBBDD::ProbarConexion()
     m_db->setPassword(ui->lineEdit_PassWord->text());
     if (m_db->open())
     {
-        //ui->boton_ProbarConexion->setText(ui->boton_ProbarConexion->text().append(tr(". Conectado con éxito!!")));
-        ui->boton_ProbarConexion->setText(tr("Conectado con éxito!!"));
+        ui->boton_ProbarConexion->setText(estadoConexion.leyendaEstado[CORRECTO]);
+        ui->boton_ProbarConexion->setStyleSheet(estadoConexion.colorEstado[CORRECTO]);
         //solo si estan estos check activados se permite guardar y conectar automaticamente la proxima vez
         if (ui->checkBox_GuardarNombre->isChecked() && ui->checkBox_GuardarPassword->isChecked())
         {
@@ -67,7 +71,14 @@ bool DialogoConexionBBDD::ProbarConexion()
         m_conectado = true;
         return true;
     }
-    ui->boton_ProbarConexion->setText(tr("Error abriendo base de detos"));
+    ui->boton_ProbarConexion->setText(estadoConexion.leyendaEstado[ERROR]);
+    ui->boton_ProbarConexion->setStyleSheet(estadoConexion.colorEstado[ERROR]);
+    ui->boton_ProbarConexion->setEnabled(false);
+    QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setText(tr("Error abriendo base de detos"));});
+    QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setStyleSheet(estadoConexion.colorEstado[NORMAL]);});
+    QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setText(estadoConexion.leyendaEstado[NORMAL]);});
+    QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setEnabled(true);});
+
     QMessageBox::critical(nullptr, QObject::tr("Error de conexión"), m_db->lastError().text());
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     m_conectado = false;

@@ -1,6 +1,7 @@
 #include "abrirguardarbc3.h"
 #include <QDebug>
 #include <QFile>
+#include <iostream>
 
 AbrirGuardarBC3::AbrirGuardarBC3(const QStringList &listadoBC3, bool &abierta)
 {
@@ -139,7 +140,7 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
     //esto hay que implementarlo. Por ahora solo considera 3 campos
     foreach (const QString& linea, registroD)
     {
-        qDebug()<<"Linea D: "<<linea;
+        //qDebug()<<"Linea D: "<<linea;
         QStringList lista = linea.split("|");
         //qDebug()<<"Tamaño linea D: "<<lista.size();
         QString padre = lista.at(0);
@@ -168,10 +169,10 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
                 registros[j] = relaciones.first();
                 relaciones.pop_front();
             }
-            qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0]<<"Cantidad: "<<registros[2];
+            //qDebug()<<"Padre: "<<padre<<" - "<<"Hijo: "<<registros[0]<<"Cantidad: "<<registros[2];
             QString cadenainsertar = "SELECT insertar_partida('"+ codigo + "','"+padre+"','"+registros[0]+"','-1','"+ registros[2]+"');" ;
 
-            qDebug()<<"Cadena insertar: "<<cadenainsertar;
+            //qDebug()<<"Cadena insertar: "<<cadenainsertar;
             consulta.exec(cadenainsertar);
         }
     }
