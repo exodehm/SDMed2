@@ -122,7 +122,7 @@ void Instancia::GenerarUI()
      InsertarTablaMedCert(consulta.value(0).toInt());
     }
     //ultimo elemento del tab. Un boton para añadir mas certificaciones
-    QIcon icono ("../SDMed2/Iconos/plus.png");
+    QIcon icono ("../SDMed2/images/plus.png");
     QPushButton* buton = new QPushButton(icono,"");
     buton->setFlat(true);
     buton->setToolTip(tr("Añadir certificacion"));

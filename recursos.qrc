@@ -21,5 +21,6 @@
         <file>images/imprimir.png</file>
         <file>images/maximizar.png</file>
         <file>images/minimizar.png</file>
+        <file>images/plus.png</file>
     </qresource>
 </RCC>
