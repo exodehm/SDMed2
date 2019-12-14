@@ -17,14 +17,14 @@ private:
     {
         return
         {
-            std::make_pair(Naturaleza::SIN_CLASIFICAR, QIcon(QStringLiteral("../SDMed2/Iconos/sinclasificar.png"))),
-            std::make_pair(Naturaleza::MANO_DE_OBRA, QIcon(QStringLiteral("../SDMed2/Iconos/engineer.png"))),
-            std::make_pair(Naturaleza::MAQUINARIA, QIcon(QStringLiteral("../SDMed2/Iconos/trucking.png"))),
-            std::make_pair(Naturaleza::MATERIALES, QIcon(QStringLiteral("../SDMed2/Iconos/brick.png"))),
-            std::make_pair(Naturaleza::COMP_RESIDUO, QIcon(QStringLiteral("../SDMed2/Iconos/delete.png"))),
-            std::make_pair(Naturaleza::CLASIF_RESIDUO, QIcon(QStringLiteral("../SDMed2/Iconos/delete.png"))),
-            std::make_pair(Naturaleza::CAPITULO, QIcon(QStringLiteral("../SDMed2/Iconos/folder.png"))),
-            std::make_pair(Naturaleza::PARTIDA, QIcon(QStringLiteral("../SDMed2/Iconos/file.png")))
+            std::make_pair(Naturaleza::SIN_CLASIFICAR, QIcon(QStringLiteral(":/Iconos/sinclasificar.png"))),
+            std::make_pair(Naturaleza::MANO_DE_OBRA, QIcon(QStringLiteral(":/Iconos/engineer.png"))),
+            std::make_pair(Naturaleza::MAQUINARIA, QIcon(QStringLiteral(":/Iconos/trucking.png"))),
+            std::make_pair(Naturaleza::MATERIALES, QIcon(QStringLiteral(":/Iconos/brick.png"))),
+            std::make_pair(Naturaleza::COMP_RESIDUO, QIcon(QStringLiteral(":/Iconos/delete.png"))),
+            std::make_pair(Naturaleza::CLASIF_RESIDUO, QIcon(QStringLiteral(":/Iconos/delete.png"))),
+            std::make_pair(Naturaleza::CAPITULO, QIcon(QStringLiteral(":/Iconos/folder.png"))),
+            std::make_pair(Naturaleza::PARTIDA, QIcon(QStringLiteral(":/Iconos/file.png")))
         };
     }
 
