@@ -73,8 +73,8 @@ void Instancia::GenerarUI()
     //tabla principal
     m_PanelTablaP = new QWidget;
     m_botoneraTablaPrincipal =  new QHBoxLayout;        
-    m_IconMax = new QIcon("../SDMed2/images/maximizar.png");
-    m_IconMin = new QIcon("../SDMed2/images/minimizar.png");
+    m_IconMax = new QIcon(":/images/maximizar.png");
+    m_IconMin = new QIcon(":/images/minimizar.png");
     m_BtnmaxminTablaP = new QPushButton;
     m_BtnmaxminTablaP->setIcon(*m_IconMax);
     m_BtnmaxminTablaP->setIconSize(QSize(18,18));
@@ -122,7 +122,7 @@ void Instancia::GenerarUI()
      InsertarTablaMedCert(consulta.value(0).toInt());
     }
     //ultimo elemento del tab. Un boton para añadir mas certificaciones
-    QIcon icono ("../SDMed2/images/plus.png");
+    QIcon icono (":/images/plus.png");
     QPushButton* buton = new QPushButton(icono,"");
     buton->setFlat(true);
     buton->setToolTip(tr("Añadir certificacion"));
