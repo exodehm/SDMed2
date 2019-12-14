@@ -315,10 +315,8 @@ bool MainWindow::GuardarObra(QString nombreFichero)
 
 void MainWindow::ActionImprimir()
 {   
-    //Imprimir impresor("/home/david/programacion/Qt/SDMed2/SDMed2/python/","plugin_loader","iniciar", db);
     qDebug()<<"Current path"<<QDir::currentPath();
     QString ruta = QDir::currentPath()+"/python";
-    //QString ruta = "/home/david/programacion/Qt/SDMed2/SDMed2/python/";
     QString pModulo = "plugin_loader";
     QString pFuncion = "iniciar";
     QStringList pArgumentos;
@@ -334,6 +332,12 @@ void MainWindow::ActionImprimir()
         {
             qDebug()<< __PRETTY_FUNCTION__ << "successful";
         }
+    }
+    else
+    {
+        QMessageBox::warning(this, tr("Aviso"),
+                                       tr("Debe haber alguna obra abierta"),
+                                       QMessageBox::Ok);
     }
 }
 

@@ -24,7 +24,7 @@ def run():
     
 def imprimir(conexion, obra, book):
 	tipoInforme = "Presupuestos y Mediciones"
-	imprimirMediciones = True
+	imprimirMediciones = False
 	#abro una instancia de hoja de calculo
 	sheet = book.active
 	book.remove_sheet(sheet)
@@ -60,18 +60,20 @@ def imprimir(conexion, obra, book):
 		sheet.cell(column = Columnas.CCodigo.value, row = fila).value = codigo + " " + resumen
 		fila = fila + 1;
 		#partidas
-		subconsulta.exec_("SELECT C.codigo, C.ud, C.resumen , C.preciomed, C.descripcion FROM \"" + obra + "_Conceptos\" AS C, \"" + obra + "_Relacion\" AS R WHERE R.codpadre ='"+codigo+"' AND C.codigo = R.codhijo")
+		subconsulta.exec_("SELECT C.codigo, C.ud, C.resumen , R.canpres, C.preciomed, C.descripcion FROM \"" + obra + "_Conceptos\" AS C, \"" + obra + "_Relacion\" AS R WHERE R.codpadre ='"+codigo+"' AND C.codigo = R.codhijo")
 		codigopartida=""
 		udpartida = ""
 		resumenpartida = ""
 		descripcionpartida=""
+		cantidad = 0
 		precio = 0
 		while subconsulta.next():
 			codigopartida = subconsulta.value(0)
 			udpartida = subconsulta.value(1)
 			resumenpartida = subconsulta.value(2)
-			precio = float(subconsulta.value(3))
-			descripcionpartida = subconsulta.value(4)			
+			cantidad = float(subconsulta.value(3))
+			precio = float(subconsulta.value(4))
+			descripcionpartida = subconsulta.value(5)			
 			#codigo partida
 			sheet.cell(column = Columnas.CCodigo.value, row = fila).value = codigopartida
 			sheet.cell(column = Columnas.CCodigo.value, row = fila).font = ft_negrita
@@ -131,14 +133,17 @@ def imprimir(conexion, obra, book):
 					sheet[coordenadaParcial].number_format = '#,##0.00'
 					fila = fila +1
 				#linea de suma
-				sheet.cell(column = Columnas.CParciales.value, row = fila).border = Border(top=Side(style='thin'))#linea superior
-				sheet.cell(column = Columnas.CCantidad.value, row = fila).border = Border(top=Side(style='thin'))#linea superior
-				sheet.cell(column = Columnas.CPrecio.value, row = fila).border = Border(top=Side(style='thin'))#linea superior
-				sheet.cell(column = Columnas.CImporte.value, row = fila).border = Border(top=Side(style='thin'))#linea superior	
-				#sumatorio			
-				cadena_rango = get_column_letter(Columnas.CParciales.value)+str(fila_inicial)+":"+get_column_letter(Columnas.CParciales.value)+str(fila-1)
-				coordenadaSumatorio = get_column_letter(Columnas.CCantidad.value)+str(fila)
-				sheet[coordenadaSumatorio]="=SUM("+cadena_rango+")"
+				#sheet.cell(column = Columnas.CParciales.value, row = fila).border = Border(top=Side(style='thin'))#linea superior
+				#sheet.cell(column = Columnas.CCantidad.value, row = fila).border = Border(top=Side(style='thin'))#linea superior
+				#sheet.cell(column = Columnas.CPrecio.value, row = fila).border = Border(top=Side(style='thin'))#linea superior
+				#sheet.cell(column = Columnas.CImporte.value, row = fila).border = Border(top=Side(style='thin'))#linea superior	
+				#cantidad			
+				#cadena_rango = get_column_letter(Columnas.CParciales.value)+str(fila_inicial)+":"+get_column_letter(Columnas.CParciales.value)+str(fila-1)
+				#coordenadaSumatorio = get_column_letter(Columnas.CCantidad.value)+str(fila)
+				#if imprimirMediciones is True:
+				#	sheet[coordenadaSumatorio]="=SUM("+cadena_rango+")"
+				#else:
+				sheet[coordenadaSumatorio]=cantidad
 				sheet[coordenadaSumatorio].font = ft_chica
 				sheet[coordenadaSumatorio].number_format = '#,##0.00'
 				#precio
@@ -150,7 +155,7 @@ def imprimir(conexion, obra, book):
 				sheet.cell(column = Columnas.CImporte.value, row = fila).number_format = '#,##0.00'			
 				sheet.cell(column = Columnas.CImporte.value, row = fila).font = ft_chica
 				fila = fila +3
-		sheet.cell(column=Columnas.CResumen.value, row = fila).value = "TOTAL CAPITULO " + codigo + " " + resumen
+		sheet.cell(column=Columnas.CResumen.value, row = fila).value = "TOTAL CAPITULO KK" + codigo + " " + resumen
 		sheet.cell(column=Columnas.CResumen.value, row = fila).font = ft_negrita
 		#cantidad total del capitulo
 		cadena_rango = get_column_letter(Columnas.CImporte.value)+str(1)+":"+get_column_letter(Columnas.CImporte.value)+str(fila-1)
