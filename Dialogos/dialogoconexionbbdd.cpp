@@ -36,6 +36,8 @@ void DialogoConexionBBDD::ReadSettings()
     ui->lineEdit_Puerto->setText(settings.value("conexionBBDD/puerto").toString());
     ui->lineEdit_NombreUsuario->setText(settings.value("conexionBBDD/usuario").toString());
     ui->lineEdit_PassWord->setText(settings.value("conexionBBDD/password").toString());
+    ui->checkBox_GuardarNombre->setChecked(settings.value("conexionBBDD/guardarnombre").toBool());
+    ui->checkBox_GuardarPassword->setChecked(settings.value("conexionBBDD/guardarclave").toBool());
 }
 
 DialogoConexionBBDD::~DialogoConexionBBDD()
@@ -95,6 +97,8 @@ void DialogoConexionBBDD::GuardarDatosConexion()
     settings.setValue("servidor", ui->lineEdit_Servidor->text());
     settings.setValue("puerto", ui->lineEdit_Puerto->text());
     settings.setValue("database", ui->lineEdit_BBDD->text());
+    settings.setValue("guardarnombre", ui->checkBox_GuardarNombre->isChecked());
+    settings.setValue("guardarclave", ui->checkBox_GuardarPassword->isChecked());
     if (ui->checkBox_GuardarNombre->isChecked())
     {
         settings.setValue("usuario", ui->lineEdit_NombreUsuario->text());
