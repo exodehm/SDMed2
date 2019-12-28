@@ -316,7 +316,8 @@ bool MainWindow::GuardarObra(QString nombreFichero)
 void MainWindow::ActionImprimir()
 {   
     qDebug()<<"Current path"<<QDir::currentPath();
-    QString ruta = QDir::currentPath()+"/python";
+    QString pathPython = "/.sdmed/python";
+    QString ruta = QDir::homePath()+pathPython;
     QString pModulo = "plugin_loader";
     QString pFuncion = "iniciar";
     QStringList pArgumentos;
@@ -328,7 +329,7 @@ void MainWindow::ActionImprimir()
     {
         pArgumentos<<(*obraActual)->LeeTabla();
 
-        if(::PyRun::loadModule(QDir::current().absoluteFilePath(ruta), pModulo, pFuncion, pArgumentos))
+        /*if(::PyRun::loadModule(QDir::home().absoluteFilePath(ruta), pModulo, pFuncion, pArgumentos))
         {
             qDebug()<< __PRETTY_FUNCTION__ << "successful";
         }
@@ -337,8 +338,12 @@ void MainWindow::ActionImprimir()
     {
         QMessageBox::warning(this, tr("Aviso"),
                                        tr("Debe haber alguna obra abierta"),
-                                       QMessageBox::Ok);
+                                       QMessageBox::Ok);*/
     }
+    int res = ::PyRun::loadModule(QDir::home().absoluteFilePath(ruta),pModulo, pFuncion, pArgumentos);
+    qDebug()<<"Resultado: "<<res<<" "<<QDir::home().absoluteFilePath(ruta);
+    //hacer un switch/case con los posibles errores
+
 }
 
 void MainWindow::ActionCerrar()

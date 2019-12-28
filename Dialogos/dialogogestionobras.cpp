@@ -35,20 +35,19 @@ void DialogoGestionObras::LlenarTabla()
     ui->tabla->setRowCount(0);
     QSqlQuery consultacodigos;
     QSqlQuery consultaresumenes;
-    QString codigo, resumen;
-    QString cadenaconsultacodigos = "SELECT table_name FROM INFORMATION_SCHEMA.TABLES \
-            WHERE TABLE_SCHEMA = 'public' AND table_name like '%\\_Conceptos';";
+    QString codigo, resumen, codigo_conceptos;
+    //QString cadenaconsultacodigos = "SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'public' AND table_name like '%\\_Conceptos';";
+    QString cadenaconsultacodigos = "SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema' AND tablename like '%Conceptos';";
     consultacodigos.exec (cadenaconsultacodigos);
     ui->tabla->setRowCount(consultacodigos.size());
     int fila = 0;
     while (consultacodigos.next())
     {
         //hallo el codigo
-        codigo = consultacodigos.value(0).toString();
+        codigo_conceptos = codigo = consultacodigos.value(1).toString();
         codigo.remove("_Conceptos");
         //hallo el resumen
-        QString cadenaconsultaresumen = "SELECT resumen from \"" + \
-                consultacodigos.value(0).toString() + "\" WHERE codigo = '" + codigo + "';";
+        QString cadenaconsultaresumen = "SELECT resumen from \"" + codigo_conceptos + "\" WHERE codigo = '" + codigo + "';";
         qDebug()<<cadenaconsultaresumen;
         consultaresumenes.exec(cadenaconsultaresumen);
         while (consultaresumenes.next())

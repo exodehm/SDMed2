@@ -17,11 +17,13 @@ static void cleanup()
     }
 }
 
-bool loadModule(const QString &modulePath, const QString &moduleName, const QString &functionName, const QStringList& args)
+int loadModule(const QString &modulePath, const QString &moduleName, const QString &functionName, const QStringList& args)
 {
+    qDebug()<<"modulepath"<<modulePath;
     qputenv("PYTHONPATH", modulePath.toLocal8Bit());
     if (init() != AppModuleLoaded)
-        return false;
+        //return false;
+        return CannotLoadModule;
     PyObject *pName, *pModule, *pFunc;
     PyObject *pArgs, *pValue;
     pName = PyUnicode_DecodeFSDefault(moduleName.toLocal8Bit().constData());
@@ -44,7 +46,8 @@ bool loadModule(const QString &modulePath, const QString &moduleName, const QStr
                     Py_DECREF(pArgs);
                     Py_DECREF(pModule);
                     qWarning("Cannot convert argument\n");
-                    return false;
+                    //return false;
+                    return  CannotConvertArgument;
                 }
                 PyTuple_SetItem(pArgs, i, arg_valor);//meto los datos de conexion
             }
@@ -60,7 +63,8 @@ bool loadModule(const QString &modulePath, const QString &moduleName, const QStr
                 Py_DECREF(pModule);
                 PyErr_Print();
                 qWarning("Call failed\n");
-                return false;
+                //return false;
+                return  CallFailed;
             }
         }
         else
@@ -75,10 +79,12 @@ bool loadModule(const QString &modulePath, const QString &moduleName, const QStr
     else
     {
         PyErr_Print();
-        qWarning("Failed to load \"%s\"\n", moduleName.toLocal8Bit().constData());
-        return false;
+        qWarning("Failed to load \"%s\"\n", moduleName.toLocal8Bit().constData());        
+        //return false;
+        return FailedToLoad;
     }
-    return true;
+    //return true;
+    return Success;
 }
 
 State init()

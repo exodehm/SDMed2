@@ -15,7 +15,18 @@ enum State
     PythonInitialized,
     AppModuleLoaded
 };
-bool loadModule(const QString &modulePath, const QString &moduleName, const QString &functionName, const QStringList &args=QStringList());
+enum Resultado
+{
+    CannotLoadModule,
+    CannotConvertArgument,
+    CallFailed,
+    CannotFindFunction,
+    FailedToLoad,
+    Success
+};
+
+//bool loadModule(const QString &modulePath, const QString &moduleName, const QString &functionName, const QStringList &args=QStringList());
+int loadModule(const QString &modulePath, const QString &moduleName, const QString &functionName, const QStringList &args=QStringList());
 State init();
 }
 #endif // PYRUN_H

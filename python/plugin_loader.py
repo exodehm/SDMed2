@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
 
 def iniciar(*datos):
-	ruta = os.path.dirname(__file__) + "/"
+	ruta = os.path.dirname(__file__) + "/"	
 	conexion = QtSql.QSqlDatabase('QPSQL')
 	conexion.setDatabaseName(datos[0])
 	conexion.setHostName(datos[1])
