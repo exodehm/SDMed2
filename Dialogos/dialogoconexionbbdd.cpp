@@ -98,7 +98,7 @@ void DialogoConexionBBDD::GuardarDatosConexion()
     settings.setValue("puerto", ui->lineEdit_Puerto->text());
     settings.setValue("database", ui->lineEdit_BBDD->text());
     settings.setValue("guardarnombre", ui->checkBox_GuardarNombre->isChecked());
-    settings.setValue("guardarclave", ui->checkBox_GuardarPassword->isChecked());
+    settings.setValue("guardarclave", ui->checkBox_GuardarPassword->isChecked());    
     if (ui->checkBox_GuardarNombre->isChecked())
     {
         settings.setValue("usuario", ui->lineEdit_NombreUsuario->text());
