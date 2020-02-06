@@ -1,9 +1,11 @@
 #include "dialogoconexionbbdd.h"
 #include "ui_dialogoconexionbbdd.h"
+#include "dialogooperacionesbbdd.h"
 #include <QDebug>
 #include <QMessageBox>
 #include <QSettings>
 #include <QSqlError>
+#include <QSqlQuery>
 #include <QTimer>
 
 DialogoConexionBBDD::DialogoConexionBBDD(QSqlDatabase* db, QWidget *parent) : QDialog(parent), ui(new Ui::DialogoConexionBBDD)
@@ -17,9 +19,30 @@ DialogoConexionBBDD::DialogoConexionBBDD(QSqlDatabase* db, QWidget *parent) : QD
     m_conectado = false;
     ReadSettings();
     QObject::connect(ui->boton_ProbarConexion,SIGNAL(clicked(bool)),this,SLOT(ProbarConexion()));
+    QObject::connect(ui->boton_Operaciones_BBDD,SIGNAL(clicked(bool)),this,SLOT(OperacionesBBDD()));
     QObject::connect(ui->checkBox_GuardarNombre,SIGNAL(stateChanged(int)),this,SLOT(ActivarCheckConexionAutomatica(int)));
     QObject::connect(ui->checkBox_GuardarPassword,SIGNAL(stateChanged(int)),this,SLOT(ActivarCheckConexionAutomatica(int)));
-    QObject::connect(ui->buttonBox->button(QDialogButtonBox::Ok),SIGNAL(clicked(bool)),this,SLOT(GuardarDatosConexion()));
+    QObject::connect(ui->buttonBox->button(QDialogButtonBox::Ok),SIGNAL(clicked(bool)),this,SLOT(GuardarDatosConexion()));    
+}
+
+bool DialogoConexionBBDD::HayExension(QString bbdd)
+{
+    QString nombreextension, version;
+    QString cadenaConsultaExtension = "SELECT * FROM pg_extension WHERE extname = "+ bbdd + ";";
+    QSqlQuery consultaExtension(cadenaConsultaExtension);
+    while (consultaExtension.next())
+    {
+        nombreextension = consultaExtension.value(0).toString();
+        version = consultaExtension.value(4).toString();
+        qDebug()<<"extension" <<nombreextension;
+        qDebug()<<"version "<<version;
+    }
+    //si no existe la extension
+     if (consultaExtension.size()==-1)
+     {
+         return false;
+     }
+    return true;
 }
 
 bool DialogoConexionBBDD::HayConexion()
@@ -32,7 +55,7 @@ void DialogoConexionBBDD::ReadSettings()
     QSettings settings;
     ui->lineEdit_NombreConexion->setText(settings.value("conexionBBDD/nombreconexion").toString());
     ui->lineEdit_Servidor->setText(settings.value("conexionBBDD/servidor").toString());
-    ui->lineEdit_BBDD->setText(settings.value("conexionBBDD/database").toString());
+    //ui->lineEdit_BBDD->setText(settings.value("conexionBBDD/database").toString());
     ui->lineEdit_Puerto->setText(settings.value("conexionBBDD/puerto").toString());
     ui->lineEdit_NombreUsuario->setText(settings.value("conexionBBDD/usuario").toString());
     ui->lineEdit_PassWord->setText(settings.value("conexionBBDD/password").toString());
@@ -62,21 +85,35 @@ bool DialogoConexionBBDD::ProbarConexion()
     m_db->setPassword(ui->lineEdit_PassWord->text());
     if (m_db->open())
     {
-        ui->boton_ProbarConexion->setText(estadoConexion.leyendaEstado[CORRECTO]);
-        ui->boton_ProbarConexion->setStyleSheet(estadoConexion.colorEstado[CORRECTO]);
-        //solo si estan estos check activados se permite guardar y conectar automaticamente la proxima vez
-        if (ui->checkBox_GuardarNombre->isChecked() && ui->checkBox_GuardarPassword->isChecked())
+        if (HayExension())
         {
-            ui->checkBox_ConexionAutomatica->setEnabled(true);
+            ui->boton_ProbarConexion->setText(estadoConexion.leyendaEstado[CORRECTO]);
+            ui->boton_ProbarConexion->setStyleSheet(estadoConexion.colorEstado[CORRECTO]);
+            //solo si estan estos check activados se permite guardar y conectar automaticamente la proxima vez
+            if (ui->checkBox_GuardarNombre->isChecked() && ui->checkBox_GuardarPassword->isChecked())
+            {
+                ui->checkBox_ConexionAutomatica->setEnabled(true);
+            }
+            ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+            m_conectado = true;
+            return true;
         }
-        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
-        m_conectado = true;
-        return true;
+        else
+        {
+            ui->boton_ProbarConexion->setText("No se encuentra la extesion");
+            ui->boton_ProbarConexion->setStyleSheet(estadoConexion.colorEstado[ERROR]);
+            ui->boton_ProbarConexion->setEnabled(false);
+            QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setText(tr("No se encuentra la extesion"));});
+            QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setStyleSheet(estadoConexion.colorEstado[NORMAL]);});
+            QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setText(estadoConexion.leyendaEstado[NORMAL]);});
+            QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setEnabled(true);});
+            m_conectado = false;
+            return  false;
+        }
     }
     ui->boton_ProbarConexion->setText(estadoConexion.leyendaEstado[ERROR]);
     ui->boton_ProbarConexion->setStyleSheet(estadoConexion.colorEstado[ERROR]);
     ui->boton_ProbarConexion->setEnabled(false);
-    QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setText(tr("Error abriendo base de detos"));});
     QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setStyleSheet(estadoConexion.colorEstado[NORMAL]);});
     QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setText(estadoConexion.leyendaEstado[NORMAL]);});
     QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setEnabled(true);});
@@ -96,7 +133,7 @@ void DialogoConexionBBDD::GuardarDatosConexion()
     settings.setValue("nombreconexion", ui->lineEdit_NombreConexion->text());
     settings.setValue("servidor", ui->lineEdit_Servidor->text());
     settings.setValue("puerto", ui->lineEdit_Puerto->text());
-    settings.setValue("database", ui->lineEdit_BBDD->text());
+    //settings.setValue("database", ui->lineEdit_BBDD->text());
     settings.setValue("guardarnombre", ui->checkBox_GuardarNombre->isChecked());
     settings.setValue("guardarclave", ui->checkBox_GuardarPassword->isChecked());    
     if (ui->checkBox_GuardarNombre->isChecked())
@@ -121,7 +158,8 @@ void DialogoConexionBBDD::GuardarDatosConexion()
 void DialogoConexionBBDD::ActivarCheckConexionAutomatica(int estado)
 {
     if (estado == Qt::Checked)
-    {if (m_db->open() && ui->checkBox_GuardarNombre->isChecked() && ui->checkBox_GuardarPassword->isChecked())
+    {
+        if (m_db->open() && ui->checkBox_GuardarNombre->isChecked() && ui->checkBox_GuardarPassword->isChecked())
         {
             ui->checkBox_ConexionAutomatica->setEnabled(true);
         }
@@ -130,4 +168,10 @@ void DialogoConexionBBDD::ActivarCheckConexionAutomatica(int estado)
     {
         ui->checkBox_ConexionAutomatica->setEnabled(false);
     }
+}
+
+void DialogoConexionBBDD::OperacionesBBDD()
+{
+    DialogoOperacionesBBDD* d =  new DialogoOperacionesBBDD(this);
+    d->show();
 }

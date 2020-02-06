@@ -14,6 +14,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     Delegados/delegadocodigos.cpp \
+    Dialogos/dialogooperacionesbbdd.cpp \
         mainwindow.cpp \
     Dialogos/dialogoabout.cpp \
     Dialogos/dialogocreditos.cpp \
@@ -73,6 +74,7 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogolicencia.h \
     Dialogos/dialogocreditos.h \
     Dialogos/dialogodatoscodigoresumen.h \
+    Dialogos/dialogooperacionesbbdd.h \
     instancia.h \
     consultas.h \
     Tablas/tablabase.h \
@@ -126,6 +128,7 @@ FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
     Ui/dialogocreditos.ui \
     Ui/dialogolicencia.ui \
+    Ui/dialogooperacionesbbdd.ui \
     Ui/dialogoprecio.ui \
     Ui/dialogosuprimirmedicion.ui \
     Ui/dialogodatoscodigoresumen.ui \

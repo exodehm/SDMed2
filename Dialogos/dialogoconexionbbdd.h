@@ -21,15 +21,16 @@ public:
         sEstados()
         {
             colorEstado[NORMAL]= "background-color: #d9dede";
-            colorEstado[ERROR]= "background-color: red";
+            colorEstado[ERROR]= "background-color: red; color : black";
             colorEstado[CORRECTO]= "background-color: lime";
             leyendaEstado[NORMAL]=tr("Probar conexón");
-            leyendaEstado[ERROR]=tr("Error abriendo base de detos");
-            leyendaEstado[CORRECTO]=tr("Conectado con éxito!!");
+            leyendaEstado[ERROR]=tr("Error abriendo base de datos");
+            leyendaEstado[CORRECTO]=tr("¡Conectado con éxito!");
         }
     };
 
     explicit DialogoConexionBBDD(QSqlDatabase *db, QWidget *parent = nullptr);
+    bool HayExension(QString bbdd = "sdmed");
     bool HayConexion();
     void ReadSettings();
     ~DialogoConexionBBDD();
@@ -45,6 +46,7 @@ private slots:
     bool ProbarConexion();
     void GuardarDatosConexion();
     void ActivarCheckConexionAutomatica(int estado);
+    void OperacionesBBDD();
 };
 
 #endif // DIALOGOCONEXIONBBDD_H

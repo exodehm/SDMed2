@@ -7,5 +7,6 @@
 		<file>Iconos/file.png</file>
 		<file>Iconos/folder.png</file>
 		<file>Iconos/sinclasificar.png</file>
+        <file>Iconos/wrench.png</file>
     </qresource>
 </RCC>

@@ -90,7 +90,7 @@ void MainWindow::readSettings()
     }
     else
     {
-        qDebug()<<"Chasco carrasco $1";
+        qDebug()<<"No se esta conectado a ninguna BBDD";
     }
 
 }
@@ -147,6 +147,7 @@ void MainWindow::ActionNuevo()
         }
         else
         {
+            qDebug()<<consulta.lastError().text();
             QMessageBox::warning(this, tr("Aviso"),
                                  tr("Existe una obra en la BBDD con el código %1").arg(cuadro->LeeCodigo()),
                                  QMessageBox::Ok);
