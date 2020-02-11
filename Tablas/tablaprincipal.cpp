@@ -69,7 +69,7 @@ void TablaPrincipal::MostrarMenuLateralTabla(QPoint pos)
     menu->addAction(AccionPegar);
     /*copiar*/
     QObject::connect(AccionCopiar, SIGNAL(triggered()), this, SLOT(CopiarPartidas()));
-    QObject::connect(AccionPegar, SIGNAL(triggered()), this, SLOT(Pegar()));
+    QObject::connect(AccionPegar, SIGNAL(triggered()), this, SLOT(PegarPartidas()));
     menu->popup(cabeceraVertical->viewport()->mapToGlobal(pos));
 }
 
@@ -82,4 +82,9 @@ void TablaPrincipal::CopiarPartidas()
 {
     qDebug()<<"Copiar tabla principal";
     emit Copiar();
+}
+
+void TablaPrincipal::PegarPartidas()
+{
+    emit Pegar();
 }

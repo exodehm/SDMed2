@@ -36,6 +36,7 @@ void DialogoGestionObras::LlenarTabla()
     QSqlQuery consultaBBDD;
     QString codigo, resumen;
     QString cadenaConsultaBBDD = "SELECT * FROM ver_obras_BBDD()";
+    qDebug()<<cadenaConsultaBBDD;
     consultaBBDD.exec (cadenaConsultaBBDD);
     ui->tabla->setRowCount(consultaBBDD.size());
     int fila = 0;

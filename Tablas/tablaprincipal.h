@@ -18,6 +18,7 @@ public slots:
     void MostrarMenuTabla(QPoint pos) override;
     //void Copiar();
     void CopiarPartidas();
+    void PegarPartidas();
 };
 
 #endif // TABLAPRINCIPAL_H

@@ -28,7 +28,7 @@ DialogoConexionBBDD::DialogoConexionBBDD(QSqlDatabase* db, QWidget *parent) : QD
 bool DialogoConexionBBDD::HayExension(QString bbdd)
 {
     QString nombreextension, version;
-    QString cadenaConsultaExtension = "SELECT * FROM pg_extension WHERE extname = "+ bbdd + ";";
+    QString cadenaConsultaExtension = "SELECT * FROM pg_extension WHERE extname = '"+ bbdd + "';";
     QSqlQuery consultaExtension(cadenaConsultaExtension);
     while (consultaExtension.next())
     {
@@ -172,6 +172,6 @@ void DialogoConexionBBDD::ActivarCheckConexionAutomatica(int estado)
 
 void DialogoConexionBBDD::OperacionesBBDD()
 {
-    DialogoOperacionesBBDD* d =  new DialogoOperacionesBBDD(this);
-    d->show();
+    DialogoOperacionesBBDD* d =  new DialogoOperacionesBBDD(ui->lineEdit_Servidor->text(), ui->lineEdit_Puerto->text(), this);
+    d->exec();
 }
