@@ -68,28 +68,34 @@ void DialogoOperacionesBBDD::Comprobaciones()
         ui->labelBBDD->setEnabled(true);
         ui->botonBBDD->setEnabled(false);
     }
-    //compropbar si existe la extension    
-    QString cadenaComprobarExtension = "SELECT 1 FROM pg_extension WHERE extname ='sdmed'";
-    qDebug()<<cadenaComprobarExtension;
-    consulta.exec(cadenaComprobarExtension);
-    bool hayExtensionSdmed = false;
-    while (consulta.next())
+    if (hayBBDDSdmed)
     {
-        hayExtensionSdmed = consulta.value(0).toBool();
-    }
-    if (!hayExtensionSdmed)
-    {
-        ui->labelExtension->setText(tr("No existe la extensión \"sdmed\""));
-        ui->botonExtension->setText("Crear extensión");
-        ui->labelExtension->setEnabled(true);
-        ui->botonExtension->setEnabled(true);
-    }
-    else
-    {
-        ui->labelExtension->setText(tr("Existe la extensión \"sdmed\""));
-        ui->botonExtension->setText("...");
-        ui->labelExtension->setEnabled(true);
-        ui->botonExtension->setEnabled(false);
+        db.close();
+        db.setDatabaseName("sdmed");
+        db.open();
+        //compropbar si existe la extension
+        QString cadenaComprobarExtension = "SELECT 1 FROM pg_extension WHERE extname ='sdmed'";
+        qDebug()<<cadenaComprobarExtension;
+        consulta.exec(cadenaComprobarExtension);
+        bool hayExtensionSdmed = false;
+        while (consulta.next())
+        {
+            hayExtensionSdmed = consulta.value(0).toBool();
+        }
+        if (!hayExtensionSdmed)
+        {
+            ui->labelExtension->setText(tr("No existe la extensión \"sdmed\""));
+            ui->botonExtension->setText("Crear extensión");
+            ui->labelExtension->setEnabled(true);
+            ui->botonExtension->setEnabled(true);
+        }
+        else
+        {
+            ui->labelExtension->setText(tr("Existe la extensión \"sdmed\""));
+            ui->botonExtension->setText("...");
+            ui->labelExtension->setEnabled(true);
+            ui->botonExtension->setEnabled(false);
+        }
     }
 }
 
