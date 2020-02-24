@@ -160,9 +160,12 @@ unix
     LIBS += -L /usr/local/lib/python3.6 -lpython3.6m
     DEPENDPATH +=  /usr/include/python3.6m
 }
+
 win32
 {
-    INCLUDEPATH += c:\Program Files\Python\include
+    INCLUDEPATH += C:\Python\Python37\include
+    LIBS += -L C:\Python\Python37\libs -lpython37
+    DEPENDPATH += C:\Python\Python37\include
 }
 
 DISTFILES += \
