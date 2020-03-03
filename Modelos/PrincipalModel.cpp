@@ -269,18 +269,6 @@ void PrincipalModel::ActualizarDatos(const QStringList &ruta)
     }
 }
 
-int PrincipalModel::LeeColor(int fila, int columna)
-{
-    if (fila>m_datoscolor.size()-1)
-    {
-        return 0;
-    }
-    else
-    {
-        return m_datoscolor.at(fila).at(columna).toInt();
-    }
-}
-
 void PrincipalModel::Copiar(const QList<int> &filas)
 {
     qDebug()<<"Copiar en el modelo";

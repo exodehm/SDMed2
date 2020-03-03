@@ -23,8 +23,6 @@ public:
     void InsertarFila(int fila) override;
     void ActualizarDatos(const QStringList& ruta) override;
 
-    int LeeColor(int fila, int columna);
-
     void Copiar(const QList<int> &filas) override;
     void Pegar(int fila) override;
 

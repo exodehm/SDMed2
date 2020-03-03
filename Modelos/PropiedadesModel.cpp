@@ -110,6 +110,11 @@ void PropiedadesModel::ActualizarDatos(const QStringList &ruta)
 
 }
 
+int PropiedadesModel::LeeColor(int fila, int columna)
+{
+
+}
+
 void PropiedadesModel::PrepararCabecera()
 {
 

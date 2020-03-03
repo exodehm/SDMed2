@@ -39,6 +39,8 @@ public:
     virtual void Pegar(int fila)=0;
     virtual void Certificar(const QList<int> &filas){}
 
+    int LeeColor(int fila, int columna);
+
 public slots:
     //void MostrarHijos (QModelIndex idpadre);
 

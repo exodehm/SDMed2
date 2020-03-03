@@ -189,3 +189,15 @@ int ModeloBase::FilaVacia()
         return -1;
     }
 }
+
+int ModeloBase::LeeColor(int fila, int columna)
+{
+    if (fila>m_datoscolor.size()-1)
+    {
+        return 0;
+    }
+    else
+    {
+        return m_datoscolor.at(fila).at(columna).toInt();
+    }
+}

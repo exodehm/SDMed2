@@ -18,6 +18,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     void ActualizarDatos(const QStringList& ruta);
+    int LeeColor(int fila, int columna);
     void PrepararCabecera(/*QList<QList<QVariant>>&datos*/);
     void Copiar(const QList<int> &filas);
     void Pegar(int fila);
