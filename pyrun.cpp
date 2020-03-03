@@ -1,4 +1,4 @@
-#include "pyrun.h"
+#include "./pyrun.h"
 #include <Python.h>
 
 #include <QByteArray>
@@ -79,7 +79,7 @@ int loadModule(const QString &modulePath, const QString &moduleName, const QStri
     else
     {
         PyErr_Print();
-        qWarning("Failed to load \"%s\"\n", moduleName.toLocal8Bit().constData());        
+        qWarning("Failed to load \"%s\"\n", moduleName.toLocal8Bit().constData());
         //return false;
         return FailedToLoad;
     }

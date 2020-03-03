@@ -9,6 +9,8 @@ class DelegadoCodigos : public DelegadoBase
 public:
     explicit DelegadoCodigos(QObject* parent=nullptr);
     void paint( QPainter *painter,const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+protected:
+    void initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const;
 };
 
 #endif // DELEGADOCODIGOS_H

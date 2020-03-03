@@ -45,7 +45,7 @@ SOURCES += main.cpp\
     Undo/undoinsertarprincipal.cpp \
     Undo/undoeditarmedicion.cpp \
     Modelos/PrincipalModel.cpp \
-    pyrun.cpp \
+    pyrun.cpp \    
     Dialogos/dialogocertificaciones.cpp \
     Modelos/MedicionModel.cpp \
     Tablas/tablacert.cpp \
@@ -101,7 +101,7 @@ HEADERS  += mainwindow.h \
     Undo/undoinsertarprincipal.h \
     Undo/undoeditarmedicion.h \
     Modelos/PrincipalModel.h \
-    pyrun.h \
+    pyrun.h \    
     Dialogos/dialogocertificaciones.h \
     Modelos/MedicionModel.h \
     Tablas/tablacert.h \
@@ -154,15 +154,13 @@ RESOURCES += \
     iconos.qrc
 
 
-unix
-{
+unix {
     INCLUDEPATH += /usr/include/python3.6m
     LIBS += -L /usr/local/lib/python3.6 -lpython3.6m
     DEPENDPATH +=  /usr/include/python3.6m
 }
 
-win32
-{
+win32 {
     INCLUDEPATH += C:\Python\Python37\include
     LIBS += -L C:\Python\Python37\libs -lpython37
     DEPENDPATH += C:\Python\Python37\include
