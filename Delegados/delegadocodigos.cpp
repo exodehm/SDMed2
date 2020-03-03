@@ -16,9 +16,9 @@ void DelegadoCodigos::initStyleOption(QStyleOptionViewItem *option, const QModel
 {
     QAbstractItemModel *model =const_cast<QAbstractItemModel *>(index.model());
     PrincipalModel* modelo = qobject_cast<PrincipalModel*>(model);
-    QModelIndex indice = index;
+    //QModelIndex indice = index;
     QStyledItemDelegate::initStyleOption(option, index);
-    option->backgroundBrush = colores[modelo->LeeColor(indice.row()+1,indice.column())].fondo;
-    //option->palette.setBrush(QPalette::Text, colores[modelo->LeeColor(indice.row()+1,indice.column())].fondo);
+    option->backgroundBrush = colores[modelo->LeeColor(index.row()+1,index.column())].fondo;
+    //option->palette.setBrush(QPalette::Text, colores[modelo->LeeColor(index.row()+1,index.column())].fondo);
     option->displayAlignment = Qt::AlignRight | Qt::AlignVCenter;
 }
