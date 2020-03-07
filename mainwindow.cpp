@@ -9,6 +9,7 @@
 #include "./Dialogos/dialogogestionobras.h"
 #include "./Dialogos/dialogodatosgenerales.h"
 #include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
+#include "./Dialogos/dialogolistadoimprimir.h"
 #include "./imprimir.h"
 #include "./miundostack.h"
 
@@ -317,7 +318,7 @@ bool MainWindow::GuardarObra(QString nombreFichero)
 void MainWindow::ActionImprimir()
 {   
     qDebug()<<"Current path"<<QDir::currentPath();
-    QString pathPython = "/.sdmed/python";
+    QString pathPython = "/.sdmed/python/plugins/";
     QString ruta = QDir::homePath()+pathPython;
     QString pModulo = "plugin_loader";
     QString pFuncion = "iniciar";
@@ -341,9 +342,11 @@ void MainWindow::ActionImprimir()
                                        tr("Debe haber alguna obra abierta"),
                                        QMessageBox::Ok);*/
     }
-    int res = ::PyRun::loadModule(QDir::home().absoluteFilePath(ruta),pModulo, pFuncion, pArgumentos);
-    qDebug()<<"Resultado: "<<res<<" "<<QDir::home().absoluteFilePath(ruta);
+    //int res = ::PyRun::loadModule(QDir::home().absoluteFilePath(ruta),pModulo, pFuncion, pArgumentos);
+    //qDebug()<<"Resultado: "<<res<<" "<<QDir::home().absoluteFilePath(ruta);
     //hacer un switch/case con los posibles errores
+    DialogoListadoImprimir* d = new DialogoListadoImprimir(ruta, this);
+    int res = d->exec();
 
 }
 
