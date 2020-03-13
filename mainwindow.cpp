@@ -569,7 +569,8 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     ui->actionGuardar->setEnabled(true);
     ui->actionCerrar->setEnabled(true);
     ui->actionExportar->setEnabled(true);
-    ui->actionImprimir->setEnabled(true);
+    //ui->actionImportar->setEnabled(true);
+    ui->actionImprimir->setEnabled(true);    
     comboMedCert->setEnabled(true);
     botonCertificaciones->setEnabled(true);
     ui->actionVer_Arbol->setEnabled(true);
@@ -616,7 +617,7 @@ void MainWindow::ActivarBotonesBasicos(bool activar)
 {
     ui->actionNuevo->setEnabled(db.open());
     ui->actionImportar->setEnabled(db.open());
-    ui->actionExportar->setEnabled(db.open());
+    //ui->actionExportar->setEnabled(db.open());
     ui->actionCopiar->setEnabled(db.open());
     ui->menuImportar->setEnabled(db.open());
     ui->menuExportar->setEnabled(db.open());
