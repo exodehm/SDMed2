@@ -11,6 +11,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QSqlDatabase>
+#include <QMessageBox>
+#include <QFileDialog>
 
 DialogoListadoImprimir::DialogoListadoImprimir(const QString& ruta, QSqlDatabase db, QWidget *parent) :
     QDialog(parent), ui(new Ui::DialogoListadoImprimir), m_db(db), m_ruta(ruta)
@@ -119,10 +121,21 @@ void DialogoListadoImprimir::Imprimir()
                         pArgumentos<<m_lista.at(i).ruta;
                         //pArgumentos<<m_db.databaseName()<<m_db.hostName()<<QString::number(m_db.port())<<m_db.userName()<<m_db.password();
                         qDebug()<<m_lista.at(i).nombre<<"-"<<m_lista.at(i).ruta;
-                        int res = ::PyRun::loadModule(m_ruta, pModulo, pFuncion, pArgumentos);//if(::PyRun::loadModule(m_lista.at(i).ruta, pModulo, pFuncion, pArgumentos))
-                                {
-                                    qDebug()<< __PRETTY_FUNCTION__ << "successful"<<res;
-                                }
+                        int res = ::PyRun::loadModule(m_ruta, pModulo, pFuncion, pArgumentos);
+                        if (res == ::PyRun::Resultado::Success)
+                            {
+                                qDebug()<< __PRETTY_FUNCTION__ << "successful"<<res;
+                                QString fileName = QFileDialog::getSaveFileName(this, tr("Guardar archivo"),
+                                                           m_ruta,
+                                                           tr("Hoja de calculo (*.xslx)"));
+                            }
+                        else //definir los mensajes de error en caso de no successful
+                        {
+                            int ret = QMessageBox::warning(this, tr("Problemas al imprimir"),
+                                                           tr("Ha habido problemas con el script de python"),
+                                                           QMessageBox::Ok);
+                            qDebug()<<"ret "<<ret;
+                        }
                     }
                 }
             }
