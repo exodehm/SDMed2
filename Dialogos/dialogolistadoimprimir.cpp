@@ -1,5 +1,6 @@
 #include "dialogolistadoimprimir.h"
 #include "ui_dialogolistadoimprimir.h"
+#include "pyrun.h"
 #include <QDir>
 #include <QDebug>
 #include <QRadioButton>
@@ -9,9 +10,10 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QSqlDatabase>
 
-DialogoListadoImprimir::DialogoListadoImprimir(QString ruta, QWidget *parent) :
-    QDialog(parent), ui(new Ui::DialogoListadoImprimir)
+DialogoListadoImprimir::DialogoListadoImprimir(const QString& ruta, QSqlDatabase db, QWidget *parent) :
+    QDialog(parent), ui(new Ui::DialogoListadoImprimir), m_db(db), m_ruta(ruta)
 {
     ui->setupUi(this);
     QDir dir_plugins(ruta);
@@ -29,62 +31,35 @@ DialogoListadoImprimir::DialogoListadoImprimir(QString ruta, QWidget *parent) :
         {
             if (fichero.filePath().contains("metadata.json"))
             {
+                qDebug()<<"fichero "<<fichero.absolutePath()<<" - "<<fichero.filePath();
                 sTipoListado TL;
                 if (LeerJSON(TL,fichero.filePath()))
                 {
-                    TL.ruta="";
-                    lista.append(TL);
+                    TL.ruta=fichero.absolutePath();
+                    m_lista.append(TL);
                 }
             }
         }
     }
     //botones
-    QVBoxLayout* botoneralayout[nTipoListados];
-    botoneralayout[0]= new QVBoxLayout(ui->groupBoxGeneral);
-    botoneralayout[1]= new QVBoxLayout(ui->groupBoxListados);
-    botoneralayout[2]= new QVBoxLayout(ui->groupBoxMed);
-    botoneralayout[3]= new QVBoxLayout(ui->groupBoxPres);
-    for (int i = 0;i<lista.size();i++)
+    m_botoneralayout[eTipo::LISTADO]= new QVBoxLayout(ui->groupBoxListados);
+    m_botoneralayout[eTipo::MEDICION]= new QVBoxLayout(ui->groupBoxMedPres);
+    m_botoneralayout[eTipo::CERTIFICACION]= new QVBoxLayout(ui->groupBoxCertif);
+    m_botoneralayout[eTipo::GENERAL]= new QVBoxLayout(ui->groupBoxSinClasif);
+
+    for (int i = 0;i<m_lista.size();i++)
     {
-        QRadioButton* boton =  new QRadioButton(lista.at(i).nombre);
-        botoneralayout[lista.at(i).tipo]->addWidget(boton);
+        QRadioButton* boton =  new QRadioButton(m_lista.at(i).nombre);
+        m_botoneralayout[m_lista.at(i).tipo]->addWidget(boton);
+        m_lista[i].boton = boton;
     }
+    QObject::connect(ui->botonImprimir,SIGNAL(pressed()),this,SLOT(Imprimir()));
+    QObject::connect(ui->botonSalir,SIGNAL(pressed()),this,SLOT(accept()));
 }
 
 DialogoListadoImprimir::~DialogoListadoImprimir()
 {
     delete ui;
-}
-
-QFileInfoList DialogoListadoImprimir::ComprobarFicheros(const QString &ruta)
-{
-    QDir aplicacion(ruta);
-    aplicacion.setFilter(QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
-    QFileInfoList ret = aplicacion.entryInfoList();
-    QStringList filtros;
-    filtros<<"*.json"<<"*.py";
-    foreach (const QFileInfo &subd, ret)
-    {
-        QString subdirectorio = ruta;
-        subdirectorio.append("/").append(subd.fileName());
-        qDebug()<<"Subdirectorio "<<subdirectorio;
-        QDir aplicacion(subdirectorio);
-        QFileInfoList ret = aplicacion.entryInfoList(filtros, QDir::Files);
-        foreach (const QFileInfo& fichero, ret)
-        {
-            qDebug()<<"A ver que pasa "<<fichero;
-            //NombreListado(fichero.filePath());
-            if (fichero.filePath().contains("metadata.json"))
-            {
-                sTipoListado TL;
-                if (LeerJSON(TL,fichero.filePath()))
-                {
-                    lista.append(TL);
-                }
-            }
-        }
-    }
-    return ret;
 }
 
 bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombrefichero)
@@ -106,15 +81,51 @@ bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombre
     for(const QJsonValue val: arrayscript)
     {
         QJsonObject loopObj = val.toObject();
-        qDebug() << loopObj["nombre"].toString();
-        qDebug() << loopObj["tipo"].toString();
-        qDebug() << loopObj["version"].toString();
+        //qDebug() << loopObj["nombre"].toString();
+        //qDebug() << loopObj["tipo"].toString();
+        //qDebug() << loopObj["version"].toString();
         tipoL.nombre = loopObj["nombre"].toString();
         tipoL.tipo = static_cast<eTipo>(loopObj["tipo"].toInt());
+        //si el tipo por algun caso esta mal, le asignaremos el tipo general
+        if (tipoL.tipo<eTipo::LISTADO || tipoL.tipo>eTipo::CERTIFICACION)
+        {
+            tipoL.tipo = eTipo::GENERAL;
+        }
         if (!tipoL.nombre.isEmpty())
         {
             return true;
         }
     }
     return false;
+}
+
+void DialogoListadoImprimir::Imprimir()
+{
+    QGroupBox* g = qobject_cast<QGroupBox*>(m_botoneralayout[ui->tabWidget->currentIndex()]->parent());
+    if (g)
+    {
+        foreach (QRadioButton* button, g->findChildren<QRadioButton*>())
+        {
+            if (button->isChecked())
+            {
+                for( int i=0; i<m_lista.count(); ++i )
+                {
+                    if (m_lista.at(i).boton == button)
+                    {
+                        //QString ruta =m_lista.at(i).ruta;
+                        QString pModulo = "prueba";
+                        QString pFuncion = "Imprimir";
+                        QStringList pArgumentos;
+                        pArgumentos<<m_lista.at(i).ruta;
+                        //pArgumentos<<m_db.databaseName()<<m_db.hostName()<<QString::number(m_db.port())<<m_db.userName()<<m_db.password();
+                        qDebug()<<m_lista.at(i).nombre<<"-"<<m_lista.at(i).ruta;
+                        int res = ::PyRun::loadModule(m_ruta, pModulo, pFuncion, pArgumentos);//if(::PyRun::loadModule(m_lista.at(i).ruta, pModulo, pFuncion, pArgumentos))
+                                {
+                                    qDebug()<< __PRETTY_FUNCTION__ << "successful"<<res;
+                                }
+                    }
+                }
+            }
+        }
+    }
 }

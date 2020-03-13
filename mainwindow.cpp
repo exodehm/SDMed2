@@ -13,8 +13,6 @@
 #include "./imprimir.h"
 #include "./miundostack.h"
 
-#include "pyrun.h"
-
 #include <QMessageBox>
 #include <QDebug>
 #include <QLabel>
@@ -345,7 +343,7 @@ void MainWindow::ActionImprimir()
     //int res = ::PyRun::loadModule(QDir::home().absoluteFilePath(ruta),pModulo, pFuncion, pArgumentos);
     //qDebug()<<"Resultado: "<<res<<" "<<QDir::home().absoluteFilePath(ruta);
     //hacer un switch/case con los posibles errores
-    DialogoListadoImprimir* d = new DialogoListadoImprimir(ruta, this);
+    DialogoListadoImprimir* d = new DialogoListadoImprimir(ruta, db, this);
     int res = d->exec();
 
 }

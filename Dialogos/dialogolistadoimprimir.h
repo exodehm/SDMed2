@@ -3,12 +3,14 @@
 
 #include <QDialog>
 #include <QFileInfoList>
+#include <QSqlDatabase>
 
 namespace Ui {
 class DialogoListadoImprimir;
 }
 
 class QRadioButton;
+class QVBoxLayout;
 
 class DialogoListadoImprimir : public QDialog
 {
@@ -22,17 +24,22 @@ public:
       QString nombre;
       QString ruta;
       eTipo tipo;
+      QRadioButton* boton;
     };
-    explicit DialogoListadoImprimir(QString ruta, QWidget *parent = nullptr);
+    explicit DialogoListadoImprimir(const QString &ruta, QSqlDatabase db, QWidget *parent = nullptr);
     ~DialogoListadoImprimir();
 
-    QFileInfoList ComprobarFicheros(const QString& ruta);
     bool LeerJSON(sTipoListado &tipoL, const QString &nombrefichero);
+
+public slots:
+    void Imprimir();
 
 private:
     Ui::DialogoListadoImprimir *ui;
-    QRadioButton** botones;
-    QList<sTipoListado> lista;
+    QList<sTipoListado> m_lista;
+    QVBoxLayout* m_botoneralayout[nTipoListados];
+    QSqlDatabase m_db;
+    QString m_ruta;
 };
 
 #endif // DIALOGOLISTADOIMPRIMIR_H
