@@ -26,7 +26,7 @@ public:
       eTipo tipo;
       QRadioButton* boton;
     };
-    explicit DialogoListadoImprimir(const QString &ruta, QSqlDatabase db, QWidget *parent = nullptr);
+    explicit DialogoListadoImprimir(const QString &obra, QSqlDatabase db, QWidget *parent = nullptr);
     ~DialogoListadoImprimir();
 
     bool LeerJSON(sTipoListado &tipoL, const QString &nombrefichero);
@@ -40,6 +40,7 @@ private:
     QVBoxLayout* m_botoneralayout[nTipoListados];
     QSqlDatabase m_db;
     QString m_ruta;
+    QString m_obra;
 };
 
 #endif // DIALOGOLISTADOIMPRIMIR_H

@@ -14,11 +14,13 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
-DialogoListadoImprimir::DialogoListadoImprimir(const QString& ruta, QSqlDatabase db, QWidget *parent) :
-    QDialog(parent), ui(new Ui::DialogoListadoImprimir), m_db(db), m_ruta(ruta)
+DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase db, QWidget *parent) :
+    QDialog(parent), ui(new Ui::DialogoListadoImprimir), m_db(db), m_obra(obra)
 {
     ui->setupUi(this);
-    QDir dir_plugins(ruta);
+    QString pathPython = "/.sdmed/python/plugins/";
+    m_ruta = QDir::homePath()+pathPython;
+    QDir dir_plugins(m_ruta);
     dir_plugins.setFilter(QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
     QStringList filtros;
     QFileInfoList directorios = dir_plugins.entryInfoList();
@@ -33,7 +35,7 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& ruta, QSqlDatabase
         {
             if (fichero.filePath().contains("metadata.json"))
             {
-                qDebug()<<"fichero "<<fichero.absolutePath()<<" - "<<fichero.filePath();
+                //qDebug()<<"fichero "<<fichero.absolutePath()<<" - "<<fichero.filePath();
                 sTipoListado TL;
                 if (LeerJSON(TL,fichero.filePath()))
                 {
@@ -106,7 +108,7 @@ void DialogoListadoImprimir::Imprimir()
     QGroupBox* g = qobject_cast<QGroupBox*>(m_botoneralayout[ui->tabWidget->currentIndex()]->parent());
     if (g)
     {
-        foreach (QRadioButton* button, g->findChildren<QRadioButton*>())
+        foreach (const QRadioButton* button, g->findChildren<QRadioButton*>())
         {
             if (button->isChecked())
             {
@@ -116,23 +118,30 @@ void DialogoListadoImprimir::Imprimir()
                     {
                         //QString ruta =m_lista.at(i).ruta;
                         QString pModulo = "prueba";
-                        QString pFuncion = "Imprimir";
+                        QString pFuncion = "iniciar";
                         QStringList pArgumentos;
+                        pArgumentos<<m_db.databaseName()<<m_db.hostName()<<QString::number(m_db.port())<<m_db.userName()<<m_db.password();
+                        pArgumentos<<m_obra;
                         pArgumentos<<m_lista.at(i).ruta;
-                        //pArgumentos<<m_db.databaseName()<<m_db.hostName()<<QString::number(m_db.port())<<m_db.userName()<<m_db.password();
-                        qDebug()<<m_lista.at(i).nombre<<"-"<<m_lista.at(i).ruta;
+                        QString fileName = m_ruta;
+                        qDebug()<<fileName;
+                        if (ui->checkBoxGuardar->isChecked())
+                        {
+                            fileName = QFileDialog::getSaveFileName(this, tr("Guardar archivo"),
+                                                                            m_ruta,
+                                                                            tr("Hoja de calculo (*.xslx)"));
+                        }
+                        qDebug()<<"fichero con ruta completa "<<fileName;
                         int res = ::PyRun::loadModule(m_ruta, pModulo, pFuncion, pArgumentos);
                         if (res == ::PyRun::Resultado::Success)
-                            {
-                                qDebug()<< __PRETTY_FUNCTION__ << "successful"<<res;
-                                QString fileName = QFileDialog::getSaveFileName(this, tr("Guardar archivo"),
-                                                           m_ruta,
-                                                           tr("Hoja de calculo (*.xslx)"));
-                            }
+                        {
+                            qDebug()<< __PRETTY_FUNCTION__ << "successful"<<res;
+
+                        }
                         else //definir los mensajes de error en caso de no successful
                         {
                             int ret = QMessageBox::warning(this, tr("Problemas al imprimir"),
-                                                           tr("Ha habido problemas con el script de python"),
+                                                           tr("Ha habido problemas con el script de python"/*este mensaje* es el que hay que especificar el tipo de error*/),
                                                            QMessageBox::Ok);
                             qDebug()<<"ret "<<ret;
                         }

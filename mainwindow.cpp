@@ -343,7 +343,7 @@ void MainWindow::ActionImprimir()
     //int res = ::PyRun::loadModule(QDir::home().absoluteFilePath(ruta),pModulo, pFuncion, pArgumentos);
     //qDebug()<<"Resultado: "<<res<<" "<<QDir::home().absoluteFilePath(ruta);
     //hacer un switch/case con los posibles errores
-    DialogoListadoImprimir* d = new DialogoListadoImprimir(ruta, db, this);
+    DialogoListadoImprimir* d = new DialogoListadoImprimir((*obraActual)->LeeTabla(), db, this);
     int res = d->exec();
 
 }
@@ -569,7 +569,7 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     ui->actionGuardar->setEnabled(true);
     ui->actionCerrar->setEnabled(true);
     ui->actionExportar->setEnabled(true);
-    //ui->actionImportar->setEnabled(true);
+    ui->actionImprimir->setEnabled(true);
     ui->actionImprimir->setEnabled(true);    
     comboMedCert->setEnabled(true);
     botonCertificaciones->setEnabled(true);
