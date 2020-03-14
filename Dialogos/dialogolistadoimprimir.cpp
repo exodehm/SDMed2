@@ -123,15 +123,14 @@ void DialogoListadoImprimir::Imprimir()
                         pArgumentos<<m_db.databaseName()<<m_db.hostName()<<QString::number(m_db.port())<<m_db.userName()<<m_db.password();
                         pArgumentos<<m_obra;
                         pArgumentos<<m_lista.at(i).ruta;
-                        QString fileName = m_ruta;
-                        qDebug()<<fileName;
+                        QString fileName = "";
                         if (ui->checkBoxGuardar->isChecked())
                         {
                             fileName = QFileDialog::getSaveFileName(this, tr("Guardar archivo"),
                                                                             m_ruta,
                                                                             tr("Hoja de calculo (*.xslx)"));
                         }
-                        qDebug()<<"fichero con ruta completa "<<fileName;
+                        pArgumentos<<fileName;
                         int res = ::PyRun::loadModule(m_ruta, pModulo, pFuncion, pArgumentos);
                         if (res == ::PyRun::Resultado::Success)
                         {
