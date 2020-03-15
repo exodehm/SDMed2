@@ -117,7 +117,7 @@ void DialogoListadoImprimir::Imprimir()
                     if (m_lista.at(i).boton == button)
                     {
                         //QString ruta =m_lista.at(i).ruta;
-                        QString pModulo = "prueba";
+                        QString pModulo = "cargador";
                         QString pFuncion = "iniciar";
                         QStringList pArgumentos;
                         pArgumentos<<m_db.databaseName()<<m_db.hostName()<<QString::number(m_db.port())<<m_db.userName()<<m_db.password();
