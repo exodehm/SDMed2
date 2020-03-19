@@ -23,6 +23,8 @@ DialogoGestionObras::DialogoGestionObras(std::list<Instancia *> &ListaObras, QSq
     LlenarTabla();
     QObject::connect(this,SIGNAL(accepted()),SLOT(listaNombreObrasAbrir()));
     QObject::connect(this->ui->botonConectarBBDD,SIGNAL(clicked(bool)),this,SLOT(ConectarBBDD()));
+    QObject::connect(this->ui->botonImportarDB,SIGNAL(clicked(bool)),this,SLOT(ImportarDB()));
+    QObject::connect(this->ui->botonExportarDB,SIGNAL(clicked(bool)),this,SLOT(ExportadDB()));
 }
 
 DialogoGestionObras::~DialogoGestionObras()
@@ -131,4 +133,14 @@ bool DialogoGestionObras::ConectarBBDD()
         LlenarTabla();        
     }
     emit ActivarBotones(d->HayConexion());
+}
+
+void DialogoGestionObras::ExportadDB()
+{
+    qDebug()<<"Exportar DB";
+}
+
+void DialogoGestionObras::ImportarDB()
+{
+    qDebug()<<"Importar DB";
 }

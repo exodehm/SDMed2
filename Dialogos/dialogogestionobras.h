@@ -19,14 +19,16 @@ public:
     explicit DialogoGestionObras(std::list<Instancia*>&ListaObras, QSqlDatabase& db, QWidget *parent = nullptr);
     ~DialogoGestionObras();
     void LlenarTabla();
-    bool EstaAbierta(QString codigo);
+    bool EstaAbierta(QString codigo);    
 
 public slots:
     QList<QStringList> listaNombreObrasAbrir();
     void Borrar();
 
 private slots:
-    bool ConectarBBDD();    
+    bool ConectarBBDD();
+    void ExportadDB();
+    void ImportarDB();
 
 signals:
     void BorrarObra(QStringList datosobra);
