@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <QMessageBox>
+#include <QProcess>
+#include <QFileDialog>
 #include <QDebug>
 
 DialogoGestionObras::DialogoGestionObras(std::list<Instancia *> &ListaObras, QSqlDatabase& db, QWidget *parent) :
@@ -133,14 +135,96 @@ bool DialogoGestionObras::ConectarBBDD()
         LlenarTabla();        
     }
     emit ActivarBotones(d->HayConexion());
+    return true;
 }
 
 void DialogoGestionObras::ExportadDB()
 {
-    qDebug()<<"Exportar DB";
+    QString titulo = "Guardar copia de respaldo";
+    QString extension = "Postgres backup (*.backup);;All Files (*)";
+    QString path = QString();
+    QString fileName;
+    QProcess programa;
+    QStringList environment = programa.systemEnvironment();
+    QString commandToStart= "pg_dump";
+    QStringList argumentos;
+    argumentos<<"--host"<<m_db->hostName()<<"--port"<<QString::number(m_db->port())\
+             <<"--username"<<m_db->userName()<<"--format"<<"custom"<<"--verbose"<<"--no-password"<<"--file";
+#if defined(Q_WS_WIN) || defined(Q_WS_MAC)
+    fileName =  QFileDialog::getSaveFileName(this,
+                                             titulo,
+                                             path,
+                                             tr("Postgres backup (*.backup);;All Files (*)"),
+                                             &extension);
+#else //linux
+    QFileDialog dialog(this, titulo, path, extension);
+    dialog.setWindowModality(Qt::WindowModal);
+    QRegExp filter_regex(QLatin1String("(?:^\\*\\.(?!.*\\()|\\(\\*\\.)(\\w+)"));
+    QStringList filters = extension.split(QLatin1String(";;"));
+    if (!filters.isEmpty())
+    {
+        dialog.setNameFilter(filters.first());
+        if (filter_regex.indexIn(filters.first()) != -1)
+        {
+            dialog.setDefaultSuffix(filter_regex.cap(1));
+        }
+    }
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        fileName = dialog.selectedFiles().first();
+        QFileInfo info(fileName);
+        if (info.suffix().isEmpty() && !dialog.selectedNameFilter().isEmpty())
+        {
+            if (filter_regex.indexIn(dialog.selectedNameFilter()) != -1)
+            {
+                QString extension = filter_regex.cap(1);
+                fileName = fileName + QLatin1String(".") + extension;
+            }
+        }
+    }
+#endif  // Q_WS_MAC || Q_WS_WIN
+    int pos = fileName.lastIndexOf(QChar('/'));
+    path = fileName.left(pos);
+    qDebug()<<"filename "<<fileName;
+    argumentos<<fileName;
+    argumentos<<"--table";
+    argumentos<<"^*pruebas*";
+    argumentos<<"sdmed";
+    programa.start(commandToStart,argumentos);
+    foreach (const QString& s, programa.arguments()) {
+        qDebug()<<s;
+    }
+    bool started = programa.waitForStarted();
+    if (!programa.waitForFinished(10000)) // 10 Second timeout
+    {
+        programa.kill();
+        qDebug()<<"problema "<<started;
+    }
+    qDebug()<<"programa "<<programa.program();
+    int exitCode = programa.exitCode();
+    qDebug()<<"exitCode "<<exitCode<<" - "<<programa.exitStatus();
+
+    QString stdOutput = QString::fromLocal8Bit(programa.readAllStandardOutput());
+    QString stdError = QString::fromLocal8Bit(programa.readAllStandardError());
 }
 
 void DialogoGestionObras::ImportarDB()
 {
     qDebug()<<"Importar DB";
+    QString titulo = "Restaurar copia de respaldo";
+    QString extension = "Postgres backup (*.backup);;All Files (*)";
+    QString path = QString();
+    QString fileName;
+    QProcess programa;
+    QStringList environment = programa.systemEnvironment();
+    QString commandToStart= "pg_dump";
+    QStringList argumentos;
+    argumentos<<"--host"<<m_db->hostName()<<"--port"<<QString::number(m_db->port())\
+             <<"--username"<<m_db->userName()<<"--format"<<"custom"<<"--verbose"<<"--no-password"<<"--file";
+    fileName =  QFileDialog::getOpenFileName(this,
+                                             titulo,
+                                             path,
+                                             tr("Postgres backup (*.backup);;All Files (*)"),
+                                             &extension);
 }
