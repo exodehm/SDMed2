@@ -14,7 +14,7 @@ class DialogoGestionObras;
 class DialogoGestionObras : public QDialog
 {
     Q_OBJECT
-    enum eColumnas{CODIGO,RESUMEN,ABRIR,BORRAR};
+    enum eColumnas{CODIGO,RESUMEN,ABRIR,BORRAR,EXPORTAR};
 public:    
     explicit DialogoGestionObras(std::list<Instancia*>&ListaObras, QSqlDatabase& db, QWidget *parent = nullptr);
     ~DialogoGestionObras();
@@ -24,6 +24,8 @@ public:
 public slots:
     QList<QStringList> listaNombreObrasAbrir();
     void Borrar();
+    void ActualizarBotones();
+    void AnadirObrasABackup();
 
 private slots:
     bool ConectarBBDD();
@@ -40,6 +42,11 @@ private:
     QSqlDatabase* m_db;
     std::list<Instancia*>::iterator primer_elemento;
     std::list<Instancia*>::iterator ultimo_elemento;
+    QStringList m_listaObrasBackup;
+    QString m_role = "sdmed";
+    QString m_schema = "sdmed";
+    QString m_tooltipAnadir = "Marcar para añadir a copia de respaldo";
+    QString m_tooltipQuitar = "Quitar de la copia de respaldo";
 };
 
 #endif // DIALOGOTABLASLISTADOOBRAS_H

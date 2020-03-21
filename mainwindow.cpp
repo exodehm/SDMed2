@@ -265,7 +265,10 @@ bool MainWindow::BorrarBBDD(QStringList datosobra)
         QSqlQuery consulta;
         consulta.exec(cadenaborrartablacodigo);
         //qDebug()<<sender();
-        std::advance (it,1);
+        if (it!=ListaObras.end())
+        {
+            std::advance (it,1);
+        }
     }
     return true;
 }

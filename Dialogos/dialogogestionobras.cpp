@@ -19,9 +19,9 @@ DialogoGestionObras::DialogoGestionObras(std::list<Instancia *> &ListaObras, QSq
     primer_elemento = ListaObras.begin();
     ultimo_elemento = ListaObras.end();
     QStringList cabecera;
-    cabecera<<tr("Código")<<tr("Resumen")<<tr("Abrir")<<tr("Borrar");
+    cabecera<<tr("Código")<<tr("Resumen")<<tr("Abrir")<<tr("Borrar")<<tr("");
     ui->tabla->setColumnCount(cabecera.size());
-    ui->tabla->setHorizontalHeaderLabels(cabecera);
+    ui->tabla->setHorizontalHeaderLabels(cabecera);    
     LlenarTabla();
     QObject::connect(this,SIGNAL(accepted()),SLOT(listaNombreObrasAbrir()));
     QObject::connect(this->ui->botonConectarBBDD,SIGNAL(clicked(bool)),this,SLOT(ConectarBBDD()));
@@ -78,6 +78,17 @@ void DialogoGestionObras::LlenarTabla()
                 QObject::connect(btn_borrar,SIGNAL(clicked(bool)),this,SLOT(Borrar()));
                 ui->tabla->setCellWidget(fila,columna,btn_borrar);                
             }
+            else if (columna==eColumnas::EXPORTAR)
+            {
+                QPushButton* btn_exportar = new QPushButton(QIcon(QStringLiteral(":/images/anadir.png")),QString());
+                btn_exportar->setObjectName(QString("%1").arg(fila));
+                btn_exportar->setCheckable(true);
+                btn_exportar->setMaximumWidth(30);
+                btn_exportar->setToolTip(m_tooltipAnadir);
+                btn_exportar->setStyleSheet("QPushButton{ background-color: lightgreen }");
+                QObject::connect(btn_exportar,SIGNAL(clicked(bool)),this,SLOT(ActualizarBotones()));
+                ui->tabla->setCellWidget(fila,columna,btn_exportar);
+            }
         }
         fila++;//paso a la siguiente fila        
     }    
@@ -125,6 +136,42 @@ void DialogoGestionObras::Borrar()
     datosobra<<codigoobra<<resumenobra;
     emit BorrarObra(datosobra);
     ui->tabla->removeRow(fila);
+    ui->tabla->resizeColumnsToContents();
+}
+
+void DialogoGestionObras::ActualizarBotones()
+{
+    QPushButton* btn = qobject_cast<QPushButton*>(sender());
+    if (btn->isChecked())
+    {
+        btn->setStyleSheet("QPushButton{ background-color: red }");
+        btn->setIcon(QIcon(QStringLiteral(":/images/quitar.png")));
+        btn->setToolTip(m_tooltipQuitar);
+    }
+    else
+    {
+        btn->setStyleSheet("QPushButton{ background-color: lightgreen }");
+        btn->setIcon(QIcon(QStringLiteral(":/images/anadir.png")));
+        btn->setToolTip(m_tooltipAnadir);
+    }
+    m_listaObrasBackup.clear();
+    for (int i = 0;i < ui->tabla->rowCount();i++)
+    {
+        QPushButton* btn1 = qobject_cast<QPushButton*>(ui->tabla->cellWidget(i,eColumnas::EXPORTAR));
+        if (btn1 && btn1->isChecked())
+        {
+            //qDebug()<< ui->tabla->item(i,eColumnas::CODIGO)->data(Qt::DisplayRole).toString();
+            QString tabla = "^\"""" + ui->tabla->item(i,eColumnas::CODIGO)->data(Qt::DisplayRole).toString() + "\"""*";
+            m_listaObrasBackup<<"--table"<<tabla;
+        }
+    }
+    ui->botonExportarDB->setEnabled(!m_listaObrasBackup.isEmpty());
+}
+
+void DialogoGestionObras::AnadirObrasABackup()
+{
+
+
 }
 
 bool DialogoGestionObras::ConectarBBDD()
@@ -148,6 +195,7 @@ void DialogoGestionObras::ExportadDB()
     QStringList environment = programa.systemEnvironment();
     QString commandToStart= "pg_dump";
     QStringList argumentos;
+    QStringList tablasExportar;
     argumentos<<"--host"<<m_db->hostName()<<"--port"<<QString::number(m_db->port())\
              <<"--username"<<m_db->userName()<<"--format"<<"custom"<<"--verbose"<<"--no-password"<<"--file";
 #if defined(Q_WS_WIN) || defined(Q_WS_MAC)
@@ -183,14 +231,34 @@ void DialogoGestionObras::ExportadDB()
             }
         }
     }
-#endif  // Q_WS_MAC || Q_WS_WIN
+#endif  // Q_WS_MAC || Q_WS_WIN*/
+    for (int i = 0;i < ui->tabla->rowCount();i++)
+    {
+        qDebug()<<ui->tabla->cellWidget(i,eColumnas::ABRIR);
+        QCheckBox* casilla = qobject_cast<QCheckBox*>(ui->tabla->cellWidget(i,eColumnas::ABRIR));
+        if (casilla && casilla->isChecked())
+        {
+            qDebug()<< ui->tabla->item(i,eColumnas::CODIGO)->data(Qt::DisplayRole).toString();
+            QString tabla = "^\"""" + ui->tabla->item(i,eColumnas::CODIGO)->data(Qt::DisplayRole).toString() + "\"""*";
+            tablasExportar<<"--table"<<tabla;
+        }
+    }
     int pos = fileName.lastIndexOf(QChar('/'));
     path = fileName.left(pos);
     qDebug()<<"filename "<<fileName;
     argumentos<<fileName;
-    argumentos<<"--table";
-    argumentos<<"^*pruebas*";
-    argumentos<<"sdmed";
+    //meto las tablas a exportar
+    for (int i = 0;i<tablasExportar.count();i++)
+    {
+        argumentos.append(tablasExportar.at(i));
+    }
+    //argumentos<<"--table";
+    //argumentos<<"^*pruebas*";
+    foreach (const QString& argObra, m_listaObrasBackup)
+    {
+        argumentos<<argObra;
+    }
+    argumentos<<m_db->databaseName();
     programa.start(commandToStart,argumentos);
     foreach (const QString& s, programa.arguments()) {
         qDebug()<<s;
@@ -199,14 +267,14 @@ void DialogoGestionObras::ExportadDB()
     if (!programa.waitForFinished(10000)) // 10 Second timeout
     {
         programa.kill();
-        qDebug()<<"problema "<<started;
+        //qDebug()<<"problema "<<started;
     }
-    qDebug()<<"programa "<<programa.program();
     int exitCode = programa.exitCode();
-    qDebug()<<"exitCode "<<exitCode<<" - "<<programa.exitStatus();
-
+    qDebug()<<"exit status"<<exitCode;
     QString stdOutput = QString::fromLocal8Bit(programa.readAllStandardOutput());
     QString stdError = QString::fromLocal8Bit(programa.readAllStandardError());
+    qDebug()<<"Salida: "<<stdOutput;
+    qDebug()<<"Errores: "<<stdError;
 }
 
 void DialogoGestionObras::ImportarDB()
@@ -218,13 +286,33 @@ void DialogoGestionObras::ImportarDB()
     QString fileName;
     QProcess programa;
     QStringList environment = programa.systemEnvironment();
-    QString commandToStart= "pg_dump";
+    QString commandToStart= "pg_restore";
     QStringList argumentos;
     argumentos<<"--host"<<m_db->hostName()<<"--port"<<QString::number(m_db->port())\
-             <<"--username"<<m_db->userName()<<"--format"<<"custom"<<"--verbose"<<"--no-password"<<"--file";
+             <<"--username"<<m_db->userName()<<"--dbname"<<m_db->databaseName()\
+            <<"--role"<<m_role<<"--schema"<<m_schema<<"--verbose";
     fileName =  QFileDialog::getOpenFileName(this,
                                              titulo,
                                              path,
                                              tr("Postgres backup (*.backup);;All Files (*)"),
                                              &extension);
+    argumentos<<fileName;
+    int pos = fileName.lastIndexOf(QChar('/'));
+    path = fileName.left(pos);
+    programa.start(commandToStart,argumentos);
+    foreach (const QString& s, programa.arguments()) {
+        qDebug()<<s;
+    }
+    bool started = programa.waitForStarted();
+    if (!programa.waitForFinished(10000)) // 10 Second timeout
+    {
+        programa.kill();
+        //qDebug()<<"problema "<<started;
+    }
+    int exitCode = programa.exitCode();
+    qDebug()<<"exit status"<<exitCode;
+    QString stdOutput = QString::fromLocal8Bit(programa.readAllStandardOutput());
+    QString stdError = QString::fromLocal8Bit(programa.readAllStandardError());
+    qDebug()<<"Salida: "<<stdOutput;
+    qDebug()<<"Errores: "<<stdError;
 }
