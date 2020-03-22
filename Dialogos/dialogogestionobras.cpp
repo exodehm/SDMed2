@@ -17,11 +17,7 @@ DialogoGestionObras::DialogoGestionObras(std::list<Instancia *> &ListaObras, QSq
     ui->setupUi(this);
     m_db = &db;
     primer_elemento = ListaObras.begin();
-    ultimo_elemento = ListaObras.end();
-    QStringList cabecera;
-    cabecera<<tr("Código")<<tr("Resumen")<<tr("Abrir")<<tr("Borrar")<<tr("");
-    ui->tabla->setColumnCount(cabecera.size());
-    ui->tabla->setHorizontalHeaderLabels(cabecera);    
+    ultimo_elemento = ListaObras.end();    
     LlenarTabla();
     QObject::connect(this,SIGNAL(accepted()),SLOT(listaNombreObrasAbrir()));
     QObject::connect(this->ui->botonConectarBBDD,SIGNAL(clicked(bool)),this,SLOT(ConectarBBDD()));
@@ -36,7 +32,11 @@ DialogoGestionObras::~DialogoGestionObras()
 
 void DialogoGestionObras::LlenarTabla()
 {
-    ui->tabla->setRowCount(0);
+    ui->tabla->clear();
+    QStringList cabecera;
+    cabecera<<tr("Código")<<tr("Resumen")<<tr("Abrir")<<tr("Borrar")<<tr("");
+    ui->tabla->setColumnCount(cabecera.size());
+    ui->tabla->setHorizontalHeaderLabels(cabecera);
     QSqlQuery consultaBBDD;
     QString codigo, resumen;
     QString cadenaConsultaBBDD = "SELECT * FROM ver_obras_BBDD()";
@@ -56,27 +56,27 @@ void DialogoGestionObras::LlenarTabla()
             {
                 QTableWidgetItem *item = new QTableWidgetItem(codigo);
                 item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-                ui->tabla->setItem(fila,columna,item);                
+                ui->tabla->setItem(fila,columna,item);
             }
             else if (columna==eColumnas::RESUMEN)
             {
                 QTableWidgetItem *item = new QTableWidgetItem(resumen);
                 item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-                ui->tabla->setItem(fila,columna,item);                
+                ui->tabla->setItem(fila,columna,item);
             }
             else if (columna==eColumnas::ABRIR)
             {
                 QCheckBox* itemcheck = new QCheckBox(this);
                 itemcheck->setEnabled(!EstaAbierta(codigo));
                 QObject::connect(itemcheck,SIGNAL(clicked(bool)),this,SLOT(listaNombreObrasAbrir()));
-                ui->tabla->setCellWidget(fila,columna,itemcheck);                
+                ui->tabla->setCellWidget(fila,columna,itemcheck);
             }
             else if (columna==eColumnas::BORRAR)
             {
                 QPushButton* btn_borrar = new QPushButton(tr("Borrar"));//,ui->tabla);
                 btn_borrar->setObjectName(QString("%1").arg(fila));
                 QObject::connect(btn_borrar,SIGNAL(clicked(bool)),this,SLOT(Borrar()));
-                ui->tabla->setCellWidget(fila,columna,btn_borrar);                
+                ui->tabla->setCellWidget(fila,columna,btn_borrar);
             }
             else if (columna==eColumnas::EXPORTAR)
             {
@@ -95,7 +95,7 @@ void DialogoGestionObras::LlenarTabla()
     ui->tabla->resizeColumnsToContents();
 }
 
-bool DialogoGestionObras::EstaAbierta(QString codigo)
+bool DialogoGestionObras::EstaAbierta(const QString& codigo)
 {
     auto it = primer_elemento;
     while (it!= ultimo_elemento)
@@ -166,12 +166,6 @@ void DialogoGestionObras::ActualizarBotones()
         }
     }
     ui->botonExportarDB->setEnabled(!m_listaObrasBackup.isEmpty());
-}
-
-void DialogoGestionObras::AnadirObrasABackup()
-{
-
-
 }
 
 bool DialogoGestionObras::ConectarBBDD()
@@ -309,6 +303,7 @@ void DialogoGestionObras::ImportarDB()
         programa.kill();
         //qDebug()<<"problema "<<started;
     }
+    LlenarTabla();
     int exitCode = programa.exitCode();
     qDebug()<<"exit status"<<exitCode;
     QString stdOutput = QString::fromLocal8Bit(programa.readAllStandardOutput());

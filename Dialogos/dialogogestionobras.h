@@ -19,13 +19,12 @@ public:
     explicit DialogoGestionObras(std::list<Instancia*>&ListaObras, QSqlDatabase& db, QWidget *parent = nullptr);
     ~DialogoGestionObras();
     void LlenarTabla();
-    bool EstaAbierta(QString codigo);    
+    bool EstaAbierta(const QString& codigo);
 
 public slots:
     QList<QStringList> listaNombreObrasAbrir();
     void Borrar();
-    void ActualizarBotones();
-    void AnadirObrasABackup();
+    void ActualizarBotones();    
 
 private slots:
     bool ConectarBBDD();
