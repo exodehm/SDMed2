@@ -251,14 +251,14 @@ bool MainWindow::BorrarBBDD(QStringList datosobra)
             }
         }
         //primera accion, borrar la obra de la ventana principal
-        obraActual = it;
-        ActionCerrar();
-        //segunda accion, exportar a bc3 si esta seleccionada la accion
         if (d->Exportar())
         {
             Exportar(datosobra.at(0));
             qDebug()<<"se guarda la obra";
         }
+        //segunda accion, exportar a bc3 si esta seleccionada la accion
+        obraActual = it;
+        ActionCerrar();
         //tercera accion, borrar la obra de la BBDD
         QString cadenaborrartablacodigo = "SELECT borrar_obra ('"+datosobra.at(0)+"');";
         //qDebug()<<cadenaborrartablacodigo;
