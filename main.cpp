@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     //QApplication::setStyle(QStyleFactory::create("Motif"));
 
     int id = QFontDatabase::addApplicationFont(":/Fuentes/Comfortaa-Regular.ttf");
-    qDebug()<<id;
+    //qDebug()<<id;
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
     QFont font(family,10);
     qApp->setFont(font); 
