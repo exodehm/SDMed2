@@ -192,7 +192,7 @@ void DialogoGestionObras::ExportadDB()
     QStringList tablasExportar;
     argumentos<<"--host"<<m_db->hostName()<<"--port"<<QString::number(m_db->port())\
              <<"--username"<<m_db->userName()<<"--format"<<"custom"<<"--verbose"<<"--no-password"<<"--file";
-#if defined(Q_WS_WIN) || defined(Q_WS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
     fileName =  QFileDialog::getSaveFileName(this,
                                              titulo,
                                              path,
@@ -225,7 +225,7 @@ void DialogoGestionObras::ExportadDB()
             }
         }
     }
-#endif  // Q_WS_MAC || Q_WS_WIN*/
+#endif  // Q_OS_MAC || Q_OS_WIN
     for (int i = 0;i < ui->tabla->rowCount();i++)
     {
         qDebug()<<ui->tabla->cellWidget(i,eColumnas::ABRIR);
