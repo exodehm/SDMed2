@@ -15,7 +15,6 @@ class DialogoOperacionesBBDD : public QDialog
 public:
     explicit DialogoOperacionesBBDD(QString servidor, QString puerto, QWidget *parent = nullptr);
     ~DialogoOperacionesBBDD();
-    void ActivarBotones();
     void Comprobaciones();
 
 private slots:

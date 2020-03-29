@@ -9,7 +9,7 @@ DialogoOperacionesBBDD::DialogoOperacionesBBDD(QString servidor, QString puerto,
     ui->setupUi(this);
     ui->lineEditPuerto->setText(puerto);
     ui->lineEditServidor->setText(servidor);
-    ui->lineEditSuperUser->setText("postgres");
+    ui->lineEditSuperUser->setText("");
     db = QSqlDatabase::addDatabase("QPSQL");
     QObject::connect(ui->botonComprobar,SIGNAL(clicked(bool)),this,SLOT(Conectar()));
     QObject::connect(ui->botonRole,SIGNAL(clicked(bool)),this,SLOT(CrearRole()));
@@ -22,11 +22,6 @@ DialogoOperacionesBBDD::~DialogoOperacionesBBDD()
     delete ui;
 }
 
-void DialogoOperacionesBBDD::ActivarBotones()
-{
-
-}
-
 void DialogoOperacionesBBDD::Comprobaciones()
 {
     //compropbar si existe el role sdmed
@@ -37,6 +32,7 @@ void DialogoOperacionesBBDD::Comprobaciones()
     while (consulta.next())
     {
         hayRoleSdmed = consulta.value(0).toBool();
+        qDebug()<<"Consulta hay role= "<<hayRoleSdmed;
     }
     if (!hayRoleSdmed)
     {
@@ -44,6 +40,15 @@ void DialogoOperacionesBBDD::Comprobaciones()
         ui->botonRole->setText("Crear role");
         ui->labelRole->setEnabled(true);
         ui->botonRole->setEnabled(true);
+        qDebug()<<"Consulta hay role 1= "<<hayRoleSdmed;
+    }
+    else
+    {
+        ui->labelRole->setText(tr("Existe el role \"sdmed\""));
+        ui->botonRole->setText("...");
+        ui->labelRole->setEnabled(true);
+        ui->botonRole->setEnabled(false);
+        qDebug()<<"Consulta hay role 2= "<<hayRoleSdmed;
     }
     //compropbar si existe la base de datos
     QString cadenaComprobarBBDD = "SELECT 1 FROM pg_database WHERE datname='sdmed'";
@@ -109,7 +114,6 @@ bool DialogoOperacionesBBDD::Conectar()
     if (db.open())
     {
         Comprobaciones();
-        ActivarBotones();
         return true;
     }
     return false;
@@ -118,9 +122,10 @@ bool DialogoOperacionesBBDD::Conectar()
 bool DialogoOperacionesBBDD::CrearRole()
 {
     qDebug()<<"Crear role";
-    QString cadenaCrearRole = "CREATE ROLE sdmed";
+    QString cadenaCrearRole = "CREATE ROLE sdmed WITH LOGIN";
     qDebug()<<cadenaCrearRole;
     QSqlQuery consulta(cadenaCrearRole,db);
+    Comprobaciones();
     return consulta.isValid();
 }
 

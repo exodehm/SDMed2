@@ -24,30 +24,7 @@ SET row_security = off;
 --
 
 CREATE SCHEMA IF NOT EXISTS sdmed;
-
---
--- TOC entry 318 (class 1255 OID 39448)
--- Name: create_role_if_not_exists(name); Type: FUNCTION; Schema: sdmed; Owner: sdmed
---
-
-CREATE FUNCTION sdmed.create_role_if_not_exists(rolename name) RETURNS text
-    LANGUAGE plpgsql
-    AS $$
-BEGIN
-    IF NOT EXISTS (SELECT * FROM pg_roles WHERE rolname = rolename) THEN
-        EXECUTE format('CREATE ROLE %I', rolename);
-        RETURN 'CREATE ROLE';
-    ELSE
-        RETURN format('ROLE ''%I'' ALREADY EXISTS', rolename);
-    END IF;
-END;
-$$;
-
-SELECT create_role_if_not_exists ('sdmed')
-
-
 ALTER SCHEMA sdmed OWNER TO sdmed;
-ALTER FUNCTION sdmed.create_role_if_not_exists(rolename name) OWNER TO sdmed;
 
 --
 -- TOC entry 1 (class 3079 OID 13081)
