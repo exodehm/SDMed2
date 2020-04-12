@@ -1,0 +1,24 @@
+{
+    "comentarios" : "tipo de listado: 0 listado, 1 mediciones y presupuestos, 2 certificaciones, 3 general",
+    "datos_script":
+    [
+        {
+            "nombre" :"Listado dummy para pruebas",
+            "tipo" : 3,
+            "version" : "0.1",
+            "descripcion" : "Listado dummy",
+            "icono" : "",
+            "experimental" : "True",
+            "depreciado" : "False",
+            "repositorio" : ""
+        }
+    ],
+    "datos_autor" :
+    [
+        {
+            "nombre" : "David de las Heras",
+            "email" :   "sdmed@gmail.com",
+            "web" : ""            
+        }
+    ]
+}

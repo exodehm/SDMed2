@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
 
 def iniciar(*datos):
-	ruta = os.path.dirname(__file__) + "/"	
+	ruta = os.path.dirname(__file__) + "/"
 	conexion = QtSql.QSqlDatabase('QPSQL')
 	conexion.setDatabaseName(datos[0])
 	conexion.setHostName(datos[1])
@@ -93,8 +93,9 @@ def iniciar(*datos):
 	if conexion.open():
 		print('Successful')
 		app = QtWidgets.QApplication.instance()
+		print (app)
 		if app is None:
-			app = QtWidgets.QApplication([])
+			app = QtWidgets.QApplication([])			
 		myapp = DialogoImprimir(getPlugins(ruta), conexion, obraActual)
 		myapp.show()
 		return myapp.exec_()		

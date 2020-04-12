@@ -1,0 +1,24 @@
+{
+    "comentarios" : "tipo de listado: 0 listado, 1 mediciones y presupuestos, 2 certificaciones, 3 general",
+    "datos_script":
+    [
+        {
+            "nombre" :"Mediciones y Presupuestos",
+            "tipo" : 1,
+            "version" : "0.1",
+            "descripcion" : "Desglose de las mediciones del proyecto",
+            "icono" : "",
+            "experimental" : "True",
+            "depreciado" : "False",
+            "repositorio" : ""
+        }
+    ],
+    "datos_autor" :
+    [
+        {
+            "nombre" : "David de las Heras",
+            "email" :   "sdmed@gmail.com",
+            "web" : ""            
+        }
+    ]
+}

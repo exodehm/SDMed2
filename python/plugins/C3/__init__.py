@@ -8,9 +8,10 @@ import datetime
 def run():
     print("Plugin para imprimir resumen de presupuesto")
     
-def imprimir(conexion, obra, book):	
+def imprimir(conexion, obra):	
 	#abro una instancia de hoja de calculo	
-	sheet = book.active
+	wb = Workbook()
+	sheet = wb.active	
 	sheet.title = "RESUMEN DE PRESUPUESTO"
 	#cabecera
 	consulta = QtSql.QSqlQuery("SELECT resumen FROM \"" + obra + "_Conceptos\" AS C, \"" + obra + "_Relacion\" AS R WHERE C.codigo = R.codhijo AND R.codpadre IS NULL", conexion)
@@ -301,8 +302,8 @@ def imprimir(conexion, obra, book):
 	#firmas-situar
 	sheet.cell(column = offset_izquierdo,row = fila).font = ft_resaltada
 	sheet.cell(column = offset_izquierdo,row = fila, value = encabezado_firma_promotor)	
-	sheet.cell(column = offset_izquierdo+4,row = fila).font = ft_resaltada
-	sheet.cell(column = offset_izquierdo+4,row = fila, value = encabezado_firma_proyectista)
+	sheet.cell(column = offset_izquierdo+3,row = fila).font = ft_resaltada
+	sheet.cell(column = offset_izquierdo+3,row = fila, value = encabezado_firma_proyectista)
 	fila = fila + 3
 	sheet.cell(column = offset_izquierdo,row = fila).font = ft_normal
 	sheet.cell(column = offset_izquierdo,row = fila, value = nombre_promotor1)		
@@ -315,8 +316,7 @@ def imprimir(conexion, obra, book):
 	sheet.cell(column = offset_izquierdo+4,row = fila, value = nombre_proyectista2)	
 	#ajuste del texto a la pagina
 	#sheet.sheet_properties.pageSetUpPr.fitToPage = True
-	
-	book.save('resumen.xlsx')
+	return wb
 	
 def as_text(value):
     if value is None:

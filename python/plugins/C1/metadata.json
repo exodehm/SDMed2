@@ -1,0 +1,24 @@
+{
+    "comentarios" : "tipo de listado: 0 listado, 1 mediciones y presupuestos, 2 certificaciones, 3 general",
+    "datos_script":
+    [
+        {
+            "nombre" :"Listado de Precios Auxiliares",
+            "tipo" : 0,
+            "version" : "0.1",
+            "descripcion" : "Relación de precios auxiliares que intervienen en la obra",
+            "icono" : "",
+            "experimental" : "True",
+            "depreciado" : "False",
+            "repositorio" : ""
+        }
+    ],
+    "datos_autor" :
+    [
+        {
+            "nombre" : "David de las Heras",
+            "email" :   "sdmed@gmail.com",
+            "web" : ""            
+        }
+    ]
+}

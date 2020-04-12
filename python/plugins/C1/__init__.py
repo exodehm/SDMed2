@@ -18,18 +18,27 @@ class Columnas(Enum):
 def run():
     print("Plugin para imprimir precios auxiliares de mano de obra, materiales y maquinaria")
     
-def imprimir(conexion, obra, book):
+def imprimir(conexion, obra):
+	wb = Workbook()
+	sheet = wb.active
 	tipo = 1
-	consulta = QtSql.QSqlQuery("SELECT * FROM ver_conceptos_cantidad('"+ obra+"','"+str(tipo)+"')", conexion)
+	#consulta = QtSql.QSqlQuery(conexion)
+	consulta = QtSql.QSqlQuery ("SELECT * FROM ver_conceptos_cantidad('"+ obra+"','"+str(tipo)+"')",conexion)
+	#consulta.exec_("SELECT * FROM ver_conceptos_cantidad1('"+ obra+"','"+str(tipo)+"')")
+	print (consulta.lastQuery())
+	if not conexion:
+		print ("la hemos cagado")
+	else:
+		print ("chachipiruli")
 	print (consulta.lastError().text())
 	rec = consulta.record()
+	print (rec.count())
 	codigo = rec.indexOf("codigo")
 	cantidad = rec.indexOf("cantidad")
 	ud = rec.indexOf("ud")
 	resumen = rec.indexOf("resumen");
 	precio = rec.indexOf("precio");
-	#abro una instancia de hoja de calculo		
-	sheet = book.active
+	#abro una instancia de hoja de calculo	
 	sheet.title = "Listado de Auxiliares"
 	#fuentes
 	ft_resaltada = Font(name='Arial', size=11, bold=True)
@@ -140,13 +149,11 @@ def imprimir(conexion, obra, book):
 	#	ancho = max(len(as_text(cell.value)) for cell in columnaResumen)
 	sheet.column_dimensions[get_column_letter(Columnas.CResumen.value)].width = 65-ancho_columnas
 	
-	
-		
+	return wb	
 		
 	#ajuste del texto a la pagina
 	#sheet.sheet_properties.pageSetUpPr.fitToPage = True
-			
-	book.save('listado_conceptos.xlsx')
+	#book.save('patata.xlsx')	
 	
 def as_text(value):
     if value is None:

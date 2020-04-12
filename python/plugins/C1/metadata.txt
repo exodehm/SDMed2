@@ -2,12 +2,13 @@
 
 [general]
 name=01 Listado de Precios Auxiliares
+tipo = Listado;
 email=d.gis.consultores@gmail.com
 author=SDMed
 SDMedMinimumVersion=0.1
 description=Relación de precios auxiliares que intervienen en la obra
 about=Utilidad para información
-version=version 1.0
+version=version 0.1
 tracker=http://bugs.itopen.it
 repository=http://www.itopen.it/repo
 ; end of mandatory metadata
@@ -18,9 +19,7 @@ repository=http://www.itopen.it/repo
 category=Database
 changelog=The changelog lists the plugin versions
     and their changes as in the example below:
-    1.0 - First stable release
-    0.9 - All features implemented
-    0.8 - First testing release
+    0.1 Primera versión de pruebas
 
 ; Tags are in comma separated value format, spaces are allowed within the
 ; tag name.
@@ -29,7 +28,7 @@ changelog=The changelog lists the plugin versions
 tags=wkt,raster,hello world
 
 ; these metadata can be empty, they will eventually become mandatory.
-homepage=http://www.itopen.it
+homepage=http://www.sdmed.com
 icon=icon.png
 
 ; experimental flag (applies to the single version)
