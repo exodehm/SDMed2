@@ -301,7 +301,7 @@ void DialogoGestionObras::ImportarDB()
     if (!programa.waitForFinished(10000)) // 10 Second timeout
     {
         programa.kill();
-        //qDebug()<<"problema "<<started;
+        qDebug()<<"problema "<<started;
     }
     LlenarTabla();
     int exitCode = programa.exitCode();

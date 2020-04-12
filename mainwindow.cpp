@@ -319,16 +319,16 @@ bool MainWindow::GuardarObra(QString nombreFichero)
 void MainWindow::ActionImprimir()
 {   
     qDebug()<<"Current path"<<QDir::currentPath();
-    QString pathPython = "/.sdmed/python/plugins/";
+    /*QString pathPython = "/.sdmed/python/plugins/";
     QString ruta = QDir::homePath()+pathPython;
     QString pModulo = "plugin_loader";
     QString pFuncion = "iniciar";
-    QStringList pArgumentos;
+    QStringList pArgumentos;*/
     //argumentos
     //primero meto los datos de la conexion
-    pArgumentos<<db.databaseName()<<db.hostName()<<QString::number(db.port())<<db.userName()<<db.password();
+    //pArgumentos<<db.databaseName()<<db.hostName()<<QString::number(db.port())<<db.userName()<<db.password();
     //ahora meto los datos de la obra actual (nombre, padre e hijo)
-    if (HayObrasAbiertas())
+    /*if (HayObrasAbiertas())
     {
         pArgumentos<<(*obraActual)->LeeTabla();
 
@@ -341,8 +341,8 @@ void MainWindow::ActionImprimir()
     {
         QMessageBox::warning(this, tr("Aviso"),
                                        tr("Debe haber alguna obra abierta"),
-                                       QMessageBox::Ok);*/
-    }
+                                       QMessageBox::Ok);
+    }*/
     //int res = ::PyRun::loadModule(QDir::home().absoluteFilePath(ruta),pModulo, pFuncion, pArgumentos);
     //qDebug()<<"Resultado: "<<res<<" "<<QDir::home().absoluteFilePath(ruta);
     //hacer un switch/case con los posibles errores
