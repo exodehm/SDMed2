@@ -24,7 +24,7 @@ TablaBase::TablaBase(QWidget *parent): QTableView(parent)
     resizeRowsToContents();
     setEditTriggers(QAbstractItemView::SelectedClicked | QAbstractItemView::AnyKeyPressed);
 
-    cabeceraHorizontal->setSectionResizeMode(QHeaderView::Fixed);
+    //cabeceraHorizontal->setSectionResizeMode(QHeaderView::Fixed);
     btn = new QPushButton;
     cabeceraHorizontal->addScrollBarWidget(btn,Qt::AlignCenter);
     alturaFilas->setDefaultSectionSize(24);
