@@ -5,7 +5,7 @@
 -- Dumped from database version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
 -- Dumped by pg_dump version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
 
--- Started on 2020-03-29 10:03:19 CEST
+-- Started on 2020-04-15 20:24:55 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -23,7 +23,9 @@ SET row_security = off;
 -- Name: sdmed; Type: SCHEMA; Schema: -; Owner: sdmed
 --
 
-CREATE SCHEMA IF NOT EXISTS sdmed;
+CREATE SCHEMA sdmed;
+
+
 ALTER SCHEMA sdmed OWNER TO sdmed;
 
 --
@@ -35,7 +37,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 3098 (class 0 OID 0)
+-- TOC entry 3240 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -44,7 +46,7 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- TOC entry 712 (class 1247 OID 39244)
+-- TOC entry 743 (class 1247 OID 39244)
 -- Name: tp_certificacion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -57,7 +59,7 @@ CREATE TYPE sdmed.tp_certificacion AS (
 ALTER TYPE sdmed.tp_certificacion OWNER TO sdmed;
 
 --
--- TOC entry 715 (class 1247 OID 39266)
+-- TOC entry 746 (class 1247 OID 39266)
 -- Name: tp_color; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -74,7 +76,7 @@ CREATE TYPE sdmed.tp_color AS ENUM (
 ALTER TYPE sdmed.tp_color OWNER TO sdmed;
 
 --
--- TOC entry 696 (class 1247 OID 39281)
+-- TOC entry 728 (class 1247 OID 39281)
 -- Name: tp_concepto; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -95,7 +97,7 @@ CREATE TYPE sdmed.tp_concepto AS (
 ALTER TYPE sdmed.tp_concepto OWNER TO sdmed;
 
 --
--- TOC entry 699 (class 1247 OID 39284)
+-- TOC entry 733 (class 1247 OID 39284)
 -- Name: tp_copiarconcepto; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -109,7 +111,7 @@ CREATE TYPE sdmed.tp_copiarconcepto AS (
 ALTER TYPE sdmed.tp_copiarconcepto OWNER TO sdmed;
 
 --
--- TOC entry 702 (class 1247 OID 39287)
+-- TOC entry 771 (class 1247 OID 39883)
 -- Name: tp_relacion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -117,8 +119,8 @@ CREATE TYPE sdmed.tp_relacion AS (
 	id integer,
 	codpadre character varying,
 	codhijo character varying,
-	canpres numeric(7,3),
-	cancert numeric(7,3),
+	canpres numeric(13,3),
+	cancert numeric(13,3),
 	posicion smallint,
 	nivel smallint
 );
@@ -127,7 +129,7 @@ CREATE TYPE sdmed.tp_relacion AS (
 ALTER TYPE sdmed.tp_relacion OWNER TO sdmed;
 
 --
--- TOC entry 730 (class 1247 OID 39311)
+-- TOC entry 774 (class 1247 OID 39886)
 -- Name: tp_copiarrelacion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -141,7 +143,7 @@ CREATE TYPE sdmed.tp_copiarrelacion AS (
 ALTER TYPE sdmed.tp_copiarrelacion OWNER TO sdmed;
 
 --
--- TOC entry 727 (class 1247 OID 39308)
+-- TOC entry 755 (class 1247 OID 39308)
 -- Name: tp_guardarconcepto; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -155,7 +157,7 @@ CREATE TYPE sdmed.tp_guardarconcepto AS (
 ALTER TYPE sdmed.tp_guardarconcepto OWNER TO sdmed;
 
 --
--- TOC entry 711 (class 1247 OID 39296)
+-- TOC entry 742 (class 1247 OID 39296)
 -- Name: tp_medicion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -178,7 +180,7 @@ CREATE TYPE sdmed.tp_medicion AS (
 ALTER TYPE sdmed.tp_medicion OWNER TO sdmed;
 
 --
--- TOC entry 724 (class 1247 OID 39305)
+-- TOC entry 752 (class 1247 OID 39305)
 -- Name: tp_guardarmedicion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -192,7 +194,7 @@ CREATE TYPE sdmed.tp_guardarmedicion AS (
 ALTER TYPE sdmed.tp_guardarmedicion OWNER TO sdmed;
 
 --
--- TOC entry 721 (class 1247 OID 39302)
+-- TOC entry 777 (class 1247 OID 39889)
 -- Name: tp_guardarrelacion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -206,7 +208,7 @@ CREATE TYPE sdmed.tp_guardarrelacion AS (
 ALTER TYPE sdmed.tp_guardarrelacion OWNER TO sdmed;
 
 --
--- TOC entry 718 (class 1247 OID 39299)
+-- TOC entry 749 (class 1247 OID 39299)
 -- Name: tp_lineamedicion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -228,7 +230,7 @@ CREATE TYPE sdmed.tp_lineamedicion AS (
 ALTER TYPE sdmed.tp_lineamedicion OWNER TO sdmed;
 
 --
--- TOC entry 708 (class 1247 OID 39293)
+-- TOC entry 739 (class 1247 OID 39293)
 -- Name: tp_partida; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -249,7 +251,7 @@ CREATE TYPE sdmed.tp_partida AS (
 ALTER TYPE sdmed.tp_partida OWNER TO sdmed;
 
 --
--- TOC entry 705 (class 1247 OID 39290)
+-- TOC entry 736 (class 1247 OID 39290)
 -- Name: tp_propiedades; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -263,7 +265,7 @@ CREATE TYPE sdmed.tp_propiedades AS (
 ALTER TYPE sdmed.tp_propiedades OWNER TO sdmed;
 
 --
--- TOC entry 213 (class 1255 OID 39313)
+-- TOC entry 235 (class 1255 OID 39313)
 -- Name: actualizar_certificacion_actual(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -282,7 +284,7 @@ $_$;
 ALTER FUNCTION sdmed.actualizar_certificacion_actual(_nombretabla character varying, _fecha character varying) OWNER TO sdmed;
 
 --
--- TOC entry 229 (class 1255 OID 39314)
+-- TOC entry 339 (class 1255 OID 39314)
 -- Name: actualizar_desde_nodo(character varying, character varying, integer, double precision); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -306,7 +308,7 @@ DECLARE
     texto text;
     naturaleza smallint;
 BEGIN
---RAISE INFO 'aCTUALIZO EL NODO: %', _codigonodo;
+  RAISE INFO 'aCTUALIZO EL NODO: %', _codigonodo;
 --PRIMER PASO, DEFINIR SI MODIFICO LAS COLUMNAS preciomed/canpres o preciocert/cancert
 IF _num_cert = 0 THEN
     columnaprecio := 'preciomed';
@@ -371,7 +373,7 @@ $_$;
 ALTER FUNCTION sdmed.actualizar_desde_nodo(_nombretabla character varying, _codigonodo character varying, _num_cert integer, _coste_indirecto double precision) OWNER TO sdmed;
 
 --
--- TOC entry 230 (class 1255 OID 39315)
+-- TOC entry 251 (class 1255 OID 39315)
 -- Name: ajustar(character varying, double precision); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -401,7 +403,7 @@ $_$;
 ALTER FUNCTION sdmed.ajustar(_nombretabla character varying, _nuevo_valor double precision) OWNER TO sdmed;
 
 --
--- TOC entry 226 (class 1255 OID 39316)
+-- TOC entry 248 (class 1255 OID 39316)
 -- Name: anadir_certificacion(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -438,7 +440,7 @@ $_$;
 ALTER FUNCTION sdmed.anadir_certificacion(_nombretabla character varying, _fecha character varying) OWNER TO sdmed;
 
 --
--- TOC entry 227 (class 1255 OID 39317)
+-- TOC entry 249 (class 1255 OID 39317)
 -- Name: anadir_obra_a_listado(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -477,7 +479,7 @@ $$;
 ALTER FUNCTION sdmed.anadir_obra_a_listado(codigo character varying, resumen character varying) OWNER TO sdmed;
 
 --
--- TOC entry 228 (class 1255 OID 39318)
+-- TOC entry 250 (class 1255 OID 39318)
 -- Name: bloquear_precio(character varying, character varying, numeric, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -499,7 +501,7 @@ $_$;
 ALTER FUNCTION sdmed.bloquear_precio(_nombretabla character varying, _codigo character varying, _precio numeric, _bloquear boolean) OWNER TO sdmed;
 
 --
--- TOC entry 231 (class 1255 OID 39319)
+-- TOC entry 252 (class 1255 OID 39319)
 -- Name: borrar_certificacion(character varying, date); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -528,7 +530,7 @@ $_$;
 ALTER FUNCTION sdmed.borrar_certificacion(_nombretabla character varying, _fecha date) OWNER TO sdmed;
 
 --
--- TOC entry 235 (class 1255 OID 39320)
+-- TOC entry 256 (class 1255 OID 39320)
 -- Name: borrar_hijos(character varying, character varying, character varying, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -593,7 +595,7 @@ $_$;
 ALTER FUNCTION sdmed.borrar_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijos character varying, _guardar boolean) OWNER TO sdmed;
 
 --
--- TOC entry 232 (class 1255 OID 39322)
+-- TOC entry 253 (class 1255 OID 39322)
 -- Name: borrar_lineas_medcert(character varying, integer[], integer, boolean, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -655,7 +657,7 @@ $_$;
 ALTER FUNCTION sdmed.borrar_lineas_medcert(_nombretabla character varying, _ids integer[], _num_cert integer, _guardar boolean, _solomedicion boolean) OWNER TO sdmed;
 
 --
--- TOC entry 236 (class 1255 OID 39321)
+-- TOC entry 257 (class 1255 OID 39321)
 -- Name: borrar_lineas_medcert(character varying, character varying, character varying, integer, integer[], boolean, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -694,7 +696,7 @@ $_$;
 ALTER FUNCTION sdmed.borrar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _posiciones integer[], _guardar boolean, _solomedicion boolean) OWNER TO sdmed;
 
 --
--- TOC entry 233 (class 1255 OID 39323)
+-- TOC entry 254 (class 1255 OID 39323)
 -- Name: borrar_lineas_principal(character varying, character varying, character varying[], boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -774,7 +776,7 @@ $_$;
 ALTER FUNCTION sdmed.borrar_lineas_principal(_nombretabla character varying, _codigopadre character varying, _codigoshijo character varying[], _guardar boolean) OWNER TO sdmed;
 
 --
--- TOC entry 234 (class 1255 OID 39325)
+-- TOC entry 255 (class 1255 OID 39325)
 -- Name: borrar_obra(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -818,7 +820,7 @@ $$;
 ALTER FUNCTION sdmed.borrar_obra(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 238 (class 1255 OID 39326)
+-- TOC entry 259 (class 1255 OID 39326)
 -- Name: borrar_relacion(character varying, integer, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -861,7 +863,7 @@ $$;
 ALTER FUNCTION sdmed.borrar_relacion(nombretabla character varying, idpadre integer, idhijo integer) OWNER TO sdmed;
 
 --
--- TOC entry 239 (class 1255 OID 39327)
+-- TOC entry 260 (class 1255 OID 39327)
 -- Name: cambiar_codigo_obra(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -912,7 +914,7 @@ $_$;
 ALTER FUNCTION sdmed.cambiar_codigo_obra(_nombretabla character varying, _codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 240 (class 1255 OID 39328)
+-- TOC entry 261 (class 1255 OID 39328)
 -- Name: cambiar_resumen_obra(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -945,7 +947,7 @@ $_$;
 ALTER FUNCTION sdmed.cambiar_resumen_obra(_nombretabla character varying, _resumen character varying) OWNER TO sdmed;
 
 --
--- TOC entry 241 (class 1255 OID 39329)
+-- TOC entry 262 (class 1255 OID 39329)
 -- Name: cerrar_obra(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -971,7 +973,7 @@ $$;
 ALTER FUNCTION sdmed.cerrar_obra(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 237 (class 1255 OID 39330)
+-- TOC entry 258 (class 1255 OID 39330)
 -- Name: cerrar_tablas_auxiliares(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -997,7 +999,7 @@ $$;
 ALTER FUNCTION sdmed.cerrar_tablas_auxiliares(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 242 (class 1255 OID 39331)
+-- TOC entry 263 (class 1255 OID 39331)
 -- Name: certificar(character varying, character varying, character varying, character varying[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1052,7 +1054,7 @@ $_$;
 ALTER FUNCTION sdmed.certificar(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _indices character varying[]) OWNER TO sdmed;
 
 --
--- TOC entry 245 (class 1255 OID 39332)
+-- TOC entry 266 (class 1255 OID 39332)
 -- Name: copiar(character varying, character varying, character varying[], boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1127,7 +1129,7 @@ $$;
 ALTER FUNCTION sdmed.copiar(_nombretabla character varying, _codigopadre character varying, _codigos character varying[], _primer_paso boolean) OWNER TO sdmed;
 
 --
--- TOC entry 247 (class 1255 OID 39333)
+-- TOC entry 268 (class 1255 OID 39333)
 -- Name: copiar_medicion(character varying, character varying, character varying, integer, integer[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1169,7 +1171,7 @@ $_$;
 ALTER FUNCTION sdmed.copiar_medicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _lineas integer[]) OWNER TO sdmed;
 
 --
--- TOC entry 243 (class 1255 OID 39334)
+-- TOC entry 264 (class 1255 OID 39334)
 -- Name: crear_obra(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1217,7 +1219,7 @@ $$;
 ALTER FUNCTION sdmed.crear_obra(codigo character varying, resumen character varying) OWNER TO sdmed;
 
 --
--- TOC entry 244 (class 1255 OID 39335)
+-- TOC entry 265 (class 1255 OID 39335)
 -- Name: crear_tabla_conceptos(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1241,7 +1243,7 @@ $$;
 ALTER FUNCTION sdmed.crear_tabla_conceptos(codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 246 (class 1255 OID 39336)
+-- TOC entry 267 (class 1255 OID 39336)
 -- Name: crear_tabla_mediciones(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1269,7 +1271,7 @@ $$;
 ALTER FUNCTION sdmed.crear_tabla_mediciones(codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 248 (class 1255 OID 39337)
+-- TOC entry 269 (class 1255 OID 39337)
 -- Name: crear_tabla_propiedades(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1322,7 +1324,7 @@ $$;
 ALTER FUNCTION sdmed.crear_tabla_propiedades(_codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 249 (class 1255 OID 39338)
+-- TOC entry 270 (class 1255 OID 39338)
 -- Name: crear_tabla_relacion(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1351,10 +1353,29 @@ $$;
 
 ALTER FUNCTION sdmed.crear_tabla_relacion(codigo character varying) OWNER TO sdmed;
 
+--
+-- TOC entry 334 (class 1255 OID 39448)
+-- Name: create_role_if_not_exists(name); Type: FUNCTION; Schema: sdmed; Owner: sdmed
+--
 
+CREATE FUNCTION sdmed.create_role_if_not_exists(rolename name) RETURNS text
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    IF NOT EXISTS (SELECT * FROM pg_roles WHERE rolname = rolename) THEN
+        EXECUTE format('CREATE ROLE %I', rolename);
+        RETURN 'CREATE ROLE';
+    ELSE
+        RETURN format('ROLE ''%I'' ALREADY EXISTS', rolename);
+    END IF;
+END;
+$$;
+
+
+ALTER FUNCTION sdmed.create_role_if_not_exists(rolename name) OWNER TO sdmed;
 
 --
--- TOC entry 253 (class 1255 OID 39339)
+-- TOC entry 274 (class 1255 OID 39339)
 -- Name: es_ancestro(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1399,7 +1420,7 @@ $$;
 ALTER FUNCTION sdmed.es_ancestro(nombretabla character varying, codigopadre character varying, codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 254 (class 1255 OID 39340)
+-- TOC entry 275 (class 1255 OID 39340)
 -- Name: es_porcentaje(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1418,7 +1439,7 @@ $$;
 ALTER FUNCTION sdmed.es_porcentaje(_codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 255 (class 1255 OID 39341)
+-- TOC entry 276 (class 1255 OID 39341)
 -- Name: es_precio_bloqueado(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1438,7 +1459,7 @@ $$;
 ALTER FUNCTION sdmed.es_precio_bloqueado(nombretabla character varying, codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 256 (class 1255 OID 39342)
+-- TOC entry 277 (class 1255 OID 39342)
 -- Name: establecer_naturaleza(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1474,7 +1495,7 @@ $$;
 ALTER FUNCTION sdmed.establecer_naturaleza(_nombretabla character varying, _codigoapdre character varying, _codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 257 (class 1255 OID 39343)
+-- TOC entry 278 (class 1255 OID 39343)
 -- Name: evaluar_formula(numeric, numeric, numeric, numeric, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1502,7 +1523,7 @@ $$;
 ALTER FUNCTION sdmed.evaluar_formula(unidad numeric, longitud numeric, anchura numeric, altura numeric, formula character varying) OWNER TO sdmed;
 
 --
--- TOC entry 250 (class 1255 OID 39344)
+-- TOC entry 271 (class 1255 OID 39344)
 -- Name: existe_codigo(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1522,7 +1543,7 @@ $_$;
 ALTER FUNCTION sdmed.existe_codigo(_nombretabla character varying, _codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 251 (class 1255 OID 39345)
+-- TOC entry 272 (class 1255 OID 39345)
 -- Name: existe_hermano(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1550,7 +1571,7 @@ $$;
 ALTER FUNCTION sdmed.existe_hermano(nombretabla character varying, codigopadre character varying, codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 252 (class 1255 OID 39346)
+-- TOC entry 273 (class 1255 OID 39346)
 -- Name: exportarbc3(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1630,7 +1651,7 @@ $$;
 ALTER FUNCTION sdmed.exportarbc3(tabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 258 (class 1255 OID 39347)
+-- TOC entry 279 (class 1255 OID 39347)
 -- Name: fecha_a_bc3(date); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1656,7 +1677,7 @@ $$;
 ALTER FUNCTION sdmed.fecha_a_bc3(fecha date) OWNER TO sdmed;
 
 --
--- TOC entry 261 (class 1255 OID 39348)
+-- TOC entry 282 (class 1255 OID 39348)
 -- Name: fx_letras(numeric); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1720,7 +1741,7 @@ $$;
 ALTER FUNCTION sdmed.fx_letras(numero numeric) OWNER TO sdmed;
 
 --
--- TOC entry 262 (class 1255 OID 39349)
+-- TOC entry 283 (class 1255 OID 39349)
 -- Name: generar_json_calculo(); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1744,7 +1765,7 @@ $$;
 ALTER FUNCTION sdmed.generar_json_calculo() OWNER TO sdmed;
 
 --
--- TOC entry 263 (class 1255 OID 39350)
+-- TOC entry 284 (class 1255 OID 39350)
 -- Name: generar_json_datos_generales(character varying, text[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1806,7 +1827,7 @@ $_$;
 ALTER FUNCTION sdmed.generar_json_datos_generales(_nombretabla character varying, _valores text[]) OWNER TO sdmed;
 
 --
--- TOC entry 259 (class 1255 OID 39351)
+-- TOC entry 280 (class 1255 OID 39351)
 -- Name: generar_json_datos_intervinientes(character varying, text[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1886,7 +1907,7 @@ $$;
 ALTER FUNCTION sdmed.generar_json_datos_intervinientes(_interviniente character varying, _valores text[]) OWNER TO sdmed;
 
 --
--- TOC entry 260 (class 1255 OID 39352)
+-- TOC entry 281 (class 1255 OID 39352)
 -- Name: generar_json_porcentajes(text[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1933,7 +1954,7 @@ $$;
 ALTER FUNCTION sdmed.generar_json_porcentajes(valores text[]) OWNER TO sdmed;
 
 --
--- TOC entry 264 (class 1255 OID 39353)
+-- TOC entry 285 (class 1255 OID 39353)
 -- Name: hallar_cantidad_porcentaje(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1974,7 +1995,7 @@ $_$;
 ALTER FUNCTION sdmed.hallar_cantidad_porcentaje(_nombretabla character varying, _codigopadre character varying, _codigoporcentaje character varying) OWNER TO sdmed;
 
 --
--- TOC entry 265 (class 1255 OID 39354)
+-- TOC entry 286 (class 1255 OID 39354)
 -- Name: hay_certificacion(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1999,7 +2020,7 @@ $$;
 ALTER FUNCTION sdmed.hay_certificacion(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 266 (class 1255 OID 39355)
+-- TOC entry 287 (class 1255 OID 39355)
 -- Name: hay_descomposicion(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2019,7 +2040,7 @@ $$;
 ALTER FUNCTION sdmed.hay_descomposicion(_nombretabla character varying, _codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 267 (class 1255 OID 39356)
+-- TOC entry 288 (class 1255 OID 39356)
 -- Name: hay_medcert(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2049,7 +2070,7 @@ $_$;
 ALTER FUNCTION sdmed.hay_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _tipocandidad integer) OWNER TO sdmed;
 
 --
--- TOC entry 268 (class 1255 OID 39357)
+-- TOC entry 289 (class 1255 OID 39357)
 -- Name: id_por_posicion(character varying, character varying, character varying, integer, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2071,7 +2092,7 @@ $_$;
 ALTER FUNCTION sdmed.id_por_posicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _posicion integer, _num_cert integer) OWNER TO sdmed;
 
 --
--- TOC entry 274 (class 1255 OID 39358)
+-- TOC entry 293 (class 1255 OID 39358)
 -- Name: insertar_concepto(character varying, character varying, character varying, character varying, text, numeric, integer, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2107,7 +2128,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_concepto(nombretabla character varying, codigopadre character varying, u character varying, resumen character varying, texto text, precio numeric, nat integer, fecha character varying) OWNER TO sdmed;
 
 --
--- TOC entry 275 (class 1255 OID 39359)
+-- TOC entry 294 (class 1255 OID 39359)
 -- Name: insertar_lineas_medcert(character varying, character varying, character varying, integer, integer, integer, integer, character varying, numeric, numeric, numeric, numeric, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2164,7 +2185,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_lineas integer, _posicion integer, _num_cert integer, _tipo integer, _comentario character varying, _ud numeric, _longitud numeric, _anchura numeric, _altura numeric, _formula character varying, _idfila integer) OWNER TO sdmed;
 
 --
--- TOC entry 269 (class 1255 OID 39360)
+-- TOC entry 290 (class 1255 OID 39360)
 -- Name: insertar_partida(character varying, character varying, character varying, smallint, numeric, character varying, character varying, text, numeric, integer, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2232,7 +2253,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_partida(nombretabla character varying, codigopadre character varying, codigohijo character varying, pos smallint, cantidad numeric, u character varying, res character varying, texto text, precio numeric, nat integer, fec character varying) OWNER TO sdmed;
 
 --
--- TOC entry 270 (class 1255 OID 39361)
+-- TOC entry 291 (class 1255 OID 39361)
 -- Name: insertar_registro_guardarconcepto(character varying, integer, sdmed.tp_concepto); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2253,7 +2274,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_registro_guardarconcepto(_nombretabla character varying, _paso integer, _dato sdmed.tp_concepto) OWNER TO sdmed;
 
 --
--- TOC entry 271 (class 1255 OID 39362)
+-- TOC entry 292 (class 1255 OID 39362)
 -- Name: insertar_registro_guardarmedicion(character varying, integer, sdmed.tp_medicion); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2274,7 +2295,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_registro_guardarmedicion(_nombretabla character varying, _paso integer, _dato sdmed.tp_medicion) OWNER TO sdmed;
 
 --
--- TOC entry 272 (class 1255 OID 39363)
+-- TOC entry 335 (class 1255 OID 39890)
 -- Name: insertar_registro_guardarrelacion(character varying, integer, sdmed.tp_relacion); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2294,7 +2315,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_registro_guardarrelacion(_nombretabla character varying, _paso integer, _dato sdmed.tp_relacion) OWNER TO sdmed;
 
 --
--- TOC entry 273 (class 1255 OID 39364)
+-- TOC entry 337 (class 1255 OID 39891)
 -- Name: insertar_registro_relacion(character varying, integer, sdmed.tp_relacion); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2323,7 +2344,7 @@ $$;
 ALTER FUNCTION sdmed.insertar_registro_relacion(_nombretabla character varying, _paso integer, _dato sdmed.tp_relacion) OWNER TO sdmed;
 
 --
--- TOC entry 278 (class 1255 OID 39365)
+-- TOC entry 295 (class 1255 OID 39365)
 -- Name: insertar_relacion(character varying, character varying, character varying, numeric, smallint); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2335,8 +2356,8 @@ r record;
 tablarelacion character varying := _nombretabla||'_Relacion';
 nivel smallint;
 esporcentaje boolean := false;
-canpres numeric(7,3) := 0;
-cancert numeric(7,3) := 0;
+canpres numeric(13,3) := 0;
+cancert numeric(13,3) := 0;
 posicion smallint;
 BEGIN
 canpres = _cantidad;
@@ -2400,7 +2421,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_relacion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _cantidad numeric, _pos smallint) OWNER TO sdmed;
 
 --
--- TOC entry 279 (class 1255 OID 39366)
+-- TOC entry 297 (class 1255 OID 39366)
 -- Name: insertar_texto(character varying, character varying, text); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2420,7 +2441,7 @@ $$;
 ALTER FUNCTION sdmed.insertar_texto(_nombretabla character varying, _cod character varying, _texto text) OWNER TO sdmed;
 
 --
--- TOC entry 280 (class 1255 OID 39367)
+-- TOC entry 298 (class 1255 OID 39367)
 -- Name: insertar_tipo_concepto(character varying, sdmed.tp_concepto); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2456,7 +2477,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_tipo_concepto(nombretabla character varying, _dato sdmed.tp_concepto) OWNER TO sdmed;
 
 --
--- TOC entry 281 (class 1255 OID 39368)
+-- TOC entry 299 (class 1255 OID 39368)
 -- Name: insertar_tipo_medcert(character varying, sdmed.tp_medicion, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2504,7 +2525,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_tipo_medcert(_nombretabla character varying, _dato sdmed.tp_medicion, _num_cert integer) OWNER TO sdmed;
 
 --
--- TOC entry 276 (class 1255 OID 39369)
+-- TOC entry 338 (class 1255 OID 39892)
 -- Name: insertar_tipo_relacion(character varying, sdmed.tp_relacion); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2536,7 +2557,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_tipo_relacion(_nombretabla character varying, _dato sdmed.tp_relacion) OWNER TO sdmed;
 
 --
--- TOC entry 277 (class 1255 OID 39370)
+-- TOC entry 296 (class 1255 OID 39370)
 -- Name: modificar_campo_medcert(character varying, character varying, character varying, character varying, integer, integer, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2547,7 +2568,7 @@ DECLARE
 tablamedcert character varying := _nombretabla||'_Mediciones';
 texto text;
 BEGIN
-IF (_columna!=1 AND _valor = '') THEN _valor =0;END IF;
+IF (_columna!=1 AND _columna!=6 AND _valor = '') THEN _valor =0;END IF;--PONGO A 0 LOS CAMPOS VACIOS QUE NO SEAN COMENTARIOS O FORMULAS
 CASE _columna
 WHEN 1 THEN texto := ' comentario = '||quote_literal(_valor);
 WHEN 2 THEN texto := ' ud = '||quote_literal(_valor);
@@ -2559,7 +2580,7 @@ WHEN 8 THEN texto := ' tipo = '||quote_literal(_valor);--8 por la posicion de la
 END CASE;
 raise notice 'text: %, id: %',texto,_idfila;
 EXECUTE FORMAT ('UPDATE %I SET %s WHERE id = %s',tablamedcert, texto, _idfila);
-IF _columna = 2 or _columna = 3 or _columna = 4 or _columna = 5 THEN
+IF _columna = 2 or _columna = 3 or _columna = 4 or _columna = 5 or _columna = 6 THEN
 	PERFORM modificar_cantidad(_nombretabla,_codigopadre,_codigohijo,_num_cert);
 END IF;
 END;
@@ -2569,7 +2590,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_campo_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _valor character varying, _idfila integer, _columna integer, _num_cert integer) OWNER TO sdmed;
 
 --
--- TOC entry 285 (class 1255 OID 39371)
+-- TOC entry 303 (class 1255 OID 39371)
 -- Name: modificar_cantidad(character varying, character varying, character varying, integer, boolean, numeric); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2634,7 +2655,7 @@ $_$;
 ALTER FUNCTION sdmed.modificar_cantidad(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _guardar boolean, _cantidad numeric) OWNER TO sdmed;
 
 --
--- TOC entry 288 (class 1255 OID 39372)
+-- TOC entry 306 (class 1255 OID 39372)
 -- Name: modificar_codigo(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2660,7 +2681,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_codigo(_nombretabla character varying, _codigoantiguo character varying, _codigonuevo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 282 (class 1255 OID 39373)
+-- TOC entry 300 (class 1255 OID 39373)
 -- Name: modificar_naturaleza(character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2678,7 +2699,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_naturaleza(_nombretabla character varying, _cod character varying, _nat integer) OWNER TO sdmed;
 
 --
--- TOC entry 283 (class 1255 OID 39374)
+-- TOC entry 301 (class 1255 OID 39374)
 -- Name: modificar_precio(character varying, character varying, character varying, numeric, integer, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2711,7 +2732,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_precio(nombretabla character varying, codpadre character varying, codhijo character varying, precio numeric, opcion integer, restaurar boolean) OWNER TO sdmed;
 
 --
--- TOC entry 284 (class 1255 OID 39375)
+-- TOC entry 302 (class 1255 OID 39375)
 -- Name: modificar_resumen(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2729,7 +2750,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_resumen(_nombretabla character varying, _cod character varying, _res character varying) OWNER TO sdmed;
 
 --
--- TOC entry 286 (class 1255 OID 39376)
+-- TOC entry 304 (class 1255 OID 39376)
 -- Name: modificar_texto(character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2749,7 +2770,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_texto(nombretabla character varying, cod character varying, textoplano character varying, textohtml character varying) OWNER TO sdmed;
 
 --
--- TOC entry 287 (class 1255 OID 39377)
+-- TOC entry 305 (class 1255 OID 39377)
 -- Name: modificar_unidad(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2768,7 +2789,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_unidad(_nombretabla character varying, _cod character varying, _ud character varying) OWNER TO sdmed;
 
 --
--- TOC entry 289 (class 1255 OID 39378)
+-- TOC entry 307 (class 1255 OID 39378)
 -- Name: mostrar_ruta(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2795,7 +2816,7 @@ $_$;
 ALTER FUNCTION sdmed.mostrar_ruta(tabla character varying, codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 290 (class 1255 OID 39379)
+-- TOC entry 308 (class 1255 OID 39379)
 -- Name: nivel_capitulo(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2831,7 +2852,7 @@ $_$;
 ALTER FUNCTION sdmed.nivel_capitulo(_nombretabla character varying, _codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 291 (class 1255 OID 39380)
+-- TOC entry 309 (class 1255 OID 39380)
 -- Name: numero_en_euro(numeric); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2854,7 +2875,7 @@ IF decimal > 0 THEN
 	cantidad := cantidad|| ' con ' ||fx_letras(decimal) || centimos;
 END If;
 
- cantidad :=  UPPER(cantidad);
+cantidad :=  UPPER(cantidad);
 
   RETURN cantidad;
 END;
@@ -2864,7 +2885,7 @@ $$;
 ALTER FUNCTION sdmed.numero_en_euro(numero numeric) OWNER TO sdmed;
 
 --
--- TOC entry 292 (class 1255 OID 39381)
+-- TOC entry 310 (class 1255 OID 39381)
 -- Name: ordenar_posiciones(character varying, character varying, character varying, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2902,7 +2923,7 @@ $_$;
 ALTER FUNCTION sdmed.ordenar_posiciones(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _insertar boolean) OWNER TO sdmed;
 
 --
--- TOC entry 297 (class 1255 OID 39382)
+-- TOC entry 314 (class 1255 OID 39382)
 -- Name: pegar(character varying, character varying, smallint, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2964,7 +2985,7 @@ $_$;
 ALTER FUNCTION sdmed.pegar(_nombretabla character varying, _codigodestino character varying, OUT nodos_insertados character varying, _pos smallint, _primer_paso boolean) OWNER TO sdmed;
 
 --
--- TOC entry 298 (class 1255 OID 39383)
+-- TOC entry 315 (class 1255 OID 39383)
 -- Name: pegar_medicion(character varying, character varying, character varying, integer, smallint); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2991,7 +3012,7 @@ $$;
 ALTER FUNCTION sdmed.pegar_medicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _pos smallint) OWNER TO sdmed;
 
 --
--- TOC entry 293 (class 1255 OID 39384)
+-- TOC entry 311 (class 1255 OID 39384)
 -- Name: poner_almohadilla(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3024,7 +3045,7 @@ $$;
 ALTER FUNCTION sdmed.poner_almohadilla(tabla character varying, codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 294 (class 1255 OID 39385)
+-- TOC entry 312 (class 1255 OID 39385)
 -- Name: procesar_cadena_fecha(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3054,7 +3075,7 @@ $_$;
 ALTER FUNCTION sdmed.procesar_cadena_fecha(cadenafecha character varying) OWNER TO sdmed;
 
 --
--- TOC entry 295 (class 1255 OID 39386)
+-- TOC entry 340 (class 1255 OID 39386)
 -- Name: procesar_linea_medicion(numeric, numeric, numeric, numeric, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3063,11 +3084,11 @@ CREATE FUNCTION sdmed.procesar_linea_medicion(unidad numeric, longitud numeric, 
     AS $$
 DECLARE
 BEGIN
-IF unidad IS NULL THEN unidad = 0; END IF;
-IF longitud IS NULL OR longitud = 0 THEN longitud =1; END IF;
-IF anchura IS NULL OR anchura = 0 THEN anchura =1; END IF;
-IF altura IS NULL OR altura = 0 THEN altura =1; END IF;
 IF formula IS NULL OR formula = '' IS TRUE THEN
+	IF unidad IS NULL THEN unidad = 0; END IF;
+	IF longitud IS NULL OR longitud = 0 THEN longitud =1; END IF;
+	IF anchura IS NULL OR anchura = 0 THEN anchura =1; END IF;
+	IF altura IS NULL OR altura = 0 THEN altura =1; END IF;
 	RETURN unidad*longitud*anchura*altura;
 ELSE
 	RETURN evaluar_formula(unidad,longitud,anchura,altura,formula);
@@ -3079,7 +3100,7 @@ $$;
 ALTER FUNCTION sdmed.procesar_linea_medicion(unidad numeric, longitud numeric, anchura numeric, altura numeric, formula character varying) OWNER TO sdmed;
 
 --
--- TOC entry 296 (class 1255 OID 39387)
+-- TOC entry 313 (class 1255 OID 39387)
 -- Name: recalcular(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3100,7 +3121,7 @@ $$;
 ALTER FUNCTION sdmed.recalcular(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 299 (class 1255 OID 39388)
+-- TOC entry 316 (class 1255 OID 39388)
 -- Name: recorrer_principal(character varying, character varying, integer, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3159,7 +3180,7 @@ $$;
 ALTER FUNCTION sdmed.recorrer_principal(nombretabla character varying, codigopadre character varying, _nivel integer, primer_elemento boolean) OWNER TO sdmed;
 
 --
--- TOC entry 302 (class 1255 OID 39389)
+-- TOC entry 319 (class 1255 OID 39389)
 -- Name: recorrercte(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3201,7 +3222,7 @@ $$;
 ALTER FUNCTION sdmed.recorrercte(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 303 (class 1255 OID 39390)
+-- TOC entry 320 (class 1255 OID 39390)
 -- Name: restaurar_lineas_borradas(character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3273,7 +3294,7 @@ $_$;
 ALTER FUNCTION sdmed.restaurar_lineas_borradas(_nombretabla character varying, _tipotabla integer) OWNER TO sdmed;
 
 --
--- TOC entry 304 (class 1255 OID 39391)
+-- TOC entry 321 (class 1255 OID 39391)
 -- Name: total_cantidad_por_partida(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3308,7 +3329,7 @@ $_$;
 ALTER FUNCTION sdmed.total_cantidad_por_partida(nombretabla character varying, codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 305 (class 1255 OID 39392)
+-- TOC entry 322 (class 1255 OID 39392)
 -- Name: ultimo_paso(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3367,7 +3388,7 @@ $_$;
 ALTER FUNCTION sdmed.ultimo_paso(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 300 (class 1255 OID 39393)
+-- TOC entry 317 (class 1255 OID 39393)
 -- Name: ver_anterior(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3395,7 +3416,7 @@ $$;
 ALTER FUNCTION sdmed.ver_anterior(nombretabla character varying, codpadre character varying, codhijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 301 (class 1255 OID 39394)
+-- TOC entry 318 (class 1255 OID 39394)
 -- Name: ver_certificacion_actual(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3429,7 +3450,7 @@ $$;
 ALTER FUNCTION sdmed.ver_certificacion_actual(_nombretabla character varying, OUT _num_cert integer, OUT _fecha character varying) OWNER TO sdmed;
 
 --
--- TOC entry 306 (class 1255 OID 39395)
+-- TOC entry 323 (class 1255 OID 39395)
 -- Name: ver_certificaciones(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3456,7 +3477,7 @@ $$;
 ALTER FUNCTION sdmed.ver_certificaciones(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 309 (class 1255 OID 39396)
+-- TOC entry 326 (class 1255 OID 39396)
 -- Name: ver_color_hijos(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3564,7 +3585,7 @@ END IF;
 ALTER FUNCTION sdmed.ver_color_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 310 (class 1255 OID 39397)
+-- TOC entry 327 (class 1255 OID 39397)
 -- Name: ver_conceptos_cantidad(character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3599,7 +3620,44 @@ $$;
 ALTER FUNCTION sdmed.ver_conceptos_cantidad(_nombretabla character varying, _tipo_concepto integer) OWNER TO sdmed;
 
 --
--- TOC entry 307 (class 1255 OID 39398)
+-- TOC entry 336 (class 1255 OID 40032)
+-- Name: ver_conceptos_unitarios(character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
+--
+
+CREATE FUNCTION sdmed.ver_conceptos_unitarios(_nombretabla character varying, _tipo_concepto integer DEFAULT NULL::integer) RETURNS TABLE(codigo character varying, cantidad numeric, ud character varying, resumen character varying, precio numeric, importe numeric)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE 
+    var_r record;
+    tablaconceptos character varying := _nombretabla||'_Conceptos';
+    tablarelacion character varying := _nombretabla ||'_Relacion';
+    str_null_case character varying;
+    cadenafiltro character varying :='';
+BEGIN
+--si el tipo_concepto es mayor que uno filtro la seleccion y creando la cadena
+IF (_tipo_concepto IS NULL OR _tipo_concepto = 0) THEN
+	cadenafiltro := ' WHERE naturaleza = ''1'' OR naturaleza = ''2'' OR naturaleza = ''3''';
+ELSE
+	cadenafiltro := ' WHERE naturaleza = '||quote_literal(_tipo_concepto);
+END IF;
+FOR var_r IN EXECUTE FORMAT('SELECT codigo,ud,resumen,preciomed FROM %I %s ORDER BY naturaleza, codigo',tablaconceptos,cadenafiltro)
+	LOOP
+		codigo := var_r.codigo;
+		cantidad = total_cantidad_por_partida(_nombretabla,codigo);
+		ud := var_r.ud;
+		resumen := var_r.resumen;
+		precio := var_r.preciomed;
+		importe := cantidad*precio;
+		RETURN NEXT;
+	END LOOP;
+END;
+$$;
+
+
+ALTER FUNCTION sdmed.ver_conceptos_unitarios(_nombretabla character varying, _tipo_concepto integer) OWNER TO sdmed;
+
+--
+-- TOC entry 324 (class 1255 OID 39398)
 -- Name: ver_hijos(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3701,7 +3759,7 @@ AND R.codhijo = C.codigo',tabla_conceptos, tabla_relacion , str_null_case) USING
 ALTER FUNCTION sdmed.ver_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 308 (class 1255 OID 39399)
+-- TOC entry 325 (class 1255 OID 39399)
 -- Name: ver_lineas_medcert(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3757,7 +3815,7 @@ $_$;
 ALTER FUNCTION sdmed.ver_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _tipocantidad integer) OWNER TO sdmed;
 
 --
--- TOC entry 311 (class 1255 OID 39400)
+-- TOC entry 342 (class 1255 OID 39400)
 -- Name: ver_medcert(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3794,7 +3852,7 @@ FOR var_r IN EXECUTE FORMAT('SELECT * FROM %I WHERE codhijo = $1 AND %s AND num_
 		subt_parc = acum;
 	ELSIF var_r.tipo =2 THEN
 		subtotal = acum;
-		acum = acum - parcial;
+		subt_parc = acum;
 	ELSE
 		subtotal = 0;
 	END IF;
@@ -3809,7 +3867,7 @@ FOR var_r IN EXECUTE FORMAT('SELECT * FROM %I WHERE codhijo = $1 AND %s AND num_
 ALTER FUNCTION sdmed.ver_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_certif integer) OWNER TO sdmed;
 
 --
--- TOC entry 312 (class 1255 OID 39401)
+-- TOC entry 328 (class 1255 OID 39401)
 -- Name: ver_obra(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3830,11 +3888,11 @@ SELECT rel.codpadre, rel.codhijo, rel.canpres, rel.cancert, depth+1, camino ||''
 FROM %I rel
 JOIN tree t ON rel.codpadre = t.codhijo
 )
-SELECT C.codigo, C.naturaleza, C.ud, C.resumen,tree.canpres,tree.cancert, C.preciocert/C.preciomed AS "Porcentaje", C.preciomed, C.preciocert, C.preciomed*tree.canpres as "Importe presupuesto", 
+SELECT C.codigo, C.naturaleza, C.ud, C.resumen, C.descripcion, tree.canpres,tree.cancert, C.preciocert/C.preciomed AS "Porcentaje", C.preciomed, C.preciocert, C.preciomed*tree.canpres as "Importe presupuesto", 
 	C.preciocert*tree.cancert as "Importe certifi.", tree.depth 
 FROM tree, %I AS C 
 WHERE C.codigo=tree.codhijo
-ORDER BY camino',tablarelacion, tablarelacion, tablaconceptos);
+ORDER BY string_to_array(camino, ''.'')::int[]',tablarelacion, tablarelacion, tablaconceptos);
 raise notice '%', texto;
 EXECUTE  (texto);
 RETURN NEXT;
@@ -3845,7 +3903,7 @@ $$;
 ALTER FUNCTION sdmed.ver_obra(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 313 (class 1255 OID 39402)
+-- TOC entry 329 (class 1255 OID 39402)
 -- Name: ver_obras_bbdd(); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3874,7 +3932,7 @@ END; $_$;
 ALTER FUNCTION sdmed.ver_obras_bbdd() OWNER TO sdmed;
 
 --
--- TOC entry 314 (class 1255 OID 39403)
+-- TOC entry 330 (class 1255 OID 39403)
 -- Name: ver_precio(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3901,7 +3959,37 @@ $$;
 ALTER FUNCTION sdmed.ver_precio(_nombretabla character varying, _cod character varying) OWNER TO sdmed;
 
 --
--- TOC entry 315 (class 1255 OID 39404)
+-- TOC entry 341 (class 1255 OID 40028)
+-- Name: ver_resumen_capitulos(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
+--
+
+CREATE FUNCTION sdmed.ver_resumen_capitulos(_nombretabla character varying) RETURNS TABLE(codigo character varying, resumen character varying, cantidad numeric, total numeric, porcentaje numeric)
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE
+tablarelacion character varying := _nombretabla || '_Relacion';
+tablaconceptos character varying := _nombretabla || '_Conceptos';
+var_r record;
+BEGIN
+FOR var_r IN EXECUTE FORMAT('SELECT codigo,resumen,canpres, canpres*preciomed as total, 100.0 * canpres * preciomed / sum(canpres * preciomed) over() AS porcentaje
+FROM  %I AS C INNER JOIN %I AS R 
+ON C.codigo = R.codhijo AND R.codpadre = $1',tablaconceptos,tablarelacion) USING _nombretabla
+ LOOP
+        codigo := var_r.codigo;
+        resumen := var_r.resumen;
+        cantidad := var_r.canpres;
+        total := var_r.total;
+        porcentaje := var_r.porcentaje;                
+        RETURN NEXT;
+END LOOP;
+END;
+$_$;
+
+
+ALTER FUNCTION sdmed.ver_resumen_capitulos(_nombretabla character varying) OWNER TO sdmed;
+
+--
+-- TOC entry 331 (class 1255 OID 39404)
 -- Name: ver_siguiente(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3929,7 +4017,7 @@ $$;
 ALTER FUNCTION sdmed.ver_siguiente(nombretabla character varying, codpadre character varying, codhijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 316 (class 1255 OID 39405)
+-- TOC entry 332 (class 1255 OID 39405)
 -- Name: ver_texto(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3949,7 +4037,7 @@ $$;
 ALTER FUNCTION sdmed.ver_texto(nombretabla character varying, cod character varying) OWNER TO sdmed;
 
 --
--- TOC entry 317 (class 1255 OID 39406)
+-- TOC entry 333 (class 1255 OID 39406)
 -- Name: ver_todas_certificaciones(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -4000,7 +4088,11 @@ FOR var_r IN EXECUTE FORMAT('SELECT * FROM %I WHERE codhijo = $1 AND %s AND num_
 
 ALTER FUNCTION sdmed.ver_todas_certificaciones(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying) OWNER TO sdmed;
 
--- Completed on 2020-03-29 10:03:19 CEST
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+-- Completed on 2020-04-15 20:24:55 CEST
 
 --
 -- PostgreSQL database dump complete
