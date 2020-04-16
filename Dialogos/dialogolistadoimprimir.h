@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QFileInfoList>
 #include <QSqlDatabase>
+#include <QHash>
 
 namespace Ui {
 class DialogoListadoImprimir;
@@ -41,6 +42,7 @@ private:
     QSqlDatabase m_db;
     QString m_ruta;
     QString m_obra;
+    QHash<QString, QString> m_lista_extensiones;
 };
 
 #endif // DIALOGOLISTADOIMPRIMIR_H

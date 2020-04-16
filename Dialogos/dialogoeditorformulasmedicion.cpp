@@ -137,6 +137,7 @@ void DialogoEditorFormulasMedicion::SeleccionarPeso()
 
 QString DialogoEditorFormulasMedicion::LeeFormula()
 {
+    qDebug()<<"ui->lineeditexpres "<<ui->lineEditExpresion->text();
     return ui->lineEditExpresion->text();
 }
 

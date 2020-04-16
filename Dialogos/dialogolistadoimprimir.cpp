@@ -45,6 +45,9 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
             }
         }
     }
+    //extensiones
+    m_lista_extensiones[ tr("Documento de texto Open Document(*.odt)") ] = ".odt";
+    m_lista_extensiones[ tr("Documento de texto MS Word (*.docx)") ] = ".docx";
     //botones
     m_botoneralayout[eTipo::LISTADO]= new QVBoxLayout(ui->groupBoxListados);
     m_botoneralayout[eTipo::MEDICION]= new QVBoxLayout(ui->groupBoxMedPres);
@@ -123,12 +126,33 @@ void DialogoListadoImprimir::Imprimir()
                         pArgumentos<<m_db.databaseName()<<m_db.hostName()<<QString::number(m_db.port())<<m_db.userName()<<m_db.password();
                         pArgumentos<<m_obra;
                         pArgumentos<<m_lista.at(i).ruta;
-                        QString fileName = "";
+                        QString fileName = "";                        
+                        QString extensiones;
+                        //preparo las extensiones
+                        QHashIterator<QString, QString> i(m_lista_extensiones);
+                        while (i.hasNext())
+                        {
+                            i.next();
+                            extensiones += i.key();
+                            if (i.hasNext())
+                                extensiones += ";;";
+                        }
                         if (ui->checkBoxGuardar->isChecked())
                         {
-                            fileName = QFileDialog::getSaveFileName(this, tr("Guardar archivo"),
-                                                                            m_ruta,
-                                                                            tr("Hoja de calculo (*.xslx)"));
+                            fileName = QFileDialog::getSaveFileName(this,
+                                                                    tr("Guardar archivo"),
+                                                                    m_ruta,
+                                                                    tr("Documento de texto Open Document(*.odt);;Documento de texto MS Word (*.docx)"),
+                                                                    &extensiones,
+                                                                    nullptr
+                                                                    );
+
+                        }                        
+                        //si no hay extensiones (ocurre bajo linux)
+                        QFileInfo f(fileName);
+                        if (f.suffix().isEmpty())
+                        {
+                            fileName += m_lista_extensiones[extensiones];
                         }
                         pArgumentos<<fileName;
                         int res = ::PyRun::loadModule(m_ruta, pModulo, pFuncion, pArgumentos);
