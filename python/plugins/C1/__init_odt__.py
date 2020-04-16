@@ -6,6 +6,8 @@ from odf import teletype
 import locale
 from datetime import datetime
 
+from cargador import formatear
+
 import importlib
 from pathlib import Path
 mod_path = Path(__file__).parent
@@ -39,8 +41,7 @@ def imprimir(conexion, obra, documento):
 	elif tipo == 3:
 		Listado += ListadoMaquinaria
 	#documento y estilos
-	Instancia = modulo.Estilo()	
-	locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
+	Instancia = modulo.Estilo()		
 	s = documento.styles
 	d = Instancia.ListaEstilos()
 	for key in d:
@@ -82,7 +83,7 @@ def imprimir(conexion, obra, documento):
 	teletype.addTextToElement(lineahorizontal, linea)
 	documento.text.addElement(lineahorizontal)
 	#consulta
-	consulta.exec_("SELECT * FROM ver_conceptos_cantidad('"+ obra+"','"+str(tipo)+"')")
+	consulta.exec_("SELECT * FROM ver_conceptos_unitarios('"+ obra+"','"+str(tipo)+"')")
 	rec = consulta.record()
 	codigo = rec.indexOf("codigo")
 	cantidad = rec.indexOf("cantidad")
@@ -91,9 +92,9 @@ def imprimir(conexion, obra, documento):
 	precio = rec.indexOf("precio");
 	#datos	de la consulta
 	while consulta.next():
-		linea = consulta.value(codigo)+"\t"+str(locale.format(precision, consulta.value(cantidad), grouping=True, monetary=True))+"\t"+\
-			str(consulta.value(ud))+"\t"+consulta.value(resumen)+"\t"+str(locale.format(precision, consulta.value(precio)))+"\t"+\
-			str(locale.format(precision, consulta.value(cantidad)*consulta.value(precio)))
+		linea = consulta.value(codigo)+"\t"+formatear(consulta.value(cantidad))+"\t"+\
+			str(consulta.value(ud))+"\t"+consulta.value(resumen)+"\t"+formatear(consulta.value(precio))+"\t"+\
+			formatear(consulta.value(cantidad)*consulta.value(precio))
 		tabp = P(stylename=Instancia.Estilos("Tabuladores Hoja Listados Normal"))
 		teletype.addTextToElement(tabp, linea)
 		documento.text.addElement(tabp)

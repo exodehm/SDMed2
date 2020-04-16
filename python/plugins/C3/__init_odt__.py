@@ -3,8 +3,10 @@ from odf.opendocument import OpenDocumentText
 from odf.style import PageLayout, MasterPage, Header, Footer, Style, TextProperties, ParagraphProperties, PageLayoutProperties, TabStop, TabStops
 from odf.text import P,H,Span,LineBreak, PageNumber
 from odf import teletype
-import locale
+
 from datetime import datetime
+
+from cargador import formatear
 
 import importlib
 from pathlib import Path
@@ -22,14 +24,12 @@ def imprimir(conexion, obra, documento):
 	Autor = ""
 	Obra = ""
 	Listado = u"RESUMEN DE PRESUPUESTO"		
-	Instancia = modulo.Estilo()	
-	locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
+	Instancia = modulo.Estilo()		
 	s = documento.styles
 	d = Instancia.ListaEstilos()
 	for key in d:
 		s.addElement(d[key])
-	precision = "%.2f"
-		
+	precision = "%.2f"		
 	###############
 	###Contenido###
 	###############
@@ -51,15 +51,18 @@ def imprimir(conexion, obra, documento):
 	teletype.addTextToElement(lineahorizontal, linea)
 	documento.text.addElement(lineahorizontal)
 	#consulta
-	consulta.exec_("SELECT codigo,resumen,canpres*preciomed AS \"EUROS\" FROM \"" + obra + "_Conceptos\" AS C, \"" + obra + "_Relacion\" AS R WHERE C.codigo = R.codhijo AND R.codpadre = '" + obra + "' ORDER BY R.posicion")	
+	consulta.exec_("SELECT * FROM ver_resumen_capitulos('" + obra + "')")
 	#datos	de la consulta
 	rec = consulta.record()
 	codigo = rec.indexOf("codigo")
 	resumen = rec.indexOf("resumen")
-	euros = rec.indexOf("EUROS")
+	cantidad = rec.indexOf("cantidad")
+	euros = rec.indexOf("total")
+	porcentaje = rec.indexOf("porcentaje")
 	EM = 0.0
 	while consulta.next():
-		linea = consulta.value(codigo)+"\t"+consulta.value(resumen)+"\t"+str(locale.format(precision, consulta.value(euros), grouping=True, monetary=True))
+		linea = consulta.value(codigo)+"\t"+consulta.value(resumen)+"\t"+formatear(consulta.value(euros))+"\t"+formatear(consulta.value(porcentaje))+ " %"
+		print (linea)
 		tabp = P(stylename=Instancia.Estilos("Normal con tabuladores capitulos"))
 		teletype.addTextToElement(tabp, linea)
 		documento.text.addElement(tabp)
@@ -69,7 +72,7 @@ def imprimir(conexion, obra, documento):
 	lb = LineBreak()
 	salto.addElement(lb)
 	documento.text.addElement(salto)
-	lineaEM = "\tTotal Ejecución Material:\t" + str(locale.format(precision, EM, grouping=True, monetary=True))
+	lineaEM = "\tTotal Ejecución Material:\t" + formatear(EM)
 	parrafo = P(stylename=Instancia.Estilos("Normal con tabuladores resumen negritas"))
 	teletype.addTextToElement(parrafo, lineaEM)
 	documento.text.addElement(parrafo)
@@ -82,7 +85,7 @@ def imprimir(conexion, obra, documento):
 		GG = float(consulta.value(0))
 		print ("Gastos generales " + str(GG) + "\t")
 	GastosGenerales = EM*GG/100
-	lineaGG = "\t\t" + str(GG) + "% Gastos generales\t" + str(locale.format(precision, GastosGenerales, grouping=True, monetary=True))
+	lineaGG = "\t\t" + str(GG) + "% Gastos generales\t" + formatear(GastosGenerales)
 	parrafo = P(stylename=Instancia.Estilos("Normal con tabuladores resumen"))
 	teletype.addTextToElement(parrafo, lineaGG)
 	documento.text.addElement(parrafo)
@@ -95,35 +98,36 @@ def imprimir(conexion, obra, documento):
 		BI = float(consulta.value(0))
 		print ("Gastos generales " + str(BI) + "\t")
 	BeneficioIndustrial = EM*BI/100
-	lineaBI = "\t\t" + str(BI) + "%Beneficio Industrial\t" + str(locale.format(precision, BeneficioIndustrial, grouping=True, monetary=True))
+	lineaBI = "\t\t" + str(BI) + "%Beneficio Industrial\t" + formatear(BeneficioIndustrial)
 	parrafo = P(stylename=Instancia.Estilos("Normal con tabuladores resumen"))
 	teletype.addTextToElement(parrafo, lineaBI)
 	documento.text.addElement(parrafo)
 	#suma de GG+BI
-	lineaGGBI = "\t\tSuma de G.G. + B.I.: \t" + str(locale.format(precision, GastosGenerales+BeneficioIndustrial, grouping=True, monetary=True))
+	lineaGGBI = "\t\tSuma de G.G. + B.I.: \t" + formatear(GastosGenerales+BeneficioIndustrial)
 	parrafo = P(stylename=Instancia.Estilos("Normal con tabuladores resumen"))
 	teletype.addTextToElement(parrafo, lineaGGBI)
 	documento.text.addElement(parrafo)
 	#PContrata
 	importeTPC = EM+GastosGenerales+BeneficioIndustrial
-	lineaTPC = "\tTOTAL PRESUPUESTO DE CONTRATA: \t" + str(locale.format(precision, importeTPC, grouping=True, monetary=True))
+	lineaTPC = "\tTOTAL PRESUPUESTO DE CONTRATA: \t" + formatear(importeTPC)
 	parrafo = P(stylename=Instancia.Estilos("Normal con tabuladores resumen negritas"))
 	teletype.addTextToElement(parrafo, lineaTPC)
 	documento.text.addElement(parrafo)
 	#IVA
+	IVA = 0
 	consulta.exec_("SELECT datos->>'Valor' FROM (SELECT jsonb_array_elements(propiedades->'Valor') AS datos \
 				FROM \"" + obra + "_Propiedades\" \
 				WHERE propiedades->>'Propiedad' = 'Porcentajes') AS subdatos WHERE datos->>'Variable' = 'zPorIVAEjecucion'")	
 	while consulta.next():
 		IVA = float(consulta.value(0))
 	importeIVA = importeTPC*IVA/100
-	lineaIVA = "\t\t" + str(IVA) + "% IVA\t" + str(locale.format(precision, importeIVA, grouping=True, monetary=True))
+	lineaIVA = "\t\t" + str(IVA) + "% IVA\t" + formatear(importeIVA)
 	parrafo = P(stylename=Instancia.Estilos("Normal con tabuladores resumen"))
 	teletype.addTextToElement(parrafo, lineaIVA)
 	documento.text.addElement(parrafo)
 	#PGeneral
 	importeTPG = importeTPC + (importeTPC*IVA/100)
-	lineaTPC = "\tTOTAL PRESUPUESTO GENERAL: \t" + str(locale.format(precision, importeTPG, grouping=True, monetary=True))
+	lineaTPC = "\tTOTAL PRESUPUESTO GENERAL: \t" + formatear(importeTPG)
 	parrafo = P(stylename=Instancia.Estilos("Normal con tabuladores resumen negritas"))
 	teletype.addTextToElement(parrafo, lineaTPC)
 	documento.text.addElement(parrafo)

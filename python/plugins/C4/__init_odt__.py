@@ -6,6 +6,8 @@ from odf import teletype
 import locale
 from datetime import datetime
 
+from cargador import formatear
+
 import importlib
 from pathlib import Path
 mod_path = Path(__file__).parent
@@ -22,7 +24,6 @@ def imprimir(conexion, obra, documento):
 	consulta_mediciones = QtSql.QSqlQuery (conexion)
 	#documento y estilos
 	Instancia = modulo.Estilo()	
-	locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
 	s = documento.styles
 	d = Instancia.ListaEstilos()
 	for key in d:
@@ -133,10 +134,6 @@ def imprimir(conexion, obra, documento):
 	documento.text.addElement(parrafo)	
 	
 	return documento
-	
-def formatear(numero, precision=2, esmoneda=True):
-	precision = "%."+str(precision)+"f"
-	return str(locale.format(precision, numero, grouping=True, monetary=esmoneda))
 
 
 if __name__ == "__main__":

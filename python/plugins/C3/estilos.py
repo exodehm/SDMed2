@@ -60,6 +60,8 @@ class Estilo():
 		tabstops_list_capitulos.addElement(tabstop1)
 		tabstop1 = TabStop(position="14.0cm", type = "char", char = ",", leaderstyle="dotted")
 		tabstops_list_capitulos.addElement(tabstop1)
+		tabstop1 = TabStop(position="15.0cm")
+		tabstops_list_capitulos.addElement(tabstop1)
 		tabstoppar_capitulos = ParagraphProperties()
 		tabstoppar_capitulos.addElement(tabstops_list_capitulos)
 		tabuladores_hoja_capitulos = "Tabuladores Hoja Capitulos"
