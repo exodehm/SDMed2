@@ -13,12 +13,16 @@
 #include <QSqlDatabase>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QDesktopServices>
+#include <QtPrintSupport/QPrinter>
 
 DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase db, QWidget *parent) :
     QDialog(parent), ui(new Ui::DialogoListadoImprimir), m_db(db), m_obra(obra)
 {
     ui->setupUi(this);
     QString pathPython = "/.sdmed/python/plugins/";
+    m_pModulo = "cargador";
+    m_pFuncion = "iniciar";
     m_ruta = QDir::homePath()+pathPython;
     QDir dir_plugins(m_ruta);
     dir_plugins.setFilter(QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
@@ -46,8 +50,8 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
         }
     }
     //extensiones
-    m_lista_extensiones[ tr("Documento de texto Open Document(*.odt)") ] = ".odt";
-    m_lista_extensiones[ tr("Documento de texto MS Word (*.docx)") ] = ".docx";
+    m_lista_extensiones.insert(tr("Documento de texto Open Document(*.odt)"),".odt");
+    m_lista_extensiones.insert(tr("Documento de texto MS Word (*.docx)"),".docx");
     //botones
     m_botoneralayout[eTipo::LISTADO]= new QVBoxLayout(ui->groupBoxListados);
     m_botoneralayout[eTipo::MEDICION]= new QVBoxLayout(ui->groupBoxMedPres);
@@ -57,16 +61,37 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
     for (int i = 0;i<m_lista.size();i++)
     {
         QRadioButton* boton =  new QRadioButton(m_lista.at(i).nombre);
-        m_botoneralayout[m_lista.at(i).tipo]->addWidget(boton);
+        m_botoneralayout[m_lista.at(i).tipo]->addWidget(boton);        
         m_lista[i].boton = boton;
+        QObject::connect(boton,SIGNAL(clicked()),this, SLOT(ActualizarBotonPrevisualizar()));
     }
+    QObject::connect(ui->boton_Previsualizar,SIGNAL(pressed()),this,SLOT(Imprimir()));
     QObject::connect(ui->botonImprimir,SIGNAL(pressed()),this,SLOT(Imprimir()));
     QObject::connect(ui->botonSalir,SIGNAL(pressed()),this,SLOT(accept()));
+    QObject::connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(DesactivarBotones()));
 }
 
 DialogoListadoImprimir::~DialogoListadoImprimir()
 {
     delete ui;
+}
+
+void DialogoListadoImprimir::ActualizarBotonPrevisualizar()
+{
+    QRadioButton* c = dynamic_cast<QRadioButton*>(sender());
+    if (c)
+    {
+        ui->boton_Previsualizar->setEnabled(c->isChecked());
+    }
+}
+
+void DialogoListadoImprimir::DesactivarBotones()
+{
+    ui->boton_Previsualizar->setEnabled(false);
+    for (auto elem : m_lista)
+    {
+        elem.boton->setChecked(false);
+    }
 }
 
 bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombrefichero)
@@ -120,12 +145,11 @@ void DialogoListadoImprimir::Imprimir()
                     if (m_lista.at(i).boton == button)
                     {
                         //QString ruta =m_lista.at(i).ruta;
-                        QString pModulo = "cargador";
-                        QString pFuncion = "iniciar";
                         QStringList pArgumentos;
                         pArgumentos<<m_db.databaseName()<<m_db.hostName()<<QString::number(m_db.port())<<m_db.userName()<<m_db.password();
                         pArgumentos<<m_obra;
                         pArgumentos<<m_lista.at(i).ruta;
+                        qDebug()<<"m_lista.at(i).ruta "<<m_lista.at(i).ruta;
                         QString fileName = "";                        
                         QString extensiones;
                         //preparo las extensiones
@@ -137,28 +161,33 @@ void DialogoListadoImprimir::Imprimir()
                             if (i.hasNext())
                                 extensiones += ";;";
                         }
+                        QString extension;
                         if (ui->checkBoxGuardar->isChecked())
                         {
                             fileName = QFileDialog::getSaveFileName(this,
                                                                     tr("Guardar archivo"),
                                                                     m_ruta,
-                                                                    tr("Documento de texto Open Document(*.odt);;Documento de texto MS Word (*.docx)"),
-                                                                    &extensiones,
-                                                                    nullptr
+                                                                    extensiones,
+                                                                    &extension,
+                                                                    QFileDialog::DontUseNativeDialog
                                                                     );
 
-                        }                        
-                        //si no hay extensiones (ocurre bajo linux)
-                        QFileInfo f(fileName);
-                        if (f.suffix().isEmpty())
-                        {
-                            fileName += m_lista_extensiones[extensiones];
                         }
+                        qDebug()<<"filename "<<fileName;
+                        //si no hay extensiones (ocurre bajo linux)
+                #if not defined(Q_OS_WIN) || not defined(Q_OS_MAC)
+                        fileName += m_lista_extensiones[extension];                
+                #endif
+                        qDebug()<<"filename "<<fileName;
                         pArgumentos<<fileName;
-                        int res = ::PyRun::loadModule(m_ruta, pModulo, pFuncion, pArgumentos);
+                        int res = ::PyRun::loadModule(m_ruta, m_pModulo, m_pFuncion, pArgumentos);
                         if (res == ::PyRun::Resultado::Success)
                         {
                             qDebug()<< __PRETTY_FUNCTION__ << "successful"<<res;
+                            //ver el pdf
+                            QString rutaPDF = "listado.pdf";
+                            qDebug()<<"FIchero PDF " + rutaPDF;
+                            QDesktopServices::openUrl(QUrl(rutaPDF, QUrl::TolerantMode));
 
                         }
                         else //definir los mensajes de error en caso de no successful
@@ -167,10 +196,15 @@ void DialogoListadoImprimir::Imprimir()
                                                            tr("Ha habido problemas con el script de python"/*este mensaje* es el que hay que especificar el tipo de error*/),
                                                            QMessageBox::Ok);
                             qDebug()<<"ret "<<ret;
-                        }
+                        }                        
                     }
                 }
             }
         }
     }
+}
+
+void DialogoListadoImprimir::Previsualizar()
+{
+   //QPrinter printer(QPrinter::HighResolution);
 }

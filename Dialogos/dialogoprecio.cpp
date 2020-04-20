@@ -1,4 +1,4 @@
- #include "dialogoprecio.h"
+#include "dialogoprecio.h"
 #include "ui_dialogoprecio.h"
 
 DialogoPrecio::DialogoPrecio(QString titulo, QWidget *parent) :

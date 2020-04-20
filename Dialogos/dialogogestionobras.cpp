@@ -17,7 +17,7 @@ DialogoGestionObras::DialogoGestionObras(std::list<Instancia *> &ListaObras, QSq
     ui->setupUi(this);
     m_db = &db;
     primer_elemento = ListaObras.begin();
-    ultimo_elemento = ListaObras.end();    
+    ultimo_elemento = ListaObras.end();
     LlenarTabla();
     QObject::connect(this,SIGNAL(accepted()),SLOT(listaNombreObrasAbrir()));
     QObject::connect(this->ui->botonConectarBBDD,SIGNAL(clicked(bool)),this,SLOT(ConectarBBDD()));
@@ -90,8 +90,8 @@ void DialogoGestionObras::LlenarTabla()
                 ui->tabla->setCellWidget(fila,columna,btn_exportar);
             }
         }
-        fila++;//paso a la siguiente fila        
-    }    
+        fila++;//paso a la siguiente fila
+    }
     ui->tabla->resizeColumnsToContents();
 }
 
@@ -173,7 +173,7 @@ bool DialogoGestionObras::ConectarBBDD()
     DialogoConexionBBDD* d = new DialogoConexionBBDD(m_db, this);
     if (d->exec()==1)
     {
-        LlenarTabla();        
+        LlenarTabla();
     }
     emit ActivarBotones(d->HayConexion());
     return true;

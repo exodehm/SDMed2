@@ -34,6 +34,9 @@ public:
 
 public slots:
     void Imprimir();
+    void Previsualizar();
+    void ActualizarBotonPrevisualizar();
+    void DesactivarBotones();    
 
 private:
     Ui::DialogoListadoImprimir *ui;
@@ -41,6 +44,8 @@ private:
     QVBoxLayout* m_botoneralayout[nTipoListados];
     QSqlDatabase m_db;
     QString m_ruta;
+    QString m_pModulo;
+    QString m_pFuncion;
     QString m_obra;
     QHash<QString, QString> m_lista_extensiones;
 };
