@@ -217,8 +217,7 @@ void DialogoListadoImprimir::Previsualizar()
 
 void DialogoListadoImprimir::Imprimir()
 {
-   qDebug()<<"Imprimir ";
-    QPrinter printer(QPrinter::HighResolution);
+   QPrinter printer(QPrinter::HighResolution);
    QPrintDialog* d = new QPrintDialog(this);
    int r = d->exec();
 }

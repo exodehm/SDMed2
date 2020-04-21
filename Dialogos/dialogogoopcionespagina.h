@@ -12,7 +12,13 @@ class DialogogoOpcionesPagina : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogogoOpcionesPagina(QWidget *parent = nullptr);
+    explicit DialogogoOpcionesPagina(QWidget *parent = nullptr,
+                                     double marIzq = 1.5,
+                                     double marDer = 1.5,
+                                     double marSup = 1.5,
+                                     double marInf = 1.5,
+                                     int pagInic = 1
+                                     );
     ~DialogogoOpcionesPagina();
 
 private:
