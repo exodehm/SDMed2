@@ -1,5 +1,5 @@
-#include "./pyrun.h"
 #include <Python.h>
+#include "./pyrun.h"
 
 #include <QByteArray>
 #include <QCoreApplication>
@@ -17,13 +17,18 @@ static void cleanup()
     }
 }
 
-int loadModule(const QString &modulePath, const QString &moduleName, const QString &functionName, const QStringList& args)
+QPair<int,QVariant> loadModule(const QString &modulePath, const QString &moduleName, const QString &functionName, const QStringList& args)
 {
     qDebug()<<"modulepath"<<modulePath;
+    QPair <int,QVariant>resultado;
+    QVariant valor;
     qputenv("PYTHONPATH", modulePath.toLocal8Bit());
     if (init() != AppModuleLoaded)
-        //return false;
-        return CannotLoadModule;
+    {
+        resultado.first=CannotLoadModule;
+        resultado.second=QVariant();
+        return resultado;
+    }
     PyObject *pName, *pModule, *pFunc;
     PyObject *pArgs, *pValue;
     pName = PyUnicode_DecodeFSDefault(moduleName.toLocal8Bit().constData());
@@ -46,8 +51,9 @@ int loadModule(const QString &modulePath, const QString &moduleName, const QStri
                     Py_DECREF(pArgs);
                     Py_DECREF(pModule);
                     qWarning("Cannot convert argument\n");
-                    //return false;
-                    return  CannotConvertArgument;
+                    resultado.first=CannotConvertArgument;
+                    resultado.second=QVariant();
+                    return resultado;
                 }
                 PyTuple_SetItem(pArgs, i, arg_valor);//meto los datos de conexion
             }
@@ -55,6 +61,12 @@ int loadModule(const QString &modulePath, const QString &moduleName, const QStri
             Py_DECREF(pArgs);
             if (pValue){
                 qWarning("Result of call: %ld\n", PyLong_AsLong(pValue));
+                PyObject* repr = PyObject_Repr(pValue);
+                PyObject* str = PyUnicode_AsEncodedString(repr, "utf-8", "strict");
+                char* raw_result = PyBytes_AsString(str);
+                QString result = QString(raw_result).remove('\'');
+                qDebug()<<"result "<<result;
+                valor = QVariant(result);
                 Py_DECREF(pValue);
             }
             else
@@ -63,8 +75,9 @@ int loadModule(const QString &modulePath, const QString &moduleName, const QStri
                 Py_DECREF(pModule);
                 PyErr_Print();
                 qWarning("Call failed\n");
-                //return false;
-                return  CallFailed;
+                resultado.first=CallFailed;
+                resultado.second=QVariant();
+                return resultado;
             }
         }
         else
@@ -80,11 +93,13 @@ int loadModule(const QString &modulePath, const QString &moduleName, const QStri
     {
         PyErr_Print();
         qWarning("Failed to load \"%s\"\n", moduleName.toLocal8Bit().constData());
-        //return false;
-        return FailedToLoad;
+        resultado.first=FailedToLoad;
+        resultado.second=QVariant();
+        return resultado;
     }
-    //return true;
-    return Success;
+    resultado.first=Success;
+    resultado.second=valor;
+    return resultado;
 }
 
 State init()

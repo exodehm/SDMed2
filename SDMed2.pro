@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = SDMed2
 TEMPLATE = app
@@ -14,6 +14,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     Delegados/delegadocodigos.cpp \
+    Dialogos/dialogogoopcionespagina.cpp \
     Dialogos/dialogolistadoimprimir.cpp \
     Dialogos/dialogooperacionesbbdd.cpp \
         mainwindow.cpp \
@@ -72,6 +73,7 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     Delegados/delegadocodigos.h \
     Dialogos/dialogoabout.h \
+    Dialogos/dialogogoopcionespagina.h \
     Dialogos/dialogolicencia.h \
     Dialogos/dialogocreditos.h \
     Dialogos/dialogodatoscodigoresumen.h \
@@ -129,6 +131,7 @@ HEADERS  += mainwindow.h \
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
     Ui/dialogocreditos.ui \
+    Ui/dialogogoopcionespagina.ui \
     Ui/dialogolicencia.ui \
     Ui/dialogolistadoimprimir.ui \
     Ui/dialogooperacionesbbdd.ui \

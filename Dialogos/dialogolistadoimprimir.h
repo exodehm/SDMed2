@@ -36,7 +36,8 @@ public slots:
     void Imprimir();
     void Previsualizar();
     void ActualizarBotonPrevisualizar();
-    void DesactivarBotones();    
+    void DesactivarBotones();
+    void OpcionesPagina();
 
 private:
     Ui::DialogoListadoImprimir *ui;

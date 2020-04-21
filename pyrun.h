@@ -6,6 +6,7 @@
 
 #include <QString>
 #include <QStringList>
+#include <QVariant>
 
 namespace PyRun
 {
@@ -26,7 +27,7 @@ enum Resultado
 };
 
 //bool loadModule(const QString &modulePath, const QString &moduleName, const QString &functionName, const QStringList &args=QStringList());
-int loadModule(const QString &modulePath, const QString &moduleName, const QString &functionName, const QStringList &args=QStringList());
+QPair<int,QVariant> loadModule(const QString &modulePath, const QString &moduleName, const QString &functionName, const QStringList &args=QStringList());
 State init();
 }
 #endif // PYRUN_H

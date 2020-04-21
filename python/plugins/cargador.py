@@ -6,6 +6,7 @@ MainModule = "__init_odt__"
 import sys
 import imp
 import os
+import runpy
 import subprocess, platform
 from PyQt5 import QtSql
 from subprocess import Popen
@@ -29,28 +30,61 @@ def iniciar(*datos):
 		info = imp.find_module(MainModule, [location])
 		if info:
 			ruta_fichero = location + "/" + MainModule+".py"
-			print ("ruta fichero " + ruta_fichero)
+			print ("ruta informe " + ruta_fichero)
 			fichero = open(ruta_fichero, "r+")
 			if (fichero):
 				print ("FICHERO " + nombreficheroguardar)
-				fImprimir = imp.load_module(MainModule, *info)				
+				fImprimir = imp.load_module(MainModule, *info)
 				datosCabecera = LeerDatosProyecto(obra, db)
 				print (datosCabecera[0],datosCabecera[1])
 				datosLayout=["1cm","1.5cm","2cm","2cm",datosCabecera[0],datosCabecera[1]]
 				Instancia = Plantilla(*datosLayout)
 				documento = Instancia.Documento()
-				fImprimir.imprimir(db,obra,documento)				
+				fImprimir.imprimir(db,obra,documento)
 				#guardar el archivo
 				if not nombreficheroguardar:
-					nombreficheroguardar = "dummy.odt"
-				documento.save(nombreficheroguardar)
+					nombreficheroguardar = "listado.odt"
+				nombre = nombreficheroguardar.rsplit(".",1)[0]
+				extension = nombreficheroguardar.rsplit(".",1)[1]
+				return Guardar(documento,nombre,extension)
 				#pasar a pdf
-				#subprocess.call(('unoconv', '-f', 'odt', nombreficheroguardar))
+				#sys.argv = ['','-f','pdf',nombreficheroguardar]
+				#runpy.run_path('/usr/bin/unoconv', run_name='__main__')
+				#runpy.run_module('unoconv.py', run_name='__main__')
+				#subprocess.call(('unoconv', '-f', 'pdf', nombreficheroguardar))
 				#mostrar
 				#mostrar(nombreficheroguardar)
+			return ""
 	else:
-		return False
+		return ""
 		
+def Guardar(documento, fichero, extension):
+	#Primer paso, guardar el odt 
+	documento.save(fichero+".odt")#en todos los casos creo el odt	
+	if (extension == "docx"):		
+		subprocess.call(('unoconv', '-f', 'docx', fichero + ".odt"))
+		#subprocess.call(('unoconv', '-f', 'pdf', fichero + ".docx"))
+		os.remove(fichero + ".odt")#borro el odt que en esta opcion solo sirve para hacer la conversion a docx	
+	#subprocess.call(('unoconv', '-f', 'pdf', fichero + ".odt"))
+	return fichero +"."+extension
+		
+def mostrar(nombrefichero):
+	print ("ver PDF funcion " + nombrefichero)
+	extensionpdf = ".pdf"
+	nombreficheropdf = nombrefichero + extensionpdf
+	#abrir lector de pdf
+	if platform.system() == 'Darwin':       # macOS
+		subprocess.call(('open', nombreficheropdf))
+	elif platform.system() == 'Windows':    # Windows
+		os.startfile(nombreficheropdf)
+	else:                                   # linux variants		
+		subprocess.call(('xdg-open', nombreficheropdf))
+		
+		
+def formatear(numero, precision=2, esmoneda=True):
+	precision = "%."+str(precision)+"f"
+	return str(locale.format(precision, numero, grouping=True, monetary=esmoneda))
+	
 def LeerDatosProyecto(obra,db):
 	Autor = ""
 	Obra = ""
@@ -69,23 +103,6 @@ def LeerDatosProyecto(obra,db):
 		Obra = consulta.value(0)	
 	datosProyecto = [Autor,Obra]
 	return datosProyecto
-		
-def mostrar(nombrefichero):
-	print ("ver PDF funcion" + nombrefichero)
-	extensionpdf = ".pdf"
-	nombreficheropdf = nombrefichero + extensionpdf
-	#abrir lector de pdf
-	if platform.system() == 'Darwin':       # macOS
-		subprocess.call(('open', nombreficheropdf))
-	elif platform.system() == 'Windows':    # Windows
-		os.startfile(nombreficheropdf)
-	else:                                   # linux variants		
-		subprocess.call(('xdg-open', nombreficheropdf))
-		
-		
-def formatear(numero, precision=2, esmoneda=True):
-	precision = "%."+str(precision)+"f"
-	return str(locale.format(precision, numero, grouping=True, monetary=esmoneda))
 		
 			
 if __name__ == "__main__":

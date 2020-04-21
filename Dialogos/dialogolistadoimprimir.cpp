@@ -1,5 +1,6 @@
 #include "dialogolistadoimprimir.h"
 #include "ui_dialogolistadoimprimir.h"
+#include "Dialogos/dialogogoopcionespagina.h"
 #include "pyrun.h"
 #include <QDir>
 #include <QDebug>
@@ -15,6 +16,7 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
 
 DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase db, QWidget *parent) :
     QDialog(parent), ui(new Ui::DialogoListadoImprimir), m_db(db), m_obra(obra)
@@ -65,10 +67,11 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
         m_lista[i].boton = boton;
         QObject::connect(boton,SIGNAL(clicked()),this, SLOT(ActualizarBotonPrevisualizar()));
     }
-    QObject::connect(ui->boton_Previsualizar,SIGNAL(pressed()),this,SLOT(Imprimir()));
+    QObject::connect(ui->boton_Previsualizar,SIGNAL(pressed()),this,SLOT(Previsualizar()));
     QObject::connect(ui->botonImprimir,SIGNAL(pressed()),this,SLOT(Imprimir()));
     QObject::connect(ui->botonSalir,SIGNAL(pressed()),this,SLOT(accept()));
     QObject::connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(DesactivarBotones()));
+    QObject::connect(ui->boton_opcionesPagina,SIGNAL(pressed()),this,SLOT(OpcionesPagina()));
 }
 
 DialogoListadoImprimir::~DialogoListadoImprimir()
@@ -91,6 +94,15 @@ void DialogoListadoImprimir::DesactivarBotones()
     for (auto elem : m_lista)
     {
         elem.boton->setChecked(false);
+    }
+}
+
+void DialogoListadoImprimir::OpcionesPagina()
+{
+    DialogogoOpcionesPagina* d = new DialogogoOpcionesPagina(this);
+    if (d->exec())
+    {
+        qDebug()<<"Añadir opciones al listado";
     }
 }
 
@@ -131,7 +143,7 @@ bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombre
     return false;
 }
 
-void DialogoListadoImprimir::Imprimir()
+void DialogoListadoImprimir::Previsualizar()
 {
     QGroupBox* g = qobject_cast<QGroupBox*>(m_botoneralayout[ui->tabWidget->currentIndex()]->parent());
     if (g)
@@ -173,19 +185,18 @@ void DialogoListadoImprimir::Imprimir()
                                                                     );
 
                         }
-                        qDebug()<<"filename "<<fileName;
-                        //si no hay extensiones (ocurre bajo linux)
+                        //si no guarda la extension (ocurre bajo linux) se la pongo "a mano"
                 #if not defined(Q_OS_WIN) || not defined(Q_OS_MAC)
-                        fileName += m_lista_extensiones[extension];                
+                        fileName += m_lista_extensiones[extension];
                 #endif
-                        qDebug()<<"filename "<<fileName;
                         pArgumentos<<fileName;
-                        int res = ::PyRun::loadModule(m_ruta, m_pModulo, m_pFuncion, pArgumentos);
-                        if (res == ::PyRun::Resultado::Success)
+                        QPair <int,QVariant>res = ::PyRun::loadModule(m_ruta, m_pModulo, m_pFuncion, pArgumentos);
+                        if (res.first == ::PyRun::Resultado::Success)
                         {
-                            qDebug()<< __PRETTY_FUNCTION__ << "successful"<<res;
+                            qDebug()<< __PRETTY_FUNCTION__ << "successful"<<res.first;
                             //ver el pdf
-                            QString rutaPDF = "listado.pdf";
+                            //QString rutaPDF = "listado.fg";
+                            QString rutaPDF = res.second.toString();
                             qDebug()<<"FIchero PDF " + rutaPDF;
                             QDesktopServices::openUrl(QUrl(rutaPDF, QUrl::TolerantMode));
 
@@ -195,7 +206,7 @@ void DialogoListadoImprimir::Imprimir()
                             int ret = QMessageBox::warning(this, tr("Problemas al imprimir"),
                                                            tr("Ha habido problemas con el script de python"/*este mensaje* es el que hay que especificar el tipo de error*/),
                                                            QMessageBox::Ok);
-                            qDebug()<<"ret "<<ret;
+                            qDebug()<<"ret "<<res.first;
                         }                        
                     }
                 }
@@ -204,7 +215,10 @@ void DialogoListadoImprimir::Imprimir()
     }
 }
 
-void DialogoListadoImprimir::Previsualizar()
+void DialogoListadoImprimir::Imprimir()
 {
-   //QPrinter printer(QPrinter::HighResolution);
+   qDebug()<<"Imprimir ";
+    QPrinter printer(QPrinter::HighResolution);
+   QPrintDialog* d = new QPrintDialog(this);
+   int r = d->exec();
 }

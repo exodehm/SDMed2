@@ -7,10 +7,10 @@ Imprimir::Imprimir(const char* ruta, const char* nombremodulo, const char* nombr
 {
     QStringList datosConexion;
     datosConexion<<db.databaseName()<<db.hostName()<<QString::number(db.port())<<db.userName()<<db.password();
-    if(::PyRun::loadModule(QDir::current().absoluteFilePath(ruta), nombremodulo, nombrefuncion, datosConexion))
+    /*if(::PyRun::loadModule(QDir::current().absoluteFilePath(ruta), nombremodulo, nombrefuncion, datosConexion))
     {
         qDebug()<< __PRETTY_FUNCTION__ << "successful";
-    }
+    }*/
 }
 
 Imprimir::~Imprimir()
