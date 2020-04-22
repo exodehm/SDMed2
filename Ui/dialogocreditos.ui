@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Créditos y agradecimientos</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>

@@ -1,0 +1,9 @@
+Para usar SDMed2 hay que tener instalado PostgresSQL
+
+Una vez instalado, hay que añadirle la extensión sdmed.
+Para ello, hay que copiar los tres ficheros en el directorio /extension de Postgres
+En linux suele estar en:
+/usr/share/postgresql/(numero_version)/extension/
+
+En Windows:
+
