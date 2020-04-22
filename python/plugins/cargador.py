@@ -14,7 +14,10 @@ from plantilla import Plantilla
 
 #establezco el locale para todos los numeros de los informes que usen la funciona formatear
 import locale
-locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
+if platform.system() == 'Windows':    # Windows
+	locale.setlocale(locale.LC_ALL,'')
+else:
+	locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
 
 def iniciar(*datos):	
 	db = QtSql.QSqlDatabase('QPSQL')
@@ -41,12 +44,14 @@ def iniciar(*datos):
 				Instancia = Plantilla(*datosLayout)
 				documento = Instancia.Documento()
 				fImprimir.imprimir(db,obra,documento)
+				borrararchivo = False;
 				#guardar el archivo
 				if not nombreficheroguardar:
 					nombreficheroguardar = "listado.odt"
+					borrararchivo = True;
 				nombre = nombreficheroguardar.rsplit(".",1)[0]
 				extension = nombreficheroguardar.rsplit(".",1)[1]
-				return Guardar(documento,nombre,extension)
+				return Guardar(documento,nombre,extension,borrararchivo)
 				#pasar a pdf
 				#sys.argv = ['','-f','pdf',nombreficheroguardar]
 				#runpy.run_path('/usr/bin/unoconv', run_name='__main__')
@@ -58,15 +63,21 @@ def iniciar(*datos):
 	else:
 		return ""
 		
-def Guardar(documento, fichero, extension):
+def Guardar(documento, fichero, extension, borrar):
 	#Primer paso, guardar el odt 
-	documento.save(fichero+".odt")#en todos los casos creo el odt	
+	documento.save(fichero+".odt") #en todos los casos creo el odt	
 	if (extension == "docx"):		
 		subprocess.call(('unoconv', '-f', 'docx', fichero + ".odt"))
-		#subprocess.call(('unoconv', '-f', 'pdf', fichero + ".docx"))
+		subprocess.call(('unoconv', '-f', 'pdf', fichero + ".docx"))
 		os.remove(fichero + ".odt")#borro el odt que en esta opcion solo sirve para hacer la conversion a docx	
-	#subprocess.call(('unoconv', '-f', 'pdf', fichero + ".odt"))
-	return fichero +"."+extension
+	subprocess.call(('unoconv', '-f', 'pdf', fichero + ".odt"))	
+	if borrar: #si he usado un fichero auxiliar (listado.odt) para genera el pdf lo borro
+		try:
+			os.remove(fichero + ".odt")
+		except:
+			print ("El fichero no existe")		
+	return fichero +".pdf"
+	#return fichero +"."+extension
 		
 def mostrar(nombrefichero):
 	print ("ver PDF funcion " + nombrefichero)

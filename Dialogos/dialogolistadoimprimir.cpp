@@ -15,8 +15,6 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDesktopServices>
-#include <QtPrintSupport/QPrinter>
-#include <QtPrintSupport/QPrintDialog>
 
 DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase db, QWidget *parent) :
     QDialog(parent), ui(new Ui::DialogoListadoImprimir), m_db(db), m_obra(obra)
@@ -68,7 +66,6 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
         QObject::connect(boton,SIGNAL(clicked()),this, SLOT(ActualizarBotonPrevisualizar()));
     }
     QObject::connect(ui->boton_Previsualizar,SIGNAL(pressed()),this,SLOT(Previsualizar()));
-    QObject::connect(ui->botonImprimir,SIGNAL(pressed()),this,SLOT(Imprimir()));
     QObject::connect(ui->botonSalir,SIGNAL(pressed()),this,SLOT(accept()));
     QObject::connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(DesactivarBotones()));
     QObject::connect(ui->boton_opcionesPagina,SIGNAL(pressed()),this,SLOT(OpcionesPagina()));
@@ -213,11 +210,4 @@ void DialogoListadoImprimir::Previsualizar()
             }
         }
     }
-}
-
-void DialogoListadoImprimir::Imprimir()
-{
-   QPrinter printer(QPrinter::HighResolution);
-   QPrintDialog* d = new QPrintDialog(this);
-   int r = d->exec();
 }

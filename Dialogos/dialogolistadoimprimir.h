@@ -33,7 +33,6 @@ public:
     bool LeerJSON(sTipoListado &tipoL, const QString &nombrefichero);
 
 public slots:
-    void Imprimir();
     void Previsualizar();
     void ActualizarBotonPrevisualizar();
     void DesactivarBotones();
