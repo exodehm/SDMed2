@@ -6,11 +6,16 @@ MainModule = "__init_odt__"
 import sys
 import imp
 import os
-import runpy
+#import runpy
 import subprocess, platform
 from PyQt5 import QtSql
 from subprocess import Popen
 from plantilla import Plantilla
+import unoconv
+from pathlib import Path
+sys.path.append(Path(__file__).parent)
+ruta_unoconv = str(Path(__file__).parent) + "/unoconv.py"
+
 
 #establezco el locale para todos los numeros de los informes que usen la funciona formatear
 import locale
@@ -64,13 +69,16 @@ def iniciar(*datos):
 		return ""
 		
 def Guardar(documento, fichero, extension, borrar):
+	Shell = False
+	if platform.system() == 'Windows':
+		Shell = True
 	#Primer paso, guardar el odt 
 	documento.save(fichero+".odt") #en todos los casos creo el odt	
 	if (extension == "docx"):		
-		subprocess.call(('unoconv', '-f', 'docx', fichero + ".odt"))
-		subprocess.call(('unoconv', '-f', 'pdf', fichero + ".docx"))
+		subprocess.call((ruta_unoconv, '-f', 'docx', fichero + ".odt"),shell=Shell)
+		subprocess.call((ruta_unoconv, '-f', 'pdf', fichero + ".docx"),shell=Shell)
 		os.remove(fichero + ".odt")#borro el odt que en esta opcion solo sirve para hacer la conversion a docx	
-	subprocess.call(('unoconv', '-f', 'pdf', fichero + ".odt"))	
+	subprocess.call((ruta_unoconv, '-f', 'pdf', fichero + ".odt"),shell=Shell)
 	if borrar: #si he usado un fichero auxiliar (listado.odt) para genera el pdf lo borro
 		try:
 			os.remove(fichero + ".odt")
@@ -79,7 +87,7 @@ def Guardar(documento, fichero, extension, borrar):
 	return fichero +".pdf"
 	#return fichero +"."+extension
 		
-def mostrar(nombrefichero):
+def mostrar(nombrefichero):	
 	print ("ver PDF funcion " + nombrefichero)
 	extensionpdf = ".pdf"
 	nombreficheropdf = nombrefichero + extensionpdf
