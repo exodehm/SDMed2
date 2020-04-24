@@ -33,7 +33,8 @@ def iniciar(*datos):
 	db.setPassword(datos[4])
 	obra = datos[5]
 	location = datos[6]
-	nombreficheroguardar = datos[7]	
+	nombreficheroguardar = datos[7]
+	layoutPagina = OrganizarLayoutPagina(datos[8])
 	if db.open():	
 		info = imp.find_module(MainModule, [location])
 		if info:
@@ -45,7 +46,7 @@ def iniciar(*datos):
 				fImprimir = imp.load_module(MainModule, *info)
 				datosCabecera = LeerDatosProyecto(obra, db)
 				print (datosCabecera[0],datosCabecera[1])
-				datosLayout=["1cm","1.5cm","2cm","2cm",datosCabecera[0],datosCabecera[1]]
+				datosLayout=[datosCabecera[0], datosCabecera[1], layoutPagina]
 				Instancia = Plantilla(*datosLayout)
 				documento = Instancia.Documento()
 				fImprimir.imprimir(db,obra,documento)
@@ -83,7 +84,7 @@ def Guardar(documento, fichero, extension, borrar):
 		try:
 			os.remove(fichero + ".odt")
 		except:
-			print ("El fichero no existe")		
+			print ("El fichero no existe")
 	return fichero +".pdf"
 	#return fichero +"."+extension
 		
@@ -96,9 +97,14 @@ def mostrar(nombrefichero):
 		subprocess.call(('open', nombreficheropdf))
 	elif platform.system() == 'Windows':    # Windows
 		os.startfile(nombreficheropdf)
-	else:                                   # linux variants		
+	else:                                   # linux variants
 		subprocess.call(('xdg-open', nombreficheropdf))
 		
+def OrganizarLayoutPagina (datoslayout):
+	if not datoslayout:
+		datoslayout = "1,1,1,1,10"
+	toReturn = datoslayout.split(",")	
+	return toReturn
 		
 def formatear(numero, precision=2, esmoneda=True):
 	precision = "%."+str(precision)+"f"
@@ -125,5 +131,5 @@ def LeerDatosProyecto(obra,db):
 		
 			
 if __name__ == "__main__":
-	datos = ["sdmed", "localhost","5432","sdmed","sdmed","METRO","/home/david/.sdmed/python/plugins/C3/",""]
+	datos = ["sdmed", "localhost","5432","sdmed","sdmed","METRO","/home/david/.sdmed/python/plugins/C3/","","2,2,1,1,5"]
 	iniciar(*datos)

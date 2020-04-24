@@ -96,10 +96,11 @@ void DialogoListadoImprimir::DesactivarBotones()
 
 void DialogoListadoImprimir::OpcionesPagina()
 {
-    DialogogoOpcionesPagina* d = new DialogogoOpcionesPagina(this);
+    DialogogoOpcionesPagina* d = new DialogogoOpcionesPagina(m_opciones_pagina,this);
     if (d->exec())
     {
-        qDebug()<<"Añadir opciones al listado";
+        m_opciones_pagina = d->LeerDatos();
+        m_layout_pagina = d->LeeDatosS();
     }
 }
 
@@ -187,12 +188,13 @@ void DialogoListadoImprimir::Previsualizar()
                         fileName += m_lista_extensiones[extension];
                 #endif
                         pArgumentos<<fileName;
+                        pArgumentos<<m_layout_pagina;
+                        qDebug()<<"m_layout_pagina "<<m_layout_pagina;
                         QPair <int,QVariant>res = ::PyRun::loadModule(m_ruta, m_pModulo, m_pFuncion, pArgumentos);
                         if (res.first == ::PyRun::Resultado::Success)
                         {
                             qDebug()<< __PRETTY_FUNCTION__ << "successful"<<res.first;
                             //ver el pdf
-                            //QString rutaPDF = "listado.fg";
                             QString rutaPDF = res.second.toString();
                             qDebug()<<"FIchero PDF " + rutaPDF;
                             QDesktopServices::openUrl(QUrl(rutaPDF, QUrl::TolerantMode));

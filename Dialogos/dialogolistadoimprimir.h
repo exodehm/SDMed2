@@ -13,6 +13,15 @@ class DialogoListadoImprimir;
 class QRadioButton;
 class QVBoxLayout;
 
+struct sOpcionesPagina
+{
+  double mSup;
+  double mInf;
+  double mDer;
+  double mIzq;
+  int mPagInicial;
+};
+
 class DialogoListadoImprimir : public QDialog
 {
     Q_OBJECT
@@ -26,7 +35,7 @@ public:
       QString ruta;
       eTipo tipo;
       QRadioButton* boton;
-    };
+    }; 
     explicit DialogoListadoImprimir(const QString &obra, QSqlDatabase db, QWidget *parent = nullptr);
     ~DialogoListadoImprimir();
 
@@ -47,7 +56,9 @@ private:
     QString m_pModulo;
     QString m_pFuncion;
     QString m_obra;
+    QString m_layout_pagina;
     QHash<QString, QString> m_lista_extensiones;
+    sOpcionesPagina m_opciones_pagina;
 };
 
 #endif // DIALOGOLISTADOIMPRIMIR_H

@@ -10,17 +10,24 @@ class Plantilla():
 		self.f = Footer()
 		self.s = self.textDoc.styles		
 		self.pl = PageLayout(name="pagelayout")
+		#datos para la cabecera
+		Autor = datos[0]
+		Obra = datos[1]		
 		#margenes para la pagina (PageLayout)		
-		MTop = datos[0]
-		MBottom = datos[1]
-		MRight = datos[2]
-		MLeft = datos[3]
+		layoutPagina = datos[2]
+		print ("layoutPagina")
+		print (layoutPagina)
+		MRight  = str(layoutPagina[0])+"cm"
+		print ("MRight " + MRight)
+		MLeft  = str(layoutPagina[1])+"cm"
+		MTop  = str(layoutPagina[2])+"cm"
+		MBottom  = str(layoutPagina[3])+"cm"
+		PaginaInicial = layoutPagina[4]
+		#anadimos los datos a la pagina
 		self.pl.addElement(PageLayoutProperties(margintop=MTop, marginbottom=MBottom,marginleft=MRight,marginright=MLeft))
 		self.textDoc.automaticstyles.addElement(self.pl)
 		self.mp = MasterPage(name="Standard", pagelayoutname=self.pl)
-		self.textDoc.masterstyles.addElement(self.mp)
-		Autor = datos[4]
-		Obra = datos[5]		
+		self.textDoc.masterstyles.addElement(self.mp)		
 		#Cabecera estilos
 		#Normal
 		EstiloCabeceraNormal = "CabeceraNormal"
@@ -36,7 +43,7 @@ class Plantilla():
 		EstiloCabeceraNormalCentrado = "CabeceraNormalCentrado"
 		estilo = Style(name=EstiloCabeceraNormalCentrado, family="paragraph",  parentstylename = EstiloCabeceraNormal)
 		estilo.addElement(ParagraphProperties(textalign = "center", numberlines="true", linenumber="0"))
-		self.s.addElement(estilo)		
+		self.s.addElement(estilo)
 		#linea horizontal fina		
 		linea_horizontal_fina = Style(name = "Lineahorizontalfina", displayname="Horizontal Line Thin", family="paragraph")
 		linea_horizontal_fina.addElement(ParagraphProperties(margintop="0cm", marginbottom="0cm", marginright="0cm", marginleft="0cm", \
@@ -67,8 +74,8 @@ class Plantilla():
 		fp = P(stylename=EstiloCabeceraNormalCentrado)
 		pagina = Span(stylename=EstiloCabeceraNormal, text="Página: ")
 		fp.addElement(pagina)
-		numero = PageNumber(selectpage="current")
-		fp.addElement(numero)
+		numero = PageNumber(selectpage="auto", text=4)
+		fp.addElement(numero)		
 		self.f.addElement(fp)
 		self.mp.addElement(self.f)
 	def Documento(self):
