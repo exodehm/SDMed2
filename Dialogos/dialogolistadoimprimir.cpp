@@ -4,10 +4,10 @@
 #include "pyrun.h"
 #include <QDir>
 #include <QDebug>
-#include <QRadioButton>
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QRadioButton>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -60,10 +60,20 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
 
     for (int i = 0;i<m_lista.size();i++)
     {
-        QRadioButton* boton =  new QRadioButton(m_lista.at(i).nombre);
-        m_botoneralayout[m_lista.at(i).tipo]->addWidget(boton);        
+        CustomRadioButton* boton =  new CustomRadioButton(m_lista.at(i).nombre);
+        QHBoxLayout* marco = new QHBoxLayout;
+        m_botoneralayout[m_lista.at(i).tipo]->addLayout(marco);
+        marco->addWidget(boton);
         m_lista[i].boton = boton;
         QObject::connect(boton,SIGNAL(clicked()),this, SLOT(ActualizarBotonPrevisualizar()));
+        //boton desplegable
+        QPushButton* botonPropiedades = new QPushButton("+");
+        botonPropiedades->setMaximumWidth(30);
+        botonPropiedades->setVisible(false);
+        QObject::connect(botonPropiedades,SIGNAL(clicked()),this, SLOT (GenerarTablaOpciones()));
+        boton->botonPropiedades = botonPropiedades;
+        marco->addWidget(botonPropiedades);
+        marco->addStretch();
     }
     QObject::connect(ui->boton_Previsualizar,SIGNAL(pressed()),this,SLOT(Previsualizar()));
     QObject::connect(ui->botonSalir,SIGNAL(pressed()),this,SLOT(accept()));
@@ -78,10 +88,17 @@ DialogoListadoImprimir::~DialogoListadoImprimir()
 
 void DialogoListadoImprimir::ActualizarBotonPrevisualizar()
 {
-    QRadioButton* c = dynamic_cast<QRadioButton*>(sender());
+    //Primero desactivar los botones de propiedades que haya visibles
+    for (auto c : m_lista)
+    {
+        c.boton->botonPropiedades->setVisible(c.boton->isChecked());
+    }
+    //Despues activar el que sea en funcion de si esta activo o no
+    CustomRadioButton* c = dynamic_cast<CustomRadioButton*>(sender());
     if (c)
     {
         ui->boton_Previsualizar->setEnabled(c->isChecked());
+        c->botonPropiedades->setVisible(c->isChecked());
     }
 }
 
@@ -104,6 +121,11 @@ void DialogoListadoImprimir::OpcionesPagina()
     }
 }
 
+void DialogoListadoImprimir::GenerarTablaOpciones()
+{
+    qDebug()<<"Generar tavla opciones";
+}
+
 bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombrefichero)
 {
     QFile file(nombrefichero);
@@ -118,9 +140,10 @@ bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombre
         qDebug() << jsonError.errorString();
     }
     QJsonObject datos = metadataJson.object();
-    QJsonArray arrayscript = datos["datos_script"].toArray();
+    QJsonArray datos_script = datos["datos_script"].toArray();
     //QJsonArray arraynombre = datos["datos_nombre"].toArray();<--POR AHORA NO TOCO ESTOS DATOS
-    for(const QJsonValue val: arrayscript)
+    QJsonArray opciones = datos["opciones"].toArray();
+    for(const QJsonValue val: datos_script)
     {
         QJsonObject loopObj = val.toObject();
         //qDebug() << loopObj["nombre"].toString();
@@ -135,6 +158,25 @@ bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombre
         }
         if (!tipoL.nombre.isEmpty())
         {
+            //si hay nombre, leo las opciones, si las hubiera para incorporarlas
+            OpcionesListado Listaopciones;
+            for(const QJsonValue val: opciones)
+            {
+                QJsonObject loopObj = val.toObject();
+                for (auto first : loopObj.keys())
+                {
+                    QJsonArray datos_opciones = loopObj[first].toArray();
+                    QStringList second;
+                    for(const QJsonValue opcionessecond: datos_opciones)
+                    {
+                        second<<opcionessecond.toString();
+                    }
+                    QPair<QString,QStringList>elemento(first,second);
+                    second.clear();
+                    Listaopciones.append(elemento);
+                }
+            }
+            tipoL.opciones = Listaopciones;
             return true;
         }
     }
