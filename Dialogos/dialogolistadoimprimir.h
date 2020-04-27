@@ -6,6 +6,7 @@
 #include <QSqlDatabase>
 #include <QHash>
 #include <QRadioButton>
+#include <QPushButton>
 
 namespace Ui {
 class DialogoListadoImprimir;
@@ -23,6 +24,9 @@ struct sOpcionesPagina
   int mPagInicial;
 };
 
+class DialogoTablaOpcionesImpresion;
+using OpcionesListado = QList<QPair<QString,QStringList>>;
+
 class DialogoListadoImprimir : public QDialog
 {
     Q_OBJECT
@@ -30,13 +34,21 @@ class DialogoListadoImprimir : public QDialog
 public:
     static const int nTipoListados = 4;
     enum eTipo {LISTADO,MEDICION,CERTIFICACION,GENERAL};
+    struct CustomPushButton : public QPushButton
+    {
+        CustomPushButton (QWidget* parent=nullptr):QPushButton(parent){}
+        CustomPushButton(const QString &text, QWidget *parent = nullptr):QPushButton(text,parent){}
+        OpcionesListado* opciones;
+    };
+
     struct CustomRadioButton : public QRadioButton
     {
         CustomRadioButton(const QString &text, QWidget *parent = nullptr):QRadioButton(text,parent){}
         CustomRadioButton (QWidget* parent=nullptr):QRadioButton(parent){}
         QPushButton* botonPropiedades;
+        OpcionesListado* opciones;
     };
-    using OpcionesListado = QList<QPair<QString,QStringList>>;
+
     struct sTipoListado
     {
       QString nombre;

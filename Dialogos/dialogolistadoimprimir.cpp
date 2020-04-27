@@ -1,6 +1,7 @@
 #include "dialogolistadoimprimir.h"
 #include "ui_dialogolistadoimprimir.h"
 #include "Dialogos/dialogogoopcionespagina.h"
+#include "Dialogos/dialogotablaopcionesimpresion.h"
 #include "pyrun.h"
 #include <QDir>
 #include <QDebug>
@@ -15,6 +16,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDesktopServices>
+#include <QTableWidget>
 
 DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase db, QWidget *parent) :
     QDialog(parent), ui(new Ui::DialogoListadoImprimir), m_db(db), m_obra(obra)
@@ -60,18 +62,19 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
 
     for (int i = 0;i<m_lista.size();i++)
     {
-        CustomRadioButton* boton =  new CustomRadioButton(m_lista.at(i).nombre);
+        CustomRadioButton* radio_boton =  new CustomRadioButton(m_lista.at(i).nombre);
         QHBoxLayout* marco = new QHBoxLayout;
         m_botoneralayout[m_lista.at(i).tipo]->addLayout(marco);
-        marco->addWidget(boton);
-        m_lista[i].boton = boton;
-        QObject::connect(boton,SIGNAL(clicked()),this, SLOT(ActualizarBotonPrevisualizar()));
+        marco->addWidget(radio_boton);
+        m_lista[i].boton = radio_boton;
+        QObject::connect(radio_boton,SIGNAL(clicked()),this, SLOT(ActualizarBotonPrevisualizar()));
         //boton desplegable
-        QPushButton* botonPropiedades = new QPushButton("+");
+        CustomPushButton* botonPropiedades = new CustomPushButton("+");
         botonPropiedades->setMaximumWidth(30);
         botonPropiedades->setVisible(false);
         QObject::connect(botonPropiedades,SIGNAL(clicked()),this, SLOT (GenerarTablaOpciones()));
-        boton->botonPropiedades = botonPropiedades;
+        radio_boton->botonPropiedades = botonPropiedades;
+        botonPropiedades->opciones = &m_lista[i].opciones;
         marco->addWidget(botonPropiedades);
         marco->addStretch();
     }
@@ -123,7 +126,13 @@ void DialogoListadoImprimir::OpcionesPagina()
 
 void DialogoListadoImprimir::GenerarTablaOpciones()
 {
-    qDebug()<<"Generar tavla opciones";
+    CustomPushButton *w = dynamic_cast<CustomPushButton*>(sender());
+    if (w)
+    {
+        DialogoTablaOpcionesImpresion* d =  new DialogoTablaOpcionesImpresion(*w->opciones,w);
+        d->move(mapToGlobal(QPoint(w->geometry().x()+w->width()*2,w->geometry().y()+w->height()*2)));
+        int ret = d->exec();
+    }
 }
 
 bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombrefichero)
