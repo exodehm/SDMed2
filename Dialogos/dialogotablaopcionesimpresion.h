@@ -19,6 +19,7 @@ class DialogoTablaOpcionesImpresion : public QDialog
 public:
     explicit DialogoTablaOpcionesImpresion(const OpcionesListado& opc, QWidget *parent = nullptr);
     ~DialogoTablaOpcionesImpresion();
+    QList<QPair<QString,QString>>OpcionesSeleccionadas();
 
 private:
     Ui::DialogoTablaOpcionesImpresion *ui;

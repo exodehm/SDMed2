@@ -39,6 +39,8 @@ public:
         CustomPushButton (QWidget* parent=nullptr):QPushButton(parent){}
         CustomPushButton(const QString &text, QWidget *parent = nullptr):QPushButton(text,parent){}
         OpcionesListado* opciones;
+        QList<QPair<QString,QString>> *opcionesSelecionadas;
+        DialogoTablaOpcionesImpresion* d;
     };
 
     struct CustomRadioButton : public QRadioButton
@@ -46,7 +48,7 @@ public:
         CustomRadioButton(const QString &text, QWidget *parent = nullptr):QRadioButton(text,parent){}
         CustomRadioButton (QWidget* parent=nullptr):QRadioButton(parent){}
         QPushButton* botonPropiedades;
-        OpcionesListado* opciones;
+        OpcionesListado* opciones;        
     };
 
     struct sTipoListado
@@ -56,6 +58,7 @@ public:
       eTipo tipo;
       OpcionesListado opciones;
       CustomRadioButton* boton;
+      QList<QPair<QString,QString>> opcionesSelecionadas;
     };
     explicit DialogoListadoImprimir(const QString &obra, QSqlDatabase db, QWidget *parent = nullptr);
     ~DialogoListadoImprimir();
@@ -67,7 +70,8 @@ public slots:
     void ActualizarBotonPrevisualizar();
     void DesactivarBotones();
     void OpcionesPagina();
-    void GenerarTablaOpciones();
+    void MostrarTablaOpciones();
+    void AnadirListadoImpresion();
 
 private:
     Ui::DialogoListadoImprimir *ui;
@@ -79,8 +83,9 @@ private:
     QString m_pFuncion;
     QString m_obra;
     QString m_layout_pagina;
+    QString m_listadosImpresion;
     QHash<QString, QString> m_lista_extensiones;
-    sOpcionesPagina m_opciones_pagina;
+    sOpcionesPagina m_opciones_pagina;    
 };
 
 #endif // DIALOGOLISTADOIMPRIMIR_H
