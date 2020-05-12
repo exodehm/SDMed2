@@ -1,0 +1,5 @@
+Descomprime el fichero en el directorio de usuario.
+Una vez descomprimido debe de quedar:
+Linux: /home/usuario/.sdmed/
+Windows: 
+C:\Users\usuario\.sdmed
