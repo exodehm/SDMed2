@@ -24,7 +24,7 @@ class Plantilla():
 		MBottom  = str(layoutPagina[3])+"cm"
 		PaginaInicial = layoutPagina[4]
 		#anadimos los datos a la pagina
-		self.pl.addElement(PageLayoutProperties(margintop=MTop, marginbottom=MBottom,marginleft=MRight,marginright=MLeft))
+		self.pl.addElement(PageLayoutProperties(margintop=MTop, marginbottom=MBottom,marginleft=MRight,marginright=MLeft))		
 		self.textDoc.automaticstyles.addElement(self.pl)
 		self.mp = MasterPage(name="Standard", pagelayoutname=self.pl)
 		self.textDoc.masterstyles.addElement(self.mp)		

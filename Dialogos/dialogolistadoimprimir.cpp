@@ -30,7 +30,6 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
     QDir dir_plugins(m_ruta);
     dir_plugins.setFilter(QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
     QStringList filtros;
-    //m_listadosImpresion.append("[");
     QFileInfoList directorios = dir_plugins.entryInfoList();
     foreach (const QFileInfo& fichero, directorios)
     {
@@ -143,11 +142,7 @@ void DialogoListadoImprimir::MostrarTablaOpciones()
         }
         if (w->d->exec())
         {
-            *(w->opcionesSelecionadas) = w->d->OpcionesSeleccionadas();
-            for (auto elem : w->d->OpcionesSeleccionadas())
-            {
-                qDebug()<<elem.first<<" . "<<elem.second;
-            }
+            *(w->opcionesSelecionadas) = w->d->OpcionesSeleccionadas();            
         }
     }
 }
@@ -164,9 +159,22 @@ void DialogoListadoImprimir::AnadirListadoImpresion()
                 for( int i=0; i<m_lista.count(); ++i )
                 {
                     if (m_lista.at(i).boton == button)
-                    {
-                        qDebug()<<"Añadir al listado.... "<<m_lista.at(i).ruta<<" - "<<m_lista.at(i).opcionesSelecionadas;
-                        m_listadosImpresion.append(m_lista.at(i).ruta);
+                    {                        
+                        if (!m_listadosImpresion.isEmpty())
+                        {
+                            m_listadosImpresion.append(",");
+                        }
+                        QString opciones = "";
+                        if (m_lista.at(i).opcionesSelecionadas.isEmpty())
+                        {
+                            opciones = "[]";
+                        }
+                        else
+                        {
+                            opciones = m_lista.at(i).opcionesSelecionadas;
+                        }
+                        m_listadosImpresion.append("['").append(m_lista.at(i).ruta).append("'").append(",").append(opciones).append("]");
+                        qDebug()<<"Añadir al listado.... "<<m_listadosImpresion;
                     }
                 }
             }
@@ -233,14 +241,12 @@ bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombre
 
 void DialogoListadoImprimir::Previsualizar()
 {
-
-    //m_listadosImpresion.append("]");
     QStringList pArgumentos;
-    QString datosConexion = m_db.databaseName()+","+m_db.hostName()+","+QString::number(m_db.port())+","+ m_db.userName()+","+m_db.password();
+    QString datosConexion = "[" + m_db.databaseName()+","+m_db.hostName()+","+QString::number(m_db.port())+","+ m_db.userName()+","+m_db.password() + "]";
     pArgumentos<<datosConexion;
     pArgumentos<<m_obra;
-    pArgumentos<<m_listadosImpresion;
-    //qDebug()<<"m_lista.at(i).ruta "<<m_lista.at(i).ruta;
+    QString listados = "[" + m_listadosImpresion + "]";
+    pArgumentos<<listados;
     QString fileName = "";
     QString extensiones;
     //preparo las extensiones
@@ -270,7 +276,10 @@ void DialogoListadoImprimir::Previsualizar()
 #endif
     pArgumentos<<fileName;
     pArgumentos<<m_layout_pagina;
-    qDebug()<<"m_layout_pagina "<<m_layout_pagina;
+    for (const auto &algo : pArgumentos)
+    {
+        qDebug()<<"Algo "<<algo;
+    }
     QPair <int,QVariant>res = ::PyRun::loadModule(m_ruta, m_pModulo, m_pFuncion, pArgumentos);
     if (res.first == ::PyRun::Resultado::Success)
     {

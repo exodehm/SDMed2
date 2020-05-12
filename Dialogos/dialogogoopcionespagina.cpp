@@ -32,11 +32,12 @@ sOpcionesPagina DialogogoOpcionesPagina::LeerDatos()
 
 QString DialogogoOpcionesPagina::LeeDatosS()
 {
-    QString toReturn = "";
+    QString toReturn = "[";
     toReturn.append(QString::number(ui->spinDer->value())).append(",");
     toReturn.append(QString::number(ui->spinIzq->value())).append(",");
     toReturn.append(QString::number(ui->spinSup->value())).append(",");
     toReturn.append(QString::number(ui->spinInf->value())).append(",");
     toReturn.append(QString::number(ui->spinPaginaInicial->value()));
+    toReturn.append("]");
     return toReturn;
 }

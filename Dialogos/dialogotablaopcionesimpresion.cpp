@@ -30,28 +30,21 @@ DialogoTablaOpcionesImpresion::~DialogoTablaOpcionesImpresion()
     //delete ui;
 }
 
-QList<QPair<QString, QString> > DialogoTablaOpcionesImpresion::OpcionesSeleccionadas()
+QString DialogoTablaOpcionesImpresion::OpcionesSeleccionadas()
 {
-    QList<QPair<QString, QString> > toReturn;
+    QString toReturn = "[";
     for (int fila = 0;fila<ui->tableWidget->model()->rowCount();fila++)
     {
-        QPair<QString, QString> par;
-        for (int columna = 0;columna<ui->tableWidget->model()->columnCount();columna++)
+        QComboBox* c = dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(fila,1));//columna == 1
+        if (c)
         {
-            if (columna==0)
+            toReturn.append("'").append(c->currentText()).append("'");
+            if (fila < ui->tableWidget->model()->rowCount() - 1)
             {
-                par.first = ui->tableWidget->model()->index(fila,columna).data().toString();
-            }
-            if (columna==1)
-            {
-                QComboBox* c = dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(fila,columna));
-                if (c)
-                {
-                    par.second = c->currentText();
-                }
+                toReturn.append(",");
             }
         }
-        toReturn.append(par);
     }
+    toReturn.append("]");
     return toReturn;
 }

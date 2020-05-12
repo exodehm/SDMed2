@@ -39,7 +39,7 @@ public:
         CustomPushButton (QWidget* parent=nullptr):QPushButton(parent){}
         CustomPushButton(const QString &text, QWidget *parent = nullptr):QPushButton(text,parent){}
         OpcionesListado* opciones;
-        QList<QPair<QString,QString>> *opcionesSelecionadas;
+        QString *opcionesSelecionadas;
         DialogoTablaOpcionesImpresion* d;
     };
 
@@ -58,7 +58,7 @@ public:
       eTipo tipo;
       OpcionesListado opciones;
       CustomRadioButton* boton;
-      QList<QPair<QString,QString>> opcionesSelecionadas;
+      QString opcionesSelecionadas;
     };
     explicit DialogoListadoImprimir(const QString &obra, QSqlDatabase db, QWidget *parent = nullptr);
     ~DialogoListadoImprimir();
