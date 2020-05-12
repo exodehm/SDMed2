@@ -6,12 +6,14 @@ MainModule = "__init_odt__"
 import sys
 import imp
 import os
+import ast
 #import runpy
 import subprocess, platform
 from PyQt5 import QtSql
-from subprocess import Popen
+#from subprocess import Popen
 from plantilla import Plantilla
-import unoconv
+from saltolinea import saltolinea
+#import unoconv
 from pathlib import Path
 sys.path.append(Path(__file__).parent)
 ruta_unoconv = str(Path(__file__).parent) + "/unoconv.py"
@@ -24,49 +26,62 @@ if platform.system() == 'Windows':    # Windows
 else:
 	locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
 
-def iniciar(*datos):	
+def iniciar(*datos):
+	db = EstablecerDB(datos[0])
+	obra = datos[1]
+	listados = ListadosImpresion(datos[2])
+	nombreficheroguardar = datos[3]
+	layoutPagina = OrganizarLayoutPagina(datos[4])
+	if db.open():
+		#primer paso, crear la plantilla
+		datosCabecera = LeerDatosProyecto(obra, db)
+		print (datosCabecera[0],datosCabecera[1])
+		datosLayout=[datosCabecera[0], datosCabecera[1], layoutPagina]
+		Instancia = Plantilla(*datosLayout)
+		documento = Instancia.Documento()
+		#segundo paso, iterar sobre los listados para añadir el contenido al documento
+		for listado in listados:
+			ruta_listado = listado[0]
+			propiedades_listado = listado[1]
+			info = imp.find_module(MainModule, [ruta_listado])
+			if info:
+				ruta_fichero = ruta_listado + "/" + MainModule+".py"
+				print ("ruta informe " + ruta_fichero)
+				fichero = open(ruta_fichero, "r+")
+				if (fichero):
+					print ("FICHERO " + nombreficheroguardar)
+					fImprimir = imp.load_module(MainModule, *info)
+					documento = fImprimir.imprimir(db,obra,documento,propiedades_listado)
+					documento = saltolinea(documento)
+		#tercer paso, guardar el archivo
+		borrararchivo = False;
+		if not nombreficheroguardar:
+			nombreficheroguardar = "listado.odt"
+			borrararchivo = True;
+		nombre = nombreficheroguardar.rsplit(".",1)[0]
+		extension = nombreficheroguardar.rsplit(".",1)[1]
+		return Guardar(documento,nombre,extension,borrararchivo)
+	else:
+		print ("Error, database is not opened")
+		
+			
+def EstablecerDB(conexion):
+	datos = StringToList(conexion)
 	db = QtSql.QSqlDatabase('QPSQL')
-	db.setDatabaseName(datos[0])
+	db.setDatabaseName(datos[0])	
 	db.setHostName(datos[1])
 	db.setPort(int(datos[2]))
 	db.setUserName(datos[3])
 	db.setPassword(datos[4])
-	obra = datos[5]
-	location = datos[6]
-	nombreficheroguardar = datos[7]	
-	if db.open():	
-		info = imp.find_module(MainModule, [location])
-		if info:
-			ruta_fichero = location + "/" + MainModule+".py"
-			print ("ruta informe " + ruta_fichero)
-			fichero = open(ruta_fichero, "r+")
-			if (fichero):
-				print ("FICHERO " + nombreficheroguardar)
-				fImprimir = imp.load_module(MainModule, *info)
-				datosCabecera = LeerDatosProyecto(obra, db)
-				print (datosCabecera[0],datosCabecera[1])
-				datosLayout=["1cm","1.5cm","2cm","2cm",datosCabecera[0],datosCabecera[1]]
-				Instancia = Plantilla(*datosLayout)
-				documento = Instancia.Documento()
-				fImprimir.imprimir(db,obra,documento)
-				borrararchivo = False;
-				#guardar el archivo
-				if not nombreficheroguardar:
-					nombreficheroguardar = "listado.odt"
-					borrararchivo = True;
-				nombre = nombreficheroguardar.rsplit(".",1)[0]
-				extension = nombreficheroguardar.rsplit(".",1)[1]
-				return Guardar(documento,nombre,extension,borrararchivo)
-				#pasar a pdf
-				#sys.argv = ['','-f','pdf',nombreficheroguardar]
-				#runpy.run_path('/usr/bin/unoconv', run_name='__main__')
-				#runpy.run_module('unoconv.py', run_name='__main__')
-				#subprocess.call(('unoconv', '-f', 'pdf', nombreficheroguardar))
-				#mostrar
-				#mostrar(nombreficheroguardar)
-			return ""
-	else:
-		return ""
+	return db
+	
+def ListadosImpresion(localizaciones):
+	listados = ast.literal_eval(localizaciones)
+	return listados
+	
+def StringToList(cadena):
+	toReturn = cadena.strip('][').split(',')
+	return toReturn
 		
 def Guardar(documento, fichero, extension, borrar):
 	Shell = False
@@ -83,7 +98,7 @@ def Guardar(documento, fichero, extension, borrar):
 		try:
 			os.remove(fichero + ".odt")
 		except:
-			print ("El fichero no existe")		
+			print ("El fichero no existe")
 	return fichero +".pdf"
 	#return fichero +"."+extension
 		
@@ -96,9 +111,13 @@ def mostrar(nombrefichero):
 		subprocess.call(('open', nombreficheropdf))
 	elif platform.system() == 'Windows':    # Windows
 		os.startfile(nombreficheropdf)
-	else:                                   # linux variants		
+	else:                                   # linux variants
 		subprocess.call(('xdg-open', nombreficheropdf))
 		
+def OrganizarLayoutPagina (datoslayout):
+	if not datoslayout:
+		datoslayout = "[1,1,1,1,10]"
+	return StringToList(datoslayout)
 		
 def formatear(numero, precision=2, esmoneda=True):
 	precision = "%."+str(precision)+"f"
@@ -125,5 +144,5 @@ def LeerDatosProyecto(obra,db):
 		
 			
 if __name__ == "__main__":
-	datos = ["sdmed", "localhost","5432","sdmed","sdmed","METRO","/home/david/.sdmed/python/plugins/C3/",""]
+	datos = ["[sdmed,localhost,5432,sdmed,sdmed]","CENZANO","[['/home/david/.sdmed/python/plugins_impresion/C1/',['1','2','e']],['/home/david/.sdmed/python/plugins_impresion/C4/',['a','b']],['/home/david/.sdmed/python/plugins_impresion/C3/',[]]]","","[2,2,1,1,5]"]
 	iniciar(*datos)

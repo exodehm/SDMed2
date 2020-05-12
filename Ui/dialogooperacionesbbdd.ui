@@ -132,7 +132,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Comprbar la existencia de la base de datos sdmed</string>
+            <string>Comprobar la existencia de la base de datos sdmed</string>
            </property>
           </widget>
          </item>
@@ -142,7 +142,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Comprobar la existnecia de la extensión sdmed</string>
+            <string>Comprobar la existencia de la extensión sdmed</string>
            </property>
           </widget>
          </item>

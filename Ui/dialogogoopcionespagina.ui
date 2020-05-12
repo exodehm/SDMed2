@@ -44,6 +44,9 @@
               <property name="text">
                <string>Superior:</string>
               </property>
+              <property name="buddy">
+               <cstring>spinSup</cstring>
+              </property>
              </widget>
             </item>
             <item>
@@ -75,6 +78,9 @@
               <property name="text">
                <string>Izquierdo: </string>
               </property>
+              <property name="buddy">
+               <cstring>spinIzq</cstring>
+              </property>
              </widget>
             </item>
             <item>
@@ -104,6 +110,9 @@
              <widget class="QLabel" name="labelDer">
               <property name="text">
                <string>Derecho:</string>
+              </property>
+              <property name="buddy">
+               <cstring>spinDer</cstring>
               </property>
              </widget>
             </item>
@@ -136,6 +145,9 @@
               <property name="text">
                <string>Inferior:</string>
               </property>
+              <property name="buddy">
+               <cstring>spinInf</cstring>
+              </property>
              </widget>
             </item>
            </layout>
@@ -166,6 +178,9 @@
           <widget class="QLabel" name="labelPaginaInicial">
            <property name="text">
             <string>Página inicial</string>
+           </property>
+           <property name="buddy">
+            <cstring>spinPaginaInicial</cstring>
            </property>
           </widget>
          </item>
@@ -215,7 +230,6 @@
     </layout>
    </item>
   </layout>
-  <zorder>groupBox</zorder>
   <zorder></zorder>
  </widget>
  <tabstops>

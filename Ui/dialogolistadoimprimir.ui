@@ -154,12 +154,12 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QPushButton" name="boton_Previsualizar">
+            <widget class="QPushButton" name="boton_anadir">
              <property name="enabled">
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>Previsualizar</string>
+              <string>Añadir</string>
              </property>
             </widget>
            </item>
@@ -167,6 +167,16 @@
             <widget class="QPushButton" name="boton_opcionesPagina">
              <property name="text">
               <string>Opciones de página</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="boton_Previsualizar">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Previsualizar</string>
              </property>
             </widget>
            </item>

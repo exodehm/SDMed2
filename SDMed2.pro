@@ -17,6 +17,7 @@ SOURCES += main.cpp\
     Dialogos/dialogogoopcionespagina.cpp \
     Dialogos/dialogolistadoimprimir.cpp \
     Dialogos/dialogooperacionesbbdd.cpp \
+    Dialogos/dialogotablaopcionesimpresion.cpp \
         mainwindow.cpp \
     Dialogos/dialogoabout.cpp \
     Dialogos/dialogocreditos.cpp \
@@ -79,6 +80,7 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogodatoscodigoresumen.h \
     Dialogos/dialogolistadoimprimir.h \
     Dialogos/dialogooperacionesbbdd.h \
+    Dialogos/dialogotablaopcionesimpresion.h \
     instancia.h \
     consultas.h \
     Tablas/tablabase.h \
@@ -141,7 +143,8 @@ FORMS    += Ui/mainwindow.ui \
     Editor/editor.ui \
     Ui/dialogoadvertenciaborrarbbdd.ui \
     Ui/dialogocertificaciones.ui \
-    Ui/dialogoajustar.ui \    
+    Ui/dialogoajustar.ui \
+    Ui/dialogotablaopcionesimpresion.ui \
     Ui/dialogoeditorformulasmedicion.ui \    
     Ui/dialogoconexionbbdd.ui \
     Ui/dialogodatosgenerales.ui \

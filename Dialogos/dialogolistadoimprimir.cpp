@@ -1,13 +1,14 @@
 #include "dialogolistadoimprimir.h"
 #include "ui_dialogolistadoimprimir.h"
 #include "Dialogos/dialogogoopcionespagina.h"
+#include "Dialogos/dialogotablaopcionesimpresion.h"
 #include "pyrun.h"
 #include <QDir>
 #include <QDebug>
-#include <QRadioButton>
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QRadioButton>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -15,12 +16,14 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDesktopServices>
+#include <QTableWidget>
+#include <QPushButton>
 
 DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase db, QWidget *parent) :
     QDialog(parent), ui(new Ui::DialogoListadoImprimir), m_db(db), m_obra(obra)
 {
     ui->setupUi(this);
-    QString pathPython = "/.sdmed/python/plugins/";
+    QString pathPython = "/.sdmed/python/plugins_impresion/";
     m_pModulo = "cargador";
     m_pFuncion = "iniciar";
     m_ruta = QDir::homePath()+pathPython;
@@ -56,19 +59,33 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
     m_botoneralayout[eTipo::LISTADO]= new QVBoxLayout(ui->groupBoxListados);
     m_botoneralayout[eTipo::MEDICION]= new QVBoxLayout(ui->groupBoxMedPres);
     m_botoneralayout[eTipo::CERTIFICACION]= new QVBoxLayout(ui->groupBoxCertif);
-    m_botoneralayout[eTipo::GENERAL]= new QVBoxLayout(ui->groupBoxSinClasif);
+    m_botoneralayout[eTipo::GENERAL]= new QVBoxLayout(ui->groupBoxSinClasif);    
 
     for (int i = 0;i<m_lista.size();i++)
     {
-        QRadioButton* boton =  new QRadioButton(m_lista.at(i).nombre);
-        m_botoneralayout[m_lista.at(i).tipo]->addWidget(boton);        
-        m_lista[i].boton = boton;
-        QObject::connect(boton,SIGNAL(clicked()),this, SLOT(ActualizarBotonPrevisualizar()));
+        CustomRadioButton* radio_boton =  new CustomRadioButton(m_lista.at(i).nombre);
+        QHBoxLayout* marco = new QHBoxLayout;
+        m_botoneralayout[m_lista.at(i).tipo]->addLayout(marco);
+        marco->addWidget(radio_boton);
+        m_lista[i].boton = radio_boton;
+        QObject::connect(radio_boton,SIGNAL(clicked()),this, SLOT(ActualizarBotonPrevisualizar()));
+        //boton desplegable
+        CustomPushButton* botonPropiedades = new CustomPushButton("+");
+        botonPropiedades->setMaximumWidth(30);
+        botonPropiedades->setVisible(false);        
+        radio_boton->botonPropiedades = botonPropiedades;
+        botonPropiedades->opciones = &m_lista[i].opciones;
+        botonPropiedades->opcionesSelecionadas=&m_lista[i].opcionesSelecionadas;
+        marco->addWidget(botonPropiedades);
+        marco->addStretch();
+        botonPropiedades->d=nullptr;
+        QObject::connect(botonPropiedades,SIGNAL(clicked(bool)),this, SLOT (MostrarTablaOpciones()));
     }
     QObject::connect(ui->boton_Previsualizar,SIGNAL(pressed()),this,SLOT(Previsualizar()));
     QObject::connect(ui->botonSalir,SIGNAL(pressed()),this,SLOT(accept()));
     QObject::connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(DesactivarBotones()));
     QObject::connect(ui->boton_opcionesPagina,SIGNAL(pressed()),this,SLOT(OpcionesPagina()));
+    QObject::connect(ui->boton_anadir,SIGNAL(pressed()),this, SLOT(AnadirListadoImpresion()));
 }
 
 DialogoListadoImprimir::~DialogoListadoImprimir()
@@ -78,16 +95,25 @@ DialogoListadoImprimir::~DialogoListadoImprimir()
 
 void DialogoListadoImprimir::ActualizarBotonPrevisualizar()
 {
-    QRadioButton* c = dynamic_cast<QRadioButton*>(sender());
+    //Primero desactivar los botones de propiedades que haya visibles
+    for (auto c : m_lista)
+    {
+        c.boton->botonPropiedades->setVisible(c.boton->isChecked());
+    }
+    //Despues activar el que sea en funcion de si esta activo o no
+    CustomRadioButton* c = dynamic_cast<CustomRadioButton*>(sender());
     if (c)
     {
         ui->boton_Previsualizar->setEnabled(c->isChecked());
+        ui->boton_anadir->setEnabled(c->isChecked());
+        c->botonPropiedades->setVisible(c->isChecked());
     }
 }
 
 void DialogoListadoImprimir::DesactivarBotones()
 {
     ui->boton_Previsualizar->setEnabled(false);
+    ui->boton_anadir->setEnabled(false);
     for (auto elem : m_lista)
     {
         elem.boton->setChecked(false);
@@ -96,10 +122,63 @@ void DialogoListadoImprimir::DesactivarBotones()
 
 void DialogoListadoImprimir::OpcionesPagina()
 {
-    DialogogoOpcionesPagina* d = new DialogogoOpcionesPagina(this);
+    DialogogoOpcionesPagina* d = new DialogogoOpcionesPagina(m_opciones_pagina,this);
     if (d->exec())
     {
-        qDebug()<<"Añadir opciones al listado";
+        m_opciones_pagina = d->LeerDatos();
+        m_layout_pagina = d->LeeDatosS();
+    }
+}
+
+void DialogoListadoImprimir::MostrarTablaOpciones()
+{
+    CustomPushButton *w = dynamic_cast<CustomPushButton*>(sender());
+    if (w)
+    {
+        if (!w->d)
+        {
+            w->d =  new DialogoTablaOpcionesImpresion(*w->opciones,w);
+            w->d->move(mapToGlobal(QPoint(w->geometry().x()+w->width()*2,w->geometry().y()+w->height()*2)));
+        }
+        if (w->d->exec())
+        {
+            *(w->opcionesSelecionadas) = w->d->OpcionesSeleccionadas();            
+        }
+    }
+}
+
+void DialogoListadoImprimir::AnadirListadoImpresion()
+{
+    QGroupBox* g = qobject_cast<QGroupBox*>(m_botoneralayout[ui->tabWidget->currentIndex()]->parent());
+    if (g)
+    {
+        foreach (const QRadioButton* button, g->findChildren<QRadioButton*>())
+        {
+            if (button->isChecked())
+            {
+                for( int i=0; i<m_lista.count(); ++i )
+                {
+                    if (m_lista.at(i).boton == button)
+                    {                        
+                        if (!m_listadosImpresion.isEmpty())
+                        {
+                            m_listadosImpresion.append(",");
+                        }
+                        QString opciones = "";
+                        if (m_lista.at(i).opcionesSelecionadas.isEmpty())
+                        {
+                            opciones = "[]";
+                        }
+                        else
+                        {
+                            opciones = m_lista.at(i).opcionesSelecionadas;
+                        }
+                        m_listadosImpresion.append("['").append(m_lista.at(i).ruta).append("'").append(",").append(opciones).append("]");
+                        qDebug()<<"Añadir al listado.... "<<m_listadosImpresion;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -117,9 +196,10 @@ bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombre
         qDebug() << jsonError.errorString();
     }
     QJsonObject datos = metadataJson.object();
-    QJsonArray arrayscript = datos["datos_script"].toArray();
+    QJsonArray datos_script = datos["datos_script"].toArray();
     //QJsonArray arraynombre = datos["datos_nombre"].toArray();<--POR AHORA NO TOCO ESTOS DATOS
-    for(const QJsonValue val: arrayscript)
+    QJsonArray opciones = datos["opciones"].toArray();
+    for(const QJsonValue val: datos_script)
     {
         QJsonObject loopObj = val.toObject();
         //qDebug() << loopObj["nombre"].toString();
@@ -134,6 +214,25 @@ bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombre
         }
         if (!tipoL.nombre.isEmpty())
         {
+            //si hay nombre, leo las opciones, si las hubiera para incorporarlas
+            OpcionesListado Listaopciones;
+            for(const QJsonValue val: opciones)
+            {
+                QJsonObject loopObj = val.toObject();
+                for (auto first : loopObj.keys())
+                {
+                    QJsonArray datos_opciones = loopObj[first].toArray();
+                    QStringList second;
+                    for(const QJsonValue opcionessecond: datos_opciones)
+                    {
+                        second<<opcionessecond.toString();
+                    }
+                    QPair<QString,QStringList>elemento(first,second);
+                    second.clear();
+                    Listaopciones.append(elemento);
+                }
+            }
+            tipoL.opciones = Listaopciones;
             return true;
         }
     }
@@ -142,72 +241,61 @@ bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombre
 
 void DialogoListadoImprimir::Previsualizar()
 {
-    QGroupBox* g = qobject_cast<QGroupBox*>(m_botoneralayout[ui->tabWidget->currentIndex()]->parent());
-    if (g)
+    QStringList pArgumentos;
+    QString datosConexion = "[" + m_db.databaseName()+","+m_db.hostName()+","+QString::number(m_db.port())+","+ m_db.userName()+","+m_db.password() + "]";
+    pArgumentos<<datosConexion;
+    pArgumentos<<m_obra;
+    QString listados = "[" + m_listadosImpresion + "]";
+    pArgumentos<<listados;
+    QString fileName = "";
+    QString extensiones;
+    //preparo las extensiones
+    QHashIterator<QString, QString> i(m_lista_extensiones);
+    while (i.hasNext())
     {
-        foreach (const QRadioButton* button, g->findChildren<QRadioButton*>())
-        {
-            if (button->isChecked())
-            {
-                for( int i=0; i<m_lista.count(); ++i )
-                {
-                    if (m_lista.at(i).boton == button)
-                    {
-                        //QString ruta =m_lista.at(i).ruta;
-                        QStringList pArgumentos;
-                        pArgumentos<<m_db.databaseName()<<m_db.hostName()<<QString::number(m_db.port())<<m_db.userName()<<m_db.password();
-                        pArgumentos<<m_obra;
-                        pArgumentos<<m_lista.at(i).ruta;
-                        qDebug()<<"m_lista.at(i).ruta "<<m_lista.at(i).ruta;
-                        QString fileName = "";                        
-                        QString extensiones;
-                        //preparo las extensiones
-                        QHashIterator<QString, QString> i(m_lista_extensiones);
-                        while (i.hasNext())
-                        {
-                            i.next();
-                            extensiones += i.key();
-                            if (i.hasNext())
-                                extensiones += ";;";
-                        }
-                        QString extension;
-                        if (ui->checkBoxGuardar->isChecked())
-                        {
-                            fileName = QFileDialog::getSaveFileName(this,
-                                                                    tr("Guardar archivo"),
-                                                                    m_ruta,
-                                                                    extensiones,
-                                                                    &extension,
-                                                                    QFileDialog::DontUseNativeDialog
-                                                                    );
-
-                        }
-                        //si no guarda la extension (ocurre bajo linux) se la pongo "a mano"
-                #if not defined(Q_OS_WIN) || not defined(Q_OS_MAC)
-                        fileName += m_lista_extensiones[extension];
-                #endif
-                        pArgumentos<<fileName;
-                        QPair <int,QVariant>res = ::PyRun::loadModule(m_ruta, m_pModulo, m_pFuncion, pArgumentos);
-                        if (res.first == ::PyRun::Resultado::Success)
-                        {
-                            qDebug()<< __PRETTY_FUNCTION__ << "successful"<<res.first;
-                            //ver el pdf
-                            //QString rutaPDF = "listado.fg";
-                            QString rutaPDF = res.second.toString();
-                            qDebug()<<"FIchero PDF " + rutaPDF;
-                            QDesktopServices::openUrl(QUrl(rutaPDF, QUrl::TolerantMode));
-
-                        }
-                        else //definir los mensajes de error en caso de no successful
-                        {
-                            int ret = QMessageBox::warning(this, tr("Problemas al imprimir"),
-                                                           tr("Ha habido problemas con el script de python"/*este mensaje* es el que hay que especificar el tipo de error*/),
-                                                           QMessageBox::Ok);
-                            qDebug()<<"ret "<<res.first;
-                        }                        
-                    }
-                }
-            }
-        }
+        i.next();
+        extensiones += i.key();
+        if (i.hasNext())
+            extensiones += ";;";
     }
+    QString extension;
+    if (ui->checkBoxGuardar->isChecked())
+    {
+        fileName = QFileDialog::getSaveFileName(this,
+                                                tr("Guardar archivo"),
+                                                m_ruta,
+                                                extensiones,
+                                                &extension,
+                                                QFileDialog::DontUseNativeDialog
+                                                );
+
+    }
+    //si no guarda la extension (ocurre bajo linux) se la pongo "a mano"
+#if not defined(Q_OS_WIN) || not defined(Q_OS_MAC)
+    fileName += m_lista_extensiones[extension];
+#endif
+    pArgumentos<<fileName;
+    pArgumentos<<m_layout_pagina;
+    for (const auto &algo : pArgumentos)
+    {
+        qDebug()<<"Algo "<<algo;
+    }
+    QPair <int,QVariant>res = ::PyRun::loadModule(m_ruta, m_pModulo, m_pFuncion, pArgumentos);
+    if (res.first == ::PyRun::Resultado::Success)
+    {
+        qDebug()<< __PRETTY_FUNCTION__ << "successful"<<res.first;
+        //ver el pdf
+        QString rutaPDF = res.second.toString();
+        qDebug()<<"FIchero PDF " + rutaPDF;
+        QDesktopServices::openUrl(QUrl(rutaPDF, QUrl::TolerantMode));
+
+    }
+    else //definir los mensajes de error en caso de no successful
+    {
+        int ret = QMessageBox::warning(this, tr("Problemas al imprimir"),
+                                       tr("Ha habido problemas con el script de python"/*este mensaje* es el que hay que especificar el tipo de error*/),
+                                       QMessageBox::Ok);
+        qDebug()<<"ret "<<res.first;
+    }
+
 }

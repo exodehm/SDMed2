@@ -19,7 +19,7 @@ modulo = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = modulo 
 spec.loader.exec_module(modulo)
 
-def imprimir(conexion, obra, documento):
+def imprimir(conexion, obra, documento, propiedades = None):
 	consulta = QtSql.QSqlQuery (conexion)
 	Autor = ""
 	Obra = ""
