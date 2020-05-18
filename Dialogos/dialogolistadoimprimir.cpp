@@ -18,15 +18,17 @@
 #include <QDesktopServices>
 #include <QTableWidget>
 #include <QPushButton>
+#include <QSettings>
 
 DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase db, QWidget *parent) :
     QDialog(parent), ui(new Ui::DialogoListadoImprimir), m_db(db), m_obra(obra)
 {
     ui->setupUi(this);
-    QString pathPython = "/.sdmed/python/plugins_impresion/";
-    m_pModulo = "cargador";
+    QSettings settings;
+    QString rutascriptpython = settings.value("rutas/ruta_python").toString();
+    m_ruta = rutascriptpython.left(rutascriptpython.lastIndexOf("/"));
+    m_pModulo = rutascriptpython.remove(m_ruta).remove("/").remove(".py");
     m_pFuncion = "iniciar";
-    m_ruta = QDir::homePath()+pathPython;
     QDir dir_plugins(m_ruta);
     dir_plugins.setFilter(QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
     QStringList filtros;

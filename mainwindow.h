@@ -60,6 +60,7 @@ private slots:
 
     void ActionAjustarPresupuesto();
     void ActionPropiedadesObra();
+    void ActionConfigurar();
 
     void AcercaDe();
     void AcercaDeQt();

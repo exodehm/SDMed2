@@ -10,6 +10,7 @@
 #include "./Dialogos/dialogodatosgenerales.h"
 #include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
 #include "./Dialogos/dialogolistadoimprimir.h"
+#include "./Dialogos/dialogoconfiguracion.h"
 #include "./imprimir.h"
 #include "./miundostack.h"
 
@@ -487,6 +488,15 @@ void MainWindow::ActionPropiedadesObra()
     }
 }
 
+void MainWindow::ActionConfigurar()
+{
+    DialogoConfiguracion* d = new DialogoConfiguracion(this);
+    if (d->exec())
+    {
+        qDebug()<<"Configurar";
+    }
+}
+
 void MainWindow::AcercaDe()
 {
     DialogoAbout *d = new DialogoAbout(this);
@@ -540,6 +550,7 @@ void MainWindow::setupActions()
     QObject::connect(ui->actionExportar,SIGNAL(triggered(bool)),this,SLOT(Exportar()));
     QObject::connect(ui->actionAbrirBBDD,SIGNAL(triggered(bool)),this,SLOT(ActionAbrirBBDD()));
     QObject::connect(ui->actionCerrar,SIGNAL(triggered(bool)),this,SLOT(ActionCerrar()));
+    QObject::connect(ui->actionConfigurar,SIGNAL(triggered(bool)),this,SLOT(ActionConfigurar()));
     QObject::connect(ui->actionPropiedades_de_la_obra,SIGNAL(triggered(bool)),this,SLOT(ActionPropiedadesObra()));
     //QObject::connect(ui->actionGuardar,SIGNAL(triggered(bool)),this,SLOT(ActionGuardar()));
     QObject::connect(ui->actionImprimir,SIGNAL(triggered(bool)),this,SLOT(ActionImprimir()));
