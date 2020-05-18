@@ -14,6 +14,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     Delegados/delegadocodigos.cpp \
+    Dialogos/dialogoconfiguracion.cpp \
     Dialogos/dialogogoopcionespagina.cpp \
     Dialogos/dialogolistadoimprimir.cpp \
     Dialogos/dialogooperacionesbbdd.cpp \
@@ -74,6 +75,7 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     Delegados/delegadocodigos.h \
     Dialogos/dialogoabout.h \
+    Dialogos/dialogoconfiguracion.h \
     Dialogos/dialogogoopcionespagina.h \
     Dialogos/dialogolicencia.h \
     Dialogos/dialogocreditos.h \
@@ -132,6 +134,7 @@ HEADERS  += mainwindow.h \
 
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoabout.ui \
+    Ui/dialogoconfiguracion.ui \
     Ui/dialogocreditos.ui \
     Ui/dialogogoopcionespagina.ui \
     Ui/dialogolicencia.ui \
