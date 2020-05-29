@@ -4,7 +4,7 @@ DialogoDatosCodigoResumen::DialogoDatosCodigoResumen(QWidget *parent) :
     QDialog(parent)
 {
     setupUi(this);
-    QRegExpValidator *validador=new QRegExpValidator(QRegExp("[0-9A-Za-z]{1,20}"), lineEditCodigo);
+    QRegExpValidator *validador=new QRegExpValidator(QRegExp("[0-9A-Za-z_-]{1,20}"), lineEditCodigo);
     lineEditCodigo->setValidator(validador);
     connect(lineEditCodigo, SIGNAL(textChanged(const QString&)), this, SLOT(activarBoton(const QString&)));
     connect(lineEditResumen, SIGNAL(textChanged(const QString&)), this, SLOT(activarBoton(const QString&)));
