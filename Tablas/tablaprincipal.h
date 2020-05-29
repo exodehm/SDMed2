@@ -12,6 +12,8 @@ class TablaPrincipal : public TablaBase
 public:
     explicit TablaPrincipal(const QString& tabla, const QStringList& ruta, MiUndoStack* p, QWidget *parent=nullptr);
 
+    void MenuResumen(QPoint pos);
+
 public slots:
     void MostrarMenuCabecera(QPoint pos) override;
     void MostrarMenuLateralTabla(QPoint pos) override;
@@ -19,6 +21,8 @@ public slots:
     //void Copiar();
     void CopiarPartidas();
     void PegarPartidas();
+    void Mayusculas();
+    void Minusculas();
 };
 
 #endif // TABLAPRINCIPAL_H
