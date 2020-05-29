@@ -482,6 +482,9 @@
       <property name="currentIndex">
        <number>-1</number>
       </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
      </widget>
     </item>
    </layout>
@@ -1084,6 +1087,10 @@
    </property>
   </action>
   <action name="actionConfigurar">
+   <property name="icon">
+    <iconset resource="../recursos.qrc">
+     <normaloff>:/images/maintenance.png</normaloff>:/images/maintenance.png</iconset>
+   </property>
    <property name="text">
     <string>Configurar...</string>
    </property>

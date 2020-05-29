@@ -65,9 +65,9 @@ void TablaMed::MostrarMenuLateralTabla(QPoint pos)
     menu->addAction(AccionPegar);
     menu->addAction(AccionCertificar);
     /*copiar*/
-    QObject::connect(AccionCopiar, SIGNAL(triggered()), this, SLOT(Copiar()));
+    QObject::connect(AccionCopiar, SIGNAL(triggered()), this, SLOT(CopiarMediciones()));
     /*pegar*/
-    QObject::connect(AccionPegar, SIGNAL(triggered()), this, SLOT(Pegar()));
+    QObject::connect(AccionPegar, SIGNAL(triggered()), this, SLOT(PegarMediciones()));
     /*certificar*/
     QObject::connect(AccionCertificar, SIGNAL(triggered()), this, SLOT(Certificar()));
 
@@ -137,6 +137,16 @@ void TablaMed::CambiarTipoSubtotal()
     {
         M->CambiarTipoLineaMedicion(this->currentIndex().row(),this->currentIndex().column(),tipo);
     }
+}
+
+void TablaMed::CopiarMediciones()
+{
+    emit Copiar();
+}
+
+void TablaMed::PegarMediciones()
+{
+    emit Pegar();
 }
 
 /*void TablaMed::Copiar()

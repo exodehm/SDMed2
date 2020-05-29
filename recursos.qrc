@@ -26,5 +26,6 @@
         <file>images/plus.png</file>
         <file>images/anadir.png</file>
         <file>images/quitar.png</file>
+        <file>images/maintenance.png</file>
     </qresource>
 </RCC>
