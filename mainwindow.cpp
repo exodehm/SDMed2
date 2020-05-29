@@ -95,6 +95,11 @@ void MainWindow::readSettings()
 
 }
 
+Instancia *MainWindow::obraActual()
+{
+    return qobject_cast<Instancia*>(ui->tabPrincipal->currentWidget());
+}
+
 /*QString MainWindow::CodigoBC3(const QString &nombrefichero)
 {
     QFile fichero(nombrefichero);
@@ -258,7 +263,7 @@ bool MainWindow::BorrarBBDD(QStringList datosobra)
             qDebug()<<"se guarda la obra";
         }
         //segunda accion, exportar a bc3 si esta seleccionada la accion
-        obraActual = it;
+        //obraActual = it;
         ActionCerrar();
         //tercera accion, borrar la obra de la BBDD
         QString cadenaborrartablacodigo = "SELECT borrar_obra ('"+datosobra.at(0)+"');";
@@ -280,9 +285,9 @@ bool MainWindow::Exportar(QString nombrefichero)
     QString extensionBC3 = ".bc3";
     if (nombrefichero.isEmpty())
     {
-        if (*obraActual)
+        if (obraActual())
         {
-            nombrefichero = (*obraActual)->LeeTabla();
+            nombrefichero = (obraActual())->LeeTabla();
             qDebug()<<"nombreficero original 1"<<nombrefichero;
         }
     }
@@ -300,19 +305,19 @@ bool MainWindow::GuardarObra(QString nombreFichero)
     QString extension = nombreFichero.right(nombreFichero.length()-nombreFichero.lastIndexOf('.'));
     if (extension == ".bc3" || extension == ".BC3")
     {
-        ExportarBC3 exportador((*obraActual)->LeeTabla(),nombreFichero);
+        ExportarBC3 exportador((obraActual())->LeeTabla(),nombreFichero);
         qDebug()<<"Guardada la obra "<<nombreFichero<<" con exito";
         toReturn = true;
     }
     if (extension == ".xlsx" || extension == ".XLSX")
     {
-        (*obraActual)->ExportarXLSS(nombreFichero);
+        obraActual()->ExportarXLSS(nombreFichero);
         qDebug()<<"Guardando en formato xls";
         toReturn = true;
     }
-    if (*obraActual && toReturn == true)
+    if (obraActual() && toReturn == true)
     {
-        (*obraActual)->Pila()->clear();
+        (obraActual())->Pila()->clear();
     }
     return toReturn;
 }
@@ -347,14 +352,14 @@ void MainWindow::ActionImprimir()
     //int res = ::PyRun::loadModule(QDir::home().absoluteFilePath(ruta),pModulo, pFuncion, pArgumentos);
     //qDebug()<<"Resultado: "<<res<<" "<<QDir::home().absoluteFilePath(ruta);
     //hacer un switch/case con los posibles errores
-    DialogoListadoImprimir* d = new DialogoListadoImprimir((*obraActual)->LeeTabla(), db, this);
+    DialogoListadoImprimir* d = new DialogoListadoImprimir(obraActual()->LeeTabla(), db, this);
     int res = d->exec();
 
 }
 
 void MainWindow::ActionCerrar()
 {
-    if (!ListaObras.empty())
+    /*if (!ListaObras.empty())
     {
         std::list<Instancia*>::iterator obraBorrar = obraActual;
         obraActual = ListaObras.erase(obraActual);
@@ -363,7 +368,14 @@ void MainWindow::ActionCerrar()
         {
             obraActual = std::prev(obraActual);
         }
+    }*/
+    it = ListaObras.begin();
+    while (*it != ui->tabPrincipal->currentWidget())
+    {
+        it++;
     }
+    ListaObras.erase(it);
+    delete ui->tabPrincipal->currentWidget();
     if (ListaObras.empty())
     {
         ui->actionGuardar->setEnabled(false);
@@ -395,7 +407,7 @@ void MainWindow::ActionSalir()
 
 void MainWindow::ActionCopiar()
 {
-    (*obraActual)->Copiar();
+    obraActual()->Copiar();
     ui->actionPegar->setEnabled(true);
 }
 
@@ -403,7 +415,7 @@ void MainWindow::ActionPegar()
 {
     if (HayObrasAbiertas())
     {
-        (*obraActual)->Pegar();
+        obraActual()->Pegar();
     }
 }
 
@@ -416,7 +428,7 @@ void MainWindow::ActionUndo()
 {
     if (HayObrasAbiertas())
     {
-        (*obraActual)->Undo();
+        obraActual()->Undo();
     }
 }
 
@@ -424,31 +436,46 @@ void MainWindow::ActionRedo()
 {
     if (HayObrasAbiertas())
     {
-        (*obraActual)->Redo();
+        obraActual()->Redo();
     }
 }
 
 void MainWindow::ActionAdelante()
 {
-    if (HayObrasAbiertas())
+    /*if (HayObrasAbiertas())
     {
         (*obraActual)->Mover(movimiento::DERECHA);
+    }*/
+    Instancia* i = qobject_cast<Instancia*>(ui->tabPrincipal->currentWidget());
+    if (i)
+    {
+        i->Mover(movimiento::DERECHA);
     }
 }
 
 void MainWindow::ActionAtras()
 {
-    if (HayObrasAbiertas())
+    /*if (HayObrasAbiertas())
     {
         (*obraActual)->Mover(movimiento::IZQUIERDA);
+    }*/
+    Instancia* i = qobject_cast<Instancia*>(ui->tabPrincipal->currentWidget());
+    if (i)
+    {
+        i->Mover(movimiento::IZQUIERDA);
     }
 }
 
 void MainWindow::ActionInicio()
 {
-    if (HayObrasAbiertas())
+    /*if (HayObrasAbiertas())
     {
         (*obraActual)->Mover(movimiento::INICIO);
+    }*/
+    Instancia* i = qobject_cast<Instancia*>(ui->tabPrincipal->currentWidget());
+    if (i)
+    {
+        i->Mover(movimiento::INICIO);
     }
 }
 
@@ -456,7 +483,7 @@ void MainWindow::ActionVerArbol()
 {
     if (HayObrasAbiertas())
     {
-        (*obraActual)->VerArbol();
+        obraActual()->VerArbol();
     }
 }
 
@@ -474,7 +501,7 @@ void MainWindow::ActionAjustarPresupuesto()
 {
     if (HayObrasAbiertas())
     {
-       (*obraActual)->AjustarPresupuesto();
+       obraActual()->AjustarPresupuesto();
     }
 }
 
@@ -482,7 +509,7 @@ void MainWindow::ActionPropiedadesObra()
 {
     if (HayObrasAbiertas())
     {
-        DialogoDatosGenerales* d = new DialogoDatosGenerales((*obraActual)->LeeTabla(),db);
+        DialogoDatosGenerales* d = new DialogoDatosGenerales(obraActual()->LeeTabla(),db);
         QObject::connect(d,SIGNAL(CambioCostesIndirectos()),this,SLOT(ActualizarDatosObra()));
         d->exec();
     }
@@ -515,12 +542,12 @@ bool MainWindow::HayObrasAbiertas()
 
 void MainWindow::CambiarMedCert(int indice)
 {
-    (*obraActual)->MostrarDeSegun(indice);
+    obraActual()->MostrarDeSegun(indice);
 }
 
 void MainWindow::NuevaCertificacion()
 {
-    (*obraActual)->AdministrarCertificaciones();
+    obraActual()->AdministrarCertificaciones();
 }
 
 void MainWindow::CambiarLabelCertificacionActual(QStringList certActual)
@@ -591,8 +618,8 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     ui->tabPrincipal->addTab(NuevaObra,_resumen);
     ui->tabPrincipal->setCurrentIndex(ui->tabPrincipal->currentIndex()+1);
     ListaObras.push_back(NuevaObra);
-    obraActual=ListaObras.begin();
-    std::advance(obraActual,ListaObras.size()-1);
+    //obraActual=ListaObras.begin();
+    //std::advance(obraActual,ListaObras.size()-1);
     //ActivarDesactivarBotonesPila(obraActual->miobra->Pila()->index());
     QString leyenda = QString(tr("Creada la obra %1").arg(_resumen));
     statusBar()->showMessage(leyenda,5000);
@@ -611,10 +638,10 @@ void MainWindow::CambiarObraActual(int indice)
     {
         if ((unsigned int)indice<ListaObras.size())
         {
-            obraActual=ListaObras.begin();
-            std::advance(obraActual,indice);
-            ActivarDesactivarBotonesPila((*obraActual)->Pila()->index());
-            (*obraActual)->LeerCertifActual();
+            //obraActual=ListaObras.begin();
+            //std::advance(obraActual,indice);
+            ActivarDesactivarBotonesPila(obraActual()->Pila()->index());
+            obraActual()->LeerCertifActual();
         }
     }
 }
@@ -623,7 +650,7 @@ void MainWindow::ActivarDesactivarBotonesPila(int indice)
 {
     //qDebug()<<"ActivarDesactivarBotonesUndoRedo(): "<<indice;
     ui->actionDeshacer->setEnabled(indice!=0);
-    ui->actionRehacer->setEnabled(indice<(*obraActual)->Pila()->count());
+    ui->actionRehacer->setEnabled(indice<(obraActual())->Pila()->count());
     ui->actionGuardar->setEnabled(indice!=0);
 }
 
@@ -640,5 +667,5 @@ void MainWindow::ActivarBotonesBasicos(bool activar)
 void MainWindow::ActualizarDatosObra()
 {
     qDebug()<<"Actualizar en main";
-    (*obraActual)->RefrescarVista();
+    obraActual()->RefrescarVista();
 }
