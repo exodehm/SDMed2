@@ -21,6 +21,8 @@ public slots:
     void CambiarTipoSubtotalParcial();
     void CambiarTipoSubtotal();
     //void Copiar();
+    void CopiarMediciones();
+    void PegarMediciones();
 };
 
 

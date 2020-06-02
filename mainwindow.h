@@ -27,6 +27,7 @@ public:
     //QString CodigoBC3(const QString& nombrefichero);
     void writeSettings();
     void readSettings();
+    Instancia *obraActual();
 
 
 
@@ -84,7 +85,8 @@ private:
 
     QSqlDatabase db;    
     std::list<Instancia*>ListaObras;
-    std::list<Instancia*>::iterator obraActual;
+    //std::list<Instancia*>::iterator obraActual;
+    std::list<Instancia*>::iterator it;
     QString rutaarchivo;
     //menu abrir reciente
     QStringList recentFiles;

@@ -36,10 +36,24 @@ TablaPrincipal::TablaPrincipal(const QString &tabla, const QStringList &ruta, Mi
     installEventFilter(new FiltroTablaBase(this));
 }
 
+void TablaPrincipal::MenuResumen(QPoint pos)
+{
+    QMenu *menu=new QMenu(this);
+
+    QAction *AccionMayusculas = new QAction(tr("Pasar a mayúsculas"), this);
+    menu->addAction(AccionMayusculas);
+    QObject::connect(AccionMayusculas, SIGNAL(triggered()), this, SLOT(Mayusculas()));
+
+    QAction *AccionMinusculas = new QAction(tr("Pasar a minúsculas"), this);
+    menu->addAction(AccionMinusculas);
+    QObject::connect(AccionMinusculas, SIGNAL(triggered()), this, SLOT(Minusculas()));
+
+    menu->popup(cabeceraVertical->viewport()->mapToGlobal(pos));
+}
+
 void TablaPrincipal::MostrarMenuCabecera(QPoint pos)
 {
-    int column=this->horizontalHeader()->logicalIndexAt(pos);
-    qDebug()<<"Columna: "<<column;
+    int column=this->horizontalHeader()->logicalIndexAt(pos);    
 
     QMenu *menu=new QMenu(this);
     QString nombre;
@@ -75,7 +89,15 @@ void TablaPrincipal::MostrarMenuLateralTabla(QPoint pos)
 
 void TablaPrincipal::MostrarMenuTabla(QPoint pos)
 {
-
+    int columna=this->horizontalHeader()->logicalIndexAt(pos);
+    switch (columna)
+    {
+    case tipoColumnaTPrincipal::RESUMEN:
+        MenuResumen(pos);
+        break;
+    default:
+        break;
+    }
 }
 
 void TablaPrincipal::CopiarPartidas()
@@ -87,4 +109,16 @@ void TablaPrincipal::CopiarPartidas()
 void TablaPrincipal::PegarPartidas()
 {
     emit Pegar();
+}
+
+void TablaPrincipal::Mayusculas()
+{
+    QModelIndex indice = this->currentIndex();
+    this->model()->setData(indice,indice.data().toString().toUpper());
+}
+
+void TablaPrincipal::Minusculas()
+{
+    QModelIndex indice = this->currentIndex();
+    this->model()->setData(indice,indice.data().toString().toLower());
 }

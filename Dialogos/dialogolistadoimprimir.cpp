@@ -278,9 +278,9 @@ void DialogoListadoImprimir::Previsualizar()
 #endif
     pArgumentos<<fileName;
     pArgumentos<<m_layout_pagina;
-    for (const auto &algo : pArgumentos)
+    for (const auto &arg : pArgumentos)
     {
-        qDebug()<<"Algo "<<algo;
+        qDebug()<<"Args "<<arg;
     }
     QPair <int,QVariant>res = ::PyRun::loadModule(m_ruta, m_pModulo, m_pFuncion, pArgumentos);
     if (res.first == ::PyRun::Resultado::Success)
