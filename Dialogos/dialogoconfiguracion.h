@@ -15,14 +15,21 @@ public:
     explicit DialogoConfiguracion(QWidget *parent = nullptr);
     ~DialogoConfiguracion();
     void ReadSettings();
+    void WriteSettings();
 
 public slots:
-    void DefinirRuta();
-    void GuardarDatosConexion();
+    void DefinirRutaScripts();
+    void BuscarManualRutaExtension();
+    void BuscarAutomaticaRutaExtension();
+    void ActivarDirectorioInstalacion(int indice);
+    void ActivarBotonInstalarExtension();
+    void CopiarExtension();
+    void Salir();
 
 private:
     Ui::DialogoConfiguracion *ui;
     QString m_rutaPython;
+    QString m_rutaExtensiones;
 };
 
 #endif // DIALOGOCONFIGURACION_H
