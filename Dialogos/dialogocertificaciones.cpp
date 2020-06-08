@@ -2,7 +2,6 @@
 #include "ui_dialogocertificaciones.h"
 #include <QDate>
 #include <QDebug>
-#include <QMessageBox>
 #include <QStandardItemModel>
 #include <QCheckBox>
 #include <QPushButton>

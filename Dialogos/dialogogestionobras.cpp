@@ -6,7 +6,6 @@
 #include <QtSql/QSqlQuery>
 #include <QPushButton>
 #include <QCheckBox>
-#include <QMessageBox>
 #include <QProcess>
 #include <QFileDialog>
 #include <QDebug>

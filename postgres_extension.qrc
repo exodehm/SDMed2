@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>postgres-extension/sdmed--0.1.sql</file>
-        <file>postgres-extension/sdmed.control</file>      
-        <file>postgres-extension/Makefile</file>            
+        <file>postgres-extension/sdmed.control</file>
+        <file>postgres-extension/Makefile</file>
     </qresource>
 </RCC>

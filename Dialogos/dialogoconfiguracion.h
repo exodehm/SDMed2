@@ -23,7 +23,8 @@ public slots:
     void BuscarAutomaticaRutaExtension();
     void ActivarDirectorioInstalacion(int indice);
     void ActivarBotonInstalarExtension();
-    void CopiarExtension();
+    void InstalarExtension();
+    void CopiarExtension(QString fichero_origen, QString ruta_destino, QString passw = "");
     void Salir();
 
 private:
