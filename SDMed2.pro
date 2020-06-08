@@ -18,6 +18,7 @@ SOURCES += main.cpp\
     Dialogos/dialogogoopcionespagina.cpp \
     Dialogos/dialogolistadoimprimir.cpp \
     Dialogos/dialogooperacionesbbdd.cpp \
+    Dialogos/dialogosudo.cpp \
     Dialogos/dialogotablaopcionesimpresion.cpp \
         mainwindow.cpp \
     Dialogos/dialogoabout.cpp \
@@ -82,6 +83,7 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogodatoscodigoresumen.h \
     Dialogos/dialogolistadoimprimir.h \
     Dialogos/dialogooperacionesbbdd.h \
+    Dialogos/dialogosudo.h \
     Dialogos/dialogotablaopcionesimpresion.h \
     instancia.h \
     consultas.h \
@@ -141,6 +143,7 @@ FORMS    += Ui/mainwindow.ui \
     Ui/dialogolistadoimprimir.ui \
     Ui/dialogooperacionesbbdd.ui \
     Ui/dialogoprecio.ui \
+    Ui/dialogosudo.ui \
     Ui/dialogosuprimirmedicion.ui \
     Ui/dialogodatoscodigoresumen.ui \
     Editor/editor.ui \
@@ -160,7 +163,7 @@ CONFIG += c++11
 
 RESOURCES += \
     fuentes.qrc \
-    pythonpaths.qrc \
+    postgres_extension.qrc \
     recursos.qrc \
     Editor/iconosEditor.qrc \
     iconos.qrc
