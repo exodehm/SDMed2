@@ -11,17 +11,17 @@
 #include "./Dialogos/dialogoadvertenciaborrarbbdd.h"
 #include "./Dialogos/dialogolistadoimprimir.h"
 #include "./Dialogos/dialogoconfiguracion.h"
+#include "./Dialogos/dialogomensajeconexioninicial.h"
 #include "./imprimir.h"
 #include "./miundostack.h"
 
-#include <QMessageBox>
 #include <QDebug>
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
 #include <QFileDialog>
 #include <QDir>
-
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -83,9 +83,8 @@ void MainWindow::readSettings()
         }
         else
         {
-            QMessageBox msgBox;
-            msgBox.setText(db.lastError().text());
-            msgBox.exec();
+            DialogoMensajeConexionInicial mensaje(&db);
+            mensaje.exec();
         }
     }
     else

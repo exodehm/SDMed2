@@ -89,7 +89,6 @@ void DialogoConfiguracion::ActivarDirectorioInstalacion(int indice)
 
 void DialogoConfiguracion::ActivarBotonInstalarExtension()
 {
-    qDebug()<<"Avtivarrrrrr"<<ui->lineEdit_ruta_extension->text();
     ui->boton_ruta_extension->setEnabled(!ui->lineEdit_ruta_extension->text().isEmpty());
 }
 
@@ -100,13 +99,6 @@ void DialogoConfiguracion::InstalarExtension()
     QFile file_makefile(QStringLiteral(":/postgres-extension/Makefile"));
     if(file_extension.open(QIODevice::ReadOnly) && file_control.open(QIODevice::ReadOnly) && file_makefile.open(QIODevice::ReadOnly))
     {
-        //creo una copia fisica en el disco duro para poder copiarlos
-        QString copia_extension = QDir::homePath()+"/copia_extension.sql";
-        QString copia_control = QDir::homePath()+"/copia_control.sql";
-        QString copia_makefile = QDir::homePath()+"/copia_makefile.sql";
-        file_extension.copy(copia_extension);
-        file_control.copy(copia_control);
-        file_makefile.copy(copia_makefile);
         QString ruta_extension = ui->lineEdit_ruta_extension->text() + "/";
         QString nombreFicheroExtensionDestino= file_extension.fileName().mid(file_extension.fileName().lastIndexOf("/")+1);
         QString nombreFicheroControlDestino= file_control.fileName().mid(file_control.fileName().lastIndexOf("/")+1);
@@ -116,50 +108,56 @@ void DialogoConfiguracion::InstalarExtension()
         QString ficheroExtensionMakefile = ruta_extension + nombreFicheroMakefileDestino;
 
         QString aviso = "Se copiarán <b>"+ nombreFicheroExtensionDestino + " , " + nombreFicheroControlDestino + " y "+nombreFicheroMakefileDestino +
-                "</b> en:<br> "+ ruta_extension + "</b>";
+                "</b> en:<br> "+ ruta_extension;
         int ret = QMessageBox::information(this, tr("Aviso"),aviso,QMessageBox::Ok|QMessageBox::Cancel, QMessageBox::Cancel);
         qDebug()<<"ret "<<ret;
         if (ret == QMessageBox::Ok)
         {
+        #if defined(Q_OS_WIN)//<---Windows
+            file_extension.copy(ficheroExtensionDestino);
+            file_control.copy(ficheroExtensionControl);
+            //file_makefile.copy(ficheroExtensionMakefile);
+        #else//<--Linux ....y mac?
             DialogoSudo* d = new DialogoSudo(this);
             if (d->exec())
             {
                 QString passw = d->PassWSudo();
-                CopiarExtension(copia_extension,ficheroExtensionDestino,passw);
-                CopiarExtension(copia_control,ficheroExtensionControl,passw);
-                CopiarExtension(copia_makefile,ficheroExtensionMakefile,passw);
+                CopiarExtensionPermisos(copia_extension,ficheroExtensionDestino,passw);
+                CopiarExtensionPermisos(copia_control,ficheroExtensionControl,passw);
+                CopiarExtensionPermisos(copia_makefile,ficheroExtensionMakefile,passw);
             }
-        }
-        //borro la copia del disco duro
-        file_extension.remove(copia_extension);
-        file_control.remove(copia_control);
-        file_makefile.remove(copia_makefile);
+            #endif
+        }       
     }
 }
 
-void DialogoConfiguracion::CopiarExtension(QString fichero_origen, QString ruta_destino, QString passw)
+void DialogoConfiguracion::CopiarExtensionPermisos(QFile &fichero_origen, const QString &ruta_destino, QString passw)
 {
-        QProcess process1;
-        QProcess process2;
-        process1.setStandardOutputProcess(&process2);
-        QString s_process1 = "echo " + passw;
-        qDebug()<<s_process1;
-        QString s_process2 = "sudo -S cp " +fichero_origen + " " + ruta_destino;
-        qDebug()<<s_process2;
-
-        process1.start(s_process1);
-        process2.start(s_process2);
-        process2.setProcessChannelMode(QProcess::ForwardedChannels);
-        bool retval = false;
-        QByteArray buffer;
-        while ((retval = process2.waitForFinished()))
-        {
-            buffer.append(process2.readAll());
-        }
-        if (!retval)
-        {
-            qDebug() << "Process 2 error:" << process2.errorString();
-        }
+    //creo una copia fisica en el disco duro para poder copiarlos
+    QString copia = QDir::homePath()+"/copia.sql";
+    fichero_origen.copy(copia);
+    QProcess process1;
+    QProcess process2;
+    process1.setStandardOutputProcess(&process2);
+    QString s_process1 = "echo " + passw;
+    qDebug()<<s_process1;
+    QString s_process2 = "sudo -S cp " + fichero_origen.fileName() + " " + ruta_destino;
+    qDebug()<<s_process2;
+    process1.start(s_process1);
+    process2.start(s_process2);
+    process2.setProcessChannelMode(QProcess::ForwardedChannels);
+    bool retval = false;
+    QByteArray buffer;
+    while ((retval = process2.waitForFinished()))
+    {
+        buffer.append(process2.readAll());
+    }
+    if (!retval)
+    {
+        qDebug() << "Process 2 error:" << process2.errorString();
+    }
+    //borro la copia del disco duro
+    fichero_origen.remove(copia);
 }
 
 void DialogoConfiguracion::Salir()

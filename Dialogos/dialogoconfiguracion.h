@@ -2,6 +2,7 @@
 #define DIALOGOCONFIGURACION_H
 
 #include <QDialog>
+#include <QFile>
 
 namespace Ui {
 class DialogoConfiguracion;
@@ -24,7 +25,7 @@ public slots:
     void ActivarDirectorioInstalacion(int indice);
     void ActivarBotonInstalarExtension();
     void InstalarExtension();
-    void CopiarExtension(QString fichero_origen, QString ruta_destino, QString passw = "");
+    void CopiarExtensionPermisos(QFile &fichero_origen, const QString &ruta_destino, QString passw = "");
     void Salir();
 
 private:

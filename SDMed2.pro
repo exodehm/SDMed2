@@ -17,6 +17,7 @@ SOURCES += main.cpp\
     Dialogos/dialogoconfiguracion.cpp \
     Dialogos/dialogogoopcionespagina.cpp \
     Dialogos/dialogolistadoimprimir.cpp \
+    Dialogos/dialogomensajeconexioninicial.cpp \
     Dialogos/dialogooperacionesbbdd.cpp \
     Dialogos/dialogosudo.cpp \
     Dialogos/dialogotablaopcionesimpresion.cpp \
@@ -82,6 +83,7 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogocreditos.h \
     Dialogos/dialogodatoscodigoresumen.h \
     Dialogos/dialogolistadoimprimir.h \
+    Dialogos/dialogomensajeconexioninicial.h \
     Dialogos/dialogooperacionesbbdd.h \
     Dialogos/dialogosudo.h \
     Dialogos/dialogotablaopcionesimpresion.h \
@@ -141,6 +143,7 @@ FORMS    += Ui/mainwindow.ui \
     Ui/dialogogoopcionespagina.ui \
     Ui/dialogolicencia.ui \
     Ui/dialogolistadoimprimir.ui \
+    Ui/dialogomensajeconexioninicial.ui \
     Ui/dialogooperacionesbbdd.ui \
     Ui/dialogoprecio.ui \
     Ui/dialogosudo.ui \
