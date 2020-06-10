@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->CertBar->addWidget(labelCertificacionActual[0]);
         ui->CertBar->addWidget(labelCertificacionActual[1]);
         setupActions();
-        readSettings();        
+        readSettings();
     }
 }
 
@@ -91,13 +91,13 @@ void MainWindow::readSettings()
     {
         qDebug()<<"No se esta conectado a ninguna BBDD";
     }
-
 }
 
 Instancia *MainWindow::obraActual()
 {
     return qobject_cast<Instancia*>(ui->tabPrincipal->currentWidget());
 }
+
 
 /*QString MainWindow::CodigoBC3(const QString &nombrefichero)
 {

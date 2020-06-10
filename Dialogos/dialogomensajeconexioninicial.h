@@ -21,6 +21,9 @@ private:
 
 private slots:
     void ArrancarServidor();
+    int ArrancarServidorWin();
+    int ArrancarServidorLinux();
+    bool EsConexionLocal();
 
 
 };

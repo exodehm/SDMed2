@@ -29,8 +29,6 @@ public:
     void readSettings();
     Instancia *obraActual();
 
-
-
 private slots:
     /*********MENU***************/
     void ActionNuevo();

@@ -122,9 +122,9 @@ void DialogoConfiguracion::InstalarExtension()
             if (d->exec())
             {
                 QString passw = d->PassWSudo();
-                CopiarExtensionPermisos(copia_extension,ficheroExtensionDestino,passw);
-                CopiarExtensionPermisos(copia_control,ficheroExtensionControl,passw);
-                CopiarExtensionPermisos(copia_makefile,ficheroExtensionMakefile,passw);
+                CopiarExtensionPermisos(file_extension,ficheroExtensionDestino,passw);
+                CopiarExtensionPermisos(file_control,ficheroExtensionControl,passw);
+                CopiarExtensionPermisos(file_makefile,ficheroExtensionMakefile,passw);
             }
             #endif
         }       
