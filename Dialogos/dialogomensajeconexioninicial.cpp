@@ -6,6 +6,8 @@
 #include <QProcess>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QDirIterator>
+#include <QSettings>
 #include <QDebug>
 
 
@@ -40,11 +42,31 @@ void DialogoMensajeConexionInicial::ArrancarServidor()
 
 int DialogoMensajeConexionInicial::ArrancarServidorWin()
 {
+    //miro a ver si tengo la ruta de datos guardada
+    QString directorioDatos;
+    QSettings settings;
+    directorioDatos = settings.value("rutas/ruta datos postgresql").toString();
+    if (directorioDatos.isEmpty())//si no existe, lo busco y lo almaceno en los settings
+    {
+        QDirIterator it("/", QDirIterator::Subdirectories);
+        while (it.hasNext())
+        {
+            directorioDatos = it.next();
+            if (directorioDatos.contains("/data/PG_VERSION"))
+            {
+                qDebug()<<"Diretorio datos en: "<<directorioDatos;
+                directorioDatos = directorioDatos.left(directorioDatos.lastIndexOf("/")+1);
+                settings.beginGroup("rutas");
+                settings.setValue("ruta datos postgresql", directorioDatos);
+                break;
+            }
+        }
+    }
     QProcess programa;
     QStringList environment = programa.systemEnvironment();
     QString commandToStart= "pg_ctl";
     QStringList argumentos;
-    argumentos<<"-D"<<"c:/pgsql/data"<<"start";
+    argumentos<<"-D"<<directorioDatos<<"start";
     programa.start(commandToStart,argumentos);
     foreach (const QString& s, programa.arguments()) {
         qDebug()<<s;

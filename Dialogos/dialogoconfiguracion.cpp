@@ -31,7 +31,8 @@ void DialogoConfiguracion::ReadSettings()
 {
     QSettings settings;
     ui->lineEdit_ruta_python->setText(settings.value("rutas/ruta_python").toString());
-    m_rutaPython = settings.value("rutas/ruta_python").toString();
+    ui->lineEdit_ruta_datos->setText(settings.value("rutas/ruta datos postgresql").toString());
+    m_rutaPython = settings.value("rutas/ruta_python").toString();    
 }
 
 void DialogoConfiguracion::DefinirRutaScripts()
