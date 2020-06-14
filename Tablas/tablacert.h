@@ -13,7 +13,7 @@ public:
 
 public slots:
     //void MostrarMenuCabecera(QPoint pos) override; //descomentar y añadir definición si se quiere un menu flotante propio
-    void MostrarMenuLateralTabla(QPoint pos) override;
+    void MostrarMenuLateralTabla(const QPoint& pos) override;
     //void Copiar();
 
 signals:

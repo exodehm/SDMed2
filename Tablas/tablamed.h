@@ -13,9 +13,9 @@ public:
     explicit TablaMed(const QString& tabla, const QStringList& ruta, int num_certif, MiUndoStack* p, QWidget *parent=nullptr);
 
 public slots:
-    void MostrarMenuCabecera(QPoint pos) override;
-    void MostrarMenuLateralTabla(QPoint pos) override;
-    void MostrarMenuTabla(QPoint pos) override;
+    void MostrarMenuCabecera(const QPoint& pos) override;
+    void MostrarMenuLateralTabla(const QPoint& pos) override;
+    void MostrarMenuTabla(const QPoint& pos) override;
 
     void CambiarTipoSubtotalOrigen();
     void CambiarTipoSubtotalParcial();

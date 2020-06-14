@@ -11,7 +11,7 @@ TablaCert::TablaCert(const QString& tabla, const QStringList& ruta, int num_cert
 
 }*/
 
-void TablaCert::MostrarMenuLateralTabla(QPoint pos)
+void TablaCert::MostrarMenuLateralTabla(const QPoint& pos)
 {
     QMenu *menu=new QMenu(this);
     QAction *AccionCopiar = new QAction(tr("Copiar lineas de certificación"), this);

@@ -34,17 +34,17 @@ void TablaPropiedades::ActualizarDatosPropiedades(const QString &propiedad)
 
 }
 
-void TablaPropiedades::MostrarMenuCabecera(QPoint pos)
+void TablaPropiedades::MostrarMenuCabecera(const QPoint& pos)
 {
 
 }
 
-void TablaPropiedades::MostrarMenuLateralTabla(QPoint pos)
+void TablaPropiedades::MostrarMenuLateralTabla(const QPoint& pos)
 {
 
 }
 
-void TablaPropiedades::MostrarMenuTabla(QPoint pos)
+void TablaPropiedades::MostrarMenuTabla(const QPoint& pos)
 {
 
 }

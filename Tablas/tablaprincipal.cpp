@@ -1,6 +1,7 @@
 #include "tablaprincipal.h"
 #include "./Modelos/PrincipalModel.h"
 #include "./filtrotablabase.h"
+//#include "./Delegados/delegadobase.h"
 
 #include <QFontDatabase>
 
@@ -36,7 +37,7 @@ TablaPrincipal::TablaPrincipal(const QString &tabla, const QStringList &ruta, Mi
     installEventFilter(new FiltroTablaBase(this));
 }
 
-void TablaPrincipal::MenuResumen(QPoint pos)
+void TablaPrincipal::MenuResumen(const QPoint &pos)
 {
     QMenu *menu=new QMenu(this);
 
@@ -51,7 +52,37 @@ void TablaPrincipal::MenuResumen(QPoint pos)
     menu->popup(cabeceraVertical->viewport()->mapToGlobal(pos));
 }
 
-void TablaPrincipal::MostrarMenuCabecera(QPoint pos)
+void TablaPrincipal::MenuPrecio(const QPoint &pos)
+{
+    PrincipalModel* m = dynamic_cast<PrincipalModel*>(this->model());
+    if (m)
+    {
+        qDebug()<<m->LeeColor(currentIndex().row()+1,currentIndex().column());
+        int color = m->LeeColor(currentIndex().row()+1,currentIndex().column());
+        QString cadenaprecio;
+        switch (color)
+        {
+        case DelegadoBase::eColores::BLOQUEADO:
+            cadenaprecio = tr("Desbloquear");
+            m_precio_bloqueado = true;
+            break;
+        case DelegadoBase::eColores::DESCOMPUESTO:
+            cadenaprecio = tr("Bloquear");
+            m_precio_bloqueado = false;
+            break;
+        default:
+            break;
+        }
+        QMenu *menu=new QMenu(this);
+        QAction *AccionPrecio = new QAction(cadenaprecio, this);
+        menu->addAction(AccionPrecio);
+        QObject::connect(AccionPrecio, SIGNAL(triggered(bool)), this, SLOT(BloquearDesbloquearPrecio()));
+        menu->popup(cabeceraVertical->viewport()->mapToGlobal(pos));
+    }
+}
+
+
+void TablaPrincipal::MostrarMenuCabecera(const QPoint &pos)
 {
     int column=this->horizontalHeader()->logicalIndexAt(pos);    
 
@@ -69,7 +100,7 @@ void TablaPrincipal::MostrarMenuCabecera(QPoint pos)
     menu->popup(this->horizontalHeader()->viewport()->mapToGlobal(pos));
 }
 
-void TablaPrincipal::MostrarMenuLateralTabla(QPoint pos)
+void TablaPrincipal::MostrarMenuLateralTabla(const QPoint& pos)
 {
     QMenu *menu=new QMenu(this);
     QAction *AccionCopiar = new QAction(tr("Copiar partidas"), this);
@@ -87,13 +118,17 @@ void TablaPrincipal::MostrarMenuLateralTabla(QPoint pos)
     menu->popup(cabeceraVertical->viewport()->mapToGlobal(pos));
 }
 
-void TablaPrincipal::MostrarMenuTabla(QPoint pos)
+void TablaPrincipal::MostrarMenuTabla(const QPoint& pos)
 {
     int columna=this->horizontalHeader()->logicalIndexAt(pos);
     switch (columna)
     {
     case tipoColumnaTPrincipal::RESUMEN:
         MenuResumen(pos);
+        break;
+    case tipoColumnaTPrincipal::PRPRES:
+    case tipoColumnaTPrincipal::PRCERT:
+        MenuPrecio(pos);
         break;
     default:
         break;
@@ -121,4 +156,13 @@ void TablaPrincipal::Minusculas()
 {
     QModelIndex indice = this->currentIndex();
     this->model()->setData(indice,indice.data().toString().toLower());
+}
+
+void TablaPrincipal::BloquearDesbloquearPrecio()
+{
+    PrincipalModel* m = dynamic_cast<PrincipalModel*>(this->model());
+    if (m)
+    {
+        m->BloquearPrecio(currentIndex(), m_precio_bloqueado);
+    }
 }
