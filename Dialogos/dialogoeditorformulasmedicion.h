@@ -23,8 +23,8 @@ public:
 public slots:
     void SincronizarWidgets();
     void RellenarListadoPerfiles();
-    void RellenarTablasDiferentesPerfiles(int tabla);
-    void SeleccionarPeso();
+    void RellenarTablasDiferentesPerfiles(const QString &tipo);
+    void SeleccionarPeso(const QString &tam);
     QString LeeFormula();
     QString LeeUd();
     QString LeeLong();

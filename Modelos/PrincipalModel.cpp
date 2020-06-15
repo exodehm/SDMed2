@@ -269,6 +269,17 @@ void PrincipalModel::ActualizarDatos(const QStringList &ruta)
     }
 }
 
+void PrincipalModel::BloquearPrecio(const QModelIndex &index, bool bloquear)
+{
+    qDebug()<<"Bloquear "<<bloquear;
+    QString codpadre = m_datos.at(0).at(tipoColumnaTPrincipal::CODIGO).toString();
+    QString codhijo = this->index(index.row(),tipoColumnaTPrincipal::CODIGO).data().toString();
+    codpadre.remove(m_LeyendasCabecera[0]);
+    QString cadenaprecio = "SELECT modificar_precio('"+ m_tabla+"','" + codpadre + "','" + codhijo + "','"+index.data().toString() + "','" + bloquear+"')";
+    QString cadenabloquear = "SELECT bloquear_precio('"+ m_tabla+"','" + codhijo + "','"+index.data().toString() + "','" + QString::number(bloquear)+"')";
+    qDebug()<<cadenabloquear;
+}
+
 void PrincipalModel::Copiar(const QList<int> &filas)
 {
     qDebug()<<"Copiar en el modelo";

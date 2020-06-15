@@ -14,9 +14,9 @@ public:
 
 public slots:
     void ActualizarDatosPropiedades(const QString& propiedad);
-    void MostrarMenuCabecera(QPoint pos) override;
-    void MostrarMenuLateralTabla(QPoint pos) override;
-    void MostrarMenuTabla(QPoint pos) override;
+    void MostrarMenuCabecera(const QPoint& pos) override;
+    void MostrarMenuLateralTabla(const QPoint& pos) override;
+    void MostrarMenuTabla(const QPoint& pos) override;
 
 private:
     PropiedadesModel* m_modelo;

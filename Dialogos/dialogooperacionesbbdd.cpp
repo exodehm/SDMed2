@@ -132,7 +132,7 @@ bool DialogoOperacionesBBDD::CrearRole()
 bool DialogoOperacionesBBDD::CrearBaseDatosSdmed()
 {
     qDebug()<<"Crear base de datos sdmed";
-    QString cadenaCrearBBDD = "CREATE DATABASE sdmed";
+    QString cadenaCrearBBDD = "CREATE DATABASE sdmed WITH TEMPLATE = template0 ENCODING 'UTF8'";
     qDebug()<<cadenaCrearBBDD;
     QSqlQuery consulta(cadenaCrearBBDD,db);
     qDebug()<<"consulta sice "<<consulta.size();

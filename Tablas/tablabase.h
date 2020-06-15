@@ -46,9 +46,9 @@ public slots:
 
     void SeleccionarTodo();
 
-    virtual void MostrarMenuCabecera(QPoint pos)=0;
-    virtual void MostrarMenuLateralTabla(QPoint pos)=0;
-    virtual void MostrarMenuTabla(QPoint pos)=0;
+    virtual void MostrarMenuCabecera(const QPoint& pos)=0;
+    virtual void MostrarMenuLateralTabla(const QPoint& pos)=0;
+    virtual void MostrarMenuTabla(const QPoint& pos)=0;
 
 
 signals:

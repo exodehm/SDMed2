@@ -112,7 +112,7 @@
           <item>
            <widget class="QRadioButton" name="radioButtonPerfil">
             <property name="text">
-             <string>Perfil</string>
+             <string>Acero</string>
             </property>
            </widget>
           </item>
@@ -141,7 +141,7 @@
             <item>
              <widget class="QLabel" name="labelPesoKgm">
               <property name="text">
-               <string>Peso kg/m</string>
+               <string>Peso kg/m: </string>
               </property>
              </widget>
             </item>
@@ -153,6 +153,13 @@
                 <bold>true</bold>
                </font>
               </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelPesoNumero">
               <property name="text">
                <string/>
               </property>

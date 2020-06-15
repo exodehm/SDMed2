@@ -39,7 +39,7 @@ TablaMed::TablaMed(const QString &tabla, const QStringList &ruta, int num_certif
     QObject::connect(cabeceraHorizontal, SIGNAL(sectionClicked(int)), this,SLOT(Bloquear(int)));
 }
 
-void TablaMed::MostrarMenuCabecera(QPoint pos)
+void TablaMed::MostrarMenuCabecera(const QPoint& pos)
 {
     int column=this->horizontalHeader()->logicalIndexAt(pos);
     qDebug()<<"Columna: "<<column;
@@ -49,7 +49,7 @@ void TablaMed::MostrarMenuCabecera(QPoint pos)
     menu->popup(this->horizontalHeader()->viewport()->mapToGlobal(pos));
 }
 
-void TablaMed::MostrarMenuLateralTabla(QPoint pos)
+void TablaMed::MostrarMenuLateralTabla(const QPoint& pos)
 {
     QMenu *menu=new QMenu(this);
     QAction *AccionCopiar = new QAction(tr("Copiar lineas de medición"), this);
@@ -74,7 +74,7 @@ void TablaMed::MostrarMenuLateralTabla(QPoint pos)
     menu->popup(cabeceraVertical->viewport()->mapToGlobal(pos));
 }
 
-void TablaMed::MostrarMenuTabla(QPoint pos)
+void TablaMed::MostrarMenuTabla(const QPoint& pos)
 {
    if (this->currentIndex().column()==tipoColumnaTMedCert::SUBTOTAL)
    {

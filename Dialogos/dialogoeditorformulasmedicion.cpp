@@ -20,8 +20,8 @@ DialogoEditorFormulasMedicion::DialogoEditorFormulasMedicion(const QVariant &uds
     QObject::connect(ui->radioButtonGeometria,SIGNAL(clicked(bool)),this,SLOT(SincronizarWidgets()));
     QObject::connect(ui->radioButtonPerfil,SIGNAL(clicked(bool)),this,SLOT(SincronizarWidgets()));
     QObject::connect(ui->radioButtonPerfil,SIGNAL(clicked(bool)),this,SLOT(RellenarListadoPerfiles()));
-    QObject::connect(ui->comboBoxPerfil,SIGNAL(currentIndexChanged(int)),this,SLOT(RellenarTablasDiferentesPerfiles(int)));
-    QObject::connect(ui->comboBoxTamanno,SIGNAL(currentIndexChanged(int)),this,SLOT(SeleccionarPeso()));
+    QObject::connect(ui->comboBoxPerfil,SIGNAL(currentTextChanged(const QString &)),this,SLOT(RellenarTablasDiferentesPerfiles(const QString &)));
+    QObject::connect(ui->comboBoxTamanno,SIGNAL(currentTextChanged(const QString &)),this,SLOT(SeleccionarPeso(const QString &)));
     QObject::connect(ui->pushButtonEvaluar,SIGNAL(clicked(bool)),this,SLOT(Evaluar()));
     QObject::connect(ui->lineEditUds,SIGNAL(editingFinished()),this,SLOT(Evaluar()));
     QObject::connect(ui->lineEditLongitud,SIGNAL(editingFinished()),this,SLOT(Evaluar()));
@@ -80,58 +80,41 @@ void DialogoEditorFormulasMedicion::RellenarListadoPerfiles()
     if (ComboVacio(ui->comboBoxPerfil))
     {
         modeloPerfiles = new QSqlQueryModel;
-        modeloPerfiles->setQuery("SELECT nombre FROM tipoperfiles ORDER BY id");
+        modeloPerfiles->setQuery("SELECT distinct tipo FROM \"tAcero\" ORDER BY tipo");
         ui->comboBoxPerfil->setModel(modeloPerfiles);
-        RellenarTablasDiferentesPerfiles(0);
+        //RellenarTablasDiferentesPerfiles(0);
     }
 }
 
-void DialogoEditorFormulasMedicion::RellenarTablasDiferentesPerfiles(int tabla)
+void DialogoEditorFormulasMedicion::RellenarTablasDiferentesPerfiles(const QString& tipo)
 {
-    qDebug()<<"Tabla "<<tabla;
     modeloTipoPerfiles = new QSqlQueryModel;
-    QString cadena;
-    if (tabla == 0) //cero son los corrugados que van un poco aparte
-    {        
-        cadena = "SELECT diametro FROM \"tCorrugados\" ORDER BY diametro";
-        qDebug()<<cadena;
-        modeloTipoPerfiles->setQuery(cadena);
-        ui->comboBoxTamanno->setModel(modeloTipoPerfiles);        
-    }
-    else
-    {
-        modeloTipoPerfiles->setQuery("SELECT nombre FROM perfiles WHERE id_tipoperfil = '"+QString::number(tabla)+"' ORDER BY peso");
-        ui->comboBoxTamanno->setModel(modeloTipoPerfiles);
-    }
+    QString calibre = ui->comboBoxTamanno->currentText();
+    QString cadena = "SELECT tamanno FROM \"tAcero\" WHERE tipo = '" + tipo + "' ORDER BY masa";
+    qDebug()<<cadena;
+    modeloTipoPerfiles->setQuery(cadena);
+    ui->comboBoxTamanno->setModel(modeloTipoPerfiles);
 }
 
-void DialogoEditorFormulasMedicion::SeleccionarPeso()
+void DialogoEditorFormulasMedicion::SeleccionarPeso(const QString& tam)
 {
-    QSqlQuery consultapeso;
-    float peso;
-    QString calibre = ui->comboBoxTamanno->currentText();
-    QString consulta;
-    int tabla = ui->comboBoxPerfil->currentIndex();
-    if (tabla == 0) //cero son los corrugados que van un poco aparte
-    {
-        consulta = ("SELECT peso FROM \"tCorrugados\" WHERE diametro ='"+calibre+ "'");
-    }
-    else if (tabla>0 && tabla<7)//IPE,IPN,HEB,HEA,HEM,UPN
-    {
-        consulta = ("SELECT peso FROM perfiles WHERE nombre ='"+calibre+ "' AND id_tipoperfil ='"+QString::number(tabla)+"'");
-    }
+    QSqlQuery consultapeso;    
+    QString tipo = ui->comboBoxPerfil->currentText();
+
+    QString consulta = "SELECT masa FROM \"tAcero\" WHERE tipo = '" + tipo + "' AND tamanno = '"+ tam + "' ORDER BY masa";
     consultapeso.exec(consulta);
     qDebug()<<consulta;
+    QString peso;
     while (consultapeso.next())
     {
-        peso = consultapeso.value(0).toFloat();
-        ui->labelContenidoPesoKgm->setText(QString::number(peso));
+        peso = consultapeso.value(0).toString();
+        ui->labelPesoNumero->setText(peso);
     }
     //borro el contenido de los campos anchura y altura puesto que el resultado estará en función del nº de unidades y la longitud
     ui->lineEditAnchura->setText("");
     ui->lineEditAltura->setText("");
     ui->lineEditExpresion->clear();
-    ui->lineEditExpresion->setText("a*b*"+QString::number(peso));
+    ui->lineEditExpresion->setText("a*b*"+peso);
     Evaluar();
 }
 
