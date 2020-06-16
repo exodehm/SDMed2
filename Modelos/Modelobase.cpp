@@ -201,3 +201,8 @@ int ModeloBase::LeeColor(int fila, int columna)
         return m_datoscolor.at(fila).at(columna).toInt();
     }
 }
+
+int ModeloBase::NumeroLineasDatosTabla()
+{
+    return  m_datos.size();
+}

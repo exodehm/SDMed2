@@ -40,7 +40,7 @@ bool FiltroTablaBase::eventFilter(QObject *obj, QEvent *event)
             }
             m_tabla->clearSelection();
             return true;
-            break;
+
         }
         case (Qt::Key_Tab):
         {
@@ -49,34 +49,38 @@ bool FiltroTablaBase::eventFilter(QObject *obj, QEvent *event)
             while (m_tabla->columnaBloqueada(col) || m_tabla->isColumnHidden(col))
             {
                 col++;
-                //qDebug()<<"Columna: "<<col;
             }
             QModelIndex ind;
             if (col>m_tabla->limiteDerecho)
             {
-                if (indice.row()==m_tabla->model()->rowCount(QModelIndex())-1)
+                if (indice.row()==m_tabla->model()->rowCount(QModelIndex())-1)//si estoy en la ultima fila
                 {
-                    m_tabla->model()->insertRow(m_tabla->model()->rowCount(QModelIndex()));
-                    ind = m_tabla->model()->index(indice.row()+1,m_tabla->limiteIzquierdo);
+                    ModeloBase* modelo = qobject_cast<ModeloBase*>(m_tabla->model());
+                    if (modelo)
+                    {
+                        if (m_tabla->model()->rowCount(QModelIndex())==modelo->NumeroLineasDatosTabla()-1)
+                        {
+                            m_tabla->model()->insertRow(m_tabla->model()->rowCount(QModelIndex()));
+                            ind = m_tabla->model()->index(indice.row()+1,m_tabla->limiteIzquierdo);
+                        }
+                        else
+                        {
+                            ind = m_tabla->model()->index(indice.row(),m_tabla->limiteIzquierdo);
+                        }
+                    }
                 }
                 else
                 {
-                    col=m_tabla->limiteIzquierdo;
-                    while (m_tabla->columnaBloqueada(col) || m_tabla->isColumnHidden(col))
-                    {
-                        col++;
-                    }
-                    ind = m_tabla->model()->index(indice.row()+1,col);
+                    ind = m_tabla->model()->index(indice.row()+1,m_tabla->limiteIzquierdo);
                 }
             }
-            else
+            else//avance normal antes de la ultima columna
             {
                 ind = m_tabla->model()->index(indice.row(),col);
             }
             m_tabla->setCurrentIndex(ind);
             emit m_tabla->CambiaFila(ind);
             return true;
-            break;
         }
         case (Qt::Key_Backtab):
         {
@@ -114,8 +118,7 @@ bool FiltroTablaBase::eventFilter(QObject *obj, QEvent *event)
             }
             m_tabla->setCurrentIndex(ind);
             emit m_tabla->CambiaFila(ind);
-            return true;
-            break;
+            return true;            
         }
         case (Qt::Key_Up):
         {
@@ -132,22 +135,31 @@ bool FiltroTablaBase::eventFilter(QObject *obj, QEvent *event)
         case (Qt::Key_Down):
         {
             qDebug()<<"Tecla abajo";
-            if (indice.row() == m_tabla->model()->rowCount(QModelIndex())-1)
+            QModelIndex ind;
+            if (indice.row() == m_tabla->model()->rowCount(QModelIndex())-1)//ultima fila
             {
-                m_tabla->model()->insertRow(m_tabla->model()->rowCount(QModelIndex()));
-                QModelIndex ind = m_tabla->model()->index(indice.row()+1,indice.column(), QModelIndex());
-                m_tabla->setCurrentIndex(ind);
-                return true;
+                ModeloBase* modelo = qobject_cast<ModeloBase*>(m_tabla->model());
+                if (modelo)
+                {
+                    if (m_tabla->model()->rowCount(QModelIndex())==modelo->NumeroLineasDatosTabla()-1)
+                    {
+                        m_tabla->model()->insertRow(m_tabla->model()->rowCount(QModelIndex()));
+                        ind = m_tabla->model()->index(indice.row()+1,indice.column(), QModelIndex());
+
+                    }
+                    else
+                    {
+                        ind = m_tabla->model()->index(indice.row(),indice.column(), QModelIndex());
+                    }
+                }
             }
             else
             {
-                QModelIndex ind = m_tabla->model()->index(indice.row()+1,indice.column(), QModelIndex());
-                //qDebug()<<"Fila: "<<ind.row()<<" - Columna: "<<ind.column();
+                ind = m_tabla->model()->index(indice.row()+1,indice.column(), QModelIndex());
                 emit m_tabla->CambiaFila(ind);
-                m_tabla->setCurrentIndex(ind);
-                return true;
             }
-            break;
+            m_tabla->setCurrentIndex(ind);
+            return true;
         }
         case (Qt::Key_Right):
         {
@@ -168,8 +180,7 @@ bool FiltroTablaBase::eventFilter(QObject *obj, QEvent *event)
             QModelIndex ind = m_tabla->model()->index(indice.row(),col);
             emit m_tabla->CambiaFila(ind);
             m_tabla->setCurrentIndex(ind);
-            return true;
-            break;
+            return true;            
         }
         case (Qt::Key_Left):
         {
@@ -190,8 +201,7 @@ bool FiltroTablaBase::eventFilter(QObject *obj, QEvent *event)
             QModelIndex ind = m_tabla->model()->index(indice.row(),col);
             emit m_tabla->CambiaFila(ind);
             m_tabla->setCurrentIndex(ind);
-            return true;
-            break;
+            return true;            
         }
         case (Qt::Key_F5):
         {
@@ -210,8 +220,7 @@ bool FiltroTablaBase::eventFilter(QObject *obj, QEvent *event)
                 QModelIndex ind = m_tabla->model()->index(indice.row(),m_tabla->limiteIzquierdo);
                 m_tabla->setCurrentIndex(ind);
                 return true;
-            }
-            break;
+            }            
         }
         case (Qt::Key_F2):
         {
@@ -251,6 +260,7 @@ bool FiltroTablaBase::eventFilter(QObject *obj, QEvent *event)
                 qDebug()<<"Cortanding";
                 return true;
             }
+            break;
         }
         case (Qt::Key_V)://Pegar
         {
@@ -263,8 +273,7 @@ bool FiltroTablaBase::eventFilter(QObject *obj, QEvent *event)
         }
         default:
         {
-            return false;
-            break;
+            return false;            
         }
         }
     }

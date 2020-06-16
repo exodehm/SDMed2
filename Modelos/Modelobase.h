@@ -40,6 +40,7 @@ public:
     virtual void Certificar(const QList<int> &filas){}
 
     int LeeColor(int fila, int columna);
+    int NumeroLineasDatosTabla();
 
 public slots:
     //void MostrarHijos (QModelIndex idpadre);
