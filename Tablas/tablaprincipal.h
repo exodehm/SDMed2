@@ -1,7 +1,6 @@
 #ifndef TABLAPRINCIPAL_H
 #define TABLAPRINCIPAL_H
 
-#include "../defs.h"
 #include "tablabase.h"
 
 class ModeloBase;
@@ -27,7 +26,7 @@ public slots:
     void BloquearDesbloquearPrecio();
 
 private:
-    bool m_precio_bloqueado;
+    int m_opcion_precio;
 };
 
 #endif // TABLAPRINCIPAL_H

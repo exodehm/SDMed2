@@ -1,7 +1,6 @@
 #ifndef TABLAMEDCERT_H
 #define TABLAMEDCERT_H
 
-#include "../defs.h"
 #include "tablabase.h"
 
 class MedicionModel;

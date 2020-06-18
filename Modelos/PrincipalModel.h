@@ -22,7 +22,7 @@ public:
     void BorrarFilas(const QList<int>&filas) override;
     void InsertarFila(int fila) override;
     void ActualizarDatos(const QStringList& ruta) override;
-    void BloquearPrecio(const QModelIndex &index, bool bloquear = true);
+    void BloquearPrecio(const QModelIndex &index, int opcion);
 
     void Copiar(const QList<int> &filas) override;
     void Pegar(int fila) override;

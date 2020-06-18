@@ -23,7 +23,7 @@ namespace movimiento {
 }
 
 namespace precio {
-    enum {MODIFICAR, SUPRIMIR, BLOQUEAR, AJUSTAR};
+    enum {MODIFICAR, SUPRIMIR, BLOQUEAR, AJUSTAR, DESBLOQUEAR};
 }
 
 namespace codigo {

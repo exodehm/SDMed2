@@ -64,11 +64,11 @@ void TablaPrincipal::MenuPrecio(const QPoint &pos)
         {
         case DelegadoBase::eColores::BLOQUEADO:
             cadenaprecio = tr("Desbloquear");
-            m_precio_bloqueado = true;
+            m_opcion_precio = precio::DESBLOQUEAR;
             break;
         case DelegadoBase::eColores::DESCOMPUESTO:
             cadenaprecio = tr("Bloquear");
-            m_precio_bloqueado = false;
+            m_opcion_precio = precio::BLOQUEAR;
             break;
         default:
             break;
@@ -80,7 +80,6 @@ void TablaPrincipal::MenuPrecio(const QPoint &pos)
         menu->popup(cabeceraVertical->viewport()->mapToGlobal(pos));
     }
 }
-
 
 void TablaPrincipal::MostrarMenuCabecera(const QPoint &pos)
 {
@@ -163,6 +162,6 @@ void TablaPrincipal::BloquearDesbloquearPrecio()
     PrincipalModel* m = dynamic_cast<PrincipalModel*>(this->model());
     if (m)
     {
-        m->BloquearPrecio(currentIndex(), m_precio_bloqueado);
+        m->BloquearPrecio(currentIndex(), m_opcion_precio);
     }
 }

@@ -18,6 +18,7 @@
 #include "../Delegados/delegadocodigos.h"
 //#include "../Modelos/MedCertModel.h"
 #include "../Modelos/PrincipalModel.h"
+#include "../defs.h"
 
 class ModeloBase;
 class QPushButton;
