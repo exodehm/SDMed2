@@ -105,8 +105,8 @@ void DialogoConfiguracion::InstalarExtension()
         QString nombreFicheroControlDestino= file_control.fileName().mid(file_control.fileName().lastIndexOf("/")+1);
         QString nombreFicheroMakefileDestino= file_makefile.fileName().mid(file_makefile.fileName().lastIndexOf("/")+1);
         QString ficheroExtensionDestino = ruta_extension+ nombreFicheroExtensionDestino;
-        QString ficheroExtensionControl = ruta_extension + nombreFicheroControlDestino;
-        QString ficheroExtensionMakefile = ruta_extension + nombreFicheroMakefileDestino;
+        QString ficheroExtensionControlDestino = ruta_extension + nombreFicheroControlDestino;
+        QString ficheroExtensionMakefileDestino = ruta_extension + nombreFicheroMakefileDestino;
 
         QString aviso = "Se copiarán <b>"+ nombreFicheroExtensionDestino + " , " + nombreFicheroControlDestino + " y "+nombreFicheroMakefileDestino +
                 "</b> en:<br> "+ ruta_extension;
@@ -115,8 +115,20 @@ void DialogoConfiguracion::InstalarExtension()
         if (ret == QMessageBox::Ok)
         {
         #if defined(Q_OS_WIN)//<---Windows
+            QFile file_extension_destino(ficheroExtensionDestino);
+            if (file_extension_destino.exists())
+            {
+                file_extension_destino.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+                file_extension_destino.remove();
+            }
+            QFile file_control_destino(ficheroExtensionControlDestino);
+            if (file_control_destino.exists())
+            {
+                file_control_destino.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+                file_control_destino.remove();
+            }
             file_extension.copy(ficheroExtensionDestino);
-            file_control.copy(ficheroExtensionControl);
+            file_control.copy(ficheroExtensionControlDestino);
             //file_makefile.copy(ficheroExtensionMakefile);
         #else//<--Linux ....y mac?
             DialogoSudo* d = new DialogoSudo(this);
