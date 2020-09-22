@@ -23,7 +23,7 @@ private slots:
     void VerLicencia();
 
 private:
-    Ui::DialogoAbout *ui;
+    Ui::DialogoAbout *ui;  
 };
 
 #endif // DIALOGOABOUT_H

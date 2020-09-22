@@ -1,15 +1,15 @@
-#ifndef ABRIRGUARDARBC3_H
-#define ABRIRGUARDARBC3_H
+#ifndef IMPORTARBC3_H
+#define IMPORTARBC3_H
 
 #include <QString>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
 
-class AbrirGuardarBC3
+class ImportarBC3
 {
 public:
-    AbrirGuardarBC3(const QStringList & listadoBC3, bool& abierta);
+    ImportarBC3(const QStringList & listadoBC3, bool& abierta);
     int crearObra(QStringList& registroC);
     void procesarConceptos(QStringList& registroC);
     void procesarRelaciones(const QStringList& registroD);
@@ -25,4 +25,4 @@ private:
     QString codigo,resumen;
 };
 
-#endif // ABRIRGUARDARBC3_H
+#endif // IMPORTARBC3_H

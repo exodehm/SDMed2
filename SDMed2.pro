@@ -21,6 +21,7 @@ SOURCES += main.cpp\
     Dialogos/dialogooperacionesbbdd.cpp \
     Dialogos/dialogosudo.cpp \
     Dialogos/dialogotablaopcionesimpresion.cpp \
+    Ficheros/importarBC3.cpp \
         mainwindow.cpp \
     Dialogos/dialogoabout.cpp \
     Dialogos/dialogocreditos.cpp \
@@ -42,7 +43,6 @@ SOURCES += main.cpp\
     iconos.cpp \
     Modelos/treeitem.cpp \
     Modelos/TreeModel.cpp \
-    Ficheros/abrirguardarbc3.cpp \
     Dialogos/dialogoadvertenciaborrarbbdd.cpp \
     Modelos/Modelobase.cpp \
     Undo/undoeditarprincipal.cpp \
@@ -87,6 +87,7 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogooperacionesbbdd.h \
     Dialogos/dialogosudo.h \
     Dialogos/dialogotablaopcionesimpresion.h \
+    Ficheros/importarBC3.h \
     instancia.h \
     consultas.h \
     Tablas/tablabase.h \
@@ -104,7 +105,6 @@ HEADERS  += mainwindow.h \
     Modelos/treeitem.h \
     Modelos/TreeModel.h \
     defs.h \
-    Ficheros/abrirguardarbc3.h \
     Dialogos/dialogoadvertenciaborrarbbdd.h \
     Modelos/Modelobase.h \
     Undo/undoeditarprincipal.h \

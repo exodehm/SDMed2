@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include "instancia.h"
-#include "./Ficheros/abrirguardarbc3.h"
+#include "./Ficheros/importarBC3.h"
 #include "./Ficheros/exportarBC3.h"
 #include "./Dialogos/dialogoabout.h"
 #include "./Dialogos/dialogodatoscodigoresumen.h"
@@ -205,7 +205,7 @@ bool MainWindow::ActionImportar()
         }
         else
         {
-            AbrirGuardarBC3 NuevoBC3(registros, obraabierta);
+            ImportarBC3 NuevoBC3(registros, obraabierta);
             if (obraabierta)
             {
                 AnadirObraAVentanaPrincipal(codigoBC3,resumenBC3);                
@@ -337,7 +337,7 @@ void MainWindow::ActionImprimir()
     {
         pArgumentos<<(*obraActual)->LeeTabla();
 
-        /*if(::PyRun::loadModule(QDir::home().absoluteFilePath(ruta), pModulo, pFuncion, pArgumentos))
+        if(::PyRun::loadModule(QDir::home().absoluteFilePath(ruta), pModulo, pFuncion, pArgumentos))
         {
             qDebug()<< __PRETTY_FUNCTION__ << "successful";
         }

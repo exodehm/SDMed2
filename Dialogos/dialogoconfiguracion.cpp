@@ -101,9 +101,9 @@ void DialogoConfiguracion::InstalarExtension()
     if(file_extension.open(QIODevice::ReadOnly) && file_control.open(QIODevice::ReadOnly) && file_makefile.open(QIODevice::ReadOnly))
     {
         QString ruta_extension = ui->lineEdit_ruta_extension->text() + "/";
-        QString nombreFicheroExtensionDestino= file_extension.fileName().mid(file_extension.fileName().lastIndexOf("/")+1);
-        QString nombreFicheroControlDestino= file_control.fileName().mid(file_control.fileName().lastIndexOf("/")+1);
-        QString nombreFicheroMakefileDestino= file_makefile.fileName().mid(file_makefile.fileName().lastIndexOf("/")+1);
+        QString nombreFicheroExtensionDestino = file_extension.fileName().mid(file_extension.fileName().lastIndexOf("/")+1);
+        QString nombreFicheroControlDestino = file_control.fileName().mid(file_control.fileName().lastIndexOf("/")+1);
+        QString nombreFicheroMakefileDestino = file_makefile.fileName().mid(file_makefile.fileName().lastIndexOf("/")+1);
         QString ficheroExtensionDestino = ruta_extension+ nombreFicheroExtensionDestino;
         QString ficheroExtensionControlDestino = ruta_extension + nombreFicheroControlDestino;
         QString ficheroExtensionMakefileDestino = ruta_extension + nombreFicheroMakefileDestino;
@@ -136,8 +136,8 @@ void DialogoConfiguracion::InstalarExtension()
             {
                 QString passw = d->PassWSudo();
                 CopiarExtensionPermisos(file_extension,ficheroExtensionDestino,passw);
-                CopiarExtensionPermisos(file_control,ficheroExtensionControl,passw);
-                CopiarExtensionPermisos(file_makefile,ficheroExtensionMakefile,passw);
+                CopiarExtensionPermisos(file_control,nombreFicheroControlDestino,passw);
+                CopiarExtensionPermisos(file_makefile,nombreFicheroMakefileDestino,passw);
             }
             #endif
         }       

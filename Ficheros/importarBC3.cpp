@@ -1,9 +1,9 @@
-#include "abrirguardarbc3.h"
+#include "importarBC3.h"
 #include <QDebug>
 #include <QFile>
 #include <iostream>
 
-AbrirGuardarBC3::AbrirGuardarBC3(const QStringList &listadoBC3, bool &abierta)
+ImportarBC3::ImportarBC3(const QStringList &listadoBC3, bool &abierta)
 {
     QStringList registroD;
     QStringList registroM;
@@ -60,7 +60,7 @@ AbrirGuardarBC3::AbrirGuardarBC3(const QStringList &listadoBC3, bool &abierta)
     }
 }
 
-int AbrirGuardarBC3::crearObra(QStringList &registroC)
+int ImportarBC3::crearObra(QStringList &registroC)
 {
     //la funcion lee del registroC la linea con doble almohadilla ## y crea la obra en la BBDD con los datos
     //de este concepto. Luego elimina esa linea porque el registroC será usado más adelante para llenar la tabla de conceptos
@@ -97,7 +97,7 @@ int AbrirGuardarBC3::crearObra(QStringList &registroC)
     return res;
 }
 
-void AbrirGuardarBC3::procesarConceptos(QStringList &registroC)
+void ImportarBC3::procesarConceptos(QStringList &registroC)
 {
     foreach (const QString& linea, registroC)
     {
@@ -132,7 +132,7 @@ void AbrirGuardarBC3::procesarConceptos(QStringList &registroC)
     }
 }
 
-void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
+void ImportarBC3::procesarRelaciones(const QStringList &registroD)
 {
     //Hay que mirar si el registro tiene 2 o 3 campos
     //3 campos->verson FIEBDC-3/2012->tener en cuenta porcentajes
@@ -178,7 +178,7 @@ void AbrirGuardarBC3::procesarRelaciones(const QStringList &registroD)
     }
 }
 
-void AbrirGuardarBC3::procesarMediciones(QStringList &registroM)
+void ImportarBC3::procesarMediciones(QStringList &registroM)
 {
     foreach (const QString &linea, registroM)
     {
@@ -212,7 +212,7 @@ void AbrirGuardarBC3::procesarMediciones(QStringList &registroM)
     }
 }
 
-void AbrirGuardarBC3::procesarTexto(const QStringList& registroT)
+void ImportarBC3::procesarTexto(const QStringList& registroT)
 {
     QString linea;
     foreach (linea, registroT)
@@ -226,7 +226,7 @@ void AbrirGuardarBC3::procesarTexto(const QStringList& registroT)
     }
 }
 
-bool AbrirGuardarBC3::quitarSimbolos(QString& codigo)
+bool ImportarBC3::quitarSimbolos(QString& codigo)
 {
     //quita el caracter # en caso de que lo hubiera y retorna true. Si no lo hay se limita a retornar false
     int posicion = codigo.indexOf('#');
@@ -239,12 +239,12 @@ bool AbrirGuardarBC3::quitarSimbolos(QString& codigo)
 }
 
 
-QString AbrirGuardarBC3::LeeCodigo() const
+QString ImportarBC3::LeeCodigo() const
 {
     return codigo;
 }
 
-QString AbrirGuardarBC3::LeeResumen() const
+QString ImportarBC3::LeeResumen() const
 {
     return resumen;
 }
