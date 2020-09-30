@@ -40,7 +40,7 @@ public:
     const QString& LeeTabla() const;
     const QString& LeeResumen() const;
     void CambiarCodigoObra (const QString& nuevocodigo);
-    float LeePrecio(const QString& codigo = "");
+    double LeePrecio(const QString& codigo = "");
     //certificaciones    
     bool HayCertificacion();
     void ActualizarCertificacionEnModelo();    
@@ -109,22 +109,22 @@ private:
     QPushButton* m_BtnmaxminTablaMC;
     QTabWidget* m_TabWidgetTablasMedCert;
     //panel inferior (editor)
-    Editor* editor;
+    Editor* m_editor;
     //panel derecho (arbol)
-    VistaArbol* arbol;
+    VistaArbol* m_arbol;
 
     QList<TablaBase*>Listadotablasmedcert;
     bool m_Maximizado;
     QIcon *m_IconMax, *m_IconMin;
     //QModelIndex indiceActual;
 
-    MiUndoStack* pila;
+    MiUndoStack* m_pila;
 
-    QString codigopadre,codigohijo;
-    QSqlQuery consulta;
-    QString tabla,resumen;
-    QString textoPartidaInicial;
-    QStringList ruta, certActual;
+    QString m_codigopadre,m_codigohijo;
+    QSqlQuery m_consulta;
+    QString m_tabla,m_resumen;
+    QString m_textoPartidaInicial;
+    QStringList m_ruta, m_certActual;
     int m_tablamedcertactiva;
 };
 

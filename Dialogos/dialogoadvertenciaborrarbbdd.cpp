@@ -1,9 +1,9 @@
 #include "dialogoadvertenciaborrarbbdd.h"
 #include "ui_dialogoadvertenciaborrarbbdd.h"
 
-DialogoBorrarBBDD::DialogoBorrarBBDD(QStringList datos, QWidget *parent) :
+DialogoAdvertenciaBorrarBBDD::DialogoAdvertenciaBorrarBBDD(QStringList datos, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogoBorrarBBDD)
+    ui(new Ui::DialogoAdvertenciaBorrarBBDD)
 {
     ui->setupUi(this);
     ui->label_codigo->setText(datos.at(0));
@@ -14,12 +14,12 @@ DialogoBorrarBBDD::DialogoBorrarBBDD(QStringList datos, QWidget *parent) :
 
 }
 
-DialogoBorrarBBDD::~DialogoBorrarBBDD()
+DialogoAdvertenciaBorrarBBDD::~DialogoAdvertenciaBorrarBBDD()
 {
     delete ui;
 }
 
-bool DialogoBorrarBBDD::Exportar()
+bool DialogoAdvertenciaBorrarBBDD::Exportar()
 {
     return ui->checkBox->isChecked();
 }

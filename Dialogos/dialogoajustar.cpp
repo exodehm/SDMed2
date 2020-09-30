@@ -2,7 +2,7 @@
 #include "ui_dialogoajustar.h"
 #include <QDebug>
 
-DialogoAjustar::DialogoAjustar(const QString &codigoraiz, const QString &resumenraiz, const float &precioinicial, QWidget *parent) :
+DialogoAjustar::DialogoAjustar(const QString &codigoraiz, const QString &resumenraiz, const double &precioinicial, QWidget *parent) :
     codigo(codigoraiz), resumen(resumenraiz), precio_inicial(precioinicial), precio_final(precioinicial), QDialog(parent),
     ui(new Ui::DialogoAjustar)
 {
@@ -44,14 +44,14 @@ void DialogoAjustar::PonerValoresDefecto()
 
 void DialogoAjustar::ModificarCantidad(QString porcentaje)
 {
-    precio_final = precio_inicial * porcentaje.toFloat()/100;
+    precio_final = precio_inicial * porcentaje.toDouble()/100;
     ui->lineEditPrecioAjustar->setText(QString::number(precio_final));
     HabilitarBotonAceptar();
 }
 
 void DialogoAjustar::ModificarPorcentaje(QString cantidad)
 {
-    porcentaje = cantidad.toFloat()/precio_inicial*100;
+    porcentaje = cantidad.toDouble()/precio_inicial*100;
     ui->lineEditPorcentaje->setText(QString::number(porcentaje));
     HabilitarBotonAceptar();
 }

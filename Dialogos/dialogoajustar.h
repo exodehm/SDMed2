@@ -12,7 +12,7 @@ class DialogoAjustar : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogoAjustar(const QString& codigoraiz, const QString& resumenraiz, const float& precioinicial, QWidget *parent = nullptr);
+    explicit DialogoAjustar(const QString& codigoraiz, const QString& resumenraiz, const double& precioinicial, QWidget *parent = nullptr);
     QString LeePrecioParaAjustar();
     ~DialogoAjustar();
 
@@ -25,7 +25,7 @@ public slots:
 private:
     Ui::DialogoAjustar *ui;
     QString codigo,resumen;
-    float precio_inicial, precio_final, porcentaje;
+    double precio_inicial, precio_final, porcentaje;
 };
 
 #endif // DIALOGOAJUSTAR_H

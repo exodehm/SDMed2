@@ -217,7 +217,7 @@ bool MainWindow::ActionImportar()
 
 bool MainWindow::ActionAbrirBBDD()
 {
-    DialogoGestionObras* cuadro = new DialogoGestionObras(ListaObras, db, this);
+    DialogoGestionObras* cuadro = new DialogoGestionObras(m_ListaObrasAbiertas, db, this);
     QObject::connect(cuadro,SIGNAL(BorrarObra(QStringList)),this,SLOT(BorrarBBDD(QStringList)));
     QObject::connect(cuadro,SIGNAL(ActivarBotones(bool)),this,SLOT(ActivarBotonesBasicos(bool)));
     if (cuadro->exec())
@@ -233,15 +233,15 @@ bool MainWindow::ActionAbrirBBDD()
 
 bool MainWindow::BorrarBBDD(QStringList datosobra)
 {
-    DialogoBorrarBBDD* d = new DialogoBorrarBBDD(datosobra, this);
+    DialogoAdvertenciaBorrarBBDD* d = new DialogoAdvertenciaBorrarBBDD(datosobra, this);
     int res = d->exec();
-    if (res==1)//aceptar
+    if (res==true)//aceptar
     {
+        //Mirar si esta abierta
         QMessageBox::StandardButton respuesta;
-        auto it = ListaObras.begin();
-        foreach (Instancia* nombreobra, ListaObras)
+        foreach (Instancia* nombreobra, m_ListaObrasAbiertas)
         {
-            if (nombreobra->LeeTabla() == datosobra.at(0))
+            if (nombreobra->LeeTabla() == datosobra.at(0))//si la obra a borrar en la BBDD esta abierta....
             {
                 respuesta = QMessageBox::question(
                             this,
@@ -253,32 +253,33 @@ bool MainWindow::BorrarBBDD(QStringList datosobra)
                 {
                     return false;
                 }
-            }
+                else
+                {
+                    qDebug()<<"Cerrar la obra "<<datosobra.at(0);
+                    ActionCerrar(datosobra.at(0));
+                }
+            }            
         }
-        //primera accion, borrar la obra de la ventana principal
+        //exportar a BC3 si se ha elegido la opcion
         if (d->Exportar())
         {
-            Exportar(datosobra.at(0));
-            qDebug()<<"se guarda la obra";
+            //QString ficheroBC3 = datosobra.at(0)+".bc3";
+            Exportar(QString(), datosobra.at(0));
         }
-        //segunda accion, exportar a bc3 si esta seleccionada la accion
-        //obraActual = it;
-        ActionCerrar();
-        //tercera accion, borrar la obra de la BBDD
+        //Borrar la obra de la BBDD
         QString cadenaborrartablacodigo = "SELECT borrar_obra ('"+datosobra.at(0)+"');";
-        //qDebug()<<cadenaborrartablacodigo;
+        qDebug()<<cadenaborrartablacodigo;
         QSqlQuery consulta;
         consulta.exec(cadenaborrartablacodigo);
-        //qDebug()<<sender();
-        if (it!=ListaObras.end())
+        /*if (it!=m_ListaObrasAbiertas.end())
         {
             std::advance (it,1);
-        }
+        }*/
     }
-    return true;
+    return false;
 }
 
-bool MainWindow::Exportar(QString nombrefichero)
+bool MainWindow::Exportar(QString nombrefichero, QString obra)
 {
     qDebug()<<"nombreficero original "<<nombrefichero;
     QString extensionBC3 = ".bc3";
@@ -287,24 +288,31 @@ bool MainWindow::Exportar(QString nombrefichero)
         if (obraActual())
         {
             nombrefichero = (obraActual())->LeeTabla();
-            qDebug()<<"nombreficero original 1"<<nombrefichero;
+            qDebug()<<"nombrefichero original 1"<<nombrefichero;
         }
     }
     nombrefichero.append(extensionBC3);
     nombrefichero = QFileDialog::getSaveFileName(this,tr("Guardar BC3"),\
                                                          QDir::homePath()+"/"+nombrefichero,\
                                                          tr("Archivos BC3 (*.bc3)"));
-    return GuardarObra(nombrefichero);
+    return GuardarObra(nombrefichero,obra);
 }
 
-bool MainWindow::GuardarObra(QString nombreFichero)
+bool MainWindow::GuardarObra(QString nombreFichero, QString obra)
 {
     qDebug()<<"GuardarObra: "<<nombreFichero;
     bool toReturn=false;
     QString extension = nombreFichero.right(nombreFichero.length()-nombreFichero.lastIndexOf('.'));
     if (extension == ".bc3" || extension == ".BC3")
     {
-        ExportarBC3 exportador((obraActual())->LeeTabla(),nombreFichero);
+        if (!obra.isEmpty())
+        {
+            ExportarBC3 exportador(obra,nombreFichero);
+        }
+        else
+        {
+            ExportarBC3 exportador((obraActual())->LeeTabla(),nombreFichero);
+        }
         qDebug()<<"Guardada la obra "<<nombreFichero<<" con exito";
         toReturn = true;
     }
@@ -353,34 +361,36 @@ void MainWindow::ActionImprimir()
     //hacer un switch/case con los posibles errores
     DialogoListadoImprimir* d = new DialogoListadoImprimir(obraActual()->LeeTabla(), db, this);
     int res = d->exec();
-
 }
 
-void MainWindow::ActionCerrar()
-{
-    /*if (!ListaObras.empty())
+void MainWindow::ActionCerrar(QString nombreobra)
+{   
+    it = m_ListaObrasAbiertas.begin();
+    if (!nombreobra.isNull())
     {
-        std::list<Instancia*>::iterator obraBorrar = obraActual;
-        obraActual = ListaObras.erase(obraActual);
-        delete (*obraBorrar);
-        if ( obraActual == ListaObras.end() && !ListaObras.empty())
+        int indice = 0;
+        while ((*it)->LeeTabla() != nombreobra)
         {
-            obraActual = std::prev(obraActual);
+            it++;
+            indice++;
         }
-    }*/
-    it = ListaObras.begin();
-    while (*it != ui->tabPrincipal->currentWidget())
-    {
-        it++;
+        delete ui->tabPrincipal->widget(indice);
     }
-    ListaObras.erase(it);
-    delete ui->tabPrincipal->currentWidget();
-    if (ListaObras.empty())
+    else
+    {
+        while (*it != ui->tabPrincipal->currentWidget())
+        {
+            it++;
+        }
+        delete ui->tabPrincipal->currentWidget();
+    }
+    m_ListaObrasAbiertas.erase(it);
+    if (m_ListaObrasAbiertas.empty())
     {
         ui->actionGuardar->setEnabled(false);
         ui->actionCerrar->setEnabled(false);
         comboMedCert->setEnabled(false);
-        botonCertificaciones->setEnabled(false);        
+        botonCertificaciones->setEnabled(false);
         ui->actionVer_Arbol->setEnabled(false);
         ui->actionExportar->setEnabled(false);
         ui->actionImprimir->setEnabled(false);
@@ -536,7 +546,7 @@ void MainWindow::AcercaDeQt()
 
 bool MainWindow::HayObrasAbiertas()
 {
-    return !ListaObras.empty();
+    return !m_ListaObrasAbiertas.empty();
 }
 
 void MainWindow::CambiarMedCert(int indice)
@@ -616,7 +626,7 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
     ui->actionVer_Arbol->setEnabled(true);
     ui->tabPrincipal->addTab(NuevaObra,_resumen);
     ui->tabPrincipal->setCurrentIndex(ui->tabPrincipal->currentIndex()+1);
-    ListaObras.push_back(NuevaObra);
+    m_ListaObrasAbiertas.push_back(NuevaObra);
     //obraActual=ListaObras.begin();
     //std::advance(obraActual,ListaObras.size()-1);
     //ActivarDesactivarBotonesPila(obraActual->miobra->Pila()->index());
@@ -633,9 +643,9 @@ void MainWindow::AnadirObraAVentanaPrincipal(QString _codigo, QString _resumen)
 
 void MainWindow::CambiarObraActual(int indice)
 {
-    if (!ListaObras.empty())
+    if (!m_ListaObrasAbiertas.empty())
     {
-        if ((unsigned int)indice<ListaObras.size())
+        if ((unsigned int)indice<m_ListaObrasAbiertas.size())
         {
             //obraActual=ListaObras.begin();
             //std::advance(obraActual,indice);

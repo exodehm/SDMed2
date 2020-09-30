@@ -36,11 +36,11 @@ private slots:
     bool ActionAbrirBBDD();
     bool BorrarBBDD(QStringList datosobra);
     //bool Guardar();
-    bool Exportar(QString nombreFichero=QString());
-    bool GuardarObra(QString nombreFichero);
+    bool Exportar(QString nombreFichero=QString(),QString obra=QString());
+    bool GuardarObra(QString nombreFichero,QString obra=QString());
     void ActionImprimir();
     //void ExportarBC3();
-    void ActionCerrar();
+    void ActionCerrar(QString nombreobra = QString());
     void ActionSalir();
     void ActionCopiar();
     void ActionPegar();
@@ -82,7 +82,7 @@ protected:
 private:
 
     QSqlDatabase db;    
-    std::list<Instancia*>ListaObras;
+    std::list<Instancia*>m_ListaObrasAbiertas;
     //std::list<Instancia*>::iterator obraActual;
     std::list<Instancia*>::iterator it;
     QString rutaarchivo;

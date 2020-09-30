@@ -38,22 +38,22 @@
 #include <QSqlRecord>
 #include <QWidget>
 
-Instancia::Instancia(QString cod, QString res, QWidget *parent):QWidget(parent), tabla(cod), resumen(res)
+Instancia::Instancia(QString cod, QString res, QWidget *parent):QWidget(parent), m_tabla(cod), m_resumen(res)
 {
-    codigopadre ="";
-    codigohijo = cod;
-    ruta<<codigopadre<<codigohijo;
+    m_codigopadre ="";
+    m_codigohijo = cod;
+    m_ruta<<m_codigopadre<<m_codigohijo;
     m_tablamedcertactiva=0;
-    pila = new MiUndoStack(this);
+    m_pila = new MiUndoStack(this);
     GenerarUI();
 }
 
 Instancia::~Instancia()
 {
     delete modeloArbol;
-    delete editor;
-    QString cadenaborrarobra = "SELECT cerrar_tablas_auxiliares('"+tabla+"');";
-    consulta.exec(cadenaborrarobra);    
+    delete m_editor;
+    QString cadenaborrarobra = "SELECT cerrar_tablas_auxiliares('"+m_tabla+"');";
+    m_consulta.exec(cadenaborrarobra);
 }
 
 void Instancia::GenerarUI()
@@ -62,10 +62,10 @@ void Instancia::GenerarUI()
     separadorPrincipal = new QSplitter(Qt::Horizontal);
 
     //arbol
-    modeloArbol = new TreeModel(tabla, pila);
-    arbol = new VistaArbol;
-    arbol->setModel(modeloArbol);
-    arbol->setVisible(false);
+    modeloArbol = new TreeModel(m_tabla, m_pila);
+    m_arbol = new VistaArbol;
+    m_arbol->setModel(modeloArbol);
+    m_arbol->setVisible(false);
     separadorTablas = new QSplitter(Qt::Vertical);
 
     const QSize BUTTON_SIZE = QSize(25, 25);
@@ -86,7 +86,7 @@ void Instancia::GenerarUI()
     m_botoneraTablaPrincipal->addWidget(m_BtnmaxminTablaP);
 
     m_lienzoTablaPrincipal = new QVBoxLayout;
-    tablaPrincipal = new TablaPrincipal(tabla, ruta, pila);
+    tablaPrincipal = new TablaPrincipal(m_tabla, m_ruta, m_pila);
     m_lienzoTablaPrincipal->addLayout(m_botoneraTablaPrincipal);
     m_lienzoTablaPrincipal->addWidget(tablaPrincipal);
     m_PanelTablaP->setLayout(m_lienzoTablaPrincipal);
@@ -115,11 +115,11 @@ void Instancia::GenerarUI()
     //Tabla Medicion
     InsertarTablaMedCert(0);//0 es la tabla de mediciones
     //Tablas de certificacion
-    QString cadenalistadocertificaciones = "SELECT * FROM ver_certificaciones('"+ tabla + "');";
-    consulta.exec(cadenalistadocertificaciones);
-    while (consulta.next())
+    QString cadenalistadocertificaciones = "SELECT * FROM ver_certificaciones('"+ m_tabla + "');";
+    m_consulta.exec(cadenalistadocertificaciones);
+    while (m_consulta.next())
     {
-     InsertarTablaMedCert(consulta.value(0).toInt());
+     InsertarTablaMedCert(m_consulta.value(0).toInt());
     }
     //ultimo elemento del tab. Un boton para añadir mas certificaciones
     QIcon icono (":/images/plus.png");
@@ -131,26 +131,26 @@ void Instancia::GenerarUI()
     //separadorTablas->addWidget(separadorTablasMedCert);
 
     //editor
-    editor = new Editor;//(separadorTablas);
-    editor->EscribirRuta(ruta);
-    separadorTablas->addWidget(editor);
+    m_editor = new Editor;//(separadorTablas);
+    m_editor->EscribirRuta(m_ruta);
+    separadorTablas->addWidget(m_editor);
 
     //añado el separador al layout
     separadorPrincipal->addWidget(separadorTablas);
-    separadorPrincipal->addWidget(arbol);
+    separadorPrincipal->addWidget(m_arbol);
     lienzoGlobal->addWidget(separadorPrincipal);
 
     //vista de arbol
-    arbol->expandAll();
-    arbol->resizeColumnToContents(tipoColumnaTPrincipal::CODIGO);
-    arbol->resizeColumnToContents(tipoColumnaTPrincipal::NATURALEZA);
-    arbol->resizeColumnToContents(tipoColumnaTPrincipal::UD);
-    arbol->resizeColumnToContents(tipoColumnaTPrincipal::RESUMEN);
-    arbol->resizeColumnToContents(tipoColumnaTPrincipal::IMPPRES);
+    m_arbol->expandAll();
+    m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::CODIGO);
+    m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::NATURALEZA);
+    m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::UD);
+    m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::RESUMEN);
+    m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::IMPPRES);
     RefrescarVista();
     //tablaPrincipal->resizeColumnsToContents();
     MostrarDeSegun(0);
-    certActual = LeerCertifActual();
+    m_certActual = LeerCertifActual();
     ActualizarCertificacionEnModelo();
 
     /************signals y slots*****************/
@@ -160,62 +160,62 @@ void Instancia::GenerarUI()
     QObject::connect(tablaPrincipal,SIGNAL(Pegar()),this,SLOT(Pegar()));
     //QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
     QObject::connect(m_TabWidgetTablasMedCert,SIGNAL(currentChanged(int)),this,SLOT(ActualizarTablaMedCertActiva(int)));
-    QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(ActivarDesactivarUndoRedo(int)));
-    QObject::connect(pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
-    QObject::connect(arbol,SIGNAL(clicked(QModelIndex)),this,SLOT(SincronizarArbolTablal()));
+    QObject::connect(m_pila,SIGNAL(indexChanged(int)),this,SLOT(ActivarDesactivarUndoRedo(int)));
+    QObject::connect(m_pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
+    QObject::connect(m_arbol,SIGNAL(clicked(QModelIndex)),this,SLOT(SincronizarArbolTablal()));
 }
 
 const QString& Instancia::LeeTabla() const
 {
-    return tabla;
+    return m_tabla;
 }
 
 const QString& Instancia::LeeResumen() const
 {
-    return resumen;
+    return m_resumen;
 }
 
 void Instancia::CambiarCodigoObra(const QString &nuevocodigo)
 {
-    tabla = nuevocodigo;
+    m_tabla = nuevocodigo;
 }
 
-float Instancia::LeePrecio(const QString &codigo)
+double Instancia::LeePrecio(const QString &codigo)
 {
-    QString leerpreciodecodigo = "SELECT * FROM ver_precio('"+tabla+"','"+codigo+"')";
+    QString leerpreciodecodigo = "SELECT * FROM ver_precio('"+m_tabla+"','"+codigo+"')";
     qDebug()<<leerpreciodecodigo;
-    consulta.exec(leerpreciodecodigo);
-    float preciodecodigo=0;
-    while (consulta.next())
+    m_consulta.exec(leerpreciodecodigo);
+    double preciodecodigo=0;
+    while (m_consulta.next())
     {
-        preciodecodigo = consulta.value(0).toFloat();
+        preciodecodigo = m_consulta.value(0).toDouble();
     }
     return preciodecodigo;
 }
 
 QStringList Instancia::LeerCertifActual()
 {
-    QString leercertificacionactual = "SELECT * FROM ver_certificacion_actual('"+tabla+"')";
+    QString leercertificacionactual = "SELECT * FROM ver_certificacion_actual('"+m_tabla+"')";
     qDebug()<<leercertificacionactual;
-    consulta.exec(leercertificacionactual);
-    certActual.clear();
-    while (consulta.next())
+    m_consulta.exec(leercertificacionactual);
+    m_certActual.clear();
+    while (m_consulta.next())
     {
-        certActual<<consulta.value(0).toString()<<consulta.value(1).toString();
+        m_certActual<<m_consulta.value(0).toString()<<m_consulta.value(1).toString();
     }
-    qDebug()<<"CertACtual = "<<certActual.at(0)<<"<-->"<<certActual.at(1);
-    emit CambiarLabelCertActual(certActual);
-    return certActual;
+    qDebug()<<"CertACtual = "<<m_certActual.at(0)<<"<-->"<<m_certActual.at(1);
+    emit CambiarLabelCertActual(m_certActual);
+    return m_certActual;
 }
 
 bool Instancia::HayCertificacion()
 {
-    QString cadenahaycertificacion = "SELECT hay_certificacion('"+tabla+"')";
+    QString cadenahaycertificacion = "SELECT hay_certificacion('"+m_tabla+"')";
     qDebug()<<cadenahaycertificacion;
-    consulta.exec(cadenahaycertificacion);
-    while (consulta.next())
+    m_consulta.exec(cadenahaycertificacion);
+    while (m_consulta.next())
     {        
-        return consulta.value(0).toBool();
+        return m_consulta.value(0).toBool();
     }
     return false;
 }
@@ -236,13 +236,13 @@ void Instancia::InsertarTablaMedCert(int num_certif)
     TablaBase* tablaMC;
     if (num_certif == 0)//tabla de medicion
     {
-        tablaMC = new TablaMed(tabla, ruta, num_certif, pila);
+        tablaMC = new TablaMed(m_tabla, m_ruta, num_certif, m_pila);
         tablaMC->setObjectName(tr("Mediciones"));
         QObject::connect(tablaMC,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
     }
     else
     {
-        tablaMC = new TablaCert(tabla, ruta, num_certif, pila);
+        tablaMC = new TablaCert(m_tabla, m_ruta, num_certif, m_pila);
         tablaMC->setObjectName(tr("Certificación nº ")+QString::number(num_certif));
     }
     QObject::connect(tablaMC,SIGNAL(Copiar()),this,SLOT(Copiar()));
@@ -267,16 +267,16 @@ void Instancia::ExportarXLSS(QString nombreFichero)
             FROM tree, \"PRUEBASCOMP_Conceptos\" AS C \
             WHERE C.codigo=tree.codhijo \
             ORDER BY camino;";
-    consulta.exec(cadenaconsulta);
-    QSqlRecord rec = consulta.record();
+    m_consulta.exec(cadenaconsulta);
+    QSqlRecord rec = m_consulta.record();
     qDebug()<<cadenaconsulta;
     QList<QList<QString>> tabladatos;
-    while (consulta.next())
+    while (m_consulta.next())
     {
         QList<QString>fila;
         for (int i=0;i<rec.count();i++)
         {
-            fila.append(consulta.value(i).toString());
+            fila.append(m_consulta.value(i).toString());
         }
         tabladatos.append(fila);
         fila.clear();
@@ -294,7 +294,7 @@ void Instancia::ExportarXLSS(QString nombreFichero)
 
 MiUndoStack *Instancia::Pila()
 {
-    return pila;
+    return m_pila;
 }
 
 void Instancia::MostrarDeSegun(int indice)
@@ -332,20 +332,20 @@ void Instancia::Mover(int tipomovimiento)
     {
     case movimiento::INICIO:
     {
-        codigopadre="";
-        codigohijo =tabla;
-        ruta.clear();
-        ruta<<codigopadre<<codigohijo;
+        m_codigopadre="";
+        m_codigohijo =m_tabla;
+        m_ruta.clear();
+        m_ruta<<m_codigopadre<<m_codigohijo;
         break;
     }
     case movimiento::ARRIBA:
     {
-        if (!codigopadre.isEmpty())
+        if (!m_codigopadre.isEmpty())
         {
             {
-                ruta.pop_back();
-                codigohijo = codigopadre;
-                codigopadre = ruta.at(ruta.size()-2);
+                m_ruta.pop_back();
+                m_codigohijo = m_codigopadre;
+                m_codigopadre = m_ruta.at(m_ruta.size()-2);
             }
         }
         break;
@@ -355,35 +355,35 @@ void Instancia::Mover(int tipomovimiento)
         QString cod = tablaPrincipal->model()->index(tablaPrincipal->currentIndex().row(),0).data().toString();
         if (!cod.isEmpty())
         {
-            codigopadre=codigohijo;
-            codigohijo = cod;
-            ruta.append(codigohijo);
+            m_codigopadre=m_codigohijo;
+            m_codigohijo = cod;
+            m_ruta.append(m_codigohijo);
         }
         break;
     }
     case movimiento::DERECHA:
     {
-        ruta.pop_back();
-        cadenamover = "SELECT ver_siguiente('"+ tabla + "','"+ codigopadre + "','"+ codigohijo+"')";
+        m_ruta.pop_back();
+        cadenamover = "SELECT ver_siguiente('"+ m_tabla + "','"+ m_codigopadre + "','"+ m_codigohijo+"')";
         qDebug()<<cadenamover;
-        consulta.exec(cadenamover);
-        while (consulta.next())
+        m_consulta.exec(cadenamover);
+        while (m_consulta.next())
         {
-            codigohijo = consulta.value(0).toString();
+            m_codigohijo = m_consulta.value(0).toString();
         }
-        ruta.append(codigohijo);
+        m_ruta.append(m_codigohijo);
         break;
     }
     case movimiento::IZQUIERDA:
     {
-        ruta.pop_back();
-        cadenamover = "SELECT ver_anterior('"+ tabla + "','"+ codigopadre + "','"+ codigohijo+"')";
-        consulta.exec(cadenamover);
-        while (consulta.next())
+        m_ruta.pop_back();
+        cadenamover = "SELECT ver_anterior('"+ m_tabla + "','"+ m_codigopadre + "','"+ m_codigohijo+"')";
+        m_consulta.exec(cadenamover);
+        while (m_consulta.next())
         {
-            codigohijo = consulta.value(0).toString();
+            m_codigohijo = m_consulta.value(0).toString();
         }
-        ruta.append(codigohijo);
+        m_ruta.append(m_codigohijo);
         break;
     }
     default:
@@ -395,7 +395,7 @@ void Instancia::Mover(int tipomovimiento)
 
 void Instancia::VerArbol()
 {
-    arbol->setVisible(!arbol->isVisible());
+    m_arbol->setVisible(!m_arbol->isVisible());
 }
 
 void Instancia::AjustarPresupuesto()
@@ -405,7 +405,7 @@ void Instancia::AjustarPresupuesto()
     int res = d->exec();
     if (res==1)
     {
-        pila->push(new UndoAjustarPresupuesto(tabla,QString::number(LeePrecio()),d->LeePrecioParaAjustar()));
+        m_pila->push(new UndoAjustarPresupuesto(m_tabla,QString::number(LeePrecio()),d->LeePrecioParaAjustar()));
     }
 }
 
@@ -429,35 +429,35 @@ void Instancia::TablaDeseleccionarTodo(QWidget* widgetactivo)
 
 void Instancia::Undo()
 {    
-    MiUndoStack::POSICION pos = pila->LeePosicion();
-    ruta = pos.first;
+    MiUndoStack::POSICION pos = m_pila->LeePosicion();
+    m_ruta = pos.first;
     m_tablamedcertactiva = pos.second;
-    codigopadre = ruta.at(ruta.size()-2);
-    codigohijo = ruta.at(ruta.size()-1);
+    m_codigopadre = m_ruta.at(m_ruta.size()-2);
+    m_codigohijo = m_ruta.at(m_ruta.size()-1);
     m_TabWidgetTablasMedCert->setCurrentIndex(m_tablamedcertactiva);
-    pila->Undo();
-    pila->GuardarPosicion(ruta,m_tablamedcertactiva);
+    m_pila->Undo();
+    m_pila->GuardarPosicion(m_ruta,m_tablamedcertactiva);
 }
 
 void Instancia::Redo()
 {
-    MiUndoStack::POSICION pos = pila->LeePosicion();
-    ruta = pos.first;
+    MiUndoStack::POSICION pos = m_pila->LeePosicion();
+    m_ruta = pos.first;
     m_tablamedcertactiva = pos.second;
-    codigopadre = ruta.at(ruta.size()-2);
-    codigohijo = ruta.at(ruta.size()-1);
+    m_codigopadre = m_ruta.at(m_ruta.size()-2);
+    m_codigohijo = m_ruta.at(m_ruta.size()-1);
     m_TabWidgetTablasMedCert->setCurrentIndex(m_tablamedcertactiva);
-    pila->Redo();
-    pila->GuardarPosicion(ruta,m_tablamedcertactiva);
+    m_pila->Redo();
+    m_pila->GuardarPosicion(m_ruta,m_tablamedcertactiva);
 }
 
 void Instancia::RefrescarVista()
 {
-    //qDebug()<<"Refrescar la vista con "<<codigopadre<<" -- "<<codigohijo;
-    tablaPrincipal->ActualizarDatos(ruta);
+    //qDebug()<<"Refrescar la vista con "<<m_codigopadre<<" -- "<<m_codigohijo;
+    tablaPrincipal->ActualizarDatos(m_ruta);
     for (auto it = Listadotablasmedcert.begin();it!=Listadotablasmedcert.end();++it)
     {    
-        (*it)->ActualizarDatos(ruta);
+        (*it)->ActualizarDatos(m_ruta);
     }
     /*modeloTablaP->QuitarIndicadorFilaVacia();
     if (modeloTablaP->rowCount(QModelIndex())==0)
@@ -465,7 +465,7 @@ void Instancia::RefrescarVista()
         modeloTablaP->insertRow(0);
     }*/
     EscribirTexto();
-    editor->EscribirRuta(ruta);
+    m_editor->EscribirRuta(m_ruta);
     //editor->Formatear();
     GuardarTextoPartidaInicial();    
     //tablaPrincipal->setCurrentIndex(indiceActual);
@@ -533,60 +533,60 @@ void Instancia::Pegar()
 
 void Instancia::EscribirTexto()
 {
-    QString cadenavertexto = "SELECT ver_texto('" + tabla + "','" + codigohijo+"');";
+    QString cadenavertexto = "SELECT ver_texto('" + m_tabla + "','" + m_codigohijo+"');";
     qDebug()<<cadenavertexto;
-    consulta.exec(cadenavertexto);
+    m_consulta.exec(cadenavertexto);
     QString descripcion;
-    while (consulta.next())
+    while (m_consulta.next())
     {
-        descripcion = consulta.value(0).toString();
+        descripcion = m_consulta.value(0).toString();
     }
-    editor->EscribeTexto(descripcion);
+    m_editor->EscribeTexto(descripcion);
 }
 
 void Instancia::GuardarTextoPartidaInicial()
 {
     //qDebug()<<"textoPartidaActual"<<textoPartidaInicial;
-    textoPartidaInicial = editor->LeeContenidoConFormato();
+    m_textoPartidaInicial = m_editor->LeeContenidoConFormato();
 }
 
 void Instancia::GuardarTextoPartida()
 {
     //qDebug()<<"Fucnion GuardarTextoPArtida()"<<editor->LeeContenido();
-    if (editor->HayCambios())
+    if (m_editor->HayCambios())
     {
-        QString cadenaundo = ("Cambiar texto de partida a " + editor->LeeContenido());
+        QString cadenaundo = ("Cambiar texto de partida a " + m_editor->LeeContenido());
         //qDebug()<<cadenaundo;
-        pila->Push(ruta,m_tablamedcertactiva, new UndoEditarTexto(tabla, codigopadre, codigohijo, textoPartidaInicial,editor->LeeContenidoConFormato(),QVariant(cadenaundo)));
+        m_pila->Push(m_ruta,m_tablamedcertactiva, new UndoEditarTexto(m_tabla, m_codigopadre, m_codigohijo, m_textoPartidaInicial,m_editor->LeeContenidoConFormato(),QVariant(cadenaundo)));
     }
 }
 
 void Instancia::SincronizarArbolTablal()
 {
-    TreeItem * mi_item = static_cast<TreeItem*>(arbol->currentIndex().internalPointer());
+    TreeItem * mi_item = static_cast<TreeItem*>(m_arbol->currentIndex().internalPointer());
     if (mi_item && mi_item->parentItem()!=nullptr)
     {
-        codigohijo = mi_item->data(0).toString();
-        ruta.clear();
-        ruta.append(codigohijo);
+        m_codigohijo = mi_item->data(0).toString();
+        m_ruta.clear();
+        m_ruta.append(m_codigohijo);
         //evito la cabecera del arbol que no forma parte de la estructura de datos y la susituyo por una cadena nula
         if (mi_item->parentItem()->parentItem()!=nullptr)
         {
-            codigopadre = mi_item->parentItem()->data(0).toString();
+            m_codigopadre = mi_item->parentItem()->data(0).toString();
         }
         else
         {
-            codigopadre = "";
+            m_codigopadre = "";
         }
         while (mi_item->parentItem()!= nullptr)
         {
             if (mi_item->parentItem()->parentItem()!=nullptr)
             {
-                ruta.push_front(mi_item->parentItem()->data(0).toString());
+                m_ruta.push_front(mi_item->parentItem()->data(0).toString());
             }
             else
             {
-                ruta.push_front("");
+                m_ruta.push_front("");
             }
             mi_item = mi_item->parentItem();
         }
@@ -666,7 +666,7 @@ void Instancia::CopiarElementosTablaPortapapeles(const QModelIndexList &lista, T
 
 void Instancia::AdministrarCertificaciones()
 {
-    DialogoCertificaciones* d = new DialogoCertificaciones(tabla);
+    DialogoCertificaciones* d = new DialogoCertificaciones(m_tabla);
     QObject::connect(d,SIGNAL(BorrarCertificacion(QString)),this,SLOT(BorrarCertificacion(QString)));
     QObject::connect(d,SIGNAL(InsertarCertificacion(QString)),this,SLOT(AnadirCertificacion(QString)));
     QObject::connect(d,SIGNAL(ActualizarCert()),this,SLOT(LeerCertifActual()));
@@ -680,14 +680,14 @@ void Instancia::AdministrarCertificaciones()
 void Instancia::BorrarCertificacion(QString fecha_certificacion)
 {
     //Borro la certificacion de la BBDD. Todas las lineas que tengan ese numero de certificacion quedaran borradas
-    QString cadenaborrarcertificacion = "SELECT * FROM borrar_certificacion('" + tabla + "','" + fecha_certificacion + "')";
+    QString cadenaborrarcertificacion = "SELECT * FROM borrar_certificacion('" + m_tabla + "','" + fecha_certificacion + "')";
     qDebug()<<cadenaborrarcertificacion;
-    consulta.exec(cadenaborrarcertificacion);
+    m_consulta.exec(cadenaborrarcertificacion);
     //ahora hallo el nº de certificacion para reajustar las tablas
     int num_certificacion=-1;
-    while (consulta.next())
+    while (m_consulta.next())
     {
-        num_certificacion = consulta.value(0).toInt();
+        num_certificacion = m_consulta.value(0).toInt();
         qDebug()<<"Numero de ce "<<num_certificacion;
     }
     if (num_certificacion>0)
@@ -718,13 +718,13 @@ void Instancia::BorrarCertificacion(QString fecha_certificacion)
 
 void Instancia::AnadirCertificacion(QString fecha_certificacion)
 {
-    QString cadenanuevacertificacion = "SELECT anadir_certificacion('"+ tabla + "','" + fecha_certificacion + "')";
+    QString cadenanuevacertificacion = "SELECT anadir_certificacion('"+ m_tabla + "','" + fecha_certificacion + "')";
     qDebug()<<cadenanuevacertificacion;
-    consulta.exec(cadenanuevacertificacion);
+    m_consulta.exec(cadenanuevacertificacion);
     bool resultado = false;
-    while (consulta.next())
+    while (m_consulta.next())
     {
-        resultado = consulta.value(0).toBool();
+        resultado = m_consulta.value(0).toBool();
     }
     if (resultado == false)
     {
@@ -735,13 +735,13 @@ void Instancia::AnadirCertificacion(QString fecha_certificacion)
     else
     {
         int numcert = 0;
-        QString cadenavercertificaciones = "SELECT * FROM ver_certificaciones('"+tabla+"');";
-        consulta.exec(cadenavercertificaciones);
-        while (consulta.next())
+        QString cadenavercertificaciones = "SELECT * FROM ver_certificaciones('"+m_tabla+"');";
+        m_consulta.exec(cadenavercertificaciones);
+        while (m_consulta.next())
         {
-            if (consulta.value(1).toString() == fecha_certificacion)
+            if (m_consulta.value(1).toString() == fecha_certificacion)
             {
-                numcert = consulta.value(0).toInt();
+                numcert = m_consulta.value(0).toInt();
                 //qDebug()<<"LA fecha es : "<<consulta.value(1).toString()<<" y el numcert es: "<<numcert;
             }
         }
@@ -768,7 +768,7 @@ void Instancia::Certificar()
 {
     if (HayCertificacion())
     {
-        qDebug()<<"Certif actual"<<certActual.at(0);
+        qDebug()<<"Certif actual"<<m_certActual.at(0);
         QWidget* w = qApp->focusWidget();
         TablaMed* tabla = qobject_cast<TablaMed*>(w);
         if(tabla)

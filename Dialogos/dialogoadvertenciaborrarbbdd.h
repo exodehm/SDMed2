@@ -1,23 +1,23 @@
-#ifndef DIALOGOBORRARBBDD_H
-#define DIALOGOBORRARBBDD_H
+#ifndef DIALOGOADVERTENCIABORRARBBDD_H
+#define DIALOGOADVERTENCIABORRARBBDD_H
 
 #include <QDialog>
 
 namespace Ui {
-class DialogoBorrarBBDD;
+class DialogoAdvertenciaBorrarBBDD;
 }
 
-class DialogoBorrarBBDD : public QDialog
+class DialogoAdvertenciaBorrarBBDD : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogoBorrarBBDD(QStringList datos, QWidget *parent = nullptr);
-    ~DialogoBorrarBBDD();
+    explicit DialogoAdvertenciaBorrarBBDD(QStringList datos, QWidget *parent = nullptr);
+    ~DialogoAdvertenciaBorrarBBDD();
     bool Exportar();
 
 private:
-    Ui::DialogoBorrarBBDD *ui;
+    Ui::DialogoAdvertenciaBorrarBBDD *ui;
 };
 
-#endif // DIALOGOBORRARBBDD_H
+#endif // DIALOGOADVERTENCIABORRARBBDD_H
