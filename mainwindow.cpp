@@ -263,18 +263,13 @@ bool MainWindow::BorrarBBDD(QStringList datosobra)
         //exportar a BC3 si se ha elegido la opcion
         if (d->Exportar())
         {
-            //QString ficheroBC3 = datosobra.at(0)+".bc3";
             Exportar(QString(), datosobra.at(0));
         }
         //Borrar la obra de la BBDD
         QString cadenaborrartablacodigo = "SELECT borrar_obra ('"+datosobra.at(0)+"');";
         qDebug()<<cadenaborrartablacodigo;
         QSqlQuery consulta;
-        consulta.exec(cadenaborrartablacodigo);
-        /*if (it!=m_ListaObrasAbiertas.end())
-        {
-            std::advance (it,1);
-        }*/
+        consulta.exec(cadenaborrartablacodigo);        
     }
     return false;
 }
