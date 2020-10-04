@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
--- Dumped by pg_dump version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
+-- Dumped from database version 10.14 (Ubuntu 10.14-0ubuntu0.18.04.1)
+-- Dumped by pg_dump version 10.14 (Ubuntu 10.14-0ubuntu0.18.04.1)
 
--- Started on 2020-06-18 20:48:01 CEST
+-- Started on 2020-10-01 19:35:11 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -34,11 +34,10 @@ ALTER SCHEMA sdmed OWNER TO sdmed;
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
---CREATE EXTENSION IF NOT EXISTS sdmed WITH SCHEMA sdmed;
 
 
 --
--- TOC entry 3534 (class 0 OID 0)
+-- TOC entry 3120 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -47,7 +46,7 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- TOC entry 785 (class 1247 OID 39244)
+-- TOC entry 722 (class 1247 OID 39244)
 -- Name: tp_certificacion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -60,7 +59,7 @@ CREATE TYPE sdmed.tp_certificacion AS (
 ALTER TYPE sdmed.tp_certificacion OWNER TO sdmed;
 
 --
--- TOC entry 788 (class 1247 OID 39266)
+-- TOC entry 725 (class 1247 OID 39266)
 -- Name: tp_color; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -77,7 +76,7 @@ CREATE TYPE sdmed.tp_color AS ENUM (
 ALTER TYPE sdmed.tp_color OWNER TO sdmed;
 
 --
--- TOC entry 772 (class 1247 OID 39281)
+-- TOC entry 709 (class 1247 OID 39281)
 -- Name: tp_concepto; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -98,7 +97,7 @@ CREATE TYPE sdmed.tp_concepto AS (
 ALTER TYPE sdmed.tp_concepto OWNER TO sdmed;
 
 --
--- TOC entry 775 (class 1247 OID 39284)
+-- TOC entry 712 (class 1247 OID 39284)
 -- Name: tp_copiarconcepto; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -112,7 +111,7 @@ CREATE TYPE sdmed.tp_copiarconcepto AS (
 ALTER TYPE sdmed.tp_copiarconcepto OWNER TO sdmed;
 
 --
--- TOC entry 930 (class 1247 OID 39883)
+-- TOC entry 741 (class 1247 OID 39883)
 -- Name: tp_relacion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -130,7 +129,7 @@ CREATE TYPE sdmed.tp_relacion AS (
 ALTER TYPE sdmed.tp_relacion OWNER TO sdmed;
 
 --
--- TOC entry 933 (class 1247 OID 39886)
+-- TOC entry 744 (class 1247 OID 39886)
 -- Name: tp_copiarrelacion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -144,7 +143,7 @@ CREATE TYPE sdmed.tp_copiarrelacion AS (
 ALTER TYPE sdmed.tp_copiarrelacion OWNER TO sdmed;
 
 --
--- TOC entry 797 (class 1247 OID 39308)
+-- TOC entry 734 (class 1247 OID 39308)
 -- Name: tp_guardarconcepto; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -158,7 +157,7 @@ CREATE TYPE sdmed.tp_guardarconcepto AS (
 ALTER TYPE sdmed.tp_guardarconcepto OWNER TO sdmed;
 
 --
--- TOC entry 784 (class 1247 OID 39296)
+-- TOC entry 721 (class 1247 OID 39296)
 -- Name: tp_medicion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -181,7 +180,7 @@ CREATE TYPE sdmed.tp_medicion AS (
 ALTER TYPE sdmed.tp_medicion OWNER TO sdmed;
 
 --
--- TOC entry 794 (class 1247 OID 39305)
+-- TOC entry 731 (class 1247 OID 39305)
 -- Name: tp_guardarmedicion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -195,7 +194,7 @@ CREATE TYPE sdmed.tp_guardarmedicion AS (
 ALTER TYPE sdmed.tp_guardarmedicion OWNER TO sdmed;
 
 --
--- TOC entry 936 (class 1247 OID 39889)
+-- TOC entry 747 (class 1247 OID 39889)
 -- Name: tp_guardarrelacion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -209,7 +208,7 @@ CREATE TYPE sdmed.tp_guardarrelacion AS (
 ALTER TYPE sdmed.tp_guardarrelacion OWNER TO sdmed;
 
 --
--- TOC entry 791 (class 1247 OID 39299)
+-- TOC entry 728 (class 1247 OID 39299)
 -- Name: tp_lineamedicion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -231,7 +230,7 @@ CREATE TYPE sdmed.tp_lineamedicion AS (
 ALTER TYPE sdmed.tp_lineamedicion OWNER TO sdmed;
 
 --
--- TOC entry 781 (class 1247 OID 39293)
+-- TOC entry 718 (class 1247 OID 39293)
 -- Name: tp_partida; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -252,7 +251,7 @@ CREATE TYPE sdmed.tp_partida AS (
 ALTER TYPE sdmed.tp_partida OWNER TO sdmed;
 
 --
--- TOC entry 778 (class 1247 OID 39290)
+-- TOC entry 715 (class 1247 OID 39290)
 -- Name: tp_propiedades; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
@@ -266,7 +265,7 @@ CREATE TYPE sdmed.tp_propiedades AS (
 ALTER TYPE sdmed.tp_propiedades OWNER TO sdmed;
 
 --
--- TOC entry 287 (class 1255 OID 39313)
+-- TOC entry 223 (class 1255 OID 39313)
 -- Name: actualizar_certificacion_actual(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -285,7 +284,7 @@ $_$;
 ALTER FUNCTION sdmed.actualizar_certificacion_actual(_nombretabla character varying, _fecha character varying) OWNER TO sdmed;
 
 --
--- TOC entry 386 (class 1255 OID 39314)
+-- TOC entry 322 (class 1255 OID 39314)
 -- Name: actualizar_desde_nodo(character varying, character varying, integer, double precision); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -374,7 +373,7 @@ $_$;
 ALTER FUNCTION sdmed.actualizar_desde_nodo(_nombretabla character varying, _codigonodo character varying, _num_cert integer, _coste_indirecto double precision) OWNER TO sdmed;
 
 --
--- TOC entry 303 (class 1255 OID 39315)
+-- TOC entry 239 (class 1255 OID 39315)
 -- Name: ajustar(character varying, double precision); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -404,7 +403,7 @@ $_$;
 ALTER FUNCTION sdmed.ajustar(_nombretabla character varying, _nuevo_valor double precision) OWNER TO sdmed;
 
 --
--- TOC entry 300 (class 1255 OID 39316)
+-- TOC entry 236 (class 1255 OID 39316)
 -- Name: anadir_certificacion(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -441,7 +440,7 @@ $_$;
 ALTER FUNCTION sdmed.anadir_certificacion(_nombretabla character varying, _fecha character varying) OWNER TO sdmed;
 
 --
--- TOC entry 301 (class 1255 OID 39317)
+-- TOC entry 237 (class 1255 OID 39317)
 -- Name: anadir_obra_a_listado(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -480,7 +479,7 @@ $$;
 ALTER FUNCTION sdmed.anadir_obra_a_listado(codigo character varying, resumen character varying) OWNER TO sdmed;
 
 --
--- TOC entry 302 (class 1255 OID 39318)
+-- TOC entry 238 (class 1255 OID 39318)
 -- Name: bloquear_precio(character varying, character varying, numeric, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -502,7 +501,7 @@ $_$;
 ALTER FUNCTION sdmed.bloquear_precio(_nombretabla character varying, _codigo character varying, _precio numeric, _bloquear boolean) OWNER TO sdmed;
 
 --
--- TOC entry 304 (class 1255 OID 39319)
+-- TOC entry 240 (class 1255 OID 39319)
 -- Name: borrar_certificacion(character varying, date); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -531,7 +530,7 @@ $_$;
 ALTER FUNCTION sdmed.borrar_certificacion(_nombretabla character varying, _fecha date) OWNER TO sdmed;
 
 --
--- TOC entry 308 (class 1255 OID 39320)
+-- TOC entry 244 (class 1255 OID 39320)
 -- Name: borrar_hijos(character varying, character varying, character varying, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -596,7 +595,7 @@ $_$;
 ALTER FUNCTION sdmed.borrar_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijos character varying, _guardar boolean) OWNER TO sdmed;
 
 --
--- TOC entry 305 (class 1255 OID 39322)
+-- TOC entry 241 (class 1255 OID 39322)
 -- Name: borrar_lineas_medcert(character varying, integer[], integer, boolean, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -658,7 +657,7 @@ $_$;
 ALTER FUNCTION sdmed.borrar_lineas_medcert(_nombretabla character varying, _ids integer[], _num_cert integer, _guardar boolean, _solomedicion boolean) OWNER TO sdmed;
 
 --
--- TOC entry 309 (class 1255 OID 39321)
+-- TOC entry 245 (class 1255 OID 39321)
 -- Name: borrar_lineas_medcert(character varying, character varying, character varying, integer, integer[], boolean, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -697,7 +696,7 @@ $_$;
 ALTER FUNCTION sdmed.borrar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _posiciones integer[], _guardar boolean, _solomedicion boolean) OWNER TO sdmed;
 
 --
--- TOC entry 306 (class 1255 OID 39323)
+-- TOC entry 242 (class 1255 OID 39323)
 -- Name: borrar_lineas_principal(character varying, character varying, character varying[], boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -777,7 +776,7 @@ $_$;
 ALTER FUNCTION sdmed.borrar_lineas_principal(_nombretabla character varying, _codigopadre character varying, _codigoshijo character varying[], _guardar boolean) OWNER TO sdmed;
 
 --
--- TOC entry 307 (class 1255 OID 39325)
+-- TOC entry 243 (class 1255 OID 39325)
 -- Name: borrar_obra(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -821,7 +820,7 @@ $$;
 ALTER FUNCTION sdmed.borrar_obra(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 311 (class 1255 OID 39326)
+-- TOC entry 247 (class 1255 OID 39326)
 -- Name: borrar_relacion(character varying, integer, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -864,7 +863,7 @@ $$;
 ALTER FUNCTION sdmed.borrar_relacion(nombretabla character varying, idpadre integer, idhijo integer) OWNER TO sdmed;
 
 --
--- TOC entry 312 (class 1255 OID 39327)
+-- TOC entry 248 (class 1255 OID 39327)
 -- Name: cambiar_codigo_obra(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -915,7 +914,7 @@ $_$;
 ALTER FUNCTION sdmed.cambiar_codigo_obra(_nombretabla character varying, _codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 313 (class 1255 OID 39328)
+-- TOC entry 249 (class 1255 OID 39328)
 -- Name: cambiar_resumen_obra(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -948,7 +947,7 @@ $_$;
 ALTER FUNCTION sdmed.cambiar_resumen_obra(_nombretabla character varying, _resumen character varying) OWNER TO sdmed;
 
 --
--- TOC entry 314 (class 1255 OID 39329)
+-- TOC entry 250 (class 1255 OID 39329)
 -- Name: cerrar_obra(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -974,7 +973,7 @@ $$;
 ALTER FUNCTION sdmed.cerrar_obra(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 310 (class 1255 OID 39330)
+-- TOC entry 246 (class 1255 OID 39330)
 -- Name: cerrar_tablas_auxiliares(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1000,7 +999,7 @@ $$;
 ALTER FUNCTION sdmed.cerrar_tablas_auxiliares(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 315 (class 1255 OID 39331)
+-- TOC entry 251 (class 1255 OID 39331)
 -- Name: certificar(character varying, character varying, character varying, character varying[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1055,7 +1054,7 @@ $_$;
 ALTER FUNCTION sdmed.certificar(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _indices character varying[]) OWNER TO sdmed;
 
 --
--- TOC entry 318 (class 1255 OID 39332)
+-- TOC entry 253 (class 1255 OID 39332)
 -- Name: copiar(character varying, character varying, character varying[], boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1130,7 +1129,7 @@ $$;
 ALTER FUNCTION sdmed.copiar(_nombretabla character varying, _codigopadre character varying, _codigos character varying[], _primer_paso boolean) OWNER TO sdmed;
 
 --
--- TOC entry 320 (class 1255 OID 39333)
+-- TOC entry 255 (class 1255 OID 39333)
 -- Name: copiar_medicion(character varying, character varying, character varying, integer, integer[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1172,7 +1171,7 @@ $_$;
 ALTER FUNCTION sdmed.copiar_medicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _lineas integer[]) OWNER TO sdmed;
 
 --
--- TOC entry 316 (class 1255 OID 39334)
+-- TOC entry 325 (class 1255 OID 39334)
 -- Name: crear_obra(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1183,7 +1182,25 @@ DECLARE
 resultado integer;
 tablaconceptos character varying;
 tablarelacion character varying;
+var_r character varying;
+existe boolean;
+contador integer:=1;
+primer_digito character varying:='0';
+codigo_corregido character varying;
 BEGIN
+codigo_corregido = codigo;
+SELECT existe_obra(codigo_corregido) INTO existe;
+RAISE NOTICE 'existe = %',existe;
+WHILE existe = True LOOP
+	codigo_corregido = concat (codigo,'_',primer_digito,contador::character varying);
+	RAISE NOTICE 'codigo = %',codigo_corregido;
+	SELECT existe_obra(codigo_corregido) INTO existe;
+	contador = contador +1;
+	IF contador>9 THEN
+		primer_digito = '';
+	END IF;
+END LOOP;
+codigo = codigo_corregido;
 resultado = (SELECT crear_tabla_conceptos(codigo));
 IF resultado != 0 THEN
 PERFORM borrar_obra (codigo);
@@ -1220,7 +1237,7 @@ $$;
 ALTER FUNCTION sdmed.crear_obra(codigo character varying, resumen character varying) OWNER TO sdmed;
 
 --
--- TOC entry 317 (class 1255 OID 39335)
+-- TOC entry 252 (class 1255 OID 39335)
 -- Name: crear_tabla_conceptos(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1244,7 +1261,7 @@ $$;
 ALTER FUNCTION sdmed.crear_tabla_conceptos(codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 319 (class 1255 OID 39336)
+-- TOC entry 254 (class 1255 OID 39336)
 -- Name: crear_tabla_mediciones(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1272,7 +1289,7 @@ $$;
 ALTER FUNCTION sdmed.crear_tabla_mediciones(codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 321 (class 1255 OID 39337)
+-- TOC entry 256 (class 1255 OID 39337)
 -- Name: crear_tabla_propiedades(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1325,7 +1342,7 @@ $$;
 ALTER FUNCTION sdmed.crear_tabla_propiedades(_codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 322 (class 1255 OID 39338)
+-- TOC entry 257 (class 1255 OID 39338)
 -- Name: crear_tabla_relacion(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1355,7 +1372,7 @@ $$;
 ALTER FUNCTION sdmed.crear_tabla_relacion(codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 381 (class 1255 OID 39448)
+-- TOC entry 317 (class 1255 OID 39448)
 -- Name: create_role_if_not_exists(name); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1376,7 +1393,7 @@ $$;
 ALTER FUNCTION sdmed.create_role_if_not_exists(rolename name) OWNER TO sdmed;
 
 --
--- TOC entry 325 (class 1255 OID 39339)
+-- TOC entry 265 (class 1255 OID 39339)
 -- Name: es_ancestro(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1398,6 +1415,7 @@ hayAncestro = false;
 tablarelacion := nombretabla||'_Relacion';
 --primera comprobacion, que padre e hijo no sean el mismo codigo
 IF codigopadre = codigohijo THEN
+	RAISE NOTICE 'el codigo padre es igual al hijo';
 RETURN true;
 END IF;
 FOR r in EXECUTE FORMAT('SELECT codpadre FROM %I WHERE codhijo %s',tablarelacion,str_null_case)
@@ -1421,7 +1439,7 @@ $$;
 ALTER FUNCTION sdmed.es_ancestro(nombretabla character varying, codigopadre character varying, codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 326 (class 1255 OID 39340)
+-- TOC entry 259 (class 1255 OID 39340)
 -- Name: es_porcentaje(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1440,7 +1458,7 @@ $$;
 ALTER FUNCTION sdmed.es_porcentaje(_codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 327 (class 1255 OID 39341)
+-- TOC entry 260 (class 1255 OID 39341)
 -- Name: es_precio_bloqueado(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1460,7 +1478,7 @@ $$;
 ALTER FUNCTION sdmed.es_precio_bloqueado(nombretabla character varying, codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 328 (class 1255 OID 39342)
+-- TOC entry 261 (class 1255 OID 39342)
 -- Name: establecer_naturaleza(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1496,7 +1514,7 @@ $$;
 ALTER FUNCTION sdmed.establecer_naturaleza(_nombretabla character varying, _codigoapdre character varying, _codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 391 (class 1255 OID 40550)
+-- TOC entry 328 (class 1255 OID 40550)
 -- Name: evaluar_formula(numeric, numeric, numeric, numeric, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1531,7 +1549,7 @@ $$;
 ALTER FUNCTION sdmed.evaluar_formula(_unidad numeric, _longitud numeric, _anchura numeric, _altura numeric, _formula character varying) OWNER TO sdmed;
 
 --
--- TOC entry 323 (class 1255 OID 39344)
+-- TOC entry 258 (class 1255 OID 39344)
 -- Name: existe_codigo(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1551,7 +1569,7 @@ $_$;
 ALTER FUNCTION sdmed.existe_codigo(_nombretabla character varying, _codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 324 (class 1255 OID 39345)
+-- TOC entry 264 (class 1255 OID 39345)
 -- Name: existe_hermano(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1563,11 +1581,12 @@ DECLARE
 r character varying;
 
 BEGIN
---RAISE NOTICE 'FUNCION EXISTE HERMANO CON %-%-%',nombretabla,codigopadre,codigohijo;
+RAISE NOTICE 'FUNCION EXISTE HERMANO CON %-%-%',nombretabla,codigopadre,codigohijo;
 FOR r in EXECUTE FORMAT ('SELECT codhijo FROM %I WHERE codpadre = %s', nombretabla||'_Relacion', quote_literal(codigopadre))
  LOOP
- 	--RAISE NOTICE 'Estudio el par : %-%',r,codigohijo;
- 	IF quote_literal(r) = codigohijo THEN 	
+ 	RAISE NOTICE 'Estudio el par : %-%',r,codigohijo;
+ 	--IF quote_literal(r) = codigohijo THEN
+ 	IF r = codigohijo THEN
  	RETURN TRUE;
  	END IF;
  END LOOP;
@@ -1579,7 +1598,32 @@ $$;
 ALTER FUNCTION sdmed.existe_hermano(nombretabla character varying, codigopadre character varying, codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 330 (class 1255 OID 39346)
+-- TOC entry 285 (class 1255 OID 53597)
+-- Name: existe_obra(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
+--
+
+CREATE FUNCTION sdmed.existe_obra(_obra character varying) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+var_r character varying;
+BEGIN
+FOR var_r in SELECT ret_codigo FROM ver_obras_bbdd()
+LOOP
+RAISE NOTICE '%',var_r;
+	IF var_r = _obra THEN		
+		return True;		 
+	END IF;
+END LOOP;
+RETURN false;
+END;
+$$;
+
+
+ALTER FUNCTION sdmed.existe_obra(_obra character varying) OWNER TO sdmed;
+
+--
+-- TOC entry 263 (class 1255 OID 39346)
 -- Name: exportarbc3(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1660,7 +1704,7 @@ $$;
 ALTER FUNCTION sdmed.exportarbc3(tabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 329 (class 1255 OID 39347)
+-- TOC entry 262 (class 1255 OID 39347)
 -- Name: fecha_a_bc3(date); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1686,7 +1730,7 @@ $$;
 ALTER FUNCTION sdmed.fecha_a_bc3(fecha date) OWNER TO sdmed;
 
 --
--- TOC entry 333 (class 1255 OID 39348)
+-- TOC entry 268 (class 1255 OID 39348)
 -- Name: fx_letras(numeric); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1750,7 +1794,7 @@ $$;
 ALTER FUNCTION sdmed.fx_letras(numero numeric) OWNER TO sdmed;
 
 --
--- TOC entry 334 (class 1255 OID 39349)
+-- TOC entry 269 (class 1255 OID 39349)
 -- Name: generar_json_calculo(); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1774,7 +1818,7 @@ $$;
 ALTER FUNCTION sdmed.generar_json_calculo() OWNER TO sdmed;
 
 --
--- TOC entry 335 (class 1255 OID 39350)
+-- TOC entry 270 (class 1255 OID 39350)
 -- Name: generar_json_datos_generales(character varying, text[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1836,7 +1880,7 @@ $_$;
 ALTER FUNCTION sdmed.generar_json_datos_generales(_nombretabla character varying, _valores text[]) OWNER TO sdmed;
 
 --
--- TOC entry 331 (class 1255 OID 39351)
+-- TOC entry 266 (class 1255 OID 39351)
 -- Name: generar_json_datos_intervinientes(character varying, text[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1916,7 +1960,7 @@ $$;
 ALTER FUNCTION sdmed.generar_json_datos_intervinientes(_interviniente character varying, _valores text[]) OWNER TO sdmed;
 
 --
--- TOC entry 332 (class 1255 OID 39352)
+-- TOC entry 267 (class 1255 OID 39352)
 -- Name: generar_json_porcentajes(text[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -1963,7 +2007,7 @@ $$;
 ALTER FUNCTION sdmed.generar_json_porcentajes(valores text[]) OWNER TO sdmed;
 
 --
--- TOC entry 336 (class 1255 OID 39353)
+-- TOC entry 271 (class 1255 OID 39353)
 -- Name: hallar_cantidad_porcentaje(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2004,7 +2048,7 @@ $_$;
 ALTER FUNCTION sdmed.hallar_cantidad_porcentaje(_nombretabla character varying, _codigopadre character varying, _codigoporcentaje character varying) OWNER TO sdmed;
 
 --
--- TOC entry 337 (class 1255 OID 39354)
+-- TOC entry 272 (class 1255 OID 39354)
 -- Name: hay_certificacion(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2029,7 +2073,7 @@ $$;
 ALTER FUNCTION sdmed.hay_certificacion(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 338 (class 1255 OID 39355)
+-- TOC entry 273 (class 1255 OID 39355)
 -- Name: hay_descomposicion(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2049,7 +2093,7 @@ $$;
 ALTER FUNCTION sdmed.hay_descomposicion(_nombretabla character varying, _codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 339 (class 1255 OID 39356)
+-- TOC entry 274 (class 1255 OID 39356)
 -- Name: hay_medcert(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2079,7 +2123,7 @@ $_$;
 ALTER FUNCTION sdmed.hay_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _tipocandidad integer) OWNER TO sdmed;
 
 --
--- TOC entry 340 (class 1255 OID 39357)
+-- TOC entry 275 (class 1255 OID 39357)
 -- Name: id_por_posicion(character varying, character varying, character varying, integer, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2101,7 +2145,7 @@ $_$;
 ALTER FUNCTION sdmed.id_por_posicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _posicion integer, _num_cert integer) OWNER TO sdmed;
 
 --
--- TOC entry 344 (class 1255 OID 39358)
+-- TOC entry 279 (class 1255 OID 39358)
 -- Name: insertar_concepto(character varying, character varying, character varying, character varying, text, numeric, integer, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2137,7 +2181,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_concepto(nombretabla character varying, codigopadre character varying, u character varying, resumen character varying, texto text, precio numeric, nat integer, fecha character varying) OWNER TO sdmed;
 
 --
--- TOC entry 394 (class 1255 OID 39359)
+-- TOC entry 331 (class 1255 OID 39359)
 -- Name: insertar_lineas_medcert(character varying, character varying, character varying, integer, integer, integer, integer, character varying, numeric, numeric, numeric, numeric, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2201,7 +2245,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_lineas integer, _posicion integer, _num_cert integer, _tipo integer, _comentario character varying, _ud numeric, _longitud numeric, _anchura numeric, _altura numeric, _formula character varying, _idfila integer) OWNER TO sdmed;
 
 --
--- TOC entry 341 (class 1255 OID 39360)
+-- TOC entry 276 (class 1255 OID 39360)
 -- Name: insertar_partida(character varying, character varying, character varying, smallint, numeric, character varying, character varying, text, numeric, integer, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2269,7 +2313,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_partida(nombretabla character varying, codigopadre character varying, codigohijo character varying, pos smallint, cantidad numeric, u character varying, res character varying, texto text, precio numeric, nat integer, fec character varying) OWNER TO sdmed;
 
 --
--- TOC entry 342 (class 1255 OID 39361)
+-- TOC entry 277 (class 1255 OID 39361)
 -- Name: insertar_registro_guardarconcepto(character varying, integer, sdmed.tp_concepto); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2290,7 +2334,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_registro_guardarconcepto(_nombretabla character varying, _paso integer, _dato sdmed.tp_concepto) OWNER TO sdmed;
 
 --
--- TOC entry 343 (class 1255 OID 39362)
+-- TOC entry 278 (class 1255 OID 39362)
 -- Name: insertar_registro_guardarmedicion(character varying, integer, sdmed.tp_medicion); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2311,7 +2355,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_registro_guardarmedicion(_nombretabla character varying, _paso integer, _dato sdmed.tp_medicion) OWNER TO sdmed;
 
 --
--- TOC entry 382 (class 1255 OID 39890)
+-- TOC entry 318 (class 1255 OID 39890)
 -- Name: insertar_registro_guardarrelacion(character varying, integer, sdmed.tp_relacion); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2331,7 +2375,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_registro_guardarrelacion(_nombretabla character varying, _paso integer, _dato sdmed.tp_relacion) OWNER TO sdmed;
 
 --
--- TOC entry 384 (class 1255 OID 39891)
+-- TOC entry 320 (class 1255 OID 39891)
 -- Name: insertar_registro_relacion(character varying, integer, sdmed.tp_relacion); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2360,7 +2404,7 @@ $$;
 ALTER FUNCTION sdmed.insertar_registro_relacion(_nombretabla character varying, _paso integer, _dato sdmed.tp_relacion) OWNER TO sdmed;
 
 --
--- TOC entry 345 (class 1255 OID 39365)
+-- TOC entry 280 (class 1255 OID 39365)
 -- Name: insertar_relacion(character varying, character varying, character varying, numeric, smallint); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2437,7 +2481,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_relacion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _cantidad numeric, _pos smallint) OWNER TO sdmed;
 
 --
--- TOC entry 347 (class 1255 OID 39366)
+-- TOC entry 282 (class 1255 OID 39366)
 -- Name: insertar_texto(character varying, character varying, text); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2457,7 +2501,7 @@ $$;
 ALTER FUNCTION sdmed.insertar_texto(_nombretabla character varying, _cod character varying, _texto text) OWNER TO sdmed;
 
 --
--- TOC entry 348 (class 1255 OID 39367)
+-- TOC entry 283 (class 1255 OID 39367)
 -- Name: insertar_tipo_concepto(character varying, sdmed.tp_concepto); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2493,7 +2537,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_tipo_concepto(nombretabla character varying, _dato sdmed.tp_concepto) OWNER TO sdmed;
 
 --
--- TOC entry 349 (class 1255 OID 39368)
+-- TOC entry 284 (class 1255 OID 39368)
 -- Name: insertar_tipo_medcert(character varying, sdmed.tp_medicion, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2541,7 +2585,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_tipo_medcert(_nombretabla character varying, _dato sdmed.tp_medicion, _num_cert integer) OWNER TO sdmed;
 
 --
--- TOC entry 385 (class 1255 OID 39892)
+-- TOC entry 321 (class 1255 OID 39892)
 -- Name: insertar_tipo_relacion(character varying, sdmed.tp_relacion); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2573,7 +2617,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_tipo_relacion(_nombretabla character varying, _dato sdmed.tp_relacion) OWNER TO sdmed;
 
 --
--- TOC entry 346 (class 1255 OID 39370)
+-- TOC entry 281 (class 1255 OID 39370)
 -- Name: modificar_campo_medcert(character varying, character varying, character varying, character varying, integer, integer, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2606,7 +2650,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_campo_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _valor character varying, _idfila integer, _columna integer, _num_cert integer) OWNER TO sdmed;
 
 --
--- TOC entry 352 (class 1255 OID 39371)
+-- TOC entry 288 (class 1255 OID 39371)
 -- Name: modificar_cantidad(character varying, character varying, character varying, integer, boolean, numeric); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2671,7 +2715,7 @@ $_$;
 ALTER FUNCTION sdmed.modificar_cantidad(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _guardar boolean, _cantidad numeric) OWNER TO sdmed;
 
 --
--- TOC entry 390 (class 1255 OID 39372)
+-- TOC entry 327 (class 1255 OID 39372)
 -- Name: modificar_codigo(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2699,7 +2743,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_codigo(_nombretabla character varying, _codigoantiguo character varying, _codigonuevo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 350 (class 1255 OID 39373)
+-- TOC entry 286 (class 1255 OID 39373)
 -- Name: modificar_naturaleza(character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2717,7 +2761,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_naturaleza(_nombretabla character varying, _cod character varying, _nat integer) OWNER TO sdmed;
 
 --
--- TOC entry 393 (class 1255 OID 39374)
+-- TOC entry 330 (class 1255 OID 39374)
 -- Name: modificar_precio(character varying, character varying, character varying, numeric, integer, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2758,7 +2802,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_precio(nombretabla character varying, codpadre character varying, codhijo character varying, precio numeric, opcion integer, restaurar boolean) OWNER TO sdmed;
 
 --
--- TOC entry 351 (class 1255 OID 39375)
+-- TOC entry 287 (class 1255 OID 39375)
 -- Name: modificar_resumen(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2776,7 +2820,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_resumen(_nombretabla character varying, _cod character varying, _res character varying) OWNER TO sdmed;
 
 --
--- TOC entry 353 (class 1255 OID 39376)
+-- TOC entry 289 (class 1255 OID 39376)
 -- Name: modificar_texto(character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2796,7 +2840,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_texto(nombretabla character varying, cod character varying, textoplano character varying, textohtml character varying) OWNER TO sdmed;
 
 --
--- TOC entry 354 (class 1255 OID 39377)
+-- TOC entry 290 (class 1255 OID 39377)
 -- Name: modificar_unidad(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2815,7 +2859,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_unidad(_nombretabla character varying, _cod character varying, _ud character varying) OWNER TO sdmed;
 
 --
--- TOC entry 355 (class 1255 OID 39378)
+-- TOC entry 291 (class 1255 OID 39378)
 -- Name: mostrar_ruta(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2842,7 +2886,7 @@ $_$;
 ALTER FUNCTION sdmed.mostrar_ruta(tabla character varying, codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 356 (class 1255 OID 39379)
+-- TOC entry 292 (class 1255 OID 39379)
 -- Name: nivel_capitulo(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2878,7 +2922,7 @@ $_$;
 ALTER FUNCTION sdmed.nivel_capitulo(_nombretabla character varying, _codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 357 (class 1255 OID 39380)
+-- TOC entry 293 (class 1255 OID 39380)
 -- Name: numero_en_euro(numeric); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2911,7 +2955,7 @@ $$;
 ALTER FUNCTION sdmed.numero_en_euro(numero numeric) OWNER TO sdmed;
 
 --
--- TOC entry 358 (class 1255 OID 39381)
+-- TOC entry 294 (class 1255 OID 39381)
 -- Name: ordenar_posiciones(character varying, character varying, character varying, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2949,7 +2993,7 @@ $_$;
 ALTER FUNCTION sdmed.ordenar_posiciones(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _insertar boolean) OWNER TO sdmed;
 
 --
--- TOC entry 362 (class 1255 OID 39382)
+-- TOC entry 298 (class 1255 OID 39382)
 -- Name: pegar(character varying, character varying, smallint, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3011,7 +3055,7 @@ $_$;
 ALTER FUNCTION sdmed.pegar(_nombretabla character varying, _codigodestino character varying, OUT nodos_insertados character varying, _pos smallint, _primer_paso boolean) OWNER TO sdmed;
 
 --
--- TOC entry 392 (class 1255 OID 39383)
+-- TOC entry 329 (class 1255 OID 39383)
 -- Name: pegar_medicion(character varying, character varying, character varying, integer, smallint); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3038,7 +3082,7 @@ $$;
 ALTER FUNCTION sdmed.pegar_medicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _pos smallint) OWNER TO sdmed;
 
 --
--- TOC entry 359 (class 1255 OID 39384)
+-- TOC entry 295 (class 1255 OID 39384)
 -- Name: poner_almohadilla(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3071,7 +3115,7 @@ $$;
 ALTER FUNCTION sdmed.poner_almohadilla(tabla character varying, codigo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 360 (class 1255 OID 39385)
+-- TOC entry 296 (class 1255 OID 39385)
 -- Name: procesar_cadena_fecha(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3101,7 +3145,7 @@ $_$;
 ALTER FUNCTION sdmed.procesar_cadena_fecha(cadenafecha character varying) OWNER TO sdmed;
 
 --
--- TOC entry 387 (class 1255 OID 39386)
+-- TOC entry 323 (class 1255 OID 39386)
 -- Name: procesar_linea_medicion(numeric, numeric, numeric, numeric, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3126,7 +3170,7 @@ $$;
 ALTER FUNCTION sdmed.procesar_linea_medicion(unidad numeric, longitud numeric, anchura numeric, altura numeric, formula character varying) OWNER TO sdmed;
 
 --
--- TOC entry 361 (class 1255 OID 39387)
+-- TOC entry 297 (class 1255 OID 39387)
 -- Name: recalcular(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3147,7 +3191,7 @@ $$;
 ALTER FUNCTION sdmed.recalcular(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 363 (class 1255 OID 39388)
+-- TOC entry 299 (class 1255 OID 39388)
 -- Name: recorrer_principal(character varying, character varying, integer, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3206,7 +3250,7 @@ $$;
 ALTER FUNCTION sdmed.recorrer_principal(nombretabla character varying, codigopadre character varying, _nivel integer, primer_elemento boolean) OWNER TO sdmed;
 
 --
--- TOC entry 366 (class 1255 OID 39389)
+-- TOC entry 302 (class 1255 OID 39389)
 -- Name: recorrercte(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3248,7 +3292,7 @@ $$;
 ALTER FUNCTION sdmed.recorrercte(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 367 (class 1255 OID 39390)
+-- TOC entry 303 (class 1255 OID 39390)
 -- Name: restaurar_lineas_borradas(character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3320,7 +3364,7 @@ $_$;
 ALTER FUNCTION sdmed.restaurar_lineas_borradas(_nombretabla character varying, _tipotabla integer) OWNER TO sdmed;
 
 --
--- TOC entry 368 (class 1255 OID 39391)
+-- TOC entry 304 (class 1255 OID 39391)
 -- Name: total_cantidad_por_partida(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3355,7 +3399,7 @@ $_$;
 ALTER FUNCTION sdmed.total_cantidad_por_partida(nombretabla character varying, codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 369 (class 1255 OID 39392)
+-- TOC entry 305 (class 1255 OID 39392)
 -- Name: ultimo_paso(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3414,7 +3458,7 @@ $_$;
 ALTER FUNCTION sdmed.ultimo_paso(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 364 (class 1255 OID 39393)
+-- TOC entry 300 (class 1255 OID 39393)
 -- Name: ver_anterior(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3442,7 +3486,7 @@ $$;
 ALTER FUNCTION sdmed.ver_anterior(nombretabla character varying, codpadre character varying, codhijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 365 (class 1255 OID 39394)
+-- TOC entry 301 (class 1255 OID 39394)
 -- Name: ver_certificacion_actual(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3476,7 +3520,7 @@ $$;
 ALTER FUNCTION sdmed.ver_certificacion_actual(_nombretabla character varying, OUT _num_cert integer, OUT _fecha character varying) OWNER TO sdmed;
 
 --
--- TOC entry 370 (class 1255 OID 39395)
+-- TOC entry 306 (class 1255 OID 39395)
 -- Name: ver_certificaciones(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3503,7 +3547,7 @@ $$;
 ALTER FUNCTION sdmed.ver_certificaciones(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 373 (class 1255 OID 39396)
+-- TOC entry 309 (class 1255 OID 39396)
 -- Name: ver_color_hijos(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3611,7 +3655,7 @@ END IF;
 ALTER FUNCTION sdmed.ver_color_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 374 (class 1255 OID 39397)
+-- TOC entry 310 (class 1255 OID 39397)
 -- Name: ver_conceptos_cantidad(character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3646,7 +3690,7 @@ $$;
 ALTER FUNCTION sdmed.ver_conceptos_cantidad(_nombretabla character varying, _tipo_concepto integer) OWNER TO sdmed;
 
 --
--- TOC entry 383 (class 1255 OID 40032)
+-- TOC entry 319 (class 1255 OID 40032)
 -- Name: ver_conceptos_unitarios(character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3683,7 +3727,7 @@ $$;
 ALTER FUNCTION sdmed.ver_conceptos_unitarios(_nombretabla character varying, _tipo_concepto integer) OWNER TO sdmed;
 
 --
--- TOC entry 371 (class 1255 OID 39398)
+-- TOC entry 307 (class 1255 OID 39398)
 -- Name: ver_hijos(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3785,7 +3829,7 @@ AND R.codhijo = C.codigo',tabla_conceptos, tabla_relacion , str_null_case) USING
 ALTER FUNCTION sdmed.ver_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 372 (class 1255 OID 39399)
+-- TOC entry 308 (class 1255 OID 39399)
 -- Name: ver_lineas_medcert(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3841,7 +3885,7 @@ $_$;
 ALTER FUNCTION sdmed.ver_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _tipocantidad integer) OWNER TO sdmed;
 
 --
--- TOC entry 389 (class 1255 OID 39400)
+-- TOC entry 326 (class 1255 OID 39400)
 -- Name: ver_medcert(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3893,7 +3937,7 @@ FOR var_r IN EXECUTE FORMAT('SELECT * FROM %I WHERE codhijo = $1 AND %s AND num_
 ALTER FUNCTION sdmed.ver_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_certif integer) OWNER TO sdmed;
 
 --
--- TOC entry 375 (class 1255 OID 39401)
+-- TOC entry 311 (class 1255 OID 39401)
 -- Name: ver_obra(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3929,7 +3973,7 @@ $$;
 ALTER FUNCTION sdmed.ver_obra(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 376 (class 1255 OID 39402)
+-- TOC entry 312 (class 1255 OID 39402)
 -- Name: ver_obras_bbdd(); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3958,7 +4002,7 @@ END; $_$;
 ALTER FUNCTION sdmed.ver_obras_bbdd() OWNER TO sdmed;
 
 --
--- TOC entry 377 (class 1255 OID 39403)
+-- TOC entry 313 (class 1255 OID 39403)
 -- Name: ver_precio(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3985,7 +4029,7 @@ $$;
 ALTER FUNCTION sdmed.ver_precio(_nombretabla character varying, _cod character varying) OWNER TO sdmed;
 
 --
--- TOC entry 388 (class 1255 OID 40028)
+-- TOC entry 324 (class 1255 OID 40028)
 -- Name: ver_resumen_capitulos(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -4015,7 +4059,7 @@ $_$;
 ALTER FUNCTION sdmed.ver_resumen_capitulos(_nombretabla character varying) OWNER TO sdmed;
 
 --
--- TOC entry 378 (class 1255 OID 39404)
+-- TOC entry 314 (class 1255 OID 39404)
 -- Name: ver_siguiente(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -4043,7 +4087,7 @@ $$;
 ALTER FUNCTION sdmed.ver_siguiente(nombretabla character varying, codpadre character varying, codhijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 379 (class 1255 OID 39405)
+-- TOC entry 315 (class 1255 OID 39405)
 -- Name: ver_texto(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -4063,7 +4107,7 @@ $$;
 ALTER FUNCTION sdmed.ver_texto(nombretabla character varying, cod character varying) OWNER TO sdmed;
 
 --
--- TOC entry 380 (class 1255 OID 39406)
+-- TOC entry 316 (class 1255 OID 39406)
 -- Name: ver_todas_certificaciones(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -4118,7 +4162,818 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
--- Completed on 2020-06-18 20:48:01 CEST
+--
+-- TOC entry 222 (class 1259 OID 43725)
+-- Name: tAcero; Type: TABLE; Schema: sdmed; Owner: sdmed
+--
+
+CREATE TABLE sdmed."tAcero" (
+    id integer NOT NULL,
+    area numeric(7,2),
+    masa numeric(7,3),
+    tipo character varying(15),
+    tamanno character varying(13)
+);
+
+
+ALTER TABLE sdmed."tAcero" OWNER TO sdmed;
+
+--
+-- TOC entry 221 (class 1259 OID 43723)
+-- Name: tCorrugados_id_seq; Type: SEQUENCE; Schema: sdmed; Owner: sdmed
+--
+
+CREATE SEQUENCE sdmed."tCorrugados_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE sdmed."tCorrugados_id_seq" OWNER TO sdmed;
+
+--
+-- TOC entry 3121 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: tCorrugados_id_seq; Type: SEQUENCE OWNED BY; Schema: sdmed; Owner: sdmed
+--
+
+ALTER SEQUENCE sdmed."tCorrugados_id_seq" OWNED BY sdmed."tAcero".id;
+
+
+--
+-- TOC entry 2987 (class 2604 OID 43728)
+-- Name: tAcero id; Type: DEFAULT; Schema: sdmed; Owner: sdmed
+--
+
+ALTER TABLE ONLY sdmed."tAcero" ALTER COLUMN id SET DEFAULT nextval('sdmed."tCorrugados_id_seq"'::regclass);
+
+
+--
+-- TOC entry 3112 (class 0 OID 43725)
+-- Dependencies: 222
+-- Data for Name: tAcero; Type: TABLE DATA; Schema: sdmed; Owner: sdmed
+--
+
+COPY sdmed."tAcero" (id, area, masa, tipo, tamanno) FROM stdin;
+44	65.30	502.000	HEB	180
+45	78.10	601.000	HEB	200
+46	91.00	701.000	HEB	220
+47	106.00	816.000	HEB	240
+48	118.40	912.000	HEB	260
+49	131.40	1010.000	HEB	280
+50	149.10	1148.000	HEB	300
+51	161.30	1246.000	HEB	320
+52	170.90	1315.000	HEB	340
+53	180.60	1393.000	HEB	360
+54	197.80	1521.000	HEB	400
+55	218.00	1678.000	HEB	450
+56	238.60	1834.000	HEB	500
+57	254.10	1952.000	HEB	550
+58	270.00	2080.000	HEB	600
+59	21.20	164.000	HEA	100
+60	25.30	195.000	HEA	120
+61	31.40	242.000	HEA	140
+62	38.80	298.000	HEA	160
+63	45.30	348.000	HEA	180
+64	53.80	415.000	HEA	200
+65	64.30	495.000	HEA	220
+66	76.80	592.000	HEA	240
+67	86.80	669.000	HEA	260
+68	97.30	749.000	HEA	280
+69	112.50	866.000	HEA	300
+70	124.40	957.000	HEA	320
+71	133.50	1030.000	HEA	340
+72	142.80	1099.000	HEA	360
+73	159.00	1226.000	HEA	400
+74	178.00	1373.000	HEA	450
+75	197.50	1521.000	HEA	500
+76	211.80	1628.000	HEA	550
+77	226.50	178.000	HEA	600
+78	53.20	410.000	HEM	100
+79	66.40	511.000	HEM	120
+80	80.60	620.000	HEM	140
+81	97.10	748.000	HEM	160
+82	113.30	872.000	HEM	180
+83	131.30	1010.000	HEM	200
+84	149.40	1148.000	HEM	220
+85	199.60	1540.000	HEM	240
+86	219.60	1687.000	HEM	260
+87	240.20	1854.000	HEM	280
+88	303.10	2335.000	HEM	300
+89	312.00	2403.000	HEM	320
+90	315.80	2433.000	HEM	340
+91	318.80	2453.000	HEM	360
+92	325.80	2511.000	HEM	400
+93	335.40	2580.000	HEM	450
+94	344.30	2649.000	HEM	500
+95	354.40	2727.000	HEM	550
+96	363.70	2796.000	HEM	600
+97	11.00	84.800	UPN	80
+98	13.50	104.000	UPN	100
+99	17.00	131.000	UPN	120
+100	20.40	157.000	UPN	140
+101	24.00	184.000	UPN	160
+102	28.00	216.000	UPN	180
+103	32.20	248.000	UPN	200
+104	37.40	288.000	UPN	220
+105	42.30	326.000	UPN	240
+106	48.30	372.000	UPN	260
+107	53.30	410.000	UPN	280
+108	58.80	453.000	UPN	300
+109	3.08	23.700	L	40.4
+110	3.79	29.100	L	40.5
+111	4.48	34.500	L	40.6
+112	3.49	26.900	L	45.4
+113	4.30	33.200	L	45.5
+114	5.09	39.200	L	45.6
+115	3.89	30.000	L	50.4
+116	4.80	37.000	L	50.5
+117	5.69	43.900	L	50.6
+118	6.56	50.500	L	50.7
+119	7.41	57.100	L	50.8
+120	5.82	44.800	L	60.5
+121	6.91	53.200	L	60.6
+122	9.03	69.600	L	60.8
+123	11.10	85.200	L	60.10
+124	8.13	62.600	L	70.6
+125	9.40	72.400	L	70.7
+126	10.60	82.000	L	70.8
+127	13.10	101.000	L	70.10
+128	12.30	94.500	L	80.8
+129	15.10	117.000	L	80.10
+130	17.90	137.000	L	80.12
+131	13.90	107.000	L	90.8
+132	17.10	131.000	L	90.10
+133	20.30	156.000	L	90.12
+134	15.50	120.000	L	100.8
+135	19.20	147.000	L	100.10
+136	22.70	175.000	L	100.12
+137	27.90	215.000	L	100.15
+138	23.20	179.000	L	120.10
+139	27.50	212.000	L	120.12
+140	33.90	261.000	L	120.15
+141	34.80	268.000	L	150.12
+142	43.00	332.000	L	150.15
+143	51.00	393.000	L	150.18
+144	52.10	401.000	L	180.15
+145	61.90	477.000	L	180.18
+146	68.30	527.000	L	180.20
+147	61.80	476.000	L	200.16
+148	69.10	532.000	L	200.18
+149	76.30	588.000	L	200.20
+150	90.60	697.000	L	200.24
+151	2.46	18.900	LD	40.25.4
+152	3.02	23.200	LD	40.25.5
+153	2.86	22.000	LD	45.30.4
+154	3.52	27.100	LD	45.30.5
+155	4.29	33.100	LD	60.30.5
+156	5.08	39.100	LD	60.30.6
+157	4.79	36.900	LD	60.40.5
+158	5.68	43.800	LD	60.40.6
+159	6.55	50.400	LD	60.40.7
+160	5.54	42.700	LD	65.50.5
+161	6.58	50.600	LD	65.50.6
+162	7.60	58.500	LD	65.50.7
+163	8.60	66.200	LD	65.50.8
+164	6.05	46.600	LD	75.50.5
+165	7.19	55.400	LD	75.50.6
+166	8.31	64.100	LD	75.50.7
+167	9.41	72.500	LD	75.50.8
+168	5.80	44.700	LD	80.40.5
+169	6.89	53.100	LD	80.40.6
+170	7.96	61.300	LD	80.40.7
+171	9.01	69.400	LD	80.40.8
+172	8.11	62.500	LD	80.60.6
+173	9.38	72.200	LD	80.60.7
+174	10.60	81.800	LD	80.60.8
+175	8.73	67.200	LD	100.50.6
+176	10.10	77.800	LD	100.50.7
+177	11.40	88.200	LD	100.50.8
+178	14.10	109.000	LD	100.50.10
+179	11.20	86.000	LD	100.65.7
+180	12.70	97.500	LD	100.65.8
+181	15.60	121.000	LD	100.65.10
+182	13.50	104.000	LD	100.75.8
+183	16.60	128.000	LD	100.75.10
+184	19.70	151.000	LD	100.75.12
+185	15.50	120.000	LD	120.80.8
+186	19.10	147.000	LD	120.80.10
+188	15.10	116.000	LD	130.65.8
+189	18.60	143.000	LD	130.65.10
+190	22.10	170.000	LD	130.65.12
+191	19.60	151.000	LD	150.75.9
+192	21.60	167.000	LD	150.75.10
+193	25.70	198.000	LD	150.75.12
+194	31.60	243.000	LD	150.75.15
+195	23.20	179.000	LD	150.90.10
+196	27.50	212.000	LD	150.90.12
+197	33.90	261.000	LD	150.90.15
+198	29.20	226.000	LD	200.100.10
+199	34.80	268.000	LD	200.100.12
+200	43.00	331.000	LD	200.100.15
+201	34.20	264.000	LD	200.150.10
+202	40.80	314.000	LD	200.150.12
+203	50.50	388.000	LD	200.150.15
+204	60.00	462.000	LD	200.150.18
+205	177.00	17.400	T	30
+206	297.00	22.900	T	35
+207	377.00	29.000	T	40
+208	566.00	43.600	T	50
+209	794.00	61.100	T	60
+210	1060.00	81.600	T	70
+211	1360.00	105.000	T	80
+212	2090.00	160.900	T	100
+213	2960.00	227.600	T	120
+214	3990.00	307.100	T	140
+215	0.28	2.200	∅	6
+216	0.39	3.000	∅	7
+217	0.50	3.900	∅	8
+218	0.79	6.100	∅	10
+219	1.13	8.700	∅	12
+220	1.54	11.900	∅	14
+221	2.01	15.500	∅	16
+222	2.55	19.600	∅	18
+223	3.14	24.200	∅	20
+224	3.80	29.200	∅	22
+225	4.91	37.800	∅	25
+226	6.16	47.400	∅	28
+227	7.07	54.400	∅	30
+228	8.04	61.900	∅	32
+229	10.20	78.400	∅	36
+230	12.60	96.700	∅	40
+231	15.90	122.600	∅	45
+232	19.60	151.100	∅	50
+233	1.08	3.500	≠	6
+234	2.00	4.800	≠	7
+235	3.41	6.300	≠	8
+236	8.33	9.800	≠	10
+237	17.30	14.100	≠	12
+238	32.00	19.200	≠	14
+239	54.60	25.100	≠	16
+240	87.50	31.800	≠	18
+241	133.00	39.200	≠	20
+242	195.00	47.500	≠	22
+243	326.00	61.300	≠	25
+244	512.00	76.900	≠	28
+245	675.00	88.300	≠	30
+246	874.00	100.100	≠	32
+247	1400.00	127.500	≠	36
+248	2130.00	157.000	≠	40
+249	3420.00	199.100	≠	45
+250	5210.00	245.300	≠	50
+251	80.00	6.160	Rectangular	20·4
+252	100.00	7.700	Rectangular	20·5
+253	120.00	9.240	Rectangular	20·6
+254	160.00	12.400	Rectangular	20·8
+255	200.00	15.400	Rectangular	20·10
+256	240.00	18.400	Rectangular	20·12
+257	300.00	23.200	Rectangular	20·15
+258	100.00	7.700	Rectangular	25·4
+259	125.00	9.620	Rectangular	25·5
+260	150.00	11.600	Rectangular	25·6
+261	200.00	15.400	Rectangular	25·8
+262	250.00	19.200	Rectangular	25·10
+263	300.00	23.200	Rectangular	25·12
+264	375.00	28.800	Rectangular	25·15
+265	500.00	38.600	Rectangular	25·20
+266	120.00	9.240	Rectangular	30·4
+267	150.00	11.600	Rectangular	30·5
+268	180.00	13.800	Rectangular	30·6
+269	240.00	18.400	Rectangular	30·8
+270	300.00	23.200	Rectangular	30·10
+271	360.00	27.800	Rectangular	30·12
+272	450.00	34.600	Rectangular	30·15
+273	600.00	46.200	Rectangular	30·20
+274	750.00	57.800	Rectangular	30·25
+275	140.00	10.800	Rectangular	35·4
+276	175.00	13.400	Rectangular	35·5
+277	210.00	16.200	Rectangular	35·6
+278	280.00	21.600	Rectangular	35·8
+279	350.00	27.000	Rectangular	35·10
+280	420.00	32.400	Rectangular	35·12
+281	525.00	40.400	Rectangular	35·15
+282	700.00	54.000	Rectangular	35·20
+283	875.00	67.400	Rectangular	35·25
+284	1050.00	80.800	Rectangular	35·30
+285	160.00	12.400	Rectangular	40·4
+286	200.00	15.400	Rectangular	40·5
+287	240.00	18.400	Rectangular	40·6
+288	320.00	24.600	Rectangular	40·8
+289	400.00	30.800	Rectangular	40·10
+290	480.00	37.000	Rectangular	40·12
+291	600.00	46.200	Rectangular	40·15
+292	800.00	61.600	Rectangular	40·20
+293	1000.00	77.000	Rectangular	40·25
+294	1200.00	92.400	Rectangular	40·30
+295	1400.00	108.000	Rectangular	40·35
+296	180.00	13.800	Rectangular	45·4
+297	225.00	17.400	Rectangular	45·5
+298	270.00	20.800	Rectangular	45·6
+299	360.00	27.800	Rectangular	45·8
+300	450.00	34.600	Rectangular	45·10
+301	540.00	41.600	Rectangular	45·12
+302	675.00	52.000	Rectangular	45·15
+303	900.00	69.400	Rectangular	45·20
+304	1120.00	86.600	Rectangular	45·25
+305	1350.00	104.000	Rectangular	45·30
+306	1580.00	122.000	Rectangular	45·35
+307	1800.00	138.000	Rectangular	45·40
+308	200.00	15.400	Rectangular	50·4
+309	250.00	19.200	Rectangular	50·5
+310	300.00	23.200	Rectangular	50·6
+311	400.00	30.800	Rectangular	50·8
+312	500.00	38.600	Rectangular	50·10
+313	600.00	46.200	Rectangular	50·12
+314	750.00	57.800	Rectangular	50·15
+315	1000.00	77.000	Rectangular	50·20
+316	1250.00	96.200	Rectangular	50·25
+317	1500.00	116.000	Rectangular	50·30
+318	1750.00	134.000	Rectangular	50·35
+319	2000.00	154.000	Rectangular	50·40
+320	220.00	17.000	Rectangular	55·4
+321	275.00	21.200	Rectangular	55·5
+322	330.00	25.400	Rectangular	55·6
+323	440.00	33.800	Rectangular	55·8
+324	550.00	42.400	Rectangular	55·10
+325	660.00	50.800	Rectangular	55·12
+326	825.00	63.600	Rectangular	55·15
+327	1100.00	84.800	Rectangular	55·20
+328	1380.00	106.000	Rectangular	55·25
+329	1650.00	128.000	Rectangular	55·30
+330	1930.00	148.000	Rectangular	55·35
+331	2200.00	170.000	Rectangular	55·40
+332	240.00	18.400	Rectangular	60·4
+333	300.00	23.200	Rectangular	60·5
+334	360.00	27.800	Rectangular	60·6
+335	480.00	37.000	Rectangular	60·8
+336	600.00	46.200	Rectangular	60·10
+337	720.00	55.400	Rectangular	60·12
+338	900.00	69.400	Rectangular	60·15
+339	1200.00	92.400	Rectangular	60·20
+340	1500.00	116.000	Rectangular	60·25
+341	1800.00	138.000	Rectangular	60·30
+342	2100.00	162.000	Rectangular	60·35
+343	2400.00	184.000	Rectangular	60·40
+344	280.00	21.600	Rectangular	70·4
+345	350.00	27.000	Rectangular	70·5
+346	420.00	32.400	Rectangular	70·6
+347	560.00	43.200	Rectangular	70·8
+348	700.00	54.000	Rectangular	70·10
+349	840.00	64.600	Rectangular	70·12
+350	1050.00	80.800	Rectangular	70·15
+351	1400.00	108.000	Rectangular	70·20
+352	1750.00	134.000	Rectangular	70·25
+353	2100.00	162.000	Rectangular	70·30
+354	2450.00	188.000	Rectangular	70·35
+355	2800.00	216.000	Rectangular	70·40
+356	300.00	23.200	Rectangular	75·4
+357	375.00	28.800	Rectangular	75·5
+358	450.00	34.600	Rectangular	75·6
+359	600.00	46.200	Rectangular	75·8
+360	750.00	57.800	Rectangular	75·10
+361	900.00	69.400	Rectangular	75·12
+362	1120.00	86.600	Rectangular	75·15
+363	1500.00	116.000	Rectangular	75·20
+364	1880.00	144.000	Rectangular	75·25
+365	2250.00	174.000	Rectangular	75·30
+366	2620.00	202.000	Rectangular	75·35
+367	3000.00	232.000	Rectangular	75·40
+368	320.00	24.600	Rectangular	80·4
+369	400.00	30.800	Rectangular	80·5
+370	480.00	37.000	Rectangular	80·6
+371	640.00	49.200	Rectangular	80·8
+372	800.00	61.600	Rectangular	80·10
+373	960.00	74.000	Rectangular	80·12
+374	1200.00	92.400	Rectangular	80·15
+375	1600.00	124.000	Rectangular	80·20
+376	2000.00	154.000	Rectangular	80·25
+377	2400.00	184.000	Rectangular	80·30
+378	2800.00	216.000	Rectangular	80·35
+379	3200.00	246.000	Rectangular	80·40
+380	360.00	28.000	Rectangular	90·4
+381	450.00	34.600	Rectangular	90·5
+382	540.00	41.600	Rectangular	90·6
+383	720.00	57.400	Rectangular	90·8
+384	900.00	69.400	Rectangular	90·10
+385	1080.00	83.200	Rectangular	90·12
+386	1350.00	104.000	Rectangular	90·15
+387	1800.00	119.000	Rectangular	90·20
+388	2250.00	174.000	Rectangular	90·25
+389	2700.00	208.000	Rectangular	90·30
+390	3150.00	242.000	Rectangular	90·35
+391	3600.00	278.000	Rectangular	90·40
+392	400.00	30.800	Rectangular	100·4
+393	500.00	38.600	Rectangular	100·5
+394	600.00	46.200	Rectangular	100·6
+395	800.00	61.100	Rectangular	100·8
+396	1000.00	77.000	Rectangular	100·10
+397	1200.00	92.400	Rectangular	100·12
+398	1500.00	116.000	Rectangular	100·15
+399	2000.00	154.000	Rectangular	100·20
+400	2500.00	192.000	Rectangular	100·25
+401	3000.00	232.000	Rectangular	100·30
+402	3500.00	270.000	Rectangular	100·35
+403	4000.00	308.000	Rectangular	100·40
+404	440.00	33.800	Rectangular	110·4
+405	550.00	42.400	Rectangular	110·5
+406	680.00	50.800	Rectangular	110·6
+407	880.00	67.800	Rectangular	110·8
+408	1100.00	84.800	Rectangular	110·10
+409	1320.00	102.000	Rectangular	110·12
+410	1650.00	128.000	Rectangular	110·15
+411	2200.00	170.000	Rectangular	110·20
+412	2750.00	212.000	Rectangular	110·25
+413	3300.00	254.000	Rectangular	110·30
+414	3850.00	296.000	Rectangular	110·35
+415	4400.00	338.000	Rectangular	110·40
+416	480.00	37.000	Rectangular	120·4
+417	600.00	46.200	Rectangular	120·5
+418	720.00	55.400	Rectangular	120·6
+419	960.00	74.000	Rectangular	120·8
+420	1200.00	92.400	Rectangular	120·10
+421	1440.00	111.000	Rectangular	120·12
+422	1880.00	138.000	Rectangular	120·15
+423	2400.00	184.000	Rectangular	120·20
+424	3000.00	232.000	Rectangular	120·25
+425	3600.00	280.000	Rectangular	120·30
+426	4200.00	324.000	Rectangular	120·35
+427	4800.00	370.000	Rectangular	120·40
+428	1120.00	86.200	Rectangular	140·8
+429	1400.00	108.000	Rectangular	140·10
+430	1680.00	129.000	Rectangular	140·12
+431	2100.00	162.000	Rectangular	140·15
+432	2800.00	216.000	Rectangular	140·20
+433	3500.00	270.000	Rectangular	140·25
+434	4200.00	324.000	Rectangular	140·30
+435	4900.00	378.000	Rectangular	140·35
+436	5600.00	432.000	Rectangular	140·40
+437	1200.00	92.400	Rectangular	150·8
+438	1500.00	116.000	Rectangular	150·10
+439	1800.00	138.000	Rectangular	150·12
+440	2250.00	174.000	Rectangular	150·15
+441	3000.00	232.000	Rectangular	150·20
+442	3750.00	288.000	Rectangular	150·25
+443	4500.00	346.000	Rectangular	150·30
+444	5250.00	404.000	Rectangular	150·35
+445	6000.00	462.000	Rectangular	150·40
+446	1280.00	98.100	Rectangular	160·8
+447	1600.00	124.000	Rectangular	160·10
+448	1920.00	148.000	Rectangular	160·12
+449	2400.00	184.000	Rectangular	160·15
+450	3200.00	246.000	Rectangular	160·20
+451	4000.00	308.000	Rectangular	160·25
+452	4800.00	370.000	Rectangular	160·30
+453	5600.00	432.000	Rectangular	160·35
+454	6400.00	492.000	Rectangular	160·40
+455	1440.00	111.000	Rectangular	180·8
+456	1800.00	138.000	Rectangular	180·10
+457	2160.00	167.000	Rectangular	180·12
+458	2700.00	208.000	Rectangular	180·15
+459	3600.00	278.000	Rectangular	180·20
+460	4500.00	346.000	Rectangular	180·25
+461	5400.00	416.000	Rectangular	180·30
+462	6300.00	486.000	Rectangular	180·35
+463	7200.00	554.000	Rectangular	180·40
+464	1600.00	124.000	Rectangular	200·8
+465	2000.00	154.000	Rectangular	200·10
+466	2400.00	184.000	Rectangular	200·12
+467	3000.00	232.000	Rectangular	200·15
+468	4000.00	308.000	Rectangular	200·20
+469	5000.00	385.000	Rectangular	200·25
+470	6000.00	462.000	Rectangular	200·30
+471	7000.00	540.000	Rectangular	200·35
+472	8000.00	616.000	Rectangular	200·40
+473	2000.00	154.000	Rectangular	250·8
+474	2500.00	192.000	Rectangular	250·10
+475	3000.00	232.000	Rectangular	250·12
+476	3750.00	288.000	Rectangular	250·15
+477	5000.00	385.000	Rectangular	250·20
+478	6250.00	482.000	Rectangular	250·25
+479	7500.00	578.000	Rectangular	250·30
+480	8750.00	674.000	Rectangular	250·35
+481	10000.00	770.000	Rectangular	250·40
+482	2400.00	184.000	Rectangular	300·8
+483	3000.00	232.000	Rectangular	300·10
+484	3600.00	278.000	Rectangular	300·12
+485	4500.00	346.000	Rectangular	300·15
+486	6000.00	462.000	Rectangular	300·20
+487	7500.00	578.000	Rectangular	300·25
+488	9000.00	693.000	Rectangular	300·30
+489	10500.00	808.000	Rectangular	300·35
+490	12000.00	924.000	Rectangular	300·40
+491	3200.00	246.000	Rectangular	400·8
+492	4000.00	308.000	Rectangular	400·10
+493	4800.00	370.000	Rectangular	400·12
+494	6000.00	462.000	Rectangular	400·15
+495	8000.00	616.000	Rectangular	400·20
+496	10000.00	770.000	Rectangular	400·25
+497	12000.00	924.000	Rectangular	400·30
+498	14000.00	1079.000	Rectangular	400·35
+499	16000.00	1236.000	Rectangular	400·40
+500	2.39	18.400	∅	40.2
+501	3.49	26.900	∅	40.3
+502	4.52	34.800	∅	40.4
+503	2.70	20.800	∅	45.2
+504	3.96	30.500	∅	45.3
+505	5.15	39.600	∅	45.4
+506	3.02	23.200	∅	50.2
+507	4.43	34.000	∅	50.3
+508	5.78	44.400	∅	50.4
+509	3.33	25.600	∅	55.2
+510	4.90	37.800	∅	55.3
+511	6.41	49.300	∅	55.4
+512	3.64	28.100	∅	60.2
+513	5.37	41.300	∅	60.3
+514	7.04	54.200	∅	60.4
+515	3.96	30.500	∅	65.2
+516	5.84	44.900	∅	65.3
+517	7.67	59.100	∅	65.4
+518	4.27	32.900	∅	70.2
+519	6.31	48.600	∅	70.3
+520	8.29	63.900	∅	70.4
+521	4.58	35.300	∅	75.2
+522	6.78	52.200	∅	75.3
+523	8.92	68.700	∅	75.4
+524	4.90	37.800	∅	80.2
+525	7.26	55.900	∅	80.3
+526	9.55	73.600	∅	80.4
+527	8.19	63.100	∅	90.3
+528	10.80	83.200	∅	90.4
+529	13.40	103.000	∅	90.5
+530	9.14	70.300	∅	100.3
+531	12.10	92.900	∅	100.4
+532	14.90	115.000	∅	100.5
+533	17.70	136.000	∅	100.6
+534	15.20	117.000	∅	125.4
+535	18.80	145.000	∅	125.5
+536	22.40	173.000	∅	125.6
+537	23.60	181.000	∅	155.5
+538	28.10	217.000	∅	155.6
+539	36.90	284.000	∅	155.8
+540	26.70	206.000	∅	175.5
+541	31.90	245.000	∅	175.6
+542	42.00	324.000	∅	175.8
+543	30.60	235.000	∅	200.5
+544	36.60	282.000	∅	200.6
+545	48.30	372.000	∅	200.8
+546	2.90	22.400	#	40.2
+547	4.13	31.800	#	40.3
+548	5.21	40.100	#	40.4
+549	3.30	25.400	#	45.2
+550	4.73	36.400	#	45.3
+551	6.01	46.300	#	45.4
+552	3.70	28.500	#	50.2
+553	5.33	41.000	#	50.3
+554	5.81	52.500	#	50.4
+555	4.10	31.600	#	55.2
+556	5.93	45.700	#	55.3
+557	7.61	58.600	#	55.4
+558	4.50	34.600	#	60.2
+559	6.53	50.300	#	60.3
+560	8.41	64.700	#	60.4
+561	10.10	78.100	#	60.5
+562	5.30	40.800	#	70.2
+563	7.73	59.500	#	70.3
+564	10.00	77.100	#	70.4
+565	12.10	93.500	#	70.5
+566	8.90	68.800	#	80.3
+567	11.60	89.400	#	80.4
+568	14.10	109.000	#	80.5
+569	16.50	128.000	#	80.6
+570	10.10	78.000	#	90.3
+571	13.20	102.000	#	90.4
+572	16.10	125.000	#	90.5
+573	18.90	146.000	#	90.6
+574	11.30	87.200	#	100.3
+575	14.80	114.000	#	100.4
+576	18.10	139.000	#	100.5
+577	21.30	164.000	#	100.6
+578	18.00	138.000	#	120.4
+579	22.10	171.000	#	120.5
+580	26.10	201.000	#	120.6
+581	26.10	201.000	#	140.5
+582	30.90	238.000	#	140.6
+583	40.00	308.000	#	140.8
+584	30.10	232.000	#	160.5
+585	35.70	275.000	#	160.6
+586	46.40	358.000	#	160.8
+587	32.10	247.000	#	170.5
+588	38.10	293.000	#	170.6
+589	149.00	487.000	#	170.8
+590	1.53	1.200	LF	40.2
+591	2.25	1.770	LF	40.3
+592	2.90	2.280	LF	40.4
+593	1.93	1.510	LF	50.2
+594	2.81	2.210	LF	50.3
+595	3.67	2.880	LF	50.4
+596	3.41	2.680	LF	60.3
+597	4.47	3.510	LF	60.4
+598	5.48	4.300	LF	60.5
+599	6.07	4.760	LF	80.4
+600	7.48	5.870	LF	80.5
+601	8.85	6.950	LF	80.6
+602	7.48	7.070	LF	100.5
+603	8.87	7.070	LF	100.6
+604	10.20	7.070	LF	100.7
+605	9.05	8.490	LF	120.5
+606	10.80	8.490	LF	120.6
+607	12.40	8.490	LF	120.7
+608	1.13	0.887	LD	40.20.2
+609	1.65	1.300	LD	40.20.3
+610	1.43	1.120	LD	50.25.2
+611	2.10	1.650	LD	50.25.3
+612	2.55	2.000	LD	60.30.3
+613	3.30	2.590	LD	60.30.4
+614	4.50	3.530	LD	80.40.4
+615	5.52	4.340	LD	80.40.5
+616	7.02	5.510	LD	100.50.5
+617	8.30	6.520	LD	100.50.6
+618	8.52	6.690	LD	120.60.5
+619	10.10	7.930	LD	120.60.6
+620	3.30	2.590	UF	60.3
+621	4.20	3.300	UF	60.4
+622	4.50	3.530	UF	80.3
+623	5.80	4.550	UF	80.4
+624	7.04	5.520	UF	80.5
+625	4.48	3.100	UF	100.3
+626	5.81	3.120	UF	100.4
+627	7.09	3.120	UF	100.5
+628	7.06	3.750	UF	120.4
+629	8.66	3.750	UF	120.5
+630	10.20	3.750	UF	120.6
+631	8.32	4.380	UF	140.4
+632	10.20	4.380	UF	140.5
+633	12.10	4.380	UF	140.6
+634	2.72	2.130	OF	40.2.0
+635	3.34	2.620	OF	40.2.5
+636	3.91	3.070	OF	40.3.0
+637	3.40	2.670	OF	50.2.0
+638	4.19	3.290	OF	50.2.5
+639	4.93	3.870	OF	50.3.0
+640	3.72	2.920	OF	60.2.0
+641	4.59	3.600	OF	60.2.5
+642	5.41	4.250	OF	60.3.0
+643	6.09	4.780	OF	80.2.5
+644	7.21	5.660	OF	80.3.0
+645	5.76	8.480	OF	100.2.5
+646	6.94	8.450	OF	100.3.0
+647	3.12	2.450	CF	60.2.0
+648	3.84	3.010	CF	60.2.5
+649	4.50	3.530	CF	60.3.0
+650	3.52	2.760	CF	80.2.0
+651	4.34	3.400	CF	80.2.5
+652	5.10	4.000	CF	80.3.0
+653	3.92	3.080	CF	100.2.0
+654	4.84	3.800	CF	100.2.5
+655	5.70	4.480	CF	100.3.0
+656	4.92	3.860	CF	120.2.0
+657	6.09	4.780	CF	120.2.5
+658	7.20	5.650	CF	120.3.0
+659	5.32	4.170	CF	140.2.0
+660	6.59	5.170	CF	140.2.5
+661	7.80	6.130	CF	140.3.0
+662	6.12	4.800	CF	160.2.0
+663	7.59	5.950	CF	160.2.5
+664	9.00	7.070	CF	160.3.0
+665	6.52	5.120	CF	180.2.0
+666	8.09	6.350	CF	180.2.5
+667	9.60	7.540	CF	180.3.0
+668	6.92	5.430	CF	200.2.0
+669	8.59	6.740	CF	200.2.5
+670	10.20	8.010	CF	200.3.0
+671	10.50	8.210	CF	225.2.5
+672	12.50	9.780	CF	225.3.0
+673	16.20	12.700	CF	225.4.0
+674	11.10	8.700	CF	250.2.5
+675	13.20	10.400	CF	250.3.0
+676	17.20	13.500	CF	250.4.0
+677	11.70	9.190	CF	275.2.5
+678	14.00	11.000	CF	275.3.0
+679	18.20	14.300	CF	275.4.0
+680	12.30	9.680	CF	300.2.5
+681	14.70	11.500	CF	300.3.0
+682	19.20	15.100	CF	300.4.0
+683	4.72	3.700	ZF	100.2.0
+684	5.84	4.580	ZF	100.2.5
+685	6.91	5.420	ZF	100.3.0
+686	5.12	4.020	ZF	120.2.0
+687	6.34	4.980	ZF	120.2.5
+688	7.51	5.890	ZF	120.3.0
+689	5.52	4.330	ZF	140.2.0
+690	6.84	5.370	ZF	140.2.5
+691	8.11	6.360	ZF	140.3.0
+692	5.92	4.650	ZF	160.2.0
+693	7.34	5.760	ZF	160.2.5
+694	8.71	6.840	ZF	160.3.0
+695	6.32	4.960	ZF	180.2.0
+696	7.84	6.150	ZF	180.2.5
+697	9.31	7.310	ZF	180.3.0
+698	7.66	6.010	ZF	200.2.0
+699	9.51	7.470	ZF	200.2.5
+1	7.58	58.400	IPN	80
+2	10.60	81.600	IPN	100
+3	14.20	110.000	IPN	120
+4	18.30	141.000	IPN	140
+5	22.80	176.000	IPN	160
+6	27.90	215.000	IPN	180
+7	33.50	258.000	IPN	200
+8	39.60	305.000	IPN	220
+9	46.10	355.000	IPN	240
+10	53.40	411.000	IPN	260
+11	61.10	471.000	IPN	280
+12	69.10	532.000	IPN	300
+13	77.80	599.000	IPN	320
+14	86.80	668.000	IPN	340
+15	97.10	748.000	IPN	360
+16	107.00	824.000	IPN	380
+17	118.00	908.000	IPN	400
+18	147.00	1128.000	IPN	450
+19	180.00	1383.000	IPN	500
+20	213.00	1638.000	IPN	550
+21	254.00	1952.000	IPN	600
+22	7.64	58.900	IPE	80
+23	10.30	79.500	IPE	100
+24	13.20	102.000	IPE	120
+25	16.40	127.000	IPE	140
+26	20.10	155.000	IPE	160
+27	23.90	184.000	IPE	180
+28	28.50	220.000	IPE	200
+29	33.40	257.000	IPE	220
+30	39.10	301.000	IPE	240
+31	45.90	354.000	IPE	270
+32	53.80	414.000	IPE	300
+33	62.60	482.000	IPE	330
+34	72.70	560.000	IPE	360
+35	84.50	650.000	IPE	400
+36	98.80	761.000	IPE	450
+37	116.00	890.000	IPE	500
+38	134.00	1040.000	IPE	550
+39	155.00	1197.000	IPE	600
+40	26.00	200.000	HEB	100
+41	34.00	262.000	HEB	120
+42	43.00	331.000	HEB	140
+43	54.30	418.000	HEB	160
+187	22.70	175.000	LD	120.80.12
+700	11.30	8.880	ZF	200.3.0
+701	10.10	7.960	ZF	225.2.5
+702	12.10	9.470	ZF	225.3.0
+703	15.70	12.300	ZF	225.4.0
+704	10.80	8.450	ZF	250.2.5
+705	12.80	10.100	ZF	250.3.0
+706	16.70	13.100	ZF	250.4.0
+707	11.40	8.940	ZF	275.2.5
+708	13.60	10.700	ZF	275.3.0
+709	17.70	13.900	ZF	275.4.0
+710	12.00	9.430	ZF	300.2.5
+711	14.30	11.200	ZF	300.3.0
+712	18.70	14.700	ZF	300.4.0
+713	500.00	43.800	Ondulada	0.5
+714	600.00	52.000	Ondulada	0.6
+715	800.00	70.000	Ondulada	0.8
+716	1000.00	87.700	Ondulada	1.0
+717	1200.00	105.000	Ondulada	1.2
+718	525.00	58.900	Grecada	0.5
+719	630.00	70.700	Grecada	0.6
+720	840.00	94.200	Grecada	0.8
+721	1050.00	118.000	Grecada	1.0
+722	1260.00	141.000	Grecada	1.2
+723	28.30	0.222	Corrugado	6
+724	50.30	0.395	Corrugado	8
+725	78.50	0.617	Corrugado	10
+726	113.00	0.888	Corrugado	12
+727	154.00	1.210	Corrugado	14
+728	201.00	1.580	Corrugado	16
+729	314.00	2.470	Corrugado	20
+730	491.00	3.850	Corrugado	25
+731	616.00	4.830	Corrugado	28
+732	804.00	6.310	Corrugado	32
+733	1257.00	9.860	Corrugado	40
+734	1963.00	15.400	Corrugado	50
+\.
+
+
+--
+-- TOC entry 3122 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: tCorrugados_id_seq; Type: SEQUENCE SET; Schema: sdmed; Owner: sdmed
+--
+
+SELECT pg_catalog.setval('sdmed."tCorrugados_id_seq"', 1, false);
+
+
+--
+-- TOC entry 2989 (class 2606 OID 43730)
+-- Name: tAcero tCorrugados_pkey; Type: CONSTRAINT; Schema: sdmed; Owner: sdmed
+--
+
+ALTER TABLE ONLY sdmed."tAcero"
+    ADD CONSTRAINT "tCorrugados_pkey" PRIMARY KEY (id);
+
+
+-- Completed on 2020-10-01 19:35:11 CEST
 
 --
 -- PostgreSQL database dump complete

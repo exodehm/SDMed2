@@ -39,6 +39,7 @@ signals:
 private:
     Ui::DialogoGestionObras *ui;
     QSqlDatabase* m_db;
+    std::list<Instancia*> m_listaobras;
     std::list<Instancia*>::iterator primer_elemento;
     std::list<Instancia*>::iterator ultimo_elemento;
     QStringList m_listaObrasBackup;

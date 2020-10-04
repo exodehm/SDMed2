@@ -10,7 +10,7 @@
 #include <QFileDialog>
 #include <QDebug>
 
-DialogoGestionObras::DialogoGestionObras(std::list<Instancia *> &ListaObras, QSqlDatabase& db, QWidget *parent) :
+DialogoGestionObras::DialogoGestionObras(std::list<Instancia *> &ListaObras, QSqlDatabase& db, QWidget *parent) : m_listaobras(ListaObras),
     QDialog(parent), ui(new Ui::DialogoGestionObras)
 {   
     ui->setupUi(this);
@@ -41,6 +41,7 @@ void DialogoGestionObras::LlenarTabla()
     QString cadenaConsultaBBDD = "SELECT * FROM ver_obras_BBDD()";
     qDebug()<<cadenaConsultaBBDD;
     consultaBBDD.exec (cadenaConsultaBBDD);
+    qDebug()<<"Tamaño de filas "<<consultaBBDD.size();
     ui->tabla->setRowCount(consultaBBDD.size());
     int fila = 0;
     while (consultaBBDD.next())
@@ -55,27 +56,27 @@ void DialogoGestionObras::LlenarTabla()
             {
                 QTableWidgetItem *item = new QTableWidgetItem(codigo);
                 item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-                ui->tabla->setItem(fila,columna,item);
+                ui->tabla->setItem(fila,columna,item);                
             }
             else if (columna==eColumnas::RESUMEN)
             {
                 QTableWidgetItem *item = new QTableWidgetItem(resumen);
                 item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-                ui->tabla->setItem(fila,columna,item);
+                ui->tabla->setItem(fila,columna,item);                
             }
             else if (columna==eColumnas::ABRIR)
             {
                 QCheckBox* itemcheck = new QCheckBox(this);
                 itemcheck->setEnabled(!EstaAbierta(codigo));
                 QObject::connect(itemcheck,SIGNAL(clicked(bool)),this,SLOT(listaNombreObrasAbrir()));
-                ui->tabla->setCellWidget(fila,columna,itemcheck);
+                ui->tabla->setCellWidget(fila,columna,itemcheck);                
             }
             else if (columna==eColumnas::BORRAR)
             {
                 QPushButton* btn_borrar = new QPushButton(tr("Borrar"));//,ui->tabla);
                 btn_borrar->setObjectName(QString("%1").arg(fila));
                 QObject::connect(btn_borrar,SIGNAL(clicked(bool)),this,SLOT(Borrar()));
-                ui->tabla->setCellWidget(fila,columna,btn_borrar);
+                ui->tabla->setCellWidget(fila,columna,btn_borrar);                
             }
             else if (columna==eColumnas::EXPORTAR)
             {
@@ -86,7 +87,7 @@ void DialogoGestionObras::LlenarTabla()
                 btn_exportar->setToolTip(m_tooltipAnadir);
                 btn_exportar->setStyleSheet("QPushButton{ background-color: lightgreen }");
                 QObject::connect(btn_exportar,SIGNAL(clicked(bool)),this,SLOT(ActualizarBotones()));
-                ui->tabla->setCellWidget(fila,columna,btn_exportar);
+                ui->tabla->setCellWidget(fila,columna,btn_exportar);                
             }
         }
         fila++;//paso a la siguiente fila
@@ -95,7 +96,7 @@ void DialogoGestionObras::LlenarTabla()
 }
 
 bool DialogoGestionObras::EstaAbierta(const QString& codigo)
-{
+{    
     auto it = primer_elemento;
     while (it!= ultimo_elemento)
     {
@@ -128,13 +129,14 @@ QList<QStringList> DialogoGestionObras::listaNombreObrasAbrir()
 
 void DialogoGestionObras::Borrar()
 {
-    int fila = sender()->objectName().toInt();
-    QString codigoobra = ui->tabla->item(fila,eColumnas::CODIGO)->data(Qt::DisplayRole).toString();
-    QString resumenobra = ui->tabla->item(fila,eColumnas::RESUMEN)->data(Qt::DisplayRole).toString();
+    /*int fila = sender()->objectName().toInt();
+    qDebug()<<"Borrar fila en tabla BBDD "<<fila;*/
+    QString codigoobra = ui->tabla->item(ui->tabla->currentRow(),eColumnas::CODIGO)->data(Qt::DisplayRole).toString();
+    QString resumenobra = ui->tabla->item(ui->tabla->currentRow(),eColumnas::RESUMEN)->data(Qt::DisplayRole).toString();
     QStringList datosobra;
     datosobra<<codigoobra<<resumenobra;
     emit BorrarObra(datosobra);
-    ui->tabla->removeRow(fila);
+    ui->tabla->removeRow(ui->tabla->currentRow());
     ui->tabla->resizeColumnsToContents();
 }
 
@@ -159,7 +161,6 @@ void DialogoGestionObras::ActualizarBotones()
         QPushButton* btn1 = qobject_cast<QPushButton*>(ui->tabla->cellWidget(i,eColumnas::EXPORTAR));
         if (btn1 && btn1->isChecked())
         {
-            //qDebug()<< ui->tabla->item(i,eColumnas::CODIGO)->data(Qt::DisplayRole).toString();
             QString tabla = "^\"""" + ui->tabla->item(i,eColumnas::CODIGO)->data(Qt::DisplayRole).toString() + "\"""*";
             m_listaObrasBackup<<"--table"<<tabla;
         }

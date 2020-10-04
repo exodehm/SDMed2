@@ -233,6 +233,7 @@ bool MainWindow::ActionAbrirBBDD()
 
 bool MainWindow::BorrarBBDD(QStringList datosobra)
 {
+    qDebug()<<"Borrar BBDD";
     DialogoAdvertenciaBorrarBBDD* d = new DialogoAdvertenciaBorrarBBDD(datosobra, this);
     int res = d->exec();
     if (res==true)//aceptar
@@ -250,12 +251,11 @@ bool MainWindow::BorrarBBDD(QStringList datosobra)
                             QMessageBox::No | QMessageBox::Default,
                             QMessageBox::Yes);
                 if (respuesta == QMessageBox::No)
-                {
+                {                    
                     return false;
                 }
                 else
-                {
-                    qDebug()<<"Cerrar la obra "<<datosobra.at(0);
+                {                    
                     ActionCerrar(datosobra.at(0));
                 }
             }            
@@ -264,12 +264,13 @@ bool MainWindow::BorrarBBDD(QStringList datosobra)
         if (d->Exportar())
         {
             Exportar(QString(), datosobra.at(0));
-        }
+        }        
         //Borrar la obra de la BBDD
         QString cadenaborrartablacodigo = "SELECT borrar_obra ('"+datosobra.at(0)+"');";
         qDebug()<<cadenaborrartablacodigo;
         QSqlQuery consulta;
-        consulta.exec(cadenaborrartablacodigo);        
+        consulta.exec(cadenaborrartablacodigo);
+        return true;
     }
     return false;
 }
