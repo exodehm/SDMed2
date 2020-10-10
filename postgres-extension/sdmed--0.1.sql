@@ -5,7 +5,7 @@
 -- Dumped from database version 10.14 (Ubuntu 10.14-0ubuntu0.18.04.1)
 -- Dumped by pg_dump version 10.14 (Ubuntu 10.14-0ubuntu0.18.04.1)
 
--- Started on 2020-10-01 19:35:11 CEST
+-- Started on 2020-10-10 09:46:55 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1514,7 +1514,7 @@ $$;
 ALTER FUNCTION sdmed.establecer_naturaleza(_nombretabla character varying, _codigoapdre character varying, _codigohijo character varying) OWNER TO sdmed;
 
 --
--- TOC entry 328 (class 1255 OID 40550)
+-- TOC entry 329 (class 1255 OID 40550)
 -- Name: evaluar_formula(numeric, numeric, numeric, numeric, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2181,7 +2181,7 @@ $_$;
 ALTER FUNCTION sdmed.insertar_concepto(nombretabla character varying, codigopadre character varying, u character varying, resumen character varying, texto text, precio numeric, nat integer, fecha character varying) OWNER TO sdmed;
 
 --
--- TOC entry 331 (class 1255 OID 39359)
+-- TOC entry 327 (class 1255 OID 39359)
 -- Name: insertar_lineas_medcert(character varying, character varying, character varying, integer, integer, integer, integer, character varying, numeric, numeric, numeric, numeric, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2199,7 +2199,7 @@ IF _tipo IS NULL THEN
 	IF _formula!= 'NULL' THEN _tipo = 3; END IF;
 END IF;
 --en caso de BC3 y tipo 3 (formula) paso el campo de comentario a formula
-IF _tipo = 3 AND FORMULA = 'NULL' THEN--formula
+IF _tipo = 3 AND (_formula <> '') IS NOT TRUE THEN--formula
 	formula = _comentario;
 ELSE
 	formula = _formula;
@@ -2715,7 +2715,7 @@ $_$;
 ALTER FUNCTION sdmed.modificar_cantidad(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _guardar boolean, _cantidad numeric) OWNER TO sdmed;
 
 --
--- TOC entry 327 (class 1255 OID 39372)
+-- TOC entry 328 (class 1255 OID 39372)
 -- Name: modificar_codigo(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -2761,7 +2761,7 @@ $$;
 ALTER FUNCTION sdmed.modificar_naturaleza(_nombretabla character varying, _cod character varying, _nat integer) OWNER TO sdmed;
 
 --
--- TOC entry 330 (class 1255 OID 39374)
+-- TOC entry 331 (class 1255 OID 39374)
 -- Name: modificar_precio(character varying, character varying, character varying, numeric, integer, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -3055,7 +3055,7 @@ $_$;
 ALTER FUNCTION sdmed.pegar(_nombretabla character varying, _codigodestino character varying, OUT nodos_insertados character varying, _pos smallint, _primer_paso boolean) OWNER TO sdmed;
 
 --
--- TOC entry 329 (class 1255 OID 39383)
+-- TOC entry 330 (class 1255 OID 39383)
 -- Name: pegar_medicion(character varying, character varying, character varying, integer, smallint); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
@@ -4973,7 +4973,7 @@ ALTER TABLE ONLY sdmed."tAcero"
     ADD CONSTRAINT "tCorrugados_pkey" PRIMARY KEY (id);
 
 
--- Completed on 2020-10-01 19:35:11 CEST
+-- Completed on 2020-10-10 09:46:55 CEST
 
 --
 -- PostgreSQL database dump complete
