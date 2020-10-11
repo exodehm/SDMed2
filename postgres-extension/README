@@ -6,4 +6,5 @@ En linux suele estar en:
 /usr/share/postgresql/(numero_version)/extension/
 
 En Windows:
+C:\pgsql(u otro directorio de instalacion)\share\extension
 
