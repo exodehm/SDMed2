@@ -54,7 +54,7 @@ void DialogoEditorFormulasMedicion::Evaluar()
     QString sAnch = ui->lineEditAnchura->text().isEmpty()? "0" : ui->lineEditAnchura->text();
     QString sAlt = ui->lineEditAltura->text().isEmpty()? "0" : ui->lineEditAltura->text();
     QString cadenaevaluar = "SELECT evaluar_formula('"+ sUd + "','" + sLong + "','" + sAnch + "','" + sAlt + "','" + ui->lineEditExpresion->text() + "')";
-    //qDebug()<<cadenaevaluar;
+    qDebug()<<cadenaevaluar;
     float resultado;
     QSqlQuery consulta_evaluar;
     consulta_evaluar.exec(cadenaevaluar);
