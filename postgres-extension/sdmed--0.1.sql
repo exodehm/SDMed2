@@ -1256,7 +1256,7 @@ SELECT EXISTS (
    RAISE NOTICE '%',existe;
 IF existe IS FALSE THEN
    
-  CREATE TABLE "tAcero" (
+  CREATE TABLE sdmed."tAcero" (
     id integer NOT NULL PRIMARY KEY,
     area numeric,
     masa numeric,
@@ -1264,7 +1264,7 @@ IF existe IS FALSE THEN
     tamanno character varying(13)
 );
 
-CREATE SEQUENCE "tCorrugados_id_seq"
+CREATE SEQUENCE sdmed."tCorrugados_id_seq"
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -1272,7 +1272,7 @@ CREATE SEQUENCE "tCorrugados_id_seq"
     NO MAXVALUE
     CACHE 1;
 	
-	INSERT INTO "tAcero" (id, area, masa, tipo, tamanno) VALUES
+	INSERT INTO sdmed."tAcero" (id, area, masa, tipo, tamanno) VALUES
 	('44','65.30','502000','HEB','180'),
 	('45','78.10','601000','HEB','200'),
 	('46','91.00','701000','HEB','220'),
@@ -4229,7 +4229,10 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 
-SELECT crear_tabla_acero();
+SELECT sdmed.crear_tabla_aceros();
+
+ALTER TABLE sdmed."tAcero" OWNER TO sdmed;
+ALTER SEQUENCE sdmed."tCorrugados_id_seq" OWNER TO sdmed;
 
 
 -- Completed on 2020-10-12 07:05:42 CEST
