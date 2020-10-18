@@ -58,6 +58,7 @@ void DialogoConfiguracion::BuscarManualRutaExtension()
     {
         m_rutaExtensiones = ruta;
         ui->lineEdit_ruta_extension->setText(m_rutaExtensiones);
+        ui->boton_instalar_extension->setEnabled(true);
     }
 }
 
@@ -97,18 +98,18 @@ void DialogoConfiguracion::InstalarExtension()
 {
     QFile file_extension(QStringLiteral(":/postgres-extension/sdmed--0.1.sql"));
     QFile file_control(QStringLiteral(":/postgres-extension/sdmed.control"));
-    QFile file_makefile(QStringLiteral(":/postgres-extension/Makefile"));
-    if(file_extension.open(QIODevice::ReadOnly) && file_control.open(QIODevice::ReadOnly) && file_makefile.open(QIODevice::ReadOnly))
+    //QFile file_makefile(QStringLiteral(":/postgres-extension/Makefile"));
+    if(file_extension.open(QIODevice::ReadOnly) && file_control.open(QIODevice::ReadOnly) /*&& file_makefile.open(QIODevice::ReadOnly)*/)
     {
         QString ruta_extension = ui->lineEdit_ruta_extension->text() + "/";
         QString nombreFicheroExtensionDestino = file_extension.fileName().mid(file_extension.fileName().lastIndexOf("/")+1);
         QString nombreFicheroControlDestino = file_control.fileName().mid(file_control.fileName().lastIndexOf("/")+1);
-        QString nombreFicheroMakefileDestino = file_makefile.fileName().mid(file_makefile.fileName().lastIndexOf("/")+1);
+        //QString nombreFicheroMakefileDestino = file_makefile.fileName().mid(file_makefile.fileName().lastIndexOf("/")+1);
         QString ficheroExtensionDestino = ruta_extension+ nombreFicheroExtensionDestino;
         QString ficheroExtensionControlDestino = ruta_extension + nombreFicheroControlDestino;
-        QString ficheroExtensionMakefileDestino = ruta_extension + nombreFicheroMakefileDestino;
+        //QString ficheroExtensionMakefileDestino = ruta_extension + nombreFicheroMakefileDestino;
 
-        QString aviso = "Se copiarán <b>"+ nombreFicheroExtensionDestino + " , " + nombreFicheroControlDestino + " y "+nombreFicheroMakefileDestino +
+        QString aviso = "Se copiarán <b>"+ nombreFicheroExtensionDestino + " y " + nombreFicheroControlDestino + /*" y "+nombreFicheroMakefileDestino +*/
                 "</b> en:<br> "+ ruta_extension;
         int ret = QMessageBox::information(this, tr("Aviso"),aviso,QMessageBox::Ok|QMessageBox::Cancel, QMessageBox::Cancel);
         qDebug()<<"ret "<<ret;
@@ -137,7 +138,7 @@ void DialogoConfiguracion::InstalarExtension()
                 QString passw = d->PassWSudo();
                 CopiarExtensionPermisos(file_extension,ficheroExtensionDestino,passw);
                 CopiarExtensionPermisos(file_control,nombreFicheroControlDestino,passw);
-                CopiarExtensionPermisos(file_makefile,nombreFicheroMakefileDestino,passw);
+                //CopiarExtensionPermisos(file_makefile,nombreFicheroMakefileDestino,passw);
             }
             #endif
         }       
