@@ -160,7 +160,7 @@ bool DialogoOperacionesBBDD::CrearExtension()
     db.setDatabaseName("sdmed");
     db.open();
     qDebug()<<"Crear extension sdmed";
-    QString cadenaCrearExtension = "USE sdmed";
+    QString cadenaCrearExtension = "\\c sdmed";
     QSqlQuery consulta(cadenaCrearExtension,db);
     cadenaCrearExtension = "CREATE EXTENSION sdmed";
     qDebug()<<cadenaCrearExtension;

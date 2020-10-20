@@ -23,7 +23,7 @@ SET row_security = off;
 -- Name: sdmed; Type: SCHEMA; Schema: -; Owner: sdmed
 --
 
-CREATE SCHEMA sdmed;
+CREATE SCHEMA IF NOT EXISTS sdmed;
 
 
 ALTER SCHEMA sdmed OWNER TO sdmed;
@@ -50,11 +50,16 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 -- Name: tp_certificacion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_certificacion AS (
-        fecha date,
-        actual boolean
-);
-
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_certificacion' AND typnamespace = 'sdmed'::regnamespace) THEN
+      CREATE TYPE sdmed.tp_certificacion AS (
+              fecha date,
+              actual boolean
+      );
+    END IF;
+END
+$$;
 
 ALTER TYPE sdmed.tp_certificacion OWNER TO sdmed;
 
@@ -63,14 +68,20 @@ ALTER TYPE sdmed.tp_certificacion OWNER TO sdmed;
 -- Name: tp_color; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_color AS ENUM (
-    'NORMAL',
-    'BLOQUEADO',
-    'DESCOMPUESTO',
-    'PORCENTAJE',
-    'CAPITULO',
-    'SUBCAPITULO'
-);
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_color' AND typnamespace = 'sdmed'::regnamespace) THEN
+      CREATE TYPE sdmed.tp_color AS ENUM (
+          'NORMAL',
+          'BLOQUEADO',
+          'DESCOMPUESTO',
+          'PORCENTAJE',
+          'CAPITULO',
+          'SUBCAPITULO'
+      );
+    END IF;
+END
+$$;
 
 
 ALTER TYPE sdmed.tp_color OWNER TO sdmed;
@@ -80,19 +91,24 @@ ALTER TYPE sdmed.tp_color OWNER TO sdmed;
 -- Name: tp_concepto; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_concepto AS (
-        codigo character varying(20),
-        resumen character varying(80),
-        descripcion text,
-        descripcionhtml text,
-        preciomed numeric(15,3),
-        preciobloq numeric(15,3),
-        naturaleza integer,
-        fecha date,
-        ud character varying(5),
-        preciocert numeric(15,3)
-);
-
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_concepto' AND typnamespace = 'sdmed'::regnamespace) THEN
+    CREATE TYPE sdmed.tp_concepto AS (
+            codigo character varying(20),
+            resumen character varying(80),
+            descripcion text,
+            descripcionhtml text,
+            preciomed numeric(15,3),
+            preciobloq numeric(15,3),
+            naturaleza integer,
+            fecha date,
+            ud character varying(5),
+            preciocert numeric(15,3)
+    );
+    END IF;
+END
+$$;
 
 ALTER TYPE sdmed.tp_concepto OWNER TO sdmed;
 
@@ -101,12 +117,17 @@ ALTER TYPE sdmed.tp_concepto OWNER TO sdmed;
 -- Name: tp_copiarconcepto; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_copiarconcepto AS (
-        idcopiar integer,
-        paso integer,
-        c sdmed.tp_concepto
-);
-
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_copiarconcepto' AND typnamespace = 'sdmed'::regnamespace) THEN
+    CREATE TYPE sdmed.tp_copiarconcepto AS (
+            idcopiar integer,
+            paso integer,
+            c sdmed.tp_concepto
+    );
+    END IF;
+END
+$$;
 
 ALTER TYPE sdmed.tp_copiarconcepto OWNER TO sdmed;
 
@@ -115,16 +136,21 @@ ALTER TYPE sdmed.tp_copiarconcepto OWNER TO sdmed;
 -- Name: tp_relacion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_relacion AS (
-        id integer,
-        codpadre character varying,
-        codhijo character varying,
-        canpres numeric(13,3),
-        cancert numeric(13,3),
-        posicion smallint,
-        nivel smallint
-);
-
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_relacion' AND typnamespace = 'sdmed'::regnamespace) THEN
+    CREATE TYPE sdmed.tp_relacion AS (
+            id integer,
+            codpadre character varying,
+            codhijo character varying,
+            canpres numeric(13,3),
+            cancert numeric(13,3),
+            posicion smallint,
+            nivel smallint
+    );
+    END IF;
+END
+$$;
 
 ALTER TYPE sdmed.tp_relacion OWNER TO sdmed;
 
@@ -133,12 +159,17 @@ ALTER TYPE sdmed.tp_relacion OWNER TO sdmed;
 -- Name: tp_copiarrelacion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_copiarrelacion AS (
-        idcopiar integer,
-        grupo integer,
-        r sdmed.tp_relacion
-);
-
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_copiarrelacion' AND typnamespace = 'sdmed'::regnamespace) THEN
+    CREATE TYPE sdmed.tp_copiarrelacion AS (
+            idcopiar integer,
+            grupo integer,
+            r sdmed.tp_relacion
+    );
+    END IF;
+END
+$$;
 
 ALTER TYPE sdmed.tp_copiarrelacion OWNER TO sdmed;
 
@@ -147,12 +178,17 @@ ALTER TYPE sdmed.tp_copiarrelacion OWNER TO sdmed;
 -- Name: tp_guardarconcepto; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_guardarconcepto AS (
-        idguardar integer,
-        paso integer,
-        c sdmed.tp_concepto
-);
-
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_guardarconcepto' AND typnamespace = 'sdmed'::regnamespace) THEN
+    CREATE TYPE sdmed.tp_guardarconcepto AS (
+            idguardar integer,
+            paso integer,
+            c sdmed.tp_concepto
+    );
+    END IF;
+END
+$$;
 
 ALTER TYPE sdmed.tp_guardarconcepto OWNER TO sdmed;
 
@@ -161,21 +197,26 @@ ALTER TYPE sdmed.tp_guardarconcepto OWNER TO sdmed;
 -- Name: tp_medicion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_medicion AS (
-        id integer,
-        num_certif integer,
-        tipo integer,
-        comentario character varying(120),
-        ud numeric,
-        longitud numeric(7,3),
-        anchura numeric(7,3),
-        altura numeric(7,3),
-        formula character varying(80),
-        codpadre character varying,
-        codhijo character varying,
-        posicion integer
-);
-
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_medicion' AND typnamespace = 'sdmed'::regnamespace) THEN
+    CREATE TYPE sdmed.tp_medicion AS (
+            id integer,
+            num_certif integer,
+            tipo integer,
+            comentario character varying(120),
+            ud numeric,
+            longitud numeric(7,3),
+            anchura numeric(7,3),
+            altura numeric(7,3),
+            formula character varying(80),
+            codpadre character varying,
+            codhijo character varying,
+            posicion integer
+    );
+    END IF;
+END
+$$;
 
 ALTER TYPE sdmed.tp_medicion OWNER TO sdmed;
 
@@ -184,12 +225,17 @@ ALTER TYPE sdmed.tp_medicion OWNER TO sdmed;
 -- Name: tp_guardarmedicion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_guardarmedicion AS (
-        idguardar integer,
-        paso integer,
-        m sdmed.tp_medicion
-);
-
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_guardarmedicion' AND typnamespace = 'sdmed'::regnamespace) THEN
+    CREATE TYPE sdmed.tp_guardarmedicion AS (
+            idguardar integer,
+            paso integer,
+            m sdmed.tp_medicion
+            );
+    END IF;
+END
+$$;
 
 ALTER TYPE sdmed.tp_guardarmedicion OWNER TO sdmed;
 
@@ -198,12 +244,17 @@ ALTER TYPE sdmed.tp_guardarmedicion OWNER TO sdmed;
 -- Name: tp_guardarrelacion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_guardarrelacion AS (
-        idguardar integer,
-        paso integer,
-        r sdmed.tp_relacion
-);
-
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_guardarrelacion' AND typnamespace = 'sdmed'::regnamespace) THEN
+    CREATE TYPE sdmed.tp_guardarrelacion AS (
+            idguardar integer,
+            paso integer,
+            r sdmed.tp_relacion
+    );
+    END IF;
+END
+$$;
 
 ALTER TYPE sdmed.tp_guardarrelacion OWNER TO sdmed;
 
@@ -212,20 +263,25 @@ ALTER TYPE sdmed.tp_guardarrelacion OWNER TO sdmed;
 -- Name: tp_lineamedicion; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_lineamedicion AS (
-        fase integer,
-        comentario character varying,
-        ud numeric,
-        longitud numeric,
-        anchura numeric,
-        altura numeric,
-        formula character varying,
-        parcial numeric,
-        subtotal numeric,
-        id integer,
-        pos integer
-);
-
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_lineamedicion' AND typnamespace = 'sdmed'::regnamespace) THEN
+    CREATE TYPE sdmed.tp_lineamedicion AS (
+            fase integer,
+            comentario character varying,
+            ud numeric,
+            longitud numeric,
+            anchura numeric,
+            altura numeric,
+            formula character varying,
+            parcial numeric,
+            subtotal numeric,
+            id integer,
+            pos integer
+    );
+    END IF;
+END
+$$;
 
 ALTER TYPE sdmed.tp_lineamedicion OWNER TO sdmed;
 
@@ -234,19 +290,24 @@ ALTER TYPE sdmed.tp_lineamedicion OWNER TO sdmed;
 -- Name: tp_partida; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_partida AS (
-        codigopadre character varying,
-        codigohijo character varying,
-        pos smallint,
-        ud character varying,
-        resumen character varying,
-        descripcion text,
-        precio numeric,
-        cantidad numeric,
-        nat integer,
-        fec character varying
-);
-
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_partida' AND typnamespace = 'sdmed'::regnamespace) THEN
+    CREATE TYPE sdmed.tp_partida AS (
+            codigopadre character varying,
+            codigohijo character varying,
+            pos smallint,
+            ud character varying,
+            resumen character varying,
+            descripcion text,
+            precio numeric,
+            cantidad numeric,
+            nat integer,
+            fec character varying
+    );
+    END IF;
+END
+$$;
 
 ALTER TYPE sdmed.tp_partida OWNER TO sdmed;
 
@@ -255,12 +316,17 @@ ALTER TYPE sdmed.tp_partida OWNER TO sdmed;
 -- Name: tp_propiedades; Type: TYPE; Schema: sdmed; Owner: sdmed
 --
 
-CREATE TYPE sdmed.tp_propiedades AS (
-        id smallint,
-        familia character varying,
-        propiedades jsonb
-);
-
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_type WHERE typname = 'tp_propiedades' AND typnamespace = 'sdmed'::regnamespace) THEN
+    CREATE TYPE sdmed.tp_propiedades AS (
+            id smallint,
+            familia character varying,
+            propiedades jsonb
+    );
+    END IF;
+END
+$$;
 
 ALTER TYPE sdmed.tp_propiedades OWNER TO sdmed;
 
@@ -269,7 +335,7 @@ ALTER TYPE sdmed.tp_propiedades OWNER TO sdmed;
 -- Name: actualizar_certificacion_actual(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.actualizar_certificacion_actual(_nombretabla character varying, _fecha character varying) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.actualizar_certificacion_actual(_nombretabla character varying, _fecha character varying) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -288,7 +354,7 @@ ALTER FUNCTION sdmed.actualizar_certificacion_actual(_nombretabla character vary
 -- Name: actualizar_desde_nodo(character varying, character varying, integer, double precision); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.actualizar_desde_nodo(_nombretabla character varying, _codigonodo character varying, _num_cert integer DEFAULT 0, _coste_indirecto double precision DEFAULT NULL::double precision) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.actualizar_desde_nodo(_nombretabla character varying, _codigonodo character varying, _num_cert integer DEFAULT 0, _coste_indirecto double precision DEFAULT NULL::double precision) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -308,7 +374,7 @@ DECLARE
     texto text;
     naturaleza smallint;
 BEGIN
-  RAISE INFO 'aCTUALIZO EL NODO: %', _codigonodo;
+--RAISE INFO 'aCTUALIZO EL NODO: %', _codigonodo;
 --PRIMER PASO, DEFINIR SI MODIFICO LAS COLUMNAS preciomed/canpres o preciocert/cancert
 IF _num_cert = 0 THEN
     columnaprecio := 'preciomed';
@@ -377,7 +443,7 @@ ALTER FUNCTION sdmed.actualizar_desde_nodo(_nombretabla character varying, _codi
 -- Name: ajustar(character varying, double precision); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ajustar(_nombretabla character varying, _nuevo_valor double precision) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.ajustar(_nombretabla character varying, _nuevo_valor double precision) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -407,7 +473,7 @@ ALTER FUNCTION sdmed.ajustar(_nombretabla character varying, _nuevo_valor double
 -- Name: anadir_certificacion(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.anadir_certificacion(_nombretabla character varying, _fecha character varying) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.anadir_certificacion(_nombretabla character varying, _fecha character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -444,7 +510,7 @@ ALTER FUNCTION sdmed.anadir_certificacion(_nombretabla character varying, _fecha
 -- Name: anadir_obra_a_listado(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.anadir_obra_a_listado(codigo character varying, resumen character varying) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.anadir_obra_a_listado(codigo character varying, resumen character varying) RETURNS integer
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -483,7 +549,7 @@ ALTER FUNCTION sdmed.anadir_obra_a_listado(codigo character varying, resumen cha
 -- Name: bloquear_precio(character varying, character varying, numeric, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.bloquear_precio(_nombretabla character varying, _codigo character varying, _precio numeric, _bloquear boolean DEFAULT true) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.bloquear_precio(_nombretabla character varying, _codigo character varying, _precio numeric, _bloquear boolean DEFAULT true) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -505,7 +571,7 @@ ALTER FUNCTION sdmed.bloquear_precio(_nombretabla character varying, _codigo cha
 -- Name: borrar_certificacion(character varying, date); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.borrar_certificacion(_nombretabla character varying, _fecha date) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.borrar_certificacion(_nombretabla character varying, _fecha date) RETURNS integer
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -534,7 +600,7 @@ ALTER FUNCTION sdmed.borrar_certificacion(_nombretabla character varying, _fecha
 -- Name: borrar_hijos(character varying, character varying, character varying, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.borrar_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijos character varying DEFAULT NULL::character varying, _guardar boolean DEFAULT true) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.borrar_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijos character varying DEFAULT NULL::character varying, _guardar boolean DEFAULT true) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -599,7 +665,7 @@ ALTER FUNCTION sdmed.borrar_hijos(_nombretabla character varying, _codigopadre c
 -- Name: borrar_lineas_medcert(character varying, integer[], integer, boolean, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.borrar_lineas_medcert(_nombretabla character varying, _ids integer[], _num_cert integer DEFAULT NULL::integer, _guardar boolean DEFAULT true, _solomedicion boolean DEFAULT false) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.borrar_lineas_medcert(_nombretabla character varying, _ids integer[], _num_cert integer DEFAULT NULL::integer, _guardar boolean DEFAULT true, _solomedicion boolean DEFAULT false) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -661,7 +727,7 @@ ALTER FUNCTION sdmed.borrar_lineas_medcert(_nombretabla character varying, _ids 
 -- Name: borrar_lineas_medcert(character varying, character varying, character varying, integer, integer[], boolean, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.borrar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _posiciones integer[] DEFAULT NULL::integer[], _guardar boolean DEFAULT true, _solomedicion boolean DEFAULT true) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.borrar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _posiciones integer[] DEFAULT NULL::integer[], _guardar boolean DEFAULT true, _solomedicion boolean DEFAULT true) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 --EL OBJETIVO DE LA FUNCION ES CREAR UN ARRAY DE id CON LA TABLA,CODIGOPADRE,CODIGOHIJO,NUM DE CERTIF Y POSICIONES SELECCIONADAS
@@ -700,7 +766,7 @@ ALTER FUNCTION sdmed.borrar_lineas_medcert(_nombretabla character varying, _codi
 -- Name: borrar_lineas_principal(character varying, character varying, character varying[], boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.borrar_lineas_principal(_nombretabla character varying, _codigopadre character varying, _codigoshijo character varying[], _guardar boolean DEFAULT true) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.borrar_lineas_principal(_nombretabla character varying, _codigopadre character varying, _codigoshijo character varying[], _guardar boolean DEFAULT true) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -780,7 +846,7 @@ ALTER FUNCTION sdmed.borrar_lineas_principal(_nombretabla character varying, _co
 -- Name: borrar_obra(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.borrar_obra(_nombretabla character varying) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.borrar_obra(_nombretabla character varying) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -824,7 +890,7 @@ ALTER FUNCTION sdmed.borrar_obra(_nombretabla character varying) OWNER TO sdmed;
 -- Name: borrar_relacion(character varying, integer, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.borrar_relacion(nombretabla character varying, idpadre integer, idhijo integer) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.borrar_relacion(nombretabla character varying, idpadre integer, idhijo integer) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -867,7 +933,7 @@ ALTER FUNCTION sdmed.borrar_relacion(nombretabla character varying, idpadre inte
 -- Name: cambiar_codigo_obra(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.cambiar_codigo_obra(_nombretabla character varying, _codigo character varying) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.cambiar_codigo_obra(_nombretabla character varying, _codigo character varying) RETURNS integer
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -918,7 +984,7 @@ ALTER FUNCTION sdmed.cambiar_codigo_obra(_nombretabla character varying, _codigo
 -- Name: cambiar_resumen_obra(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.cambiar_resumen_obra(_nombretabla character varying, _resumen character varying) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.cambiar_resumen_obra(_nombretabla character varying, _resumen character varying) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -951,7 +1017,7 @@ ALTER FUNCTION sdmed.cambiar_resumen_obra(_nombretabla character varying, _resum
 -- Name: cerrar_obra(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.cerrar_obra(_nombretabla character varying) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.cerrar_obra(_nombretabla character varying) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -977,7 +1043,7 @@ ALTER FUNCTION sdmed.cerrar_obra(_nombretabla character varying) OWNER TO sdmed;
 -- Name: cerrar_tablas_auxiliares(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.cerrar_tablas_auxiliares(_nombretabla character varying) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.cerrar_tablas_auxiliares(_nombretabla character varying) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1003,7 +1069,7 @@ ALTER FUNCTION sdmed.cerrar_tablas_auxiliares(_nombretabla character varying) OW
 -- Name: certificar(character varying, character varying, character varying, character varying[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.certificar(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _indices character varying[]) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.certificar(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _indices character varying[]) RETURNS integer
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -1058,7 +1124,7 @@ ALTER FUNCTION sdmed.certificar(_nombretabla character varying, _codigopadre cha
 -- Name: copiar(character varying, character varying, character varying[], boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.copiar(_nombretabla character varying, _codigopadre character varying, _codigos character varying[], _primer_paso boolean DEFAULT true) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.copiar(_nombretabla character varying, _codigopadre character varying, _codigos character varying[], _primer_paso boolean DEFAULT true) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1133,7 +1199,7 @@ ALTER FUNCTION sdmed.copiar(_nombretabla character varying, _codigopadre charact
 -- Name: copiar_medicion(character varying, character varying, character varying, integer, integer[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.copiar_medicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _lineas integer[] DEFAULT NULL::integer[]) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.copiar_medicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer, _lineas integer[] DEFAULT NULL::integer[]) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -1175,7 +1241,7 @@ ALTER FUNCTION sdmed.copiar_medicion(_nombretabla character varying, _codigopadr
 -- Name: crear_obra(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.crear_obra(codigo character varying, resumen character varying) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.crear_obra(codigo character varying, resumen character varying) RETURNS integer
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1241,7 +1307,7 @@ ALTER FUNCTION sdmed.crear_obra(codigo character varying, resumen character vary
 -- Name: crear_tabla_aceros(); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.crear_tabla_aceros() RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.crear_tabla_aceros() RETURNS integer
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1253,7 +1319,7 @@ SELECT EXISTS (
    WHERE  n.nspname = 'sdmed'
    AND    c.relname = 'tAcero'
    ) INTO existe;
-   RAISE NOTICE '%',existe;
+   --RAISE NOTICE '%',existe;
 IF existe IS FALSE THEN
 
   CREATE TABLE sdmed."tAcero" (
@@ -1273,22 +1339,7 @@ CREATE SEQUENCE sdmed."tCorrugados_id_seq"
     CACHE 1;
 
         INSERT INTO sdmed."tAcero" (id, area, masa, tipo, tamanno) VALUES
-        ('44','65.30','502000','HEB','180'),
-        ('45','78.10','601000','HEB','200'),
-        ('46','91.00','701000','HEB','220'),
-        ('47','106.00','816000','HEB','240'),
-        ('48','118.40','912000','HEB','260'),
-        ('49','131.40','1010000','HEB','280'),
-        ('50','149.10','1148000','HEB','300'),
-        ('51','161.30','1246000','HEB','320'),
-        ('52','170.90','1315000','HEB','340'),
-        ('53','180.60','1393000','HEB','360'),
-        ('54','197.80','1521000','HEB','400'),
-        ('55','218.00','1678000','HEB','450'),
-        ('56','238.60','1834000','HEB','500'),
-        ('57','254.10','1952000','HEB','550'),
-        ('58','270.00','2080000','HEB','600'),
-        ('59','21.20','164000','HEA','100'),('60','25.30','195000','HEA','120'),('61','31.40','242000','HEA','140'),('62','38.80','298000','HEA','160'),('63','45.30','348000','HEA','180'),('64','53.80','415000','HEA','200'),('65','64.30','495000','HEA','220'),('66','76.80','592000','HEA','240'),('67','86.80','669000','HEA','260'),('68','97.30','749000','HEA','280'),('69','112.50','866000','HEA','300'),('70','124.40','957000','HEA','320'),('71','133.50','1030000','HEA','340'),('72','142.80','1099000','HEA','360'),('73','159.00','1226000','HEA','400'),('74','178.00','1373000','HEA','450'),('75','197.50','1521000','HEA','500'),('76','211.80','1628000','HEA','550'),('77','226.50','178000','HEA','600'),('78','53.20','410000','HEM','100'),('79','66.40','511000','HEM','120'),('80','80.60','620000','HEM','140'),('81','97.10','748000','HEM','160'),('82','113.30','872000','HEM','180'),('83','131.30','1010000','HEM','200'),('84','149.40','1148000','HEM','220'),('85','199.60','1540000','HEM','240'),('86','219.60','1687000','HEM','260'),('87','240.20','1854000','HEM','280'),('88','303.10','2335000','HEM','300'),('89','312.00','2403000','HEM','320'),('90','315.80','2433000','HEM','340'),('91','318.80','2453000','HEM','360'),('92','325.80','2511000','HEM','400'),('93','335.40','2580000','HEM','450'),('94','344.30','2649000','HEM','500'),('95','354.40','2727000','HEM','550'),('96','363.70','2796000','HEM','600'),('97','11.00','84800','UPN','80'),('98','13.50','104000','UPN','100'),('99','17.00','131000','UPN','120'),('100','20.40','157000','UPN','140'),('101','24.00','184000','UPN','160'),('102','28.00','216000','UPN','180'),('103','32.20','248000','UPN','200'),('104','37.40','288000','UPN','220'),('105','42.30','326000','UPN','240'),('106','48.30','372000','UPN','260'),('107','53.30','410000','UPN','280'),('108','58.80','453000','UPN','300'),('109','3.08','23700','L','40.4'),('110','3.79','29100','L','40.5'),('111','4.48','34500','L','40.6'),('112','3.49','26900','L','45.4'),('113','4.30','33200','L','45.5'),('114','5.09','39200','L','45.6'),('115','3.89','30000','L','50.4'),('116','4.80','37000','L','50.5'),('117','5.69','43900','L','50.6'),('118','6.56','50500','L','50.7'),('119','7.41','57100','L','50.8'),('120','5.82','44800','L','60.5'),('121','6.91','53200','L','60.6'),('122','9.03','69600','L','60.8'),('123','11.10','85200','L','60.10'),('124','8.13','62600','L','70.6'),('125','9.40','72400','L','70.7'),('126','10.60','82000','L','70.8'),('127','13.10','101000','L','70.10'),('128','12.30','94500','L','80.8'),('129','15.10','117000','L','80.10'),('130','17.90','137000','L','80.12'),('131','13.90','107000','L','90.8'),('132','17.10','131000','L','90.10'),('133','20.30','156000','L','90.12'),('134','15.50','120000','L','100.8'),('135','19.20','147000','L','100.10'),('136','22.70','175000','L','100.12'),('137','27.90','215000','L','100.15'),('138','23.20','179000','L','120.10'),('139','27.50','212000','L','120.12'),('140','33.90','261000','L','120.15'),('141','34.80','268000','L','150.12'),('142','43.00','332000','L','150.15'),('143','51.00','393000','L','150.18'),('144','52.10','401000','L','180.15'),('145','61.90','477000','L','180.18'),('146','68.30','527000','L','180.20'),('147','61.80','476000','L','200.16'),('148','69.10','532000','L','200.18'),('149','76.30','588000','L','200.20'),('150','90.60','697000','L','200.24'),('151','2.46','18900','LD','40.25.4'),('152','3.02','23200','LD','40.25.5'),('153','2.86','22000','LD','45.30.4'),('154','3.52','27100','LD','45.30.5'),('155','4.29','33100','LD','60.30.5'),('156','5.08','39100','LD','60.30.6'),('157','4.79','36900','LD','60.40.5'),('158','5.68','43800','LD','60.40.6'),('159','6.55','50400','LD','60.40.7'),('160','5.54','42700','LD','65.50.5'),('161','6.58','50600','LD','65.50.6'),('162','7.60','58500','LD','65.50.7'),('163','8.60','66200','LD','65.50.8'),('164','6.05','46600','LD','75.50.5'),('165','7.19','55400','LD','75.50.6'),('166','8.31','64100','LD','75.50.7'),('167','9.41','72500','LD','75.50.8'),('168','5.80','44700','LD','80.40.5'),('169','6.89','53100','LD','80.40.6'),('170','7.96','61300','LD','80.40.7'),('171','9.01','69400','LD','80.40.8'),('172','8.11','62500','LD','80.60.6'),('173','9.38','72200','LD','80.60.7'),('174','10.60','81800','LD','80.60.8'),('175','8.73','67200','LD','100.50.6'),('176','10.10','77800','LD','100.50.7'),('177','11.40','88200','LD','100.50.8'),('178','14.10','109000','LD','100.50.10'),('179','11.20','86000','LD','100.65.7'),('180','12.70','97500','LD','100.65.8'),('181','15.60','121000','LD','100.65.10'),('182','13.50','104000','LD','100.75.8'),('183','16.60','128000','LD','100.75.10'),('184','19.70','151000','LD','100.75.12'),('185','15.50','120000','LD','120.80.8'),('186','19.10','147000','LD','120.80.10'),('188','15.10','116000','LD','130.65.8'),('189','18.60','143000','LD','130.65.10'),('190','22.10','170000','LD','130.65.12'),('191','19.60','151000','LD','150.75.9'),('192','21.60','167000','LD','150.75.10'),('193','25.70','198000','LD','150.75.12'),('194','31.60','243000','LD','150.75.15'),('195','23.20','179000','LD','150.90.10'),('196','27.50','212000','LD','150.90.12'),('197','33.90','261000','LD','150.90.15'),('198','29.20','226000','LD','200.100.10'),('199','34.80','268000','LD','200.100.12'),('200','43.00','331000','LD','200.100.15'),('201','34.20','264000','LD','200.150.10'),('202','40.80','314000','LD','200.150.12'),('203','50.50','388000','LD','200.150.15'),('204','60.00','462000','LD','200.150.18'),('205','177.00','17400','T','30'),('206','297.00','22900','T','35'),('207','377.00','29000','T','40'),('208','566.00','43600','T','50'),('209','794.00','61100','T','60'),('210','1060.00','81600','T','70'),('211','1360.00','105000','T','80'),('212','2090.00','160900','T','100'),('213','2960.00','227600','T','120'),('214','3990.00','307100','T','140'),('215','0.28','2200','?','6'),('216','0.39','3000','?','7'),('217','0.50','3900','?','8'),('218','0.79','6100','?','10'),('219','1.13','8700','?','12'),('220','1.54','11900','?','14'),('221','2.01','15500','?','16'),('222','2.55','19600','?','18'),('223','3.14','24200','?','20'),('224','3.80','29200','?','22'),('225','4.91','37800','?','25'),('226','6.16','47400','?','28'),('227','7.07','54400','?','30'),('228','8.04','61900','?','32'),('229','10.20','78400','?','36'),('230','12.60','96700','?','40'),('231','15.90','122600','?','45'),('232','19.60','151100','?','50'),('233','1.08','3500','?','6'),('234','2.00','4800','?','7'),('235','3.41','6300','?','8'),('236','8.33','9800','?','10'),('237','17.30','14100','?','12'),('238','32.00','19200','?','14'),('239','54.60','25100','?','16'),('240','87.50','31800','?','18'),('241','133.00','39200','?','20'),('242','195.00','47500','?','22'),('243','326.00','61300','?','25'),('244','512.00','76900','?','28'),('245','675.00','88300','?','30'),('246','874.00','100100','?','32'),('247','1400.00','127500','?','36'),('248','2130.00','157000','?','40'),('249','3420.00','199100','?','45'),('250','5210.00','245300','?','50'),('251','80.00','6160','Rectangular','20·4'),('252','100.00','7700','Rectangular','20·5'),('253','120.00','9240','Rectangular','20·6'),('254','160.00','12400','Rectangular','20·8'),('255','200.00','15400','Rectangular','20·10'),('256','240.00','18400','Rectangular','20·12'),('257','300.00','23200','Rectangular','20·15'),('258','100.00','7700','Rectangular','25·4'),('259','125.00','9620','Rectangular','25·5'),('260','150.00','11600','Rectangular','25·6'),('261','200.00','15400','Rectangular','25·8'),('262','250.00','19200','Rectangular','25·10'),('263','300.00','23200','Rectangular','25·12'),('264','375.00','28800','Rectangular','25·15'),('265','500.00','38600','Rectangular','25·20'),('266','120.00','9240','Rectangular','30·4'),('267','150.00','11600','Rectangular','30·5'),('268','180.00','13800','Rectangular','30·6'),('269','240.00','18400','Rectangular','30·8'),('270','300.00','23200','Rectangular','30·10'),('271','360.00','27800','Rectangular','30·12'),('272','450.00','34600','Rectangular','30·15'),('273','600.00','46200','Rectangular','30·20'),('274','750.00','57800','Rectangular','30·25'),('275','140.00','10800','Rectangular','35·4'),('276','175.00','13400','Rectangular','35·5'),('277','210.00','16200','Rectangular','35·6'),('278','280.00','21600','Rectangular','35·8'),('279','350.00','27000','Rectangular','35·10'),('280','420.00','32400','Rectangular','35·12'),('281','525.00','40400','Rectangular','35·15'),('282','700.00','54000','Rectangular','35·20'),('283','875.00','67400','Rectangular','35·25'),('284','1050.00','80800','Rectangular','35·30'),('285','160.00','12400','Rectangular','40·4'),('286','200.00','15400','Rectangular','40·5'),('287','240.00','18400','Rectangular','40·6'),('288','320.00','24600','Rectangular','40·8'),('289','400.00','30800','Rectangular','40·10'),('290','480.00','37000','Rectangular','40·12'),('291','600.00','46200','Rectangular','40·15'),('292','800.00','61600','Rectangular','40·20'),('293','1000.00','77000','Rectangular','40·25'),('294','1200.00','92400','Rectangular','40·30'),('295','1400.00','108000','Rectangular','40·35'),('296','180.00','13800','Rectangular','45·4'),('297','225.00','17400','Rectangular','45·5'),('298','270.00','20800','Rectangular','45·6'),('299','360.00','27800','Rectangular','45·8'),('300','450.00','34600','Rectangular','45·10'),('301','540.00','41600','Rectangular','45·12'),('302','675.00','52000','Rectangular','45·15'),('303','900.00','69400','Rectangular','45·20'),('304','1120.00','86600','Rectangular','45·25'),('305','1350.00','104000','Rectangular','45·30'),('306','1580.00','122000','Rectangular','45·35'),('307','1800.00','138000','Rectangular','45·40'),('308','200.00','15400','Rectangular','50·4'),('309','250.00','19200','Rectangular','50·5'),('310','300.00','23200','Rectangular','50·6'),('311','400.00','30800','Rectangular','50·8'),('312','500.00','38600','Rectangular','50·10'),('313','600.00','46200','Rectangular','50·12'),('314','750.00','57800','Rectangular','50·15'),('315','1000.00','77000','Rectangular','50·20'),('316','1250.00','96200','Rectangular','50·25'),('317','1500.00','116000','Rectangular','50·30'),('318','1750.00','134000','Rectangular','50·35'),('319','2000.00','154000','Rectangular','50·40'),('320','220.00','17000','Rectangular','55·4'),('321','275.00','21200','Rectangular','55·5'),('322','330.00','25400','Rectangular','55·6'),('323','440.00','33800','Rectangular','55·8'),('324','550.00','42400','Rectangular','55·10'),('325','660.00','50800','Rectangular','55·12'),('326','825.00','63600','Rectangular','55·15'),('327','1100.00','84800','Rectangular','55·20'),('328','1380.00','106000','Rectangular','55·25'),('329','1650.00','128000','Rectangular','55·30'),('330','1930.00','148000','Rectangular','55·35'),('331','2200.00','170000','Rectangular','55·40'),('332','240.00','18400','Rectangular','60·4'),('333','300.00','23200','Rectangular','60·5'),('334','360.00','27800','Rectangular','60·6'),('335','480.00','37000','Rectangular','60·8'),('336','600.00','46200','Rectangular','60·10'),('337','720.00','55400','Rectangular','60·12'),('338','900.00','69400','Rectangular','60·15'),('339','1200.00','92400','Rectangular','60·20'),('340','1500.00','116000','Rectangular','60·25'),('341','1800.00','138000','Rectangular','60·30'),('342','2100.00','162000','Rectangular','60·35'),('343','2400.00','184000','Rectangular','60·40'),('344','280.00','21600','Rectangular','70·4'),('345','350.00','27000','Rectangular','70·5'),('346','420.00','32400','Rectangular','70·6'),('347','560.00','43200','Rectangular','70·8'),('348','700.00','54000','Rectangular','70·10'),('349','840.00','64600','Rectangular','70·12'),('350','1050.00','80800','Rectangular','70·15'),('351','1400.00','108000','Rectangular','70·20'),('352','1750.00','134000','Rectangular','70·25'),('353','2100.00','162000','Rectangular','70·30'),('354','2450.00','188000','Rectangular','70·35'),('355','2800.00','216000','Rectangular','70·40'),('356','300.00','23200','Rectangular','75·4'),('357','375.00','28800','Rectangular','75·5'),('358','450.00','34600','Rectangular','75·6'),('359','600.00','46200','Rectangular','75·8'),('360','750.00','57800','Rectangular','75·10'),('361','900.00','69400','Rectangular','75·12'),('362','1120.00','86600','Rectangular','75·15'),('363','1500.00','116000','Rectangular','75·20'),('364','1880.00','144000','Rectangular','75·25'),('365','2250.00','174000','Rectangular','75·30'),('366','2620.00','202000','Rectangular','75·35'),('367','3000.00','232000','Rectangular','75·40'),('368','320.00','24600','Rectangular','80·4'),('369','400.00','30800','Rectangular','80·5'),('370','480.00','37000','Rectangular','80·6'),('371','640.00','49200','Rectangular','80·8'),('372','800.00','61600','Rectangular','80·10'),('373','960.00','74000','Rectangular','80·12'),('374','1200.00','92400','Rectangular','80·15'),('375','1600.00','124000','Rectangular','80·20'),('376','2000.00','154000','Rectangular','80·25'),('377','2400.00','184000','Rectangular','80·30'),('378','2800.00','216000','Rectangular','80·35'),('379','3200.00','246000','Rectangular','80·40'),('380','360.00','28000','Rectangular','90·4'),('381','450.00','34600','Rectangular','90·5'),('382','540.00','41600','Rectangular','90·6'),('383','720.00','57400','Rectangular','90·8'),('384','900.00','69400','Rectangular','90·10'),('385','1080.00','83200','Rectangular','90·12'),('386','1350.00','104000','Rectangular','90·15'),('387','1800.00','119000','Rectangular','90·20'),('388','2250.00','174000','Rectangular','90·25'),('389','2700.00','208000','Rectangular','90·30'),('390','3150.00','242000','Rectangular','90·35'),('391','3600.00','278000','Rectangular','90·40'),('392','400.00','30800','Rectangular','100·4'),('393','500.00','38600','Rectangular','100·5'),('394','600.00','46200','Rectangular','100·6'),('395','800.00','61100','Rectangular','100·8'),('396','1000.00','77000','Rectangular','100·10'),('397','1200.00','92400','Rectangular','100·12'),('398','1500.00','116000','Rectangular','100·15'),('399','2000.00','154000','Rectangular','100·20'),('400','2500.00','192000','Rectangular','100·25'),('401','3000.00','232000','Rectangular','100·30'),('402','3500.00','270000','Rectangular','100·35'),('403','4000.00','308000','Rectangular','100·40'),('404','440.00','33800','Rectangular','110·4'),('405','550.00','42400','Rectangular','110·5'),('406','680.00','50800','Rectangular','110·6'),('407','880.00','67800','Rectangular','110·8'),('408','1100.00','84800','Rectangular','110·10'),('409','1320.00','102000','Rectangular','110·12'),('410','1650.00','128000','Rectangular','110·15'),('411','2200.00','170000','Rectangular','110·20'),('412','2750.00','212000','Rectangular','110·25'),('413','3300.00','254000','Rectangular','110·30'),('414','3850.00','296000','Rectangular','110·35'),('415','4400.00','338000','Rectangular','110·40'),('416','480.00','37000','Rectangular','120·4'),('417','600.00','46200','Rectangular','120·5'),('418','720.00','55400','Rectangular','120·6'),('419','960.00','74000','Rectangular','120·8'),('420','1200.00','92400','Rectangular','120·10'),('421','1440.00','111000','Rectangular','120·12'),('422','1880.00','138000','Rectangular','120·15'),('423','2400.00','184000','Rectangular','120·20'),('424','3000.00','232000','Rectangular','120·25'),('425','3600.00','280000','Rectangular','120·30'),('426','4200.00','324000','Rectangular','120·35'),('427','4800.00','370000','Rectangular','120·40'),('428','1120.00','86200','Rectangular','140·8'),('429','1400.00','108000','Rectangular','140·10'),('430','1680.00','129000','Rectangular','140·12'),('431','2100.00','162000','Rectangular','140·15'),('432','2800.00','216000','Rectangular','140·20'),('433','3500.00','270000','Rectangular','140·25'),('434','4200.00','324000','Rectangular','140·30'),('435','4900.00','378000','Rectangular','140·35'),('436','5600.00','432000','Rectangular','140·40'),('437','1200.00','92400','Rectangular','150·8'),('438','1500.00','116000','Rectangular','150·10'),('439','1800.00','138000','Rectangular','150·12'),('440','2250.00','174000','Rectangular','150·15'),('441','3000.00','232000','Rectangular','150·20'),('442','3750.00','288000','Rectangular','150·25'),('443','4500.00','346000','Rectangular','150·30'),('444','5250.00','404000','Rectangular','150·35'),('445','6000.00','462000','Rectangular','150·40'),('446','1280.00','98100','Rectangular','160·8'),('447','1600.00','124000','Rectangular','160·10'),('448','1920.00','148000','Rectangular','160·12'),('449','2400.00','184000','Rectangular','160·15'),('450','3200.00','246000','Rectangular','160·20'),('451','4000.00','308000','Rectangular','160·25'),('452','4800.00','370000','Rectangular','160·30'),('453','5600.00','432000','Rectangular','160·35'),('454','6400.00','492000','Rectangular','160·40'),('455','1440.00','111000','Rectangular','180·8'),('456','1800.00','138000','Rectangular','180·10'),('457','2160.00','167000','Rectangular','180·12'),('458','2700.00','208000','Rectangular','180·15'),('459','3600.00','278000','Rectangular','180·20'),('460','4500.00','346000','Rectangular','180·25'),('461','5400.00','416000','Rectangular','180·30'),('462','6300.00','486000','Rectangular','180·35'),('463','7200.00','554000','Rectangular','180·40'),('464','1600.00','124000','Rectangular','200·8'),('465','2000.00','154000','Rectangular','200·10'),('466','2400.00','184000','Rectangular','200·12'),('467','3000.00','232000','Rectangular','200·15'),('468','4000.00','308000','Rectangular','200·20'),('469','5000.00','385000','Rectangular','200·25'),('470','6000.00','462000','Rectangular','200·30'),('471','7000.00','540000','Rectangular','200·35'),('472','8000.00','616000','Rectangular','200·40'),('473','2000.00','154000','Rectangular','250·8'),('474','2500.00','192000','Rectangular','250·10'),('475','3000.00','232000','Rectangular','250·12'),('476','3750.00','288000','Rectangular','250·15'),('477','5000.00','385000','Rectangular','250·20'),('478','6250.00','482000','Rectangular','250·25'),('479','7500.00','578000','Rectangular','250·30'),('480','8750.00','674000','Rectangular','250·35'),('481','10000.00','770000','Rectangular','250·40'),('482','2400.00','184000','Rectangular','300·8'),('483','3000.00','232000','Rectangular','300·10'),('484','3600.00','278000','Rectangular','300·12'),('485','4500.00','346000','Rectangular','300·15'),('486','6000.00','462000','Rectangular','300·20'),('487','7500.00','578000','Rectangular','300·25'),('488','9000.00','693000','Rectangular','300·30'),('489','10500.00','808000','Rectangular','300·35'),('490','12000.00','924000','Rectangular','300·40'),('491','3200.00','246000','Rectangular','400·8'),('492','4000.00','308000','Rectangular','400·10'),('493','4800.00','370000','Rectangular','400·12'),('494','6000.00','462000','Rectangular','400·15'),('495','8000.00','616000','Rectangular','400·20'),('496','10000.00','770000','Rectangular','400·25'),('497','12000.00','924000','Rectangular','400·30'),('498','14000.00','1079000','Rectangular','400·35'),('499','16000.00','1236000','Rectangular','400·40'),('500','2.39','18400','?','40.2'),('501','3.49','26900','?','40.3'),('502','4.52','34800','?','40.4'),('503','2.70','20800','?','45.2'),('504','3.96','30500','?','45.3'),('505','5.15','39600','?','45.4'),('506','3.02','23200','?','50.2'),('507','4.43','34000','?','50.3'),('508','5.78','44400','?','50.4'),('509','3.33','25600','?','55.2'),('510','4.90','37800','?','55.3'),('511','6.41','49300','?','55.4'),('512','3.64','28100','?','60.2'),('513','5.37','41300','?','60.3'),('514','7.04','54200','?','60.4'),('515','3.96','30500','?','65.2'),('516','5.84','44900','?','65.3'),('517','7.67','59100','?','65.4'),('518','4.27','32900','?','70.2'),('519','6.31','48600','?','70.3'),('520','8.29','63900','?','70.4'),('521','4.58','35300','?','75.2'),('522','6.78','52200','?','75.3'),('523','8.92','68700','?','75.4'),('524','4.90','37800','?','80.2'),('525','7.26','55900','?','80.3'),('526','9.55','73600','?','80.4'),('527','8.19','63100','?','90.3'),('528','10.80','83200','?','90.4'),('529','13.40','103000','?','90.5'),('530','9.14','70300','?','100.3'),('531','12.10','92900','?','100.4'),('532','14.90','115000','?','100.5'),('533','17.70','136000','?','100.6'),('534','15.20','117000','?','125.4'),('535','18.80','145000','?','125.5'),('536','22.40','173000','?','125.6'),('537','23.60','181000','?','155.5'),('538','28.10','217000','?','155.6'),('539','36.90','284000','?','155.8'),('540','26.70','206000','?','175.5'),('541','31.90','245000','?','175.6'),('542','42.00','324000','?','175.8'),('543','30.60','235000','?','200.5'),('544','36.60','282000','?','200.6'),('545','48.30','372000','?','200.8'),('546','2.90','22400','#','40.2'),('547','4.13','31800','#','40.3'),('548','5.21','40100','#','40.4'),('549','3.30','25400','#','45.2'),('550','4.73','36400','#','45.3'),('551','6.01','46300','#','45.4'),('552','3.70','28500','#','50.2'),('553','5.33','41000','#','50.3'),('554','5.81','52500','#','50.4'),('555','4.10','31600','#','55.2'),('556','5.93','45700','#','55.3'),('557','7.61','58600','#','55.4'),('558','4.50','34600','#','60.2'),('559','6.53','50300','#','60.3'),('560','8.41','64700','#','60.4'),('561','10.10','78100','#','60.5'),('562','5.30','40800','#','70.2'),('563','7.73','59500','#','70.3'),('564','10.00','77100','#','70.4'),('565','12.10','93500','#','70.5'),('566','8.90','68800','#','80.3'),('567','11.60','89400','#','80.4'),('568','14.10','109000','#','80.5'),('569','16.50','128000','#','80.6'),('570','10.10','78000','#','90.3'),('571','13.20','102000','#','90.4'),('572','16.10','125000','#','90.5'),('573','18.90','146000','#','90.6'),('574','11.30','87200','#','100.3'),('575','14.80','114000','#','100.4'),('576','18.10','139000','#','100.5'),('577','21.30','164000','#','100.6'),('578','18.00','138000','#','120.4'),('579','22.10','171000','#','120.5'),('580','26.10','201000','#','120.6'),('581','26.10','201000','#','140.5'),('582','30.90','238000','#','140.6'),('583','40.00','308000','#','140.8'),('584','30.10','232000','#','160.5'),('585','35.70','275000','#','160.6'),('586','46.40','358000','#','160.8'),('587','32.10','247000','#','170.5'),('588','38.10','293000','#','170.6'),('589','149.00','487000','#','170.8'),('590','1.53','1200','LF','40.2'),('591','2.25','1770','LF','40.3'),('592','2.90','2280','LF','40.4'),('593','1.93','1510','LF','50.2'),('594','2.81','2210','LF','50.3'),('595','3.67','2880','LF','50.4'),('596','3.41','2680','LF','60.3'),('597','4.47','3510','LF','60.4'),('598','5.48','4300','LF','60.5'),('599','6.07','4760','LF','80.4'),('600','7.48','5870','LF','80.5'),('601','8.85','6950','LF','80.6'),('602','7.48','7070','LF','100.5'),('603','8.87','7070','LF','100.6'),('604','10.20','7070','LF','100.7'),('605','9.05','8490','LF','120.5'),('606','10.80','8490','LF','120.6'),('607','12.40','8490','LF','120.7'),('608','1.13','887','LD','40.20.2'),('609','1.65','1300','LD','40.20.3'),('610','1.43','1120','LD','50.25.2'),('611','2.10','1650','LD','50.25.3'),('612','2.55','2000','LD','60.30.3'),('613','3.30','2590','LD','60.30.4'),('614','4.50','3530','LD','80.40.4'),('615','5.52','4340','LD','80.40.5'),('616','7.02','5510','LD','100.50.5'),('617','8.30','6520','LD','100.50.6'),('618','8.52','6690','LD','120.60.5'),('619','10.10','7930','LD','120.60.6'),('620','3.30','2590','UF','60.3'),('621','4.20','3300','UF','60.4'),('622','4.50','3530','UF','80.3'),('623','5.80','4550','UF','80.4'),('624','7.04','5520','UF','80.5'),('625','4.48','3100','UF','100.3'),('626','5.81','3120','UF','100.4'),('627','7.09','3120','UF','100.5'),('628','7.06','3750','UF','120.4'),('629','8.66','3750','UF','120.5'),('630','10.20','3750','UF','120.6'),('631','8.32','4380','UF','140.4'),('632','10.20','4380','UF','140.5'),('633','12.10','4380','UF','140.6'),('634','2.72','2130','OF','40.2.0'),('635','3.34','2620','OF','40.2.5'),('636','3.91','3070','OF','40.3.0'),('637','3.40','2670','OF','50.2.0'),('638','4.19','3290','OF','50.2.5'),('639','4.93','3870','OF','50.3.0'),('640','3.72','2920','OF','60.2.0'),('641','4.59','3600','OF','60.2.5'),('642','5.41','4250','OF','60.3.0'),('643','6.09','4780','OF','80.2.5'),('644','7.21','5660','OF','80.3.0'),('645','5.76','8480','OF','100.2.5'),('646','6.94','8450','OF','100.3.0'),('647','3.12','2450','CF','60.2.0'),('648','3.84','3010','CF','60.2.5'),('649','4.50','3530','CF','60.3.0'),('650','3.52','2760','CF','80.2.0'),('651','4.34','3400','CF','80.2.5'),('652','5.10','4000','CF','80.3.0'),('653','3.92','3080','CF','100.2.0'),('654','4.84','3800','CF','100.2.5'),('655','5.70','4480','CF','100.3.0'),('656','4.92','3860','CF','120.2.0'),('657','6.09','4780','CF','120.2.5'),('658','7.20','5650','CF','120.3.0'),('659','5.32','4170','CF','140.2.0'),('660','6.59','5170','CF','140.2.5'),('661','7.80','6130','CF','140.3.0'),('662','6.12','4800','CF','160.2.0'),('663','7.59','5950','CF','160.2.5'),('664','9.00','7070','CF','160.3.0'),('665','6.52','5120','CF','180.2.0'),('666','8.09','6350','CF','180.2.5'),('667','9.60','7540','CF','180.3.0'),('668','6.92','5430','CF','200.2.0'),('669','8.59','6740','CF','200.2.5'),('670','10.20','8010','CF','200.3.0'),('671','10.50','8210','CF','225.2.5'),('672','12.50','9780','CF','225.3.0'),('673','16.20','12700','CF','225.4.0'),('674','11.10','8700','CF','250.2.5'),('675','13.20','10400','CF','250.3.0'),('676','17.20','13500','CF','250.4.0'),('677','11.70','9190','CF','275.2.5'),('678','14.00','11000','CF','275.3.0'),('679','18.20','14300','CF','275.4.0'),('680','12.30','9680','CF','300.2.5'),('681','14.70','11500','CF','300.3.0'),('682','19.20','15100','CF','300.4.0'),('683','4.72','3700','ZF','100.2.0'),('684','5.84','4580','ZF','100.2.5'),('685','6.91','5420','ZF','100.3.0'),('686','5.12','4020','ZF','120.2.0'),('687','6.34','4980','ZF','120.2.5'),('688','7.51','5890','ZF','120.3.0'),('689','5.52','4330','ZF','140.2.0'),('690','6.84','5370','ZF','140.2.5'),('691','8.11','6360','ZF','140.3.0'),('692','5.92','4650','ZF','160.2.0'),('693','7.34','5760','ZF','160.2.5'),('694','8.71','6840','ZF','160.3.0'),('695','6.32','4960','ZF','180.2.0'),('696','7.84','6150','ZF','180.2.5'),('697','9.31','7310','ZF','180.3.0'),('698','7.66','6010','ZF','200.2.0'),('699','9.51','7470','ZF','200.2.5'),('1','7.58','58400','IPN','80'),('2','10.60','81600','IPN','100'),('3','14.20','110000','IPN','120'),('4','18.30','141000','IPN','140'),('5','22.80','176000','IPN','160'),('6','27.90','215000','IPN','180'),('7','33.50','258000','IPN','200'),('8','39.60','305000','IPN','220'),('9','46.10','355000','IPN','240'),('10','53.40','411000','IPN','260'),('11','61.10','471000','IPN','280'),('12','69.10','532000','IPN','300'),('13','77.80','599000','IPN','320'),('14','86.80','668000','IPN','340'),('15','97.10','748000','IPN','360'),('16','107.00','824000','IPN','380'),('17','118.00','908000','IPN','400'),('18','147.00','1128000','IPN','450'),('19','180.00','1383000','IPN','500'),('20','213.00','1638000','IPN','550'),('21','254.00','1952000','IPN','600'),('22','7.64','58900','IPE','80'),('23','10.30','79500','IPE','100'),('24','13.20','102000','IPE','120'),('25','16.40','127000','IPE','140'),('26','20.10','155000','IPE','160'),('27','23.90','184000','IPE','180'),('28','28.50','220000','IPE','200'),('29','33.40','257000','IPE','220'),('30','39.10','301000','IPE','240'),('31','45.90','354000','IPE','270'),('32','53.80','414000','IPE','300'),('33','62.60','482000','IPE','330'),('34','72.70','560000','IPE','360'),('35','84.50','650000','IPE','400'),('36','98.80','761000','IPE','450'),('37','116.00','890000','IPE','500'),('38','134.00','1040000','IPE','550'),('39','155.00','1197000','IPE','600'),('40','26.00','200000','HEB','100'),('41','34.00','262000','HEB','120'),('42','43.00','331000','HEB','140'),('43','54.30','418000','HEB','160'),('187','22.70','175000','LD','120.80.12'),('700','11.30','8880','ZF','200.3.0'),('701','10.10','7960','ZF','225.2.5'),('702','12.10','9470','ZF','225.3.0'),('703','15.70','12300','ZF','225.4.0'),('704','10.80','8450','ZF','250.2.5'),('705','12.80','10100','ZF','250.3.0'),('706','16.70','13100','ZF','250.4.0'),('707','11.40','8940','ZF','275.2.5'),('708','13.60','10700','ZF','275.3.0'),('709','17.70','13900','ZF','275.4.0'),('710','12.00','9430','ZF','300.2.5'),('711','14.30','11200','ZF','300.3.0'),('712','18.70','14700','ZF','300.4.0'),('713','500.00','43800','Ondulada','0.5'),('714','600.00','52000','Ondulada','0.6'),('715','800.00','70000','Ondulada','0.8'),('716','1000.00','87700','Ondulada','1.0'),('717','1200.00','105000','Ondulada','1.2'),('718','525.00','58900','Grecada','0.5'),('719','630.00','70700','Grecada','0.6'),('720','840.00','94200','Grecada','0.8'),('721','1050.00','118000','Grecada','1.0'),('722','1260.00','141000','Grecada','1.2'),('723','28.30','222','Corrugado','6'),('724','50.30','395','Corrugado','8'),('725','78.50','617','Corrugado','10'),('726','113.00','888','Corrugado','12'),('727','154.00','1210','Corrugado','14'),('728','201.00','1580','Corrugado','16'),('729','314.00','2470','Corrugado','20'),('730','491.00','3850','Corrugado','25'),('731','616.00','4830','Corrugado','28'),('732','804.00','6310','Corrugado','32'),('733','1257.00','9860','Corrugado','40'),('734','1963.00','15400','Corrugado','50')
+        ('45','78.10','61.3','HEB','200'),('46','91.00','71.5','HEB','220'),('47','106.00','83.2','HEB','240'),('48','118.40','93','HEB','260'),('49','131.40','103','HEB','280'),('50','149.10','117','HEB','300'),('51','161.30','127','HEB','320'),('52','170.90','134','HEB','340'),('53','180.60','142','HEB','360'),('54','197.80','155','HEB','400'),('55','218.00','171','HEB','450'),('56','238.60','187','HEB','500'),('57','254.10','199','HEB','550'),('58','270.00','212','HEB','600'),('59','21.20','16.7','HEA','100'),('60','25.30','19.9','HEA','120'),('61','31.40','24.7','HEA','140'),('62','38.80','30.4','HEA','160'),('63','45.30','35.5','HEA','180'),('64','53.80','42.3','HEA','200'),('65','64.30','50.5','HEA','220'),('66','76.80','60.3','HEA','240'),('67','86.80','68.2','HEA','260'),('68','97.30','76.4','HEA','280'),('69','112.50','88.3','HEA','300'),('70','124.40','97.6','HEA','320'),('71','133.50','105','HEA','340'),('72','142.80','112','HEA','360'),('73','159.00','125','HEA','400'),('74','178.00','140','HEA','450'),('75','197.50','155','HEA','500'),('76','211.80','166','HEA','550'),('77','226.50','178','HEA','600'),('78','53.20','41.8','HEM','100'),('79','66.40','52.1','HEM','120'),('80','80.60','63.2','HEM','140'),('82','113.30','88.9','HEM','180'),('83','131.30','103','HEM','200'),('84','149.40','117','HEM','220'),('85','199.60','157','HEM','240'),('86','219.60','172','HEM','260'),('87','240.20','189','HEM','280'),('88','303.10','238','HEM','300'),('89','312.00','245','HEM','320'),('90','315.80','248','HEM','340'),('91','318.80','250','HEM','360'),('92','325.80','256','HEM','400'),('93','335.40','263','HEM','450'),('94','344.30','270','HEM','500'),('95','354.40','278','HEM','550'),('96','363.70','285','HEM','600'),('97','11.00','8.64','UPN','80'),('98','13.50','10.6','UPN','100'),('99','17.00','13.4','UPN','120'),('100','20.40','16','UPN','140'),('101','24.00','18.8','UPN','160'),('102','28.00','22','UPN','180'),('103','32.20','25.3','UPN','200'),('104','37.40','29.4','UPN','220'),('105','42.30','33.2','UPN','240'),('106','48.30','37.9','UPN','260'),('107','53.30','41.8','UPN','280'),('108','58.80','46.2','UPN','300'),('110','3.79','2.97','L','40.5'),('111','4.48','3.52','L','40.6'),('109','3.08','2.42','L','40.4'),('112','3.49','2.74','L','45.4'),('113','4.30','3.38','L','45.5'),('114','5.09','4','L','45.6'),('115','3.89','3.06','L','50.4'),('117','5.69','4.47','L','50.6'),('118','6.56','5.15','L','50.7'),('119','7.41','5.82','L','50.8'),('120','5.82','4.57','L','60.5'),('121','6.91','5.42','L','60.6'),('122','9.03','7.09','L','60.8'),('123','11.10','8.69','L','60.10'),('124','8.13','6.38','L','70.6'),('125','9.40','7.38','L','70.7'),('126','10.60','8.36','L','70.8'),('127','13.10','10.3','L','70.10'),('128','12.30','9.63','L','80.8'),('130','17.90','14','L','80.12'),('131','13.90','10.9','L','90.8'),('132','17.10','13.4','L','90.10'),('133','20.30','15.9','L','90.12'),('134','15.50','12.2','L','100.8'),('135','19.20','15','L','100.10'),('136','22.70','17.8','L','100.12'),('137','27.90','21.9','L','100.15'),('138','23.20','18.2','L','120.10'),('139','27.50','21.6','L','120.12'),('140','33.90','26.6','L','120.15'),('141','34.80','27.3','L','150.12'),('142','43.00','33.8','L','150.15'),('143','51.00','40.1','L','150.18'),('145','61.90','48.6','L','180.18'),('146','68.30','53.7','L','180.20'),('147','61.80','48.5','L','200.16'),('148','69.10','54.2','L','200.18'),('149','76.30','59.9','L','200.20'),('150','90.60','71.1','L','200.24'),('151','2.46','1.93','LD','40.25.4'),('152','3.02','2.37','LD','40.25.5'),('153','2.86','2.24','LD','45.30.4'),('154','3.52','2.76','LD','45.30.5'),('155','4.29','3.37','LD','60.30.5'),('156','5.08','3.99','LD','60.30.6'),('157','4.79','3.76','LD','60.40.5'),('158','5.68','4.46','LD','60.40.6'),('160','5.54','4.35','LD','65.50.5'),('161','6.58','5.16','LD','65.50.6'),('162','7.60','5.96','LD','65.50.7'),('163','8.60','6.75','LD','65.50.8'),('164','6.05','4.75','LD','75.50.5'),('165','7.19','5.65','LD','75.50.6'),('166','8.31','6.53','LD','75.50.7'),('167','9.41','7.39','LD','75.50.8'),('168','5.80','4.56','LD','80.40.5'),('169','6.89','5.41','LD','80.40.6'),('170','7.96','6.25','LD','80.40.7'),('171','9.01','7.07','LD','80.40.8'),('172','8.11','6.37','LD','80.60.6'),('173','9.38','7.36','LD','80.60.7'),('175','8.73','6.85','LD','100.50.6'),('176','10.10','7.93','LD','100.50.7'),('177','11.40','8.99','LD','100.50.8'),('178','14.10','11.1','LD','100.50.10'),('179','11.20','8.7','LD','100.65.7'),('180','12.70','9.94','LD','100.65.8'),('181','15.60','12.3','LD','100.65.10'),('206','297.00','2.33','T','35'),('207','377.00','2.96','T','40'),('208','566.00','4.44','T','50'),('209','794.00','6.23','T','60'),('211','1360.00','10.7','T','80'),('212','2090.00','16.4','T','100'),('213','2960.00','23.2','T','120'),('214','3990.00','31.3','T','140'),('215','0.28','0.283','≠','6'),('217','0.50','0.502','≠','8'),('218','0.79','0.785','≠','10'),('219','1.13','1.13','≠','12'),('220','1.54','1.54','≠','14'),('222','2.55','2.54','≠','18'),('223','3.14','3.14','≠','20'),('224','3.80','3.8','≠','22'),('225','4.91','4.91','≠','25'),('227','7.07','7.07','≠','30'),('228','8.04','8.04','≠','32'),('229','10.20','10.2','≠','36'),('230','12.60','12.6','≠','40'),('232','19.60','19.6','≠','50'),('182','13.50','10.6','LD','100.75.8'),('216','0.39','0.385','≠','7'),('183','16.60','13','LD','100.75.10'),('184','19.70','15.4','LD','100.75.12'),('185','15.50','12.2','LD','120.80.8'),('186','19.10','15','LD','120.80.10'),('189','18.60','14.6','LD','130.65.10'),('190','22.10','17.3','LD','130.65.12'),('191','19.60','15.4','LD','150.75.9'),('192','21.60','17','LD','150.75.10'),('193','25.70','20.2','LD','150.75.12'),('194','31.60','24.8','LD','150.75.15'),('195','23.20','18.2','LD','150.90.10'),('196','27.50','21.6','LD','150.90.12'),('197','33.90','26.6','LD','150.90.15'),('198','29.20','23','LD','200.100.10'),('199','34.80','27.3','LD','200.100.12'),('200','43.00','33.7','LD','200.100.15'),('201','34.20','26.9','LD','200.150.10'),('202','40.80','32','LD','200.150.12'),('204','60.00','47.1','LD','200.150.18'),('238','32.00','1.21','ø','14'),('234','2.00','0.302','ø','7'),('236','8.33','0.617','ø','10'),('237','17.30','0.888','ø','12'),('235','3.41','0.395','ø','8'),('239','54.60','1.58','ø','16'),('240','87.50','2','ø','18'),('242','195.00','2.98','ø','22'),('241','133.00','2.47','ø','20'),('243','326.00','3.85','ø','25'),('244','512.00','4.83','ø','28'),('245','675.00','5.55','ø','30'),('246','874.00','6.31','ø','32'),('247','1400.00','7.99','ø','36'),('249','3420.00','12.5','ø','45'),('250','5210.00','15.4','ø','50'),('254','160.00','1.260','Rectangular','20·8'),('233','1.08','0.222','ø','6'),('252','1','0.785','Rectangular','20·5'),('251','0.8','0.628','Rectangular','20·4'),('255','200.00','1.570','Rectangular','20·10'),('256','240.00','1.88','Rectangular','20·12'),('257','300.00','2.36','Rectangular','20·15'),('258','100.00','0.785','Rectangular','25·4'),('259','125.00','0.981','Rectangular','25·5'),('260','150.00','1.18','Rectangular','25·6'),('261','200.00','1.57','Rectangular','25·8'),('262','250.00','1.96','Rectangular','25·10'),('263','300.00','2.36','Rectangular','25·12'),('264','375.00','2.94','Rectangular','25·15'),('265','500.00','3.93','Rectangular','25·20'),('266','120.00','0.942','Rectangular','30·4'),('267','150.00','1.18','Rectangular','30·5'),('268','180.00','1.41','Rectangular','30·6'),('269','240.00','1.88','Rectangular','30·8'),('270','300.00','2.36','Rectangular','30·10'),('271','360.00','2.83','Rectangular','30·12'),('273','600.00','4.71','Rectangular','30·20'),('274','750.00','5.89','Rectangular','30·25'),('275','140.00','1.1','Rectangular','35·4'),('276','175.00','1.37','Rectangular','35·5'),('277','210.00','1.65','Rectangular','35·6'),('278','280.00','2.2','Rectangular','35·8'),('279','350.00','2.75','Rectangular','35·10'),('281','525.00','4.12','Rectangular','35·15'),('282','700.00','5.5','Rectangular','35·20'),('283','875.00','6.87','Rectangular','35·25'),('280','420.00','3.3','Rectangular','35·12'),('284','1050.00','8.24','Rectangular','35·30'),('285','160.00','1.26','Rectangular','40·4'),('286','200.00','1.57','Rectangular','40·5'),('287','240.00','1.88','Rectangular','40·6'),('288','320.00','2.51','Rectangular','40·8'),('290','480.00','3.77','Rectangular','40·12'),('291','600.00','4.71','Rectangular','40·15'),('292','800.00','6.28','Rectangular','40·20'),('293','1000.00','7.85','Rectangular','40·25'),('294','1200.00','9.42','Rectangular','40·30'),('295','1400.00','11','Rectangular','40·35'),('296','180.00','1.41','Rectangular','45·4'),('297','225.00','1.77','Rectangular','45·5'),('298','270.00','2.12','Rectangular','45·6'),('299','360.00','2.83','Rectangular','45·8'),('300','450.00','3.53','Rectangular','45·10'),('301','540.00','4.24','Rectangular','45·12'),('302','675.00','5.3','Rectangular','45·15'),('303','900.00','7.07','Rectangular','45·20'),('304','1120.00','8.83','Rectangular','45·25'),('305','1350.00','10.6','Rectangular','45·30'),('307','1800.00','14.1','Rectangular','45·40'),('308','200.00','1.57','Rectangular','50·4'),('309','250.00','1.96','Rectangular','50·5'),('310','300.00','2.36','Rectangular','50·6'),('311','400.00','3.14','Rectangular','50·8'),('312','500.00','3.93','Rectangular','50·10'),('313','600.00','4.71','Rectangular','50·12'),('314','750.00','5.89','Rectangular','50·15'),('315','1000.00','7.85','Rectangular','50·20'),('316','1250.00','9.81','Rectangular','50·25'),('318','1750.00','13.7','Rectangular','50·35'),('319','2000.00','15.7','Rectangular','50·40'),('321','275.00','2.16','Rectangular','55·5'),('322','330.00','2.59','Rectangular','55·6'),('323','440.00','3.45','Rectangular','55·8'),('324','550.00','4.32','Rectangular','55·10'),('325','660.00','5.18','Rectangular','55·12'),('326','825.00','6.48','Rectangular','55·15'),('327','1100.00','8.64','Rectangular','55·20'),('328','1380.00','10.8','Rectangular','55·25'),('329','1650.00','13','Rectangular','55·30'),('330','1930.00','15.1','Rectangular','55·35'),('331','2200.00','17.3','Rectangular','55·40'),('332','240.00','1.88','Rectangular','60·4'),('333','300.00','2.36','Rectangular','60·5'),('334','360.00','2.83','Rectangular','60·6'),('335','480.00','3.77','Rectangular','60·8'),('336','600.00','4.71','Rectangular','60·10'),('338','900.00','7.07','Rectangular','60·15'),('339','1200.00','9.42','Rectangular','60·20'),('340','1500.00','11.8','Rectangular','60·25'),('341','1800.00','14.1','Rectangular','60·30'),('342','2100.00','16.5','Rectangular','60·35'),('343','2400.00','18.8','Rectangular','60·40'),('344','280.00','2.2','Rectangular','70·4'),('345','350.00','2.75','Rectangular','70·5'),('346','420.00','3.3','Rectangular','70·6'),('347','560.00','4.4','Rectangular','70·8'),('348','700.00','5.5','Rectangular','70·10'),('349','840.00','6.59','Rectangular','70·12'),('350','1050.00','8.24','Rectangular','70·15'),('351','1400.00','11','Rectangular','70·20'),('352','1750.00','13.7','Rectangular','70·25'),('353','2100.00','16.5','Rectangular','70·30'),('355','2800.00','22','Rectangular','70·40'),('356','300.00','2.36','Rectangular','75·4'),('357','375.00','2.94','Rectangular','75·5'),('358','450.00','3.53','Rectangular','75·6'),('359','600.00','4.71','Rectangular','75·8'),('360','750.00','5.89','Rectangular','75·10'),('361','900.00','7.07','Rectangular','75·12'),('362','1120.00','8.83','Rectangular','75·15'),('363','1500.00','11.8','Rectangular','75·20'),('364','1880.00','14.7','Rectangular','75·25'),('365','2250.00','17.7','Rectangular','75·30'),('366','2620.00','20.6','Rectangular','75·35'),('367','3000.00','23.6','Rectangular','75·40'),('368','320.00','2.51','Rectangular','80·4'),('369','400.00','3.14','Rectangular','80·5'),('370','480.00','3.77','Rectangular','80·6'),('372','800.00','6.28','Rectangular','80·10'),('373','960.00','7.54','Rectangular','80·12'),('374','1200.00','9.42','Rectangular','80·15'),('375','1600.00','12.6','Rectangular','80·20'),('376','2000.00','15.7','Rectangular','80·25'),('377','2400.00','18.8','Rectangular','80·30'),('378','2800.00','22','Rectangular','80·35'),('379','3200.00','25.1','Rectangular','80·40'),('380','360.00','2.85','Rectangular','90·4'),('381','450.00','3.53','Rectangular','90·5'),('382','540.00','4.24','Rectangular','90·6'),('383','720.00','5.85','Rectangular','90·8'),('384','900.00','7.07','Rectangular','90·10'),('385','1080.00','8.48','Rectangular','90·12'),('386','1350.00','10.6','Rectangular','90·15'),('387','1800.00','12.1','Rectangular','90·20'),('389','2700.00','21.2','Rectangular','90·30'),('390','3150.00','24.7','Rectangular','90·35'),('391','3600.00','28.3','Rectangular','90·40'),('392','400.00','3.14','Rectangular','100·4'),('393','500.00','3.93','Rectangular','100·5'),('394','600.00','4.71','Rectangular','100·6'),('395','800.00','6.23','Rectangular','100·8'),('396','1000.00','7.85','Rectangular','100·10'),('397','1200.00','9.42','Rectangular','100·12'),('398','1500.00','11.8','Rectangular','100·15'),('399','2000.00','15.7','Rectangular','100·20'),('400','2500.00','19.6','Rectangular','100·25'),('401','3000.00','23.6','Rectangular','100·30'),('402','3500.00','27.5','Rectangular','100·35'),('403','4000.00','31.4','Rectangular','100·40'),('404','440.00','3.45','Rectangular','110·4'),('406','680.00','5.18','Rectangular','110·6'),('407','880.00','6.91','Rectangular','110·8'),('408','1100.00','8.64','Rectangular','110·10'),('409','1320.00','10.4','Rectangular','110·12'),('410','1650.00','13','Rectangular','110·15'),('411','2200.00','17.3','Rectangular','110·20'),('412','2750.00','21.6','Rectangular','110·25'),('413','3300.00','25.9','Rectangular','110·30'),('414','3850.00','30.2','Rectangular','110·35'),('415','4400.00','34.5','Rectangular','110·40'),('416','480.00','3.7','Rectangular','120·4'),('417','600.00','4.71','Rectangular','120·5'),('418','720.00','5.65','Rectangular','120·6'),('419','960.00','7.54','Rectangular','120·8'),('420','1200.00','9.42','Rectangular','120·10'),('421','1440.00','11.3','Rectangular','120·12'),('423','2400.00','18.8','Rectangular','120·20'),('424','3000.00','23.6','Rectangular','120·25'),('425','3600.00','28.5','Rectangular','120·30'),('426','4200.00','33','Rectangular','120·35'),('427','4800.00','37.7','Rectangular','120·40'),('428','1120.00','8.79','Rectangular','140·8'),('429','1400.00','11','Rectangular','140·10'),('430','1680.00','13.2','Rectangular','140·12'),('431','2100.00','16.5','Rectangular','140·15'),('432','2800.00','22','Rectangular','140·20'),('433','3500.00','27.5','Rectangular','140·25'),('434','4200.00','33','Rectangular','140·30'),('435','4900.00','38.5','Rectangular','140·35'),('436','5600.00','44','Rectangular','140·40'),('548','5.21','4.09','#','40.4'),('549','3.30','2.59','#','45.2'),('550','4.73','3.71','#','45.3'),('551','6.01','4.72','#','45.4'),('552','3.70','2.91','#','50.2'),('553','5.33','4.18','#','50.3'),('555','4.10','3.22','#','55.2'),('554','5.81','5.35','#','50.4'),('556','5.93','4.66','#','55.3'),('557','7.61','5.97','#','55.4'),('558','4.50','3.53','#','60.2'),('559','6.53','5.13','#','60.3'),('560','8.41','6.6','#','60.4'),('561','10.10','7.96','#','60.5'),('563','7.73','6.07','#','70.3'),('564','10.00','7.86','#','70.4'),('501','3.49','2.74','Hueco redondo','40.3'),('503','2.70','2.12','Hueco redondo','45.2'),('502','4.52','3.55','Hueco redondo','40.4'),('505','5.15','4.04','Hueco redondo','45.4'),('506','3.02','2.37','Hueco redondo','50.2'),('507','4.43','3.47','Hueco redondo','50.3'),('508','5.78','4.53','Hueco redondo','50.4'),('510','4.90','3.85','Hueco redondo','55.3'),('511','6.41','5.03','Hueco redondo','55.4'),('512','3.64','2.86','Hueco redondo','60.2'),('513','5.37','4.21','Hueco redondo','60.3'),('514','7.04','5.52','Hueco redondo','60.4'),('516','5.84','4.58','Hueco redondo\n','65.3'),('517','7.67','6.02','Hueco redondo','65.4'),('518','4.27','3.35','Hueco redondo','70.2'),('519','6.31','4.95','Hueco redondo','70.3'),('522','6.78','5.32','Hueco redondo','75.3'),('521','4.58','3.6','Hueco redondo','75.2'),('523','8.92','7','Hueco redondo','75.4'),('524','4.90','3.85','Hueco redondo','80.2'),('525','7.26','5.7','Hueco redondo','80.3'),('527','8.19','6.43','Hueco redondo','90.3'),('528','10.80','8.48','Hueco redondo','90.4'),('529','13.40','10.5','Hueco redondo','90.5'),('530','9.14','7.17','Hueco redondo','100.3'),('531','12.10','9.47','Hueco redondo','100.4'),('533','17.70','13.9','Hueco redondo','100.6'),('534','15.20','11.9','Hueco redondo','125.4'),('535','18.80','14.8','Hueco redondo','125.5'),('536','22.40','17.6','Hueco redondo','125.6'),('539','36.90','29','Hueco redondo','155.8'),('538','28.10','22.1','Hueco redondo','155.6'),('541','31.90','25','Hueco redondo','175.6'),('540','26.70','21','Hueco redondo','175.5'),('542','42.00','33','Hueco redondo','175.8'),('544','36.60','28.7','Hueco redondo','200.6'),('545','48.30','37.9','Hueco redondo','200.8'),('437','1200.00','9.42','Rectangular','150·8'),('500','2.39','1.88','Hueco redondo','40.2'),('438','1500.00','11.8','Rectangular','150·10'),('439','1800.00','14.1','Rectangular','150·12'),('440','2250.00','17.7','Rectangular','150·15'),('441','3000.00','23.6','Rectangular','150·20'),('442','3750.00','29.4','Rectangular','150·25'),('444','5250.00','41.2','Rectangular','150·35'),('445','6000.00','47.1','Rectangular','150·40'),('446','1280.00','10','Rectangular','160·8'),('447','1600.00','12.6','Rectangular','160·10'),('448','1920.00','15.1','Rectangular','160·12'),('449','2400.00','18.8','Rectangular','160·15'),('450','3200.00','25.1','Rectangular','160·20'),('451','4000.00','31.4','Rectangular','160·25'),('452','4800.00','37.7','Rectangular','160·30'),('453','5600.00','44','Rectangular','160·35'),('454','6400.00','50.2','Rectangular','160·40'),('455','1440.00','11.3','Rectangular','180·8'),('456','1800.00','14.1','Rectangular','180·10'),('457','2160.00','17','Rectangular','180·12'),('458','2700.00','21.2','Rectangular','180·15'),('459','3600.00','28.3','Rectangular','180·20'),('461','5400.00','42.4','Rectangular','180·30'),('462','6300.00','49.5','Rectangular','180·35'),('463','7200.00','56.5','Rectangular','180·40'),('464','1600.00','12.6','Rectangular','200·8'),('465','2000.00','15.7','Rectangular','200·10'),('466','2400.00','18.8','Rectangular','200·12'),('467','3000.00','23.6','Rectangular','200·15'),('468','4000.00','31.4','Rectangular','200·20'),('469','5000.00','39.2','Rectangular','200·25'),('470','6000.00','47.1','Rectangular','200·30'),('471','7000.00','55','Rectangular','200·35'),('472','8000.00','62.8','Rectangular','200·40'),('473','2000.00','15.7','Rectangular','250·8'),('474','2500.00','19.6','Rectangular','250·10'),('475','3000.00','23.6','Rectangular','250·12'),('476','3750.00','29.4','Rectangular','250·15'),('478','6250.00','49.1','Rectangular','250·25'),('479','7500.00','58.9','Rectangular','250·30'),('480','8750.00','68.7','Rectangular','250·35'),('481','10000.00','78.5','Rectangular','250·40'),('482','2400.00','18.8','Rectangular','300·8'),('483','3000.00','23.6','Rectangular','300·10'),('484','3600.00','28.3','Rectangular','300·12'),('485','4500.00','35.3','Rectangular','300·15'),('486','6000.00','47.1','Rectangular','300·20'),('487','7500.00','58.9','Rectangular','300·25'),('488','9000.00','70.6','Rectangular','300·30'),('489','10500.00','82.4','Rectangular','300·35'),('490','12000.00','94.2','Rectangular','300·40'),('491','3200.00','25.1','Rectangular','400·8'),('492','4000.00','31.4','Rectangular','400·10'),('493','4800.00','37.7','Rectangular','400·12'),('495','8000.00','62.8','Rectangular','400·20'),('496','10000.00','78.5','Rectangular','400·25'),('497','12000.00','94.2','Rectangular','400·30'),('498','14000.00','110','Rectangular','400·35'),('499','16000.00','126','Rectangular','400·40'),('2','10.60','8.32','IPN','100'),('3','14.20','11.2','IPN','120'),('565','12.10','9.53','#','70.5'),('566','8.90','7.01','#','80.3'),('567','11.60','9.11','#','80.4'),('568','14.10','11.10','#','80.5'),('569','16.50','13','#','80.6'),('570','10.10','7.95','#','90.3'),('571','13.20','10.4','#','90.4'),('572','16.10','12.7','#','90.5'),('573','18.90','14.9','#','90.6'),('574','11.30','8.89','#','100.3'),('575','14.80','11.6','#','100.4'),('576','18.10','14.2','#','100.5'),('578','18.00','14.1','#','120.4'),('579','22.10','17.4','#','120.5'),('580','26.10','20.5','#','120.6'),('581','26.10','20.5','#','140.5'),('582','30.90','24.3','#','140.6'),('583','40.00','31.4','#','140.8'),('584','30.10','23.7','#','160.5'),('585','35.70','28','#','160.6'),('586','46.40','36.5','#','160.8'),('587','32.10','25.2','#','170.5'),('588','38.10','29.9','#','170.6'),('589','149.00','39','#','170.8'),('590','1.53','1.2','LF','40.2'),('591','2.25','1.77','LF','40.3'),('593','1.93','1.51','LF','50.2'),('594','2.81','2.21','LF','50.3'),('595','3.67','2.88','LF','50.4'),('596','3.41','2.68','LF','60.3'),('598','5.48','4.3','LF','60.5'),('599','6.07','4.76','LF','80.4'),('600','7.48','5.87','LF','80.5'),('601','8.85','6.95','LF','80.6'),('603','8.87','8.87','LF','100.6'),('604','10.20','10.2','LF','100.7'),('605','9.05','9.05','LF','120.5'),('606','10.80','10.8','LF','120.6'),('607','12.40','12.4','LF','120.7'),('620','3.30','2.59','UF','60.3'),('621','4.20','3.3','UF','60.4'),('622','4.50','3.53','UF','80.3'),('624','7.04','5.52','UF','80.5'),('626','5.81','5.81','UF','100.4'),('625','4.48','4.48','UF','100.3'),('627','7.09','7.09','UF','100.5'),('628','7.06','7.06','UF','120.4'),('629','8.66','8.66','UF','120.5'),('630','10.20','10.2','UF','120.6'),('631','8.32','8.32','UF','140.4'),('633','12.10','12.1','UF','140.6'),('634','2.72','2.13','OF','40.2.0'),('635','3.34','2.62','OF','40.2.5'),('636','3.91','3.07','OF','40.3.0'),('637','3.40','2.67','OF','50.2.0'),('638','4.19','3.29','OF','50.2.5'),('639','4.93','3.87','OF','50.3.0'),('640','3.72','2.92','OF','60.2.0'),('641','4.59','3.6','OF','60.2.5'),('642','5.41','4.25','OF','60.3.0'),('643','6.09','4.78','OF','80.2.5'),('644','7.21','5.66','OF','80.3.0'),('645','5.76','5.76','OF','100.2.5'),('646','6.94','6.94','OF','100.3.0'),('648','3.84','3.01','CF','60.2.5'),('649','4.50','3.53','CF','60.3.0'),('650','3.52','2.76','CF','80.2.0'),('651','4.34','3.4','CF','80.2.5'),('652','5.10','4','CF','80.3.0'),('653','3.92','3.08','CF','100.2.0'),('654','4.84','3.8','CF','100.2.5'),('655','5.70','4.48','CF','100.3.0'),('656','4.92','3.86','CF','120.2.0'),('657','6.09','4.78','CF','120.2.5'),('658','7.20','5.65','CF','120.3.0'),('659','5.32','4.17','CF','140.2.0'),('660','6.59','5.17','CF','140.2.5'),('661','7.80','6.13','CF','140.3.0'),('663','7.59','5.95','CF','160.2.5'),('664','9.00','7.07','CF','160.3.0'),('665','6.52','5.12','CF','180.2.0'),('666','8.09','6.35','CF','180.2.5'),('667','9.60','7.54','CF','180.3.0'),('668','6.92','5.43','CF','200.2.0'),('669','8.59','6.74','CF','200.2.5'),('670','10.20','8.01','CF','200.3.0'),('671','10.50','8.21','CF','225.2.5'),('672','12.50','9.78','CF','225.3.0'),('673','16.20','12.7','CF','225.4.0'),('674','11.10','8.7','CF','250.2.5'),('675','13.20','10.4','CF','250.3.0'),('676','17.20','13.5','CF','250.4.0'),('678','14.00','11','CF','275.3.0'),('679','18.20','14.3','CF','275.4.0'),('680','12.30','9.68','CF','300.2.5'),('681','14.70','11.5','CF','300.3.0'),('682','19.20','15.1','CF','300.4.0'),('683','4.72','3.7','ZF','100.2.0'),('684','5.84','4.58','ZF','100.2.5'),('685','6.91','5.42','ZF','100.3.0'),('686','5.12','4.02','ZF','120.2.0'),('687','6.34','4.98','ZF','120.2.5'),('688','7.51','5.89','ZF','120.3.0'),('689','5.52','4.33','ZF','140.2.0'),('690','6.84','5.37','ZF','140.2.5'),('691','8.11','6.36','ZF','140.3.0'),('693','7.34','5.76','ZF','160.2.5'),('694','8.71','6.84','ZF','160.3.0'),('695','6.32','4.96','ZF','180.2.0'),('696','7.84','6.15','ZF','180.2.5'),('697','9.31','7.31','ZF','180.3.0'),('698','7.66','6.01','ZF','200.2.0'),('699','9.51','7.47','ZF','200.2.5'),('608','1.13','0.887','LD','40.20.2'),('609','1.65','1.3','LD','40.20.3'),('610','1.43','1.12','LD','50.25.2'),('611','2.10','1.65','LD','50.25.3'),('612','2.55','2','LD','60.30.3'),('613','3.30','2.59','LD','60.30.4'),('614','4.50','3.53','LD','80.40.4'),('616','7.02','5.51','LD','100.50.5'),('617','8.30','6.52','LD','100.50.6'),('618','8.52','6.69','LD','120.60.5'),('619','10.10','7.93','LD','120.60.6'),('1','7.58','5.95','IPN','80'),('4','18.30','14.4','IPN','140'),('5','22.80','17.9','IPN','160'),('6','27.90','21.9','IPN','180'),('7','33.50','26.3','IPN','200'),('8','39.60','31.1','IPN','220'),('9','46.10','36.2','IPN','240'),('10','53.40','41.9','IPN','260'),('11','61.10','48','IPN','280'),('12','69.10','54.2','IPN','300'),('13','77.80','61.1','IPN','320'),('14','86.80','68.1','IPN','340'),('15','97.10','76.2','IPN','360'),('16','107.00','84','IPN','380'),('17','118.00','92.6','IPN','400'),('18','147.00','115','IPN','450'),('19','180.00','141','IPN','500'),('20','213.00','167','IPN','550'),('21','254.00','199','IPN','600'),('22','7.64','6','IPE','80'),('23','10.30','8.1','IPE','100'),('24','13.20','10.4','IPE','120'),('25','16.40','12.9','IPE','140'),('26','20.10','15.8','IPE','160'),('27','23.90','18.8','IPE','180'),('28','28.50','22.4','IPE','200'),('29','33.40','26.2','IPE','220'),('30','39.10','30.7','IPE','240'),('31','45.90','36.1','IPE','270'),('32','53.80','42.2','IPE','300'),('33','62.60','49.1','IPE','330'),('34','72.70','57.1','IPE','360'),('35','84.50','66.3','IPE','400'),('36','98.80','77.6','IPE','450'),('37','116.00','90.7','IPE','500'),('38','134.00','106','IPE','550'),('39','155.00','122','IPE','600'),('40','26.00','20.4','HEB','100'),('41','34.00','26.7','HEB','120'),('42','43.00','33.7','HEB','140'),('43','54.30','42.6','HEB','160'),('44','65.30','51.2','HEB','180'),('81','97.10','76.2','HEM','160'),('723','28.30','0.222','Corrugado','6'),('724','50.30','0.395','Corrugado','8'),('725','78.50','0.617','Corrugado','10'),('726','113.00','0.888','Corrugado','12'),('720','840.00','9.42','Grecada','0.8'),('729','314.00','2.47','Corrugado','20'),('730','491.00','3.85','Corrugado','25'),('727','154.00','0.888','Corrugado','12'),('732','804.00','6.31','Corrugado','32'),('733','1257.00','9.86','Corrugado','40'),('728','201.00','1.58','Corrugado','16'),('734','1963.00','15.4','Corrugado','50'),('721','1050.00','11.8','Grecada','1.0'),('731','616.00','4.83','Corrugado','28'),('205','177.00','1.77','T','30'),('210','1060.00','8.32','T','70'),('221','2.01','2.01','≠','16'),('226','6.16','6.15','≠','28'),('231','15.90','15.9','≠','45'),('116','4.80','3.77','L','50.5'),('129','15.10','11.9','L','80.10'),('144','52.10','40.9','L','180.15'),('159','6.55','5.14','LD','60.40.7'),('174','10.60','8.34','LD','80.60.8'),('187','22.70','17.8','LD','120.80.12'),('188','15.10','11.8','LD','130.65.8'),('203','50.50','39.6','LD','200.150.15'),('248','2130.00','9.86','ø','40'),('546','2.90','2.28','#','40.2'),('547','4.13','3.24','#','40.3'),('562','5.30','4.16','#','70.2'),('577','21.30','16.7','#','100.6'),('592','2.90','2.28','LF','40.4'),('597','4.47','3.51','LF','60.4'),('602','7.48','7.48','LF','100.5'),('623','5.80','4.55','UF','80.4'),('632','10.20','10.2','UF','140.5'),('713','500.00','4.38','Ondulada','0.5'),('714','600.00','5.2','Ondulada','0.6'),('715','800.00','7','Ondulada','0.8'),('716','1000.00','8.77','Ondulada','1.0'),('717','1200.00','10.5','Ondulada','1.2'),('718','525.00','5.89','Grecada','0.5'),('719','630.00','7.07','Grecada','0.6'),('722','1260.00','14.1','Grecada','1.2'),('647','3.12','2.45','CF','60.2.0'),('662','6.12','4.8','CF','160.2.0'),('677','11.70','9.19','CF','275.2.5'),('692','5.92','4.65','ZF','160.2.0'),('700','11.30','8.88','ZF','200.3.0'),('701','10.10','7.96','ZF','225.2.5'),('702','12.10','9.47','ZF','225.3.0'),('703','15.70','12.3','ZF','225.4.0'),('704','10.80','8.45','ZF','250.2.5'),('705','12.80','10.1','ZF','250.3.0'),('706','16.70','13.1','ZF','250.4.0'),('707','11.40','8.94','ZF','275.2.5'),('708','13.60','10.7','ZF','275.3.0'),('709','17.70','13.9','ZF','275.4.0'),('710','12.00','9.43','ZF','300.2.5'),('711','14.30','11.2','ZF','300.3.0'),('712','18.70','14.7','ZF','300.4.0'),('615','5.52','4.34','LD','80.40.5'),('504','3.96','3.11','Hueco redondo','45.3'),('509','3.33','2.61','Hueco redondo','55.2'),('515','3.96','3.11','Hueco redondo','65.2'),('520','8.29','6.51','Hueco redondo','70.4'),('526','9.55','7.5','Hueco redondo','80.4'),('532','14.90','11.7','Hueco redondo','100.5'),('537','23.60','18.5','Hueco redondo','155.5'),('543','30.60','24','Hueco redondo','200.5'),('253','1.2','0.942','Rectangular','20·6'),('272','450.00','3.53','Rectangular','30·15'),('289','400.00','3.14','Rectangular','40·10'),('306','1580.00','12.4','Rectangular','45·35'),('317','1500.00','11.8','Rectangular','50·30'),('320','220.00','1.73','Rectangular','55·4'),('337','720.00','5.65','Rectangular','60·12'),('354','2450.00','19.2','Rectangular','70·35'),('371','640.00','5.02','Rectangular','80·8'),('388','2250.00','17.7','Rectangular','90·25'),('405','550.00','4.32','Rectangular','110·5'),('422','1880.00','14.1','Rectangular','120·15'),('443','4500.00','35.3','Rectangular','150·30'),('460','4500.00','35.3','Rectangular','180·25'),('477','5000.00','39.2','Rectangular','250·20'),('494','6000.00','47.1','Rectangular','400·15')
         ;
 RETURN 0;
 ELSE
@@ -1307,7 +1358,7 @@ ALTER FUNCTION sdmed.crear_tabla_aceros() OWNER TO sdmed;
 -- Name: crear_tabla_conceptos(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.crear_tabla_conceptos(codigo character varying) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.crear_tabla_conceptos(codigo character varying) RETURNS integer
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1331,7 +1382,7 @@ ALTER FUNCTION sdmed.crear_tabla_conceptos(codigo character varying) OWNER TO sd
 -- Name: crear_tabla_mediciones(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.crear_tabla_mediciones(codigo character varying) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.crear_tabla_mediciones(codigo character varying) RETURNS integer
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1359,7 +1410,7 @@ ALTER FUNCTION sdmed.crear_tabla_mediciones(codigo character varying) OWNER TO s
 -- Name: crear_tabla_propiedades(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.crear_tabla_propiedades(_codigo character varying) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.crear_tabla_propiedades(_codigo character varying) RETURNS integer
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1412,7 +1463,7 @@ ALTER FUNCTION sdmed.crear_tabla_propiedades(_codigo character varying) OWNER TO
 -- Name: crear_tabla_relacion(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.crear_tabla_relacion(codigo character varying) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.crear_tabla_relacion(codigo character varying) RETURNS integer
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1442,7 +1493,7 @@ ALTER FUNCTION sdmed.crear_tabla_relacion(codigo character varying) OWNER TO sdm
 -- Name: create_role_if_not_exists(name); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.create_role_if_not_exists(rolename name) RETURNS text
+CREATE OR REPLACE FUNCTION sdmed.create_role_if_not_exists(rolename name) RETURNS text
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1463,7 +1514,7 @@ ALTER FUNCTION sdmed.create_role_if_not_exists(rolename name) OWNER TO sdmed;
 -- Name: es_ancestro(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.es_ancestro(nombretabla character varying, codigopadre character varying, codigohijo character varying) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.es_ancestro(nombretabla character varying, codigopadre character varying, codigohijo character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1509,7 +1560,7 @@ ALTER FUNCTION sdmed.es_ancestro(nombretabla character varying, codigopadre char
 -- Name: es_porcentaje(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.es_porcentaje(_codigo character varying) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.es_porcentaje(_codigo character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1528,7 +1579,7 @@ ALTER FUNCTION sdmed.es_porcentaje(_codigo character varying) OWNER TO sdmed;
 -- Name: es_precio_bloqueado(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.es_precio_bloqueado(nombretabla character varying, codigo character varying) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.es_precio_bloqueado(nombretabla character varying, codigo character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1548,7 +1599,7 @@ ALTER FUNCTION sdmed.es_precio_bloqueado(nombretabla character varying, codigo c
 -- Name: establecer_naturaleza(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.establecer_naturaleza(_nombretabla character varying, _codigoapdre character varying, _codigohijo character varying) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.establecer_naturaleza(_nombretabla character varying, _codigoapdre character varying, _codigohijo character varying) RETURNS integer
     LANGUAGE plpgsql
     AS $$
 --esta funcion establecera la naturaleza en funcion de varios factores, entre otros de la codicacion establecida, que todavia no esta implementada
@@ -1584,7 +1635,7 @@ ALTER FUNCTION sdmed.establecer_naturaleza(_nombretabla character varying, _codi
 -- Name: evaluar_formula(numeric, numeric, numeric, numeric, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.evaluar_formula(_unidad numeric, _longitud numeric, _anchura numeric, _altura numeric, _formula character varying) RETURNS numeric
+CREATE OR REPLACE FUNCTION sdmed.evaluar_formula(_unidad numeric, _longitud numeric, _anchura numeric, _altura numeric, _formula character varying) RETURNS numeric
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1619,7 +1670,7 @@ ALTER FUNCTION sdmed.evaluar_formula(_unidad numeric, _longitud numeric, _anchur
 -- Name: existe_codigo(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.existe_codigo(_nombretabla character varying, _codigo character varying) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.existe_codigo(_nombretabla character varying, _codigo character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -1639,7 +1690,7 @@ ALTER FUNCTION sdmed.existe_codigo(_nombretabla character varying, _codigo chara
 -- Name: existe_hermano(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.existe_hermano(nombretabla character varying, codigopadre character varying, codigohijo character varying) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.existe_hermano(nombretabla character varying, codigopadre character varying, codigohijo character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1668,7 +1719,7 @@ ALTER FUNCTION sdmed.existe_hermano(nombretabla character varying, codigopadre c
 -- Name: existe_obra(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.existe_obra(_obra character varying) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.existe_obra(_obra character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1693,7 +1744,7 @@ ALTER FUNCTION sdmed.existe_obra(_obra character varying) OWNER TO sdmed;
 -- Name: exportarbc3(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.exportarbc3(tabla character varying) RETURNS text
+CREATE OR REPLACE FUNCTION sdmed.exportarbc3(tabla character varying) RETURNS text
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1774,7 +1825,7 @@ ALTER FUNCTION sdmed.exportarbc3(tabla character varying) OWNER TO sdmed;
 -- Name: fecha_a_bc3(date); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.fecha_a_bc3(fecha date) RETURNS character varying
+CREATE OR REPLACE FUNCTION sdmed.fecha_a_bc3(fecha date) RETURNS character varying
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1800,7 +1851,7 @@ ALTER FUNCTION sdmed.fecha_a_bc3(fecha date) OWNER TO sdmed;
 -- Name: fx_letras(numeric); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.fx_letras(numero numeric) RETURNS text
+CREATE OR REPLACE FUNCTION sdmed.fx_letras(numero numeric) RETURNS text
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1864,7 +1915,7 @@ ALTER FUNCTION sdmed.fx_letras(numero numeric) OWNER TO sdmed;
 -- Name: generar_json_calculo(); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.generar_json_calculo() RETURNS text
+CREATE OR REPLACE FUNCTION sdmed.generar_json_calculo() RETURNS text
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1888,7 +1939,7 @@ ALTER FUNCTION sdmed.generar_json_calculo() OWNER TO sdmed;
 -- Name: generar_json_datos_generales(character varying, text[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.generar_json_datos_generales(_nombretabla character varying, _valores text[]) RETURNS text
+CREATE OR REPLACE FUNCTION sdmed.generar_json_datos_generales(_nombretabla character varying, _valores text[]) RETURNS text
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -1950,7 +2001,7 @@ ALTER FUNCTION sdmed.generar_json_datos_generales(_nombretabla character varying
 -- Name: generar_json_datos_intervinientes(character varying, text[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.generar_json_datos_intervinientes(_interviniente character varying, _valores text[]) RETURNS text
+CREATE OR REPLACE FUNCTION sdmed.generar_json_datos_intervinientes(_interviniente character varying, _valores text[]) RETURNS text
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2030,7 +2081,7 @@ ALTER FUNCTION sdmed.generar_json_datos_intervinientes(_interviniente character 
 -- Name: generar_json_porcentajes(text[]); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.generar_json_porcentajes(valores text[]) RETURNS text
+CREATE OR REPLACE FUNCTION sdmed.generar_json_porcentajes(valores text[]) RETURNS text
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2077,7 +2128,7 @@ ALTER FUNCTION sdmed.generar_json_porcentajes(valores text[]) OWNER TO sdmed;
 -- Name: hallar_cantidad_porcentaje(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.hallar_cantidad_porcentaje(_nombretabla character varying, _codigopadre character varying, _codigoporcentaje character varying) RETURNS numeric
+CREATE OR REPLACE FUNCTION sdmed.hallar_cantidad_porcentaje(_nombretabla character varying, _codigopadre character varying, _codigoporcentaje character varying) RETURNS numeric
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2118,7 +2169,7 @@ ALTER FUNCTION sdmed.hallar_cantidad_porcentaje(_nombretabla character varying, 
 -- Name: hay_certificacion(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.hay_certificacion(_nombretabla character varying) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.hay_certificacion(_nombretabla character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2143,7 +2194,7 @@ ALTER FUNCTION sdmed.hay_certificacion(_nombretabla character varying) OWNER TO 
 -- Name: hay_descomposicion(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.hay_descomposicion(_nombretabla character varying, _codigo character varying) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.hay_descomposicion(_nombretabla character varying, _codigo character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2163,7 +2214,7 @@ ALTER FUNCTION sdmed.hay_descomposicion(_nombretabla character varying, _codigo 
 -- Name: hay_medcert(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.hay_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _tipocandidad integer DEFAULT 0) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.hay_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _tipocandidad integer DEFAULT 0) RETURNS boolean
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2193,7 +2244,7 @@ ALTER FUNCTION sdmed.hay_medcert(_nombretabla character varying, _codigopadre ch
 -- Name: id_por_posicion(character varying, character varying, character varying, integer, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.id_por_posicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _posicion integer, _num_cert integer DEFAULT 0) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.id_por_posicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _posicion integer, _num_cert integer DEFAULT 0) RETURNS integer
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2215,7 +2266,7 @@ ALTER FUNCTION sdmed.id_por_posicion(_nombretabla character varying, _codigopadr
 -- Name: insertar_concepto(character varying, character varying, character varying, character varying, text, numeric, integer, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.insertar_concepto(nombretabla character varying, codigopadre character varying, u character varying DEFAULT ''::character varying, resumen character varying DEFAULT ''::character varying, texto text DEFAULT ''::text, precio numeric DEFAULT 0, nat integer DEFAULT 7, fecha character varying DEFAULT NULL::character varying) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.insertar_concepto(nombretabla character varying, codigopadre character varying, u character varying DEFAULT ''::character varying, resumen character varying DEFAULT ''::character varying, texto text DEFAULT ''::text, precio numeric DEFAULT 0, nat integer DEFAULT 7, fecha character varying DEFAULT NULL::character varying) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 
@@ -2251,7 +2302,7 @@ ALTER FUNCTION sdmed.insertar_concepto(nombretabla character varying, codigopadr
 -- Name: insertar_lineas_medcert(character varying, character varying, character varying, integer, integer, integer, integer, character varying, numeric, numeric, numeric, numeric, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.insertar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_lineas integer DEFAULT 1, _posicion integer DEFAULT (- (1)::smallint), _num_cert integer DEFAULT 0, _tipo integer DEFAULT NULL::integer, _comentario character varying DEFAULT NULL::character varying, _ud numeric DEFAULT (0)::numeric, _longitud numeric DEFAULT (0)::numeric, _anchura numeric DEFAULT (0)::numeric, _altura numeric DEFAULT (0)::numeric, _formula character varying DEFAULT NULL::character varying, _idfila integer DEFAULT NULL::integer) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.insertar_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_lineas integer DEFAULT 1, _posicion integer DEFAULT (- (1)::smallint), _num_cert integer DEFAULT 0, _tipo integer DEFAULT NULL::integer, _comentario character varying DEFAULT NULL::character varying, _ud numeric DEFAULT (0)::numeric, _longitud numeric DEFAULT (0)::numeric, _anchura numeric DEFAULT (0)::numeric, _altura numeric DEFAULT (0)::numeric, _formula character varying DEFAULT NULL::character varying, _idfila integer DEFAULT NULL::integer) RETURNS integer
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2315,7 +2366,7 @@ ALTER FUNCTION sdmed.insertar_lineas_medcert(_nombretabla character varying, _co
 -- Name: insertar_partida(character varying, character varying, character varying, smallint, numeric, character varying, character varying, text, numeric, integer, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.insertar_partida(nombretabla character varying, codigopadre character varying, codigohijo character varying, pos smallint DEFAULT (- (1)::smallint), cantidad numeric DEFAULT 1, u character varying DEFAULT ''::character varying, res character varying DEFAULT ''::character varying, texto text DEFAULT ''::text, precio numeric DEFAULT 0, nat integer DEFAULT 7, fec character varying DEFAULT ''::character varying) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.insertar_partida(nombretabla character varying, codigopadre character varying, codigohijo character varying, pos smallint DEFAULT (- (1)::smallint), cantidad numeric DEFAULT 1, u character varying DEFAULT ''::character varying, res character varying DEFAULT ''::character varying, texto text DEFAULT ''::text, precio numeric DEFAULT 0, nat integer DEFAULT 7, fec character varying DEFAULT ''::character varying) RETURNS integer
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2383,7 +2434,7 @@ ALTER FUNCTION sdmed.insertar_partida(nombretabla character varying, codigopadre
 -- Name: insertar_registro_guardarconcepto(character varying, integer, sdmed.tp_concepto); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.insertar_registro_guardarconcepto(_nombretabla character varying, _paso integer, _dato sdmed.tp_concepto) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.insertar_registro_guardarconcepto(_nombretabla character varying, _paso integer, _dato sdmed.tp_concepto) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2425,7 +2476,7 @@ ALTER FUNCTION sdmed.insertar_registro_guardarmedicion(_nombretabla character va
 -- Name: insertar_registro_guardarrelacion(character varying, integer, sdmed.tp_relacion); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.insertar_registro_guardarrelacion(_nombretabla character varying, _paso integer, _dato sdmed.tp_relacion) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.insertar_registro_guardarrelacion(_nombretabla character varying, _paso integer, _dato sdmed.tp_relacion) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2445,7 +2496,7 @@ ALTER FUNCTION sdmed.insertar_registro_guardarrelacion(_nombretabla character va
 -- Name: insertar_registro_relacion(character varying, integer, sdmed.tp_relacion); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.insertar_registro_relacion(_nombretabla character varying, _paso integer, _dato sdmed.tp_relacion) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.insertar_registro_relacion(_nombretabla character varying, _paso integer, _dato sdmed.tp_relacion) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2474,7 +2525,7 @@ ALTER FUNCTION sdmed.insertar_registro_relacion(_nombretabla character varying, 
 -- Name: insertar_relacion(character varying, character varying, character varying, numeric, smallint); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.insertar_relacion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _cantidad numeric, _pos smallint) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.insertar_relacion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _cantidad numeric, _pos smallint) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2551,7 +2602,7 @@ ALTER FUNCTION sdmed.insertar_relacion(_nombretabla character varying, _codigopa
 -- Name: insertar_texto(character varying, character varying, text); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.insertar_texto(_nombretabla character varying, _cod character varying, _texto text) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.insertar_texto(_nombretabla character varying, _cod character varying, _texto text) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2571,7 +2622,7 @@ ALTER FUNCTION sdmed.insertar_texto(_nombretabla character varying, _cod charact
 -- Name: insertar_tipo_concepto(character varying, sdmed.tp_concepto); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.insertar_tipo_concepto(nombretabla character varying, _dato sdmed.tp_concepto) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.insertar_tipo_concepto(nombretabla character varying, _dato sdmed.tp_concepto) RETURNS boolean
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2607,7 +2658,7 @@ ALTER FUNCTION sdmed.insertar_tipo_concepto(nombretabla character varying, _dato
 -- Name: insertar_tipo_medcert(character varying, sdmed.tp_medicion, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.insertar_tipo_medcert(_nombretabla character varying, _dato sdmed.tp_medicion, _num_cert integer DEFAULT 0) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.insertar_tipo_medcert(_nombretabla character varying, _dato sdmed.tp_medicion, _num_cert integer DEFAULT 0) RETURNS boolean
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2655,7 +2706,7 @@ ALTER FUNCTION sdmed.insertar_tipo_medcert(_nombretabla character varying, _dato
 -- Name: insertar_tipo_relacion(character varying, sdmed.tp_relacion); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.insertar_tipo_relacion(_nombretabla character varying, _dato sdmed.tp_relacion) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.insertar_tipo_relacion(_nombretabla character varying, _dato sdmed.tp_relacion) RETURNS boolean
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2687,7 +2738,7 @@ ALTER FUNCTION sdmed.insertar_tipo_relacion(_nombretabla character varying, _dat
 -- Name: modificar_campo_medcert(character varying, character varying, character varying, character varying, integer, integer, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.modificar_campo_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _valor character varying, _idfila integer, _columna integer, _num_cert integer DEFAULT 0) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.modificar_campo_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _valor character varying, _idfila integer, _columna integer, _num_cert integer DEFAULT 0) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2720,7 +2771,7 @@ ALTER FUNCTION sdmed.modificar_campo_medcert(_nombretabla character varying, _co
 -- Name: modificar_cantidad(character varying, character varying, character varying, integer, boolean, numeric); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.modificar_cantidad(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer DEFAULT 0, _guardar boolean DEFAULT true, _cantidad numeric DEFAULT NULL::numeric) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.modificar_cantidad(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer DEFAULT 0, _guardar boolean DEFAULT true, _cantidad numeric DEFAULT NULL::numeric) RETURNS boolean
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2785,7 +2836,7 @@ ALTER FUNCTION sdmed.modificar_cantidad(_nombretabla character varying, _codigop
 -- Name: modificar_codigo(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.modificar_codigo(_nombretabla character varying, _codigoantiguo character varying, _codigonuevo character varying) RETURNS boolean
+CREATE OR REPLACE FUNCTION sdmed.modificar_codigo(_nombretabla character varying, _codigoantiguo character varying, _codigonuevo character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2813,7 +2864,7 @@ ALTER FUNCTION sdmed.modificar_codigo(_nombretabla character varying, _codigoant
 -- Name: modificar_naturaleza(character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.modificar_naturaleza(_nombretabla character varying, _cod character varying, _nat integer) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.modificar_naturaleza(_nombretabla character varying, _cod character varying, _nat integer) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2831,7 +2882,7 @@ ALTER FUNCTION sdmed.modificar_naturaleza(_nombretabla character varying, _cod c
 -- Name: modificar_precio(character varying, character varying, character varying, numeric, integer, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.modificar_precio(nombretabla character varying, codpadre character varying, codhijo character varying, precio numeric, opcion integer, restaurar boolean DEFAULT true) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.modificar_precio(nombretabla character varying, codpadre character varying, codhijo character varying, precio numeric, opcion integer, restaurar boolean DEFAULT true) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2872,7 +2923,7 @@ ALTER FUNCTION sdmed.modificar_precio(nombretabla character varying, codpadre ch
 -- Name: modificar_resumen(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.modificar_resumen(_nombretabla character varying, _cod character varying, _res character varying) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.modificar_resumen(_nombretabla character varying, _cod character varying, _res character varying) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2890,7 +2941,7 @@ ALTER FUNCTION sdmed.modificar_resumen(_nombretabla character varying, _cod char
 -- Name: modificar_texto(character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.modificar_texto(nombretabla character varying, cod character varying, textoplano character varying, textohtml character varying) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.modificar_texto(nombretabla character varying, cod character varying, textoplano character varying, textohtml character varying) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2910,7 +2961,7 @@ ALTER FUNCTION sdmed.modificar_texto(nombretabla character varying, cod characte
 -- Name: modificar_unidad(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.modificar_unidad(_nombretabla character varying, _cod character varying, _ud character varying) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.modificar_unidad(_nombretabla character varying, _cod character varying, _ud character varying) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -2929,7 +2980,7 @@ ALTER FUNCTION sdmed.modificar_unidad(_nombretabla character varying, _cod chara
 -- Name: mostrar_ruta(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.mostrar_ruta(tabla character varying, codigo character varying) RETURNS character varying
+CREATE OR REPLACE FUNCTION sdmed.mostrar_ruta(tabla character varying, codigo character varying) RETURNS character varying
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2956,7 +3007,7 @@ ALTER FUNCTION sdmed.mostrar_ruta(tabla character varying, codigo character vary
 -- Name: nivel_capitulo(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.nivel_capitulo(_nombretabla character varying, _codigo character varying) RETURNS smallint
+CREATE OR REPLACE FUNCTION sdmed.nivel_capitulo(_nombretabla character varying, _codigo character varying) RETURNS smallint
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -2992,7 +3043,7 @@ ALTER FUNCTION sdmed.nivel_capitulo(_nombretabla character varying, _codigo char
 -- Name: numero_en_euro(numeric); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.numero_en_euro(numero numeric) RETURNS text
+CREATE OR REPLACE FUNCTION sdmed.numero_en_euro(numero numeric) RETURNS text
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -3025,7 +3076,7 @@ ALTER FUNCTION sdmed.numero_en_euro(numero numeric) OWNER TO sdmed;
 -- Name: ordenar_posiciones(character varying, character varying, character varying, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ordenar_posiciones(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _insertar boolean DEFAULT true) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.ordenar_posiciones(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _insertar boolean DEFAULT true) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -3063,7 +3114,7 @@ ALTER FUNCTION sdmed.ordenar_posiciones(_nombretabla character varying, _codigop
 -- Name: pegar(character varying, character varying, smallint, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.pegar(_nombretabla character varying, _codigodestino character varying, OUT nodos_insertados character varying, _pos smallint DEFAULT (- (1)::smallint), _primer_paso boolean DEFAULT true) RETURNS character varying
+CREATE OR REPLACE FUNCTION sdmed.pegar(_nombretabla character varying, _codigodestino character varying, OUT nodos_insertados character varying, _pos smallint DEFAULT (- (1)::smallint), _primer_paso boolean DEFAULT true) RETURNS character varying
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -3125,7 +3176,7 @@ ALTER FUNCTION sdmed.pegar(_nombretabla character varying, _codigodestino charac
 -- Name: pegar_medicion(character varying, character varying, character varying, integer, smallint); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.pegar_medicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer DEFAULT 0, _pos smallint DEFAULT (- (1)::smallint)) RETURNS character varying[]
+CREATE OR REPLACE FUNCTION sdmed.pegar_medicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_cert integer DEFAULT 0, _pos smallint DEFAULT (- (1)::smallint)) RETURNS character varying[]
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -3152,7 +3203,7 @@ ALTER FUNCTION sdmed.pegar_medicion(_nombretabla character varying, _codigopadre
 -- Name: poner_almohadilla(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.poner_almohadilla(tabla character varying, codigo character varying) RETURNS character varying
+CREATE OR REPLACE FUNCTION sdmed.poner_almohadilla(tabla character varying, codigo character varying) RETURNS character varying
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -3185,7 +3236,7 @@ ALTER FUNCTION sdmed.poner_almohadilla(tabla character varying, codigo character
 -- Name: procesar_cadena_fecha(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.procesar_cadena_fecha(cadenafecha character varying DEFAULT ''::character varying) RETURNS date
+CREATE OR REPLACE FUNCTION sdmed.procesar_cadena_fecha(cadenafecha character varying DEFAULT ''::character varying) RETURNS date
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -3215,7 +3266,7 @@ ALTER FUNCTION sdmed.procesar_cadena_fecha(cadenafecha character varying) OWNER 
 -- Name: procesar_linea_medicion(numeric, numeric, numeric, numeric, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.procesar_linea_medicion(unidad numeric, longitud numeric, anchura numeric, altura numeric, formula character varying) RETURNS numeric
+CREATE OR REPLACE FUNCTION sdmed.procesar_linea_medicion(unidad numeric, longitud numeric, anchura numeric, altura numeric, formula character varying) RETURNS numeric
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -3240,7 +3291,7 @@ ALTER FUNCTION sdmed.procesar_linea_medicion(unidad numeric, longitud numeric, a
 -- Name: recalcular(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.recalcular(_nombretabla character varying) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.recalcular(_nombretabla character varying) RETURNS void
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -3261,7 +3312,7 @@ ALTER FUNCTION sdmed.recalcular(_nombretabla character varying) OWNER TO sdmed;
 -- Name: recorrer_principal(character varying, character varying, integer, boolean); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.recorrer_principal(nombretabla character varying, codigopadre character varying DEFAULT NULL::character varying, _nivel integer DEFAULT 0, primer_elemento boolean DEFAULT true) RETURNS TABLE(codigo character varying, naturaleza integer, ud character varying, resumen character varying, preciomed numeric, nivel integer)
+CREATE OR REPLACE FUNCTION sdmed.recorrer_principal(nombretabla character varying, codigopadre character varying DEFAULT NULL::character varying, _nivel integer DEFAULT 0, primer_elemento boolean DEFAULT true) RETURNS TABLE(codigo character varying, naturaleza integer, ud character varying, resumen character varying, preciomed numeric, nivel integer)
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -3320,7 +3371,7 @@ ALTER FUNCTION sdmed.recorrer_principal(nombretabla character varying, codigopad
 -- Name: recorrercte(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.recorrercte(_nombretabla character varying) RETURNS TABLE(ret_codigo character varying, ret_naturaleza integer, ret_ud character varying, ret_resumen character varying, ret_preciomed numeric, ret_depth integer, ret_camino text)
+CREATE OR REPLACE FUNCTION sdmed.recorrercte(_nombretabla character varying) RETURNS TABLE(ret_codigo character varying, ret_naturaleza integer, ret_ud character varying, ret_resumen character varying, ret_preciomed numeric, ret_depth integer, ret_camino text)
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -3362,7 +3413,7 @@ ALTER FUNCTION sdmed.recorrercte(_nombretabla character varying) OWNER TO sdmed;
 -- Name: restaurar_lineas_borradas(character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.restaurar_lineas_borradas(_nombretabla character varying, _tipotabla integer DEFAULT 0) RETURNS void
+CREATE OR REPLACE FUNCTION sdmed.restaurar_lineas_borradas(_nombretabla character varying, _tipotabla integer DEFAULT 0) RETURNS void
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -3434,7 +3485,7 @@ ALTER FUNCTION sdmed.restaurar_lineas_borradas(_nombretabla character varying, _
 -- Name: total_cantidad_por_partida(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.total_cantidad_por_partida(nombretabla character varying, codigohijo character varying) RETURNS numeric
+CREATE OR REPLACE FUNCTION sdmed.total_cantidad_por_partida(nombretabla character varying, codigohijo character varying) RETURNS numeric
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -3469,7 +3520,7 @@ ALTER FUNCTION sdmed.total_cantidad_por_partida(nombretabla character varying, c
 -- Name: ultimo_paso(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ultimo_paso(_nombretabla character varying) RETURNS integer
+CREATE OR REPLACE FUNCTION sdmed.ultimo_paso(_nombretabla character varying) RETURNS integer
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -3528,7 +3579,7 @@ ALTER FUNCTION sdmed.ultimo_paso(_nombretabla character varying) OWNER TO sdmed;
 -- Name: ver_anterior(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_anterior(nombretabla character varying, codpadre character varying, codhijo character varying) RETURNS character varying
+CREATE OR REPLACE FUNCTION sdmed.ver_anterior(nombretabla character varying, codpadre character varying, codhijo character varying) RETURNS character varying
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -3556,7 +3607,7 @@ ALTER FUNCTION sdmed.ver_anterior(nombretabla character varying, codpadre charac
 -- Name: ver_certificacion_actual(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_certificacion_actual(_nombretabla character varying, OUT _num_cert integer, OUT _fecha character varying) RETURNS record
+CREATE OR REPLACE FUNCTION sdmed.ver_certificacion_actual(_nombretabla character varying, OUT _num_cert integer, OUT _fecha character varying) RETURNS record
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -3590,7 +3641,7 @@ ALTER FUNCTION sdmed.ver_certificacion_actual(_nombretabla character varying, OU
 -- Name: ver_certificaciones(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_certificaciones(_nombretabla character varying) RETURNS TABLE(num_cert integer, fecha character varying, actual boolean)
+CREATE OR REPLACE FUNCTION sdmed.ver_certificaciones(_nombretabla character varying) RETURNS TABLE(num_cert integer, fecha character varying, actual boolean)
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -3617,7 +3668,7 @@ ALTER FUNCTION sdmed.ver_certificaciones(_nombretabla character varying) OWNER T
 -- Name: ver_color_hijos(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_color_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying) RETURNS TABLE(ret_codigo integer, ret_naturaleza integer, ret_ud integer, ret_resumen integer, ret_canpres integer, ret_cancert integer, ret_portcertpres integer, ret_preciomed integer, ret_preciocert integer, ret_imppres integer, ret_impcert integer)
+CREATE OR REPLACE FUNCTION sdmed.ver_color_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying) RETURNS TABLE(ret_codigo integer, ret_naturaleza integer, ret_ud integer, ret_resumen integer, ret_canpres integer, ret_cancert integer, ret_portcertpres integer, ret_preciomed integer, ret_preciocert integer, ret_imppres integer, ret_impcert integer)
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -3725,7 +3776,7 @@ ALTER FUNCTION sdmed.ver_color_hijos(_nombretabla character varying, _codigopadr
 -- Name: ver_conceptos_cantidad(character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_conceptos_cantidad(_nombretabla character varying, _tipo_concepto integer DEFAULT 0) RETURNS TABLE(codigo character varying, cantidad numeric, ud character varying, resumen character varying, precio numeric, importe numeric)
+CREATE OR REPLACE FUNCTION sdmed.ver_conceptos_cantidad(_nombretabla character varying, _tipo_concepto integer DEFAULT 0) RETURNS TABLE(codigo character varying, cantidad numeric, ud character varying, resumen character varying, precio numeric, importe numeric)
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -3760,7 +3811,7 @@ ALTER FUNCTION sdmed.ver_conceptos_cantidad(_nombretabla character varying, _tip
 -- Name: ver_conceptos_unitarios(character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_conceptos_unitarios(_nombretabla character varying, _tipo_concepto integer DEFAULT NULL::integer) RETURNS TABLE(codigo character varying, cantidad numeric, ud character varying, resumen character varying, precio numeric, importe numeric)
+CREATE OR REPLACE FUNCTION sdmed.ver_conceptos_unitarios(_nombretabla character varying, _tipo_concepto integer DEFAULT NULL::integer) RETURNS TABLE(codigo character varying, cantidad numeric, ud character varying, resumen character varying, precio numeric, importe numeric)
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -3797,7 +3848,7 @@ ALTER FUNCTION sdmed.ver_conceptos_unitarios(_nombretabla character varying, _ti
 -- Name: ver_hijos(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying) RETURNS TABLE(ret_codigo character varying, ret_naturaleza integer, ret_ud character varying, ret_resumen character varying, ret_canpres numeric, ret_cancert numeric, ret_portcertpres numeric, ret_preciomed numeric, ret_preciocert numeric, ret_imppres numeric, ret_impcert numeric)
+CREATE OR REPLACE FUNCTION sdmed.ver_hijos(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying) RETURNS TABLE(ret_codigo character varying, ret_naturaleza integer, ret_ud character varying, ret_resumen character varying, ret_canpres numeric, ret_cancert numeric, ret_portcertpres numeric, ret_preciomed numeric, ret_preciocert numeric, ret_imppres numeric, ret_impcert numeric)
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -3899,7 +3950,7 @@ ALTER FUNCTION sdmed.ver_hijos(_nombretabla character varying, _codigopadre char
 -- Name: ver_lineas_medcert(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _tipocantidad integer) RETURNS TABLE(tipo integer, comentario character varying, ud numeric, longitud numeric, anchura numeric, altura numeric)
+CREATE OR REPLACE FUNCTION sdmed.ver_lineas_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _tipocantidad integer) RETURNS TABLE(tipo integer, comentario character varying, ud numeric, longitud numeric, anchura numeric, altura numeric)
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -3955,7 +4006,7 @@ ALTER FUNCTION sdmed.ver_lineas_medcert(_nombretabla character varying, _codigop
 -- Name: ver_medcert(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_certif integer DEFAULT 0) RETURNS TABLE(fase integer, comentario character varying, ud numeric, longitud numeric, anchura numeric, altura numeric, formula character varying, parcial numeric, subtotal numeric, tipo integer, id integer, pos integer)
+CREATE OR REPLACE FUNCTION sdmed.ver_medcert(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _num_certif integer DEFAULT 0) RETURNS TABLE(fase integer, comentario character varying, ud numeric, longitud numeric, anchura numeric, altura numeric, formula character varying, parcial numeric, subtotal numeric, tipo integer, id integer, pos integer)
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -4007,7 +4058,7 @@ ALTER FUNCTION sdmed.ver_medcert(_nombretabla character varying, _codigopadre ch
 -- Name: ver_obra(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_obra(_nombretabla character varying) RETURNS TABLE(codigo character varying, naturaleza integer, ud character varying, resumen character varying, canpres numeric, cancert numeric, portcertpres numeric, preciomed numeric, preciocert numeric, imppres numeric, impcert numeric, depth integer)
+CREATE OR REPLACE FUNCTION sdmed.ver_obra(_nombretabla character varying) RETURNS TABLE(codigo character varying, naturaleza integer, ud character varying, resumen character varying, canpres numeric, cancert numeric, portcertpres numeric, preciomed numeric, preciocert numeric, imppres numeric, impcert numeric, depth integer)
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -4043,7 +4094,7 @@ ALTER FUNCTION sdmed.ver_obra(_nombretabla character varying) OWNER TO sdmed;
 -- Name: ver_obras_bbdd(); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_obras_bbdd() RETURNS TABLE(ret_codigo character varying, ret_resumen character varying)
+CREATE OR REPLACE FUNCTION sdmed.ver_obras_bbdd() RETURNS TABLE(ret_codigo character varying, ret_resumen character varying)
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -4072,7 +4123,7 @@ ALTER FUNCTION sdmed.ver_obras_bbdd() OWNER TO sdmed;
 -- Name: ver_precio(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_precio(_nombretabla character varying, _cod character varying DEFAULT NULL::character varying) RETURNS numeric
+CREATE OR REPLACE FUNCTION sdmed.ver_precio(_nombretabla character varying, _cod character varying DEFAULT NULL::character varying) RETURNS numeric
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -4099,7 +4150,7 @@ ALTER FUNCTION sdmed.ver_precio(_nombretabla character varying, _cod character v
 -- Name: ver_resumen_capitulos(character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_resumen_capitulos(_nombretabla character varying) RETURNS TABLE(codigo character varying, resumen character varying, cantidad numeric, total numeric, porcentaje numeric)
+CREATE OR REPLACE FUNCTION sdmed.ver_resumen_capitulos(_nombretabla character varying) RETURNS TABLE(codigo character varying, resumen character varying, cantidad numeric, total numeric, porcentaje numeric)
     LANGUAGE plpgsql
     AS $_$
 DECLARE
@@ -4129,7 +4180,7 @@ ALTER FUNCTION sdmed.ver_resumen_capitulos(_nombretabla character varying) OWNER
 -- Name: ver_siguiente(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_siguiente(nombretabla character varying, codpadre character varying, codhijo character varying) RETURNS character varying
+CREATE OR REPLACE FUNCTION sdmed.ver_siguiente(nombretabla character varying, codpadre character varying, codhijo character varying) RETURNS character varying
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -4157,7 +4208,7 @@ ALTER FUNCTION sdmed.ver_siguiente(nombretabla character varying, codpadre chara
 -- Name: ver_texto(character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_texto(nombretabla character varying, cod character varying) RETURNS text
+CREATE OR REPLACE FUNCTION sdmed.ver_texto(nombretabla character varying, cod character varying) RETURNS text
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -4177,7 +4228,7 @@ ALTER FUNCTION sdmed.ver_texto(nombretabla character varying, cod character vary
 -- Name: ver_todas_certificaciones(character varying, character varying, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
 
-CREATE FUNCTION sdmed.ver_todas_certificaciones(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying) RETURNS TABLE(fase integer, comentario character varying, ud numeric, longitud numeric, anchura numeric, altura numeric, formula character varying, parcial numeric, subtotal numeric, tipo integer, id integer, pos integer)
+CREATE OR REPLACE FUNCTION sdmed.ver_todas_certificaciones(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying) RETURNS TABLE(fase integer, comentario character varying, ud numeric, longitud numeric, anchura numeric, altura numeric, formula character varying, parcial numeric, subtotal numeric, tipo integer, id integer, pos integer)
     LANGUAGE plpgsql
     AS $_$
 DECLARE
