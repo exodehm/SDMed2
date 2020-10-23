@@ -22,6 +22,7 @@ public slots:
     void DefinirRutaScripts();
     void BuscarManualRutaExtension();
     void BuscarAutomaticaRutaExtension();
+    void BuscarAutomaticaRutaDatos();
     void ActivarDirectorioInstalacion(int indice);
     void ActivarBotonInstalarExtension();
     void InstalarExtension();

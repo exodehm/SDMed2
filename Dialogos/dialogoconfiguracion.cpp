@@ -16,6 +16,7 @@ DialogoConfiguracion::DialogoConfiguracion(QWidget *parent) : QDialog(parent), u
     QObject::connect(ui->boton_ruta_python,SIGNAL(clicked(bool)),this,SLOT(DefinirRutaScripts()));
     QObject::connect(ui->boton_ruta_extension,SIGNAL(clicked(bool)),this,SLOT(BuscarManualRutaExtension()));
     QObject::connect(ui->boton_buscar_ruta_extension,SIGNAL(clicked(bool)),this,SLOT(BuscarAutomaticaRutaExtension()));
+    QObject::connect(ui->boton_buscar_ruta_datos,SIGNAL(clicked(bool)),this,SLOT(BuscarAutomaticaRutaDatos()));
     QObject::connect(ui->combobox_rutas_extension,SIGNAL(currentIndexChanged(int)),this,SLOT(ActivarDirectorioInstalacion(int)));
     QObject::connect(ui->lineEdit_ruta_extension,SIGNAL(textChanged(const QString)),this,SLOT(ActivarBotonInstalarExtension()));
     QObject::connect(ui->boton_instalar_extension,SIGNAL(clicked(bool)),this,SLOT(InstalarExtension()));
@@ -76,7 +77,28 @@ void DialogoConfiguracion::BuscarAutomaticaRutaExtension()
             QString algo = fichero.left(fichero.lastIndexOf("/"));
             ui->combobox_rutas_extension->addItem(algo);
             ui->boton_instalar_extension->setEnabled(true);
-            if (ui->check_busqueda_rapida->isChecked())
+            if (ui->check_busqueda_rapida_extension->isChecked())
+            {
+                break;
+            }
+        }
+    }
+}
+
+void DialogoConfiguracion::BuscarAutomaticaRutaDatos()
+{
+    ui->combobox_rutas_datos->clear();
+    QDirIterator it("/", QDirIterator::Subdirectories);
+    QRegExp rx("/pgsql/data/");
+    while (it.hasNext())
+    {
+        QString fichero = it.next();
+        if (fichero.contains(rx))
+        {
+            QString rutaDatos = fichero.left(fichero.lastIndexOf("/"));
+            ui->combobox_rutas_datos->addItem(rutaDatos);
+            ui->boton_guardar_ruta_datos->setEnabled(true);
+            if (ui->check_busqueda_rapida_datos->isChecked())
             {
                 break;
             }

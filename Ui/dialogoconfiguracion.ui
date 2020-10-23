@@ -160,7 +160,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="check_busqueda_rapida">
+                <widget class="QCheckBox" name="check_busqueda_rapida_extension">
                  <property name="text">
                   <string>Búsqueda rápida</string>
                  </property>
@@ -289,7 +289,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="combobox_rutas_extension_2">
+                <widget class="QComboBox" name="combobox_rutas_datos">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -349,7 +349,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="boton_ruta_extension_2">
+                <widget class="QPushButton" name="boton_ruta_datos_postgres">
                  <property name="maximumSize">
                   <size>
                    <width>25</width>
@@ -382,7 +382,7 @@
                 </spacer>
                </item>
                <item>
-                <widget class="QPushButton" name="boton_instalar_guardar_ruta_datos">
+                <widget class="QPushButton" name="boton_guardar_ruta_datos">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
