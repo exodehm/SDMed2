@@ -103,7 +103,7 @@ bool DialogoConexionBBDD::ProbarConexion()
             ui->boton_ProbarConexion->setText("No se encuentra la extesion");
             ui->boton_ProbarConexion->setStyleSheet(estadoConexion.colorEstado[ERROR]);
             ui->boton_ProbarConexion->setEnabled(false);
-            QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setText(tr("No se encuentra la extesion"));});
+            QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setText(tr("No se encuentra la extension"));});
             QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setStyleSheet(estadoConexion.colorEstado[NORMAL]);});
             QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setText(estadoConexion.leyendaEstado[NORMAL]);});
             QTimer::singleShot(1500, [&](){ui->boton_ProbarConexion->setEnabled(true);});

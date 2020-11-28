@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogoOperacionesBBDD</class>
- <widget class="QDialog" name="DialogoOperacionesBBDD">
+ <class>DialogoCredencialesConexionAdmin</class>
+ <widget class="QDialog" name="DialogoCredencialesConexionAdmin">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>475</width>
-    <height>344</height>
+    <width>536</width>
+    <height>261</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Mantenimiento BBDD</string>
+   <string>Credenciales de conexión</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_4">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -30,7 +30,7 @@
          <item row="0" column="1">
           <widget class="QLineEdit" name="lineEditServidor">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -44,19 +44,19 @@
          <item row="1" column="1">
           <widget class="QLineEdit" name="lineEditPuerto">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_7">
            <property name="text">
-            <string>Superuser:</string>
+            <string>Usuario</string>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QLineEdit" name="lineEditSuperUser"/>
+          <widget class="QLineEdit" name="lineEditUsuario"/>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_6">
@@ -110,85 +110,11 @@
       </layout>
      </item>
      <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Introducir Las credenciales de administrador.Son necesarias para la configuración</string>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="0">
-          <widget class="QLabel" name="labelBBDD">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Comprobar la existencia de la base de datos sdmed</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="labelExtension">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Comprobar la existencia de la extensión sdmed</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QPushButton" name="botonExtension">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Ok</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QPushButton" name="botonBBDD">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Ok</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="botonRole">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Ok</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="labelRole">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Comprobar la existencia del role sdmed</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
+      </widget>
      </item>
      <item>
       <spacer name="verticalSpacer_2">
@@ -197,8 +123,8 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>20</width>
-         <height>40</height>
+         <width>452</width>
+         <height>13</height>
         </size>
        </property>
       </spacer>
@@ -227,6 +153,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="botonAceptar">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="text">
           <string>Aceptar</string>
          </property>
@@ -243,7 +172,7 @@
   <connection>
    <sender>botonCancelar</sender>
    <signal>clicked()</signal>
-   <receiver>DialogoOperacionesBBDD</receiver>
+   <receiver>DialogoCredencialesConexionAdmin</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -259,7 +188,7 @@
   <connection>
    <sender>botonAceptar</sender>
    <signal>clicked()</signal>
-   <receiver>DialogoOperacionesBBDD</receiver>
+   <receiver>DialogoCredencialesConexionAdmin</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
