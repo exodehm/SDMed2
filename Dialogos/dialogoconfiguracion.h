@@ -44,6 +44,7 @@ private:
     QString m_rutaExtensiones;
     QString m_postgres;
     QString m_directorioExtension;
+    bool m_instalarExtension;
 };
 
 #endif // DIALOGOCONFIGURACION_H

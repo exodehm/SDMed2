@@ -97,7 +97,7 @@ void DialogoConfiguracion::InstalarExtension()
         {
             QFile file_extension(QStringLiteral(":/postgres-extension/sdmed--0.1.sql"));
 #if defined(Q_OS_WIN)//<---Windows
-            QFile file_extension_destino(ficheroExtensionDestino);
+            /*QFile file_extension_destino(ficheroExtensionDestino);
             if (file_extension_destino.exists())
             {
                 file_extension_destino.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
@@ -111,7 +111,7 @@ void DialogoConfiguracion::InstalarExtension()
             }
             file_extension.copy(ficheroExtensionDestino);
             file_control.copy(ficheroExtensionControlDestino);
-            //file_makefile.copy(ficheroExtensionMakefile);
+            //file_makefile.copy(ficheroExtensionMakefile);*/
 #else//<--Linux ....y mac?
             DialogoSudo* d = new DialogoSudo(this);
             if (d->exec())
@@ -202,16 +202,27 @@ bool DialogoConfiguracion::HayPython()
     programa.start(commandToStart,argumentos);
     bool started = programa.waitForStarted();
     qDebug()<<"bool "<<started;
-    if (!programa.waitForFinished(10000)) // 10 Second timeout
+    if (!programa.waitForFinished(5000)) // 10 Second timeout
     {
         programa.kill();
     }
     int exitCode = programa.exitCode();
-    qDebug()<<"exit status"<<exitCode;
+    qDebug()<<"exit status"<<exitCode;    
+    if (exitCode!= 0)
+    {
+        commandToStart = "python";
+        programa.start(commandToStart,argumentos);
+        started = programa.waitForStarted();
+        if (programa.waitForFinished(5000))
+        {
+            programa.kill();
+        }
+        exitCode = programa.exitCode();
+    }
+    //qDebug()<<"Salida: "<<stdOutput;
     m_versionPython = QString::fromLocal8Bit(programa.readAllStandardOutput());
     QString stdError = QString::fromLocal8Bit(programa.readAllStandardError());
-    //qDebug()<<"Salida: "<<stdOutput;
-    //qDebug()<<"Errores: "<<stdError;
+    qDebug()<<"Errores: "<<stdError;
     if (exitCode == 0)
     {
         return true;
@@ -246,12 +257,12 @@ bool DialogoConfiguracion::IsPostgresRunning()
         }
         return false;
     #endif
+        return true;
 }
 
 void DialogoConfiguracion::ComprobacionesPostgres()
 {
-    bool HayPostgres = IsPostgresRunning();
-    if (HayPostgres)
+    if (IsPostgresRunning())
     {
         QSqlDatabase db;
         db= QSqlDatabase::addDatabase("QPSQL");
@@ -260,6 +271,7 @@ void DialogoConfiguracion::ComprobacionesPostgres()
         db.setPort(settings.value("adminrole/puerto").toInt());
         db.setUserName(settings.value("adminrole/usuario").toString());
         db.setPassword(settings.value("adminrole/password").toString());
+        db.setDatabaseName("sdmed");
         bool esAdmin = false;
         if (db.open())
         {
@@ -340,9 +352,8 @@ void DialogoConfiguracion::ComprobarExtensionInstalada(QSqlQuery consulta)
     ui->label_version_instalada->setText("...");
     QString consultaExtensionesSdmedInstaladas = "SELECT * FROM pg_available_extensions where name like \'%sdmed%\'";
     consulta.exec(consultaExtensionesSdmedInstaladas);
-    if (consulta.isValid() && consulta.size()>0)
-    {
-        qDebug()<<"AEUI ESTOY!!!";
+    if (/*consulta.isValid() && */consulta.size()>0)
+    {        
         while (consulta.next())
         {
             ui->label_nombre_extension->setText(consulta.value(0).toString());
@@ -356,12 +367,13 @@ void DialogoConfiguracion::ComprobarExtensionInstalada(QSqlQuery consulta)
                 ui->label_version_instalada->setText(consulta.value(2).toString());
             }
             ui->label_descripcion->setText(consulta.value(3).toString());
-        }
+        }        
     }
     else
     {
         //ui->label_nombre_extension->setEnabled(consulta.isValid());
         ui->label_nombre_extension->setText(tr("<font color=red><b>%1</b></font>").arg("No hay extension instalada"));
+        qDebug()<<"error es "<<consulta.lastError();
     }
 }
 
@@ -435,7 +447,7 @@ void DialogoConfiguracion::ComprobarExtensionSuministrada()
         if (listado.at(i).contains("default_version"))
             {
                 QString version = listado.at(i).section("'",1,1);
-                if (version.remove(".") < ui->label_version_defecto->text().remove("."))
+                if (version.remove(".") <= ui->label_version_defecto->text().remove("."))
                 {
                     ui->label_version_suministrada->setText(tr("<font color=red><b>%1</b></font>").arg(listado.at(i).section("'",1,1)));
                     ui->boton_instalar_extension->setEnabled(false);
@@ -447,5 +459,5 @@ void DialogoConfiguracion::ComprobarExtensionSuministrada()
                 }
                 break;
             }
-    }
+    }  
 }

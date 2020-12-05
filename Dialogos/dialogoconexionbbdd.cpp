@@ -76,13 +76,13 @@ bool DialogoConexionBBDD::ProbarConexion()
               "-"<<ui->lineEdit_BBDD->text()<<
               "-"<<ui->lineEdit_Servidor->text()<<
               "-"<<ui->lineEdit_NombreUsuario->text()<<
-              "-"<<ui->lineEdit_NombreUsuario->text();
+              "-"<<ui->lineEdit_PassWord ->text();
     *m_db= QSqlDatabase::addDatabase("QPSQL");
     m_db->setHostName(ui->lineEdit_Servidor->text());
     m_db->setPort(ui->lineEdit_Puerto->text().toInt());
     m_db->setDatabaseName(ui->lineEdit_BBDD->text());
     m_db->setUserName(ui->lineEdit_NombreUsuario->text());
-    m_db->setPassword(ui->lineEdit_PassWord->text());
+    //m_db->setPassword(ui->lineEdit_PassWord->text());
     if (m_db->open())
     {
         if (HayExension())

@@ -63,10 +63,13 @@ bool DialogoCredencialesConexionAdmin::ComprobarAdminRole()
     m_db.setPort(ui->lineEditPuerto->text().toInt());
     m_db.setUserName(ui->lineEditUsuario->text());
     m_db.setPassword(ui->lineEditPassword->text());
+    m_db.setDatabaseName("sdmed");
     bool esSuperUser = false;
-    if (m_db.open())
+    m_db.close();
+    if (m_db.open(ui->lineEditUsuario->text(),ui->lineEditPassword->text()))
     {
-        //WriteSettings();
+        qDebug()<<"Abuerto "<<m_db.databaseName();//
+        WriteSettings();
         QString cadenacomprobacionrolsuper = "SELECT rolsuper FROM pg_authid WHERE rolname = '" + ui->lineEditUsuario->text() + "'";
         QSqlQuery consulta(cadenacomprobacionrolsuper, m_db);
         while (consulta.next())
