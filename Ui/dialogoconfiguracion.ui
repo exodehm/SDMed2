@@ -512,7 +512,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_13">
              <item>
-              <widget class="QPushButton" name="boton_instalar_python">
+              <widget class="QPushButton" name="boton_instalar_scripts">
                <property name="enabled">
                 <bool>true</bool>
                </property>

@@ -26,7 +26,7 @@ DialogoConfiguracion::DialogoConfiguracion(QWidget *parent) : QDialog(parent), u
     QObject::connect(ui->botonDatosAdmin,SIGNAL(clicked(bool)),this,SLOT(DatosAdmin()));
     QObject::connect(ui->boton_salir,SIGNAL(clicked(bool)),this,SLOT(Salir()));
     QObject::connect(ui->boton_instalar_extension,SIGNAL(clicked(bool)),this,SLOT(InstalarExtension()));
-    QObject::connect(ui->boton_instalar_python,SIGNAL(clicked(bool)),this,SLOT(InstalarScriptsPython()));
+    QObject::connect(ui->boton_instalar_scripts,SIGNAL(clicked(bool)),this,SLOT(InstalarScriptsPython()));
 }
 
 DialogoConfiguracion::~DialogoConfiguracion()
@@ -133,7 +133,7 @@ void DialogoConfiguracion::InstalarExtension()
 
 void DialogoConfiguracion::InstalarScriptsPython()
 {
-    qDebug()<<"Instalar Scripts Python en "<<m_rutaPython;
+    /*qDebug()<<"Instalar Scripts Python en "<<m_rutaPython;
     QString ruta = "/home/david/programacion/python/instalador/";
     QString m_pModulo = "instalar_scripts";
     QString m_pFuncion = "Instalar";
@@ -141,7 +141,45 @@ void DialogoConfiguracion::InstalarScriptsPython()
     pArgumentos<<m_rutaPython;
 
     QPair <int,QVariant>res = ::PyRun::loadModule(ruta, m_pModulo, m_pFuncion, pArgumentos);
-    qDebug()<<res.first;
+    qDebug()<<res.first;*/
+    /*QProcess process1;
+    QString s_process1 = "xfce4-terminal ";
+    QStringList argumentos;
+    argumentos<<"echo "<<"hola";
+    process1.start(s_process1,argumentos);
+    bool retval = false;
+    QByteArray buffer;
+    process1.waitForFinished(5000);
+    while ((retval = process1.waitForFinished()))
+    {
+        buffer.append(process1.readAll());
+    }
+    if (!retval)
+    {
+        qDebug() << "Process 1 error:" << process1.errorString();
+    }
+    qDebug()<<buffer;*/
+    //qDebug()<<getenv("SHELL");
+
+    //process1.start(QString("/bin/sh"), argumentos);
+    /*if (QProcess::execute(QString("/bin/sh"), argumentos) < 0)
+    {
+      qDebug() << "Failed to run";
+    }
+    else
+    {
+        qDebug()<<"Todo coresstoo";
+    }*/
+    /*QProcess process;
+    process.start("gedit", QStringList() << "/home/david/programacion/bash/hola.sh");*/
+    //system ("xfce4-terminal");
+    //system ("$TERM");
+    //system ("*bin/bash");
+    //auto pPipe = ::popen("/bin/sh", "r");
+    //popen("xfce4-terminal -m python", "r");
+    //system("echo $TERM");grep --version
+    system("grep --version");
+
 }
 
 void DialogoConfiguracion::DatosAdmin()
@@ -250,7 +288,7 @@ bool DialogoConfiguracion::IsPostgresRunning()
         m_postgres = QString::fromLocal8Bit(programa.readAllStandardOutput());
         QString stdError = QString::fromLocal8Bit(programa.readAllStandardError());
         //qDebug()<<"Salida: "<<stdOutput;
-        //qDebug()<<"Errores: "<<stdError;
+        qDebug()<<"Errores: "<<stdError;
         if (exitCode == 0)
         {
             return true;
@@ -334,7 +372,7 @@ void DialogoConfiguracion::ComprobacionesPython()
                                                      "Puedes descargarlo e instalarlo desde su web oficial <b>https://www.python.org</b>"));
         ui->labelVersionPython->setText(tr("<font color=red><b>%1</b></font>").arg("No se ha detectado python3 en el equipo"));
     }
-    ui->boton_instalar_python->setEnabled(hayPython);
+    ui->boton_instalar_scripts->setEnabled(hayPython);
 }
 
 void DialogoConfiguracion::ComprobarDatosAdminRole()
@@ -459,5 +497,5 @@ void DialogoConfiguracion::ComprobarExtensionSuministrada()
                 }
                 break;
             }
-    }  
+    }
 }

@@ -82,7 +82,7 @@ bool DialogoConexionBBDD::ProbarConexion()
     m_db->setPort(ui->lineEdit_Puerto->text().toInt());
     m_db->setDatabaseName(ui->lineEdit_BBDD->text());
     m_db->setUserName(ui->lineEdit_NombreUsuario->text());
-    //m_db->setPassword(ui->lineEdit_PassWord->text());
+    m_db->setPassword(ui->lineEdit_PassWord->text());
     if (m_db->open())
     {
         if (HayExension())

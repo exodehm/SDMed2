@@ -194,6 +194,20 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_NombreConexion</tabstop>
+  <tabstop>lineEdit_Servidor</tabstop>
+  <tabstop>lineEdit_Puerto</tabstop>
+  <tabstop>lineEdit_BBDD</tabstop>
+  <tabstop>comboBox_SSL</tabstop>
+  <tabstop>lineEdit_NombreUsuario</tabstop>
+  <tabstop>lineEdit_PassWord</tabstop>
+  <tabstop>boton_ProbarConexion</tabstop>
+  <tabstop>checkBox_GuardarNombre</tabstop>
+  <tabstop>checkBox_GuardarPassword</tabstop>
+  <tabstop>checkBox_ConexionAutomatica</tabstop>
+  <tabstop>boton_Operaciones_BBDD</tabstop>
+ </tabstops>
  <resources>
   <include location="../iconos.qrc"/>
  </resources>
