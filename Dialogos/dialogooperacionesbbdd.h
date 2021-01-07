@@ -19,13 +19,15 @@ public:
 
 private slots:
     bool Conectar();
-    bool CrearRole();
+    bool CrearRoleContrasenna();
     bool CrearBaseDatosSdmed();
     bool CrearExtension();
 
 private:
     Ui::DialogoOperacionesBBDD *ui;
     QSqlDatabase db;
+
+    bool m_hayRole;
 };
 
 #endif // DIALOGOOPERACIONESBBDD_H

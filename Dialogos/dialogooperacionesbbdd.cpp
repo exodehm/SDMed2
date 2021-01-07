@@ -1,18 +1,20 @@
 #include "dialogooperacionesbbdd.h"
 #include "ui_dialogooperacionesbbdd.h"
+#include "../Dialogos/dialogocontrasenna.h"
 #include <QDebug>
 #include <QSqlQuery>
 
 DialogoOperacionesBBDD::DialogoOperacionesBBDD(QString servidor, QString puerto, QWidget *parent) :
     QDialog(parent), ui(new Ui::DialogoOperacionesBBDD)
 {
+    m_hayRole = false;
     ui->setupUi(this);
     ui->lineEditPuerto->setText(puerto);
     ui->lineEditServidor->setText(servidor);
     ui->lineEditSuperUser->setText("");
     db = QSqlDatabase::addDatabase("QPSQL");
     QObject::connect(ui->botonComprobar,SIGNAL(clicked(bool)),this,SLOT(Conectar()));
-    QObject::connect(ui->botonRole,SIGNAL(clicked(bool)),this,SLOT(CrearRole()));
+    QObject::connect(ui->botonRole,SIGNAL(clicked(bool)),this,SLOT(CrearRoleContrasenna()));
     QObject::connect(ui->botonBBDD,SIGNAL(clicked(bool)),this,SLOT(CrearBaseDatosSdmed()));
     QObject::connect(ui->botonExtension,SIGNAL(clicked(bool)),this,SLOT(CrearExtension()));
 }
@@ -25,30 +27,29 @@ DialogoOperacionesBBDD::~DialogoOperacionesBBDD()
 void DialogoOperacionesBBDD::Comprobaciones()
 {
     //compropbar si existe el role sdmed
-    QString cadenaComprobarRole = "SELECT 1 FROM pg_roles WHERE rolname='sdmed'";
+    QString cadenaComprobarRole = "SELECT true FROM pg_roles WHERE rolname='sdmed'";
     qDebug()<<cadenaComprobarRole;
     QSqlQuery consulta(cadenaComprobarRole,db);
-    bool hayRoleSdmed = false;
     while (consulta.next())
     {
-        hayRoleSdmed = consulta.value(0).toBool();
-        qDebug()<<"Consulta hay role= "<<hayRoleSdmed;
+        m_hayRole = consulta.value(0).toBool();
+        qDebug()<<"Consulta hay role= "<<m_hayRole;
     }
-    if (!hayRoleSdmed)
+    if (!m_hayRole)
     {
         ui->labelRole->setText(tr("No existe el role \"sdmed\""));
         ui->botonRole->setText("Crear role");
         ui->labelRole->setEnabled(true);
-        ui->botonRole->setEnabled(true);
-        qDebug()<<"Consulta hay role 1= "<<hayRoleSdmed;
+        ui->botonRole->setEnabled(true);        
     }
     else
     {
         ui->labelRole->setText(tr("Existe el role \"sdmed\""));
-        ui->botonRole->setText("...");
+        //ui->labelRole->setText(tr("Cambiar contraseña"));
+        //ui->botonRole->setText("...");
+        ui->botonRole->setText("Cambiar contraseña");
         ui->labelRole->setEnabled(true);
-        ui->botonRole->setEnabled(false);
-        qDebug()<<"Consulta hay role 2= "<<hayRoleSdmed;
+        ui->botonRole->setEnabled(true);
     }
     //compropbar si existe la base de datos
     QString cadenaComprobarBBDD = "SELECT 1 FROM pg_database WHERE datname='sdmed'";
@@ -119,14 +120,28 @@ bool DialogoOperacionesBBDD::Conectar()
     return false;
 }
 
-bool DialogoOperacionesBBDD::CrearRole()
+bool DialogoOperacionesBBDD::CrearRoleContrasenna()
 {
-    qDebug()<<"Crear role";
-    QString cadenaCrearRole = "CREATE ROLE sdmed WITH LOGIN";
-    qDebug()<<cadenaCrearRole;
-    QSqlQuery consulta(cadenaCrearRole,db);
-    Comprobaciones();
-    return consulta.isValid();
+    //esta funcion servira para crear el role si no existe y asignar una contrasenna, o solo
+    //crear la contrasenna si ya existe el role
+    QSqlQuery consulta(db);
+    QString cadenaRole;
+    DialogoContrasenna* d = new DialogoContrasenna(this);
+    if (d->exec())
+    {
+        if (m_hayRole)
+        {
+            cadenaRole = "ALTER ROLE sdmed WITH PASSWORD '" + d->LeePassword() + "'";
+
+        }
+        else
+        {
+            cadenaRole = "CREATE ROLE sdmed WITH LOGIN WITH PASSWORD '" + d->LeePassword() + "'";
+        }
+        consulta.exec(cadenaRole);
+        Comprobaciones();
+    }
+    return  consulta.isValid();
 }
 
 bool DialogoOperacionesBBDD::CrearBaseDatosSdmed()

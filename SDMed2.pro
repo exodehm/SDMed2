@@ -13,6 +13,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
+    Dialogos/dialogocontrasenna.cpp \
     Dialogos/dialogocredencialesconexionadmin.cpp \
     mainwindow.cpp \
     Delegados/delegadoarbol.cpp \
@@ -88,6 +89,7 @@ HEADERS  += mainwindow.h \
     Delegados/delegadotablapropiedades.h \
     Dialogos/dialogoabout.h \
     Dialogos/dialogoconfiguracion.h \
+    Dialogos/dialogocontrasenna.h \
     Dialogos/dialogocredencialesconexionadmin.h \
     Dialogos/dialogogoopcionespagina.h \
     Dialogos/dialogolicencia.h \
@@ -142,6 +144,7 @@ HEADERS  += mainwindow.h \
 
 
 FORMS    += Ui/mainwindow.ui \
+    Dialogos/dialogocontrasenna.ui \
     Ui/dialogoabout.ui \
     Ui/dialogoconfiguracion.ui \
     Ui/dialogocredencialesconexionadmin.ui \
