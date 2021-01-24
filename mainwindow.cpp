@@ -78,7 +78,7 @@ void MainWindow::readSettings()
         db.setUserName(settings.value("conexionBBDD/usuario").toString());
         db.setPassword(settings.value("conexionBBDD/password").toString());
         if (db.open())
-        {
+        {            
             ActivarBotonesBasicos(true);
         }
         else
@@ -89,7 +89,7 @@ void MainWindow::readSettings()
     }
     else
     {
-        qDebug()<<"No se esta conectado a ninguna BBDD";
+        qDebug()<<"No se esta conectado a ninguna BBDD";        
     }
 }
 

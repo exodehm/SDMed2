@@ -9,7 +9,6 @@
 #include <QTemporaryDir>
 #include <QProcess>
 #include <QMessageBox>
-#include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
 #include <QTextEdit>
 #include <QDebug>

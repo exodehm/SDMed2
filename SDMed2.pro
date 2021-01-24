@@ -15,6 +15,7 @@ TEMPLATE = app
 SOURCES += main.cpp\
     Dialogos/dialogocontrasenna.cpp \
     Dialogos/dialogocredencialesconexionadmin.cpp \
+    Dialogos/dialogotipoaperturabc3.cpp \
     mainwindow.cpp \
     Delegados/delegadoarbol.cpp \
     Delegados/delegadobase.cpp \
@@ -109,6 +110,7 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogoajustar.h \
     Dialogos/dialogocertificaciones.h \
     Dialogos/dialogoeditorformulasmedicion.h \
+    Dialogos/dialogotipoaperturabc3.h \
     Ficheros/importarBC3.h \
     Ficheros/exportarBC3.h \
     instancia.h \
@@ -165,7 +167,8 @@ FORMS    += Ui/mainwindow.ui \
     Ui/dialogoeditorformulasmedicion.ui \
     Ui/dialogoconexionbbdd.ui \
     Ui/dialogodatosgenerales.ui \
-    Ui/dialogogestionobras.ui
+    Ui/dialogogestionobras.ui \
+    Ui/dialogotipoaperturabc3.ui
 
 QT += sql
 
@@ -181,9 +184,13 @@ RESOURCES += \
 
 
 unix {
-    INCLUDEPATH += /usr/include/python3.6m
-    LIBS += -L /usr/local/lib/python3.6 -lpython3.6m
-    DEPENDPATH +=  /usr/include/python3.6m
+    INCLUDEPATH += /usr/include/python3.8
+    #LIBS += -L /usr/local/lib/python3.8 -lpython3.8m
+    LIBS += -lpython3.8
+    #LIBS += -Wl,-Bstatic -lpython3.8m -Wl,-Bdynamic
+    #LIBS += -lz
+    DEPENDPATH +=  /usr/include/python3.6m8
+
 }
 
 win32 {

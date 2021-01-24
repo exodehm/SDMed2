@@ -107,11 +107,11 @@ void DialogoOperacionesBBDD::Comprobaciones()
 
 bool DialogoOperacionesBBDD::Conectar()
 {
-    db.setHostName(ui->lineEditServidor->text());
-    db.setPort(ui->lineEditPuerto->text().toInt());
+    db.setHostName(ui->lineEditServidor->text());qDebug()<<ui->lineEditServidor->text();
+    db.setPort(ui->lineEditPuerto->text().toInt());qDebug()<<ui->lineEditPuerto->text();
     db.setDatabaseName("postgres");
-    db.setUserName(ui->lineEditSuperUser->text());
-    db.setPassword(ui->lineEditPassword->text());
+    db.setUserName(ui->lineEditSuperUser->text());qDebug()<<ui->lineEditSuperUser->text();
+    db.setPassword(ui->lineEditPassword->text());qDebug()<<ui->lineEditPassword->text();
     if (db.open())
     {
         Comprobaciones();
