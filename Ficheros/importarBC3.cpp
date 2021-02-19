@@ -8,8 +8,9 @@
 #include <QSettings>
 #include <QDate>
 #include <QMessageBox>
+#include <QTemporaryDir>
 
-#include "../Dialogos/dialogocredencialesconexionadmin.h"
+//#include "../Dialogos/dialogocredencialesconexionadmin.h"
 #include "../Dialogos/dialogotipoaperturabc3.h"
 
 ImportarBC3::ImportarBC3(const QStringList &listadoBC3, bool &abierta)
@@ -59,20 +60,31 @@ ImportarBC3::ImportarBC3(const QStringList &listadoBC3, bool &abierta)
     if (res==0)
     {
         abierta = true;
-        if (listadoBC3.size()>TAM_MAX)
+        if (!HayMediciones(registroM))
         {
-            DialogoTipoAperturaBC3 *d = new DialogoTipoAperturaBC3;
-            if (d->exec())
+            tipoImportacion = SIMPLIFICADO;
+        }
+        else
+        {
+            if (listadoBC3.size()>TAM_MAX)
             {
-                if (d->result() == 1)
+                DialogoTipoAperturaBC3 *d = new DialogoTipoAperturaBC3;
+                if (d->exec())
                 {
-                    if (d->ImportacionRapida())
+                    if (d->result() == 1)
                     {
-                        tipoImportacion = SIMPLIFICADO;
+                        if (d->ImportacionRapida())
+                        {
+                            tipoImportacion = SIMPLIFICADO;
+                        }
+                        else
+                        {
+                            tipoImportacion = NORMAL;
+                        }
                     }
                     else
                     {
-                        tipoImportacion = NORMAL;
+                        qDebug()<<"Adios";
                     }
                 }
             }
@@ -87,21 +99,27 @@ ImportarBC3::ImportarBC3(const QStringList &listadoBC3, bool &abierta)
         if (db.open())
         {
             qDebug()<<"Ok Db";
+
+            CrearHashTexto(registroT);
+            if (!procesarConceptos(registroC, tipoImportacion))
+            {
+                BorrarIntentoObra(tr("Error leyendo el registro C"));
+            }
+            else if (!procesarRelaciones(registroD, tipoImportacion))
+            {
+                BorrarIntentoObra(tr("Error leyendo el registro D"));
+            }
+            else if (!procesarMediciones(registroM))
+            {
+                BorrarIntentoObra(tr("Error leyendo el registro M"));
+            }
+            //procesarTexto(registroT);
+            EscribirTextoRaiz();
         }
-        CrearHashTexto(registroT);
-        if (!procesarConceptos(registroC, tipoImportacion))
+        else
         {
-            BorrarIntentoObra(" ");
+            BorrarIntentoObra(tr("Se necesitan credenciales de admin para esta acción"));
         }
-        else if (!procesarRelaciones(registroD, tipoImportacion))
-        {
-            BorrarIntentoObra(" ");
-        }
-        else if (!procesarMediciones(registroM))
-        {
-            BorrarIntentoObra(" ");
-        }
-        //procesarTexto(registroT);
     }
     else
     {
@@ -150,12 +168,16 @@ bool ImportarBC3::procesarConceptos(const QStringList &registroC, eTipoImportaci
 {   
     QTextStream tConceptos;
     QFile file;
+    QTemporaryDir tempdir;
     if (tipo == SIMPLIFICADO)
-    {
-        file.setFileName("conceptos.csv");
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        tConceptos.setDevice(&file);
-        tConceptos.setCodec("UTF-8");        
+    {        
+        if (tempdir.isValid())
+        {
+            file.setFileName(tempdir.path() + "conceptos.csv");
+            file.open(QIODevice::WriteOnly | QIODevice::Text);
+            tConceptos.setDevice(&file);
+            tConceptos.setCodec("UTF-8");
+        }
     }
     foreach (const QString& linea, registroC)
     {
@@ -186,7 +208,8 @@ bool ImportarBC3::procesarConceptos(const QStringList &registroC, eTipoImportaci
         }
         if (tipo == SIMPLIFICADO)
         {
-            tConceptos<<codigopartida<<"\t"<<resumen.left(80).replace('\"','\'')<<"\t"<<hashtexto[codigopartida]<<"\t"<<hashtexto[codigopartida]<<"\t"<<precio<<"\t"<<"NULL"<<"\t"<<naturaleza<<"\t"<<ProcesarCadenaFecha(fecha)<<"\t"<<ud<<"\t"<<precio<<"\n";
+            tConceptos<<codigopartida<<"\t"<<resumen.left(80).replace(R"(")",R"("\"")")<<"\t"<<hashtexto[codigopartida]<<"\t"<<hashtexto[codigopartida]<<"\t"<<precio<<"\t"<<"NULL"<<"\t"<<naturaleza<<"\t"<<ProcesarCadenaFecha(fecha)<<"\t"<<ud<<"\t"<<precio<<"\n";
+            //tConceptos<<codigopartida<<"\t"<<resumen.left(80)<<"\t"<<hashtexto[codigopartida]<<"\t"<<hashtexto[codigopartida]<<"\t"<<precio<<"\t"<<"NULL"<<"\t"<<naturaleza<<"\t"<<ProcesarCadenaFecha(fecha)<<"\t"<<ud<<"\t"<<precio<<"\n";
         }
         else
         {
@@ -198,7 +221,7 @@ bool ImportarBC3::procesarConceptos(const QStringList &registroC, eTipoImportaci
     if (tipo == SIMPLIFICADO)
     {
         file.close();
-        QString cadenaimportar = "SELECT sdmed.importar_bc3_copy('" + codigo + "','/home/david/programacion/Qt/SDMed2/build-SDMed2-Qt_Estatico-Release/conceptos.csv','1')";
+        QString cadenaimportar = "SELECT sdmed.importar_bc3_copy('" + codigo + "','" + tempdir.path() + "conceptos.csv" + "','1')";
         QSqlQuery consulta(db);
         if(consulta.prepare(cadenaimportar))
         {
@@ -222,11 +245,16 @@ bool ImportarBC3::procesarRelaciones(const QStringList &registroD, eTipoImportac
     //esto hay que implementarlo. Por ahora solo considera 3 campos
     QTextStream tRelaciones;
     QFile file;
+    QTemporaryDir tempdir;
     if (tipo == SIMPLIFICADO)
     {
-        file.setFileName("relaciones.csv");
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        tRelaciones.setDevice(&file);
+        if (tempdir.isValid())
+        {
+            file.setFileName(tempdir.path() + "relaciones.csv");
+            file.open(QIODevice::WriteOnly | QIODevice::Text);
+            tRelaciones.setDevice(&file);
+            tRelaciones.setCodec("UTF-8");
+        }
     }
     //QTextStream tRelaciones(stdout, QIODevice::WriteOnly);
     int id = 1;
@@ -278,7 +306,7 @@ bool ImportarBC3::procesarRelaciones(const QStringList &registroD, eTipoImportac
     {
         file.close();
         QSqlQuery consulta (db);
-        QString cadenaimportar = "SELECT sdmed.importar_bc3_copy('" + codigo + "','/home/david/programacion/Qt/SDMed2/build-SDMed2-Qt_Estatico-Release/relaciones.csv','2')";
+        QString cadenaimportar = "SELECT sdmed.importar_bc3_copy('" + codigo + "','"+tempdir.path() + "relaciones.csv" + "','2')";
         qDebug()<<cadenaimportar;
         consulta.exec(cadenaimportar);
         qDebug()<<consulta.lastError();
@@ -422,9 +450,9 @@ void ImportarBC3::CrearHashTexto(const QStringList &registroT)
         codigotexto.remove('#');
         QString texto = datos.at(1);
         texto = texto.simplified();
-        texto.replace('\"','k');
+        texto.replace(R"(")",R"("\"")");
         tTexto<<codigotexto<<"\t"<<texto<<"\n";
-        hashtexto.insert(codigotexto,texto);
+        hashtexto.insert(codigotexto,texto);        
     }
     file.close();
 }
@@ -437,6 +465,17 @@ void ImportarBC3::BorrarIntentoObra(const QString &mensajeerror)
                          tr("Aviso"),
                          tr("No ha sido posible abrir el fichero bc3\n%1").arg(mensajeerror),
                          QMessageBox::Ok);
+}
+
+bool ImportarBC3::HayMediciones(const QStringList& registroM)
+{
+    return registroM.size()>0;
+}
+
+void ImportarBC3::EscribirTextoRaiz()
+{
+    QString cadenaescribirtextoraiz = "SELECT insertar_texto('" + codigo + "','" + codigo + "','" + hashtexto[codigo] + "')";
+    consulta.exec(cadenaescribirtextoraiz);
 }
 
 

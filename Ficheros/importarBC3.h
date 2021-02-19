@@ -24,6 +24,8 @@ public:
     QString ProcesarCadenaFecha(const QString& cadena);
     void CrearHashTexto(const QStringList& registroT);
     void BorrarIntentoObra(const QString& mensajeerror);
+    bool HayMediciones(const QStringList& registroM);
+    void EscribirTextoRaiz();
 
 private:
     QSqlDatabase db;

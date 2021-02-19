@@ -2262,9 +2262,51 @@ $_$;
 ALTER FUNCTION sdmed.id_por_posicion(_nombretabla character varying, _codigopadre character varying, _codigohijo character varying, _posicion integer, _num_cert integer) OWNER TO sdmed;
 
 --
+-- TOC entry 313 (class 1255 OID 77575)
+-- Name: importar_bc3_copy(character varying, character varying, integer); Type: FUNCTION; Schema: sdmed; Owner: sdmed
+--
+
+CREATE FUNCTION sdmed.importar_bc3_copy(_nombretabla character varying, _ruta character varying, _tipotabla integer) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+tabla character varying;
+texto text;
+BEGIN
+	IF _tipotabla = 1 THEN 
+		tabla = _nombretabla || '_Conceptos';
+	ELSIF _tipotabla = 2 THEN 
+		tabla = _nombretabla || '_Relacion';
+	END IF;
+	--texto = FORMAT ('COPY sdmed.%I FROM %s WITH CSV DELIMITER %s NULL AS ''NULL'' QUOTE %s ESCAPE %s', 
+	texto = FORMAT ('COPY sdmed.%I FROM %s WITH CSV DELIMITER %s NULL AS ''NULL'' QUOTE ''"'' ESCAPE ''\'' ', 
+	tabla, 
+	quote_literal(_ruta), 
+	quote_literal(chr(9)))
+	--quote_nullable(null),
+	--quote_literal (34)
+	--quote_literal (92)
+	;
+	execute (texto);
+	RETURN TRUE;
+	EXCEPTION
+		WHEN others THEN
+		RAISE NOTICE '%; SQLSTATE: %', SQLERRM, SQLSTATE; 
+		RETURN FALSE;
+	
+END;
+$$;
+
+
+ALTER FUNCTION sdmed.importar_bc3_copy(_nombretabla character varying, _ruta character varying, _tipotabla integer) OWNER TO sdmed;
+
+
+--
 -- TOC entry 287 (class 1255 OID 39358)
 -- Name: insertar_concepto(character varying, character varying, character varying, character varying, text, numeric, integer, character varying); Type: FUNCTION; Schema: sdmed; Owner: sdmed
 --
+
+
 
 CREATE OR REPLACE FUNCTION sdmed.insertar_concepto(nombretabla character varying, codigopadre character varying, u character varying DEFAULT ''::character varying, resumen character varying DEFAULT ''::character varying, texto text DEFAULT ''::text, precio numeric DEFAULT 0, nat integer DEFAULT 7, fecha character varying DEFAULT NULL::character varying) RETURNS void
     LANGUAGE plpgsql
