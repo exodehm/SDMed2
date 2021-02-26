@@ -6,7 +6,7 @@
 #include <QFile>
 
 namespace Ui {
-class DialogoConfiguracion;
+    class DialogoConfiguracion;
 }
 
 class DialogoConfiguracion : public QDialog
@@ -21,7 +21,7 @@ public:
     bool HayPython();
     bool IsPostgresRunning();
     void ComprobacionesPython();
-    void ComprobarDatosAdminRole();    
+    bool ComprobarDatosAdminRole(QSqlDatabase db);
     void ComprobarRoleSdmed(QSqlQuery consulta);
     void ComprobarExistenciaBBDDSdmed(QSqlQuery consulta);
     void ComprobarExtensionSuministrada();
@@ -45,6 +45,9 @@ private:
     QString m_postgres;
     QString m_directorioExtension;
     bool m_instalarExtension;
+
+    QSqlDatabase m_dbAdmin;
+    bool hayDBAdmin;
 };
 
 #endif // DIALOGOCONFIGURACION_H

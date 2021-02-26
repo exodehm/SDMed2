@@ -375,7 +375,7 @@
              <item>
               <widget class="QLabel" name="label_advertencia_noadmin">
                <property name="text">
-                <string>TextLabel</string>
+                <string/>
                </property>
               </widget>
              </item>

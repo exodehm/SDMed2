@@ -1,4 +1,4 @@
-#include "dialogooperacionesbbdd.h"
+#include "../Dialogos/dialogooperacionesbbdd.h"
 #include "ui_dialogooperacionesbbdd.h"
 #include "../Dialogos/dialogocontrasenna.h"
 #include <QDebug>

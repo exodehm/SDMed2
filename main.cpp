@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("EGSoft");
     QCoreApplication::setOrganizationDomain("sdsoft.com");
     QCoreApplication::setApplicationName("SDMed2");
-    QCoreApplication::setApplicationVersion("0.1 beta");
+    QCoreApplication::setApplicationVersion("0.2 beta");
     qDebug() << QStyleFactory::keys();
     #if defined(Q_OS_WIN)
         QApplication::setStyle(QStyleFactory::create("Fusion"));

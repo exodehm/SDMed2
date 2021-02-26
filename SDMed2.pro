@@ -16,6 +16,7 @@ SOURCES += main.cpp\
     Dialogos/dialogocontrasenna.cpp \
     Dialogos/dialogocredencialesconexionadmin.cpp \
     Dialogos/dialogotipoaperturabc3.cpp \
+    codificacion.cpp \
     mainwindow.cpp \
     Delegados/delegadoarbol.cpp \
     Delegados/delegadobase.cpp \
@@ -113,6 +114,7 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogotipoaperturabc3.h \
     Ficheros/importarBC3.h \
     Ficheros/exportarBC3.h \
+    codificacion.h \
     instancia.h \
     consultas.h \
     Tablas/tablabase.h \
@@ -146,7 +148,7 @@ HEADERS  += mainwindow.h \
 
 
 FORMS    += Ui/mainwindow.ui \
-    Dialogos/dialogocontrasenna.ui \
+    Ui/dialogocontrasenna.ui \
     Ui/dialogoabout.ui \
     Ui/dialogoconfiguracion.ui \
     Ui/dialogocredencialesconexionadmin.ui \
@@ -155,6 +157,7 @@ FORMS    += Ui/mainwindow.ui \
     Ui/dialogolicencia.ui \
     Ui/dialogolistadoimprimir.ui \
     Ui/dialogomensajeconexioninicial.ui \
+    Ui/dialogooperacionesbbdd.ui \
     Ui/dialogoprecio.ui \
     Ui/dialogosudo.ui \
     Ui/dialogosuprimirmedicion.ui \
@@ -194,9 +197,12 @@ unix {
 }
 
 win32 {
-    INCLUDEPATH += C:\Python\Python37\include
-    LIBS += -L C:\Python\Python37\libs -lpython37
-    DEPENDPATH += C:\Python\Python37\include
+    INCLUDEPATH += C:\Users\David\AppData\Local\Programs\Python\Python39\include
+    #INCLUDEPATH += Python39\include
+    LIBS += -L C:\Users\David\AppData\Local\Programs\Python\Python39\libs -lpython39
+    #LIBS += -L Python39\libs -lpython39
+    DEPENDPATH += C:\Users\David\AppData\Local\Programs\Python\Python39\include
+    #DEPENDPATH += Python39\include
 }
 
 DISTFILES += \
