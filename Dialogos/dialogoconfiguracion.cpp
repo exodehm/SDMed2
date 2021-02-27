@@ -18,18 +18,15 @@
 DialogoConfiguracion::DialogoConfiguracion(QWidget *parent) : QDialog(parent), ui(new Ui::DialogoConfiguracion)
 {
     ui->setupUi(this);
+    m_dbAdmin= QSqlDatabase::addDatabase("QPSQL");
     ReadSettings();
-    hayDBAdmin = ComprobarDatosAdminRole(m_dbAdmin);
-    if (hayDBAdmin)
-    {
-        ComprobacionesPostgres();
-        ComprobacionesPython();
-        QObject::connect(ui->boton_ruta_python,SIGNAL(clicked(bool)),this,SLOT(DefinirRutaScripts()));
-        QObject::connect(ui->botonDatosAdmin,SIGNAL(clicked(bool)),this,SLOT(DatosAdmin()));
-        QObject::connect(ui->boton_salir,SIGNAL(clicked(bool)),this,SLOT(Salir()));
-        QObject::connect(ui->boton_instalar_extension,SIGNAL(clicked(bool)),this,SLOT(InstalarExtension()));
-        QObject::connect(ui->boton_instalar_scripts,SIGNAL(clicked(bool)),this,SLOT(InstalarScriptsPython()));
-    }
+    ComprobacionesPython();
+    ComprobarDatosAdminRole(m_dbAdmin);
+    QObject::connect(ui->botonDatosAdmin,SIGNAL(clicked(bool)),this,SLOT(DatosAdmin()));
+    QObject::connect(ui->boton_ruta_python,SIGNAL(clicked(bool)),this,SLOT(DefinirRutaScripts()));
+    QObject::connect(ui->boton_salir,SIGNAL(clicked(bool)),this,SLOT(Salir()));
+    QObject::connect(ui->boton_instalar_extension,SIGNAL(clicked(bool)),this,SLOT(InstalarExtension()));
+    QObject::connect(ui->boton_instalar_scripts,SIGNAL(clicked(bool)),this,SLOT(InstalarScriptsPython()));
 }
 
 DialogoConfiguracion::~DialogoConfiguracion()
@@ -130,15 +127,26 @@ void DialogoConfiguracion::InstalarExtension()
                 }
             }
 #endif
+            //segundo paso, una vez copiados los ficheros al directorio extension,
+            //instalar la extension en la base de datos
             if (res == true)
             {
                 qDebug()<<"Ahora viene el create extension";
-                QString cadenaCrearExtension = "SELECT 1 FROM pg_extension WHERE extname ='sdmed'";
-
-            }
-            else
-            {
-                qDebug()<<"Pos va a ser que no";
+                QString cadenaCrearExtension = "SELECT extversion FROM pg_extension WHERE extname ='sdmed'";
+                QSqlQuery consulta (m_dbAdmin);
+                consulta.exec(cadenaCrearExtension);
+                if (consulta.size()>0)//si hay alguna extension instalada, si no darq 0
+                {
+                    while (consulta.next())
+                    {
+                        qDebug()<<consulta.value(0).toBool();
+                    }
+                    qDebug()<<"ALTER EXTENSION sdmed UPDATE";
+                }
+                else//no hay versión instalada
+                {
+                    qDebug()<<"CREATE EXENSION sdmed";
+                }
             }
         }
     }
@@ -146,15 +154,33 @@ void DialogoConfiguracion::InstalarExtension()
 
 void DialogoConfiguracion::InstalarScriptsPython()
 {
-    /*qDebug()<<"Instalar Scripts Python en "<<m_rutaPython;
-    QString ruta = "/home/david/programacion/python/instalador/";
+    qDebug()<<"Instalar Scripts Python en "<<m_rutaPython;
+    QTemporaryDir tempdir;
+    if (tempdir.isValid())
+    {
+        QString sResourceFiles = ":/python";
+        //QTextEdit htmlText(ui->label_ruta_directorio_extension->text());
+        //QString ruta_extension = htmlText.toPlainText() + "/";
+        QDirIterator it(sResourceFiles);//, QDirIterator::Subdirectories);
+        QStringList listaArchivosCopiar;
+        while (it.hasNext())
+        {
+            it.next();
+            listaArchivosCopiar<<it.fileName();
+            qDebug()<<"Archivos: "<<tempdir.path() + "/" + it.fileName();
+        }
+
+    //QString ruta = "/home/david/programacion/python/instalador/";
+    QString ruta = tempdir.path() + "/";
+    qDebug()<<ruta;
     QString m_pModulo = "instalar_scripts";
-    QString m_pFuncion = "Instalar";
+    QString m_pFuncion = "Descomprimir";
     QStringList pArgumentos;
     pArgumentos<<m_rutaPython;
 
     QPair <int,QVariant>res = ::PyRun::loadModule(ruta, m_pModulo, m_pFuncion, pArgumentos);
-    qDebug()<<res.first;*/
+    qDebug()<<res.first;
+    }
     /*QProcess process1;
     QString s_process1 = "xfce4-terminal ";
     QStringList argumentos;
@@ -191,15 +217,16 @@ void DialogoConfiguracion::InstalarScriptsPython()
     //auto pPipe = ::popen("/bin/sh", "r");
     //popen("xfce4-terminal -m python", "r");
     //system("echo $TERM");grep --version
-    system("grep --version");
+    //system("grep --version");
 
 }
 
 void DialogoConfiguracion::DatosAdmin()
 {
-    DialogoCredencialesConexionAdmin* d = new DialogoCredencialesConexionAdmin(this);
-    QObject::connect(d,SIGNAL(accepted()),this,SLOT(ComprobacionesPostgres()));
+    DialogoCredencialesConexionAdmin* d = new DialogoCredencialesConexionAdmin(m_dbAdmin, this);
+    //QObject::connect(d,SIGNAL(accepted()),this,SLOT(ComprobacionesPostgres()));
     d->exec();
+    ComprobarDatosAdminRole(m_dbAdmin);
 }
 
 void DialogoConfiguracion::CopiarConPermisos(const QString &fichero_origen, const QString &fichero_destino, QString passw)
@@ -225,6 +252,33 @@ void DialogoConfiguracion::CopiarConPermisos(const QString &fichero_origen, cons
     {
         qDebug() << "Process 1 error:" << process1.errorString();
         qDebug() << "Process 2 error:" << process2.errorString();
+    }
+}
+
+void DialogoConfiguracion::ActivarLetreros(bool esadmin)
+{
+    ui->label_directorio_extensiones->setEnabled(esadmin);
+    ui->label_titulo_nombre_extension->setEnabled(esadmin);
+    ui->label_titulo_version_defecto->setEnabled(esadmin);
+    ui->label_titulo_version_instalada->setEnabled(esadmin);
+    ui->label_titulo_descripcion->setEnabled(esadmin);
+    ui->label_titulo_version_suministrada->setEnabled(esadmin);
+    ui->label_existe_role_sdmed->setEnabled(esadmin);
+    ui->label_existe_bbdd_sdmed->setEnabled(esadmin);
+    ui->boton_crear_role_sdmed->setEnabled(esadmin);
+    ui->boton_crear_bbdd_sdmed->setEnabled(esadmin);
+    ui->boton_instalar_extension->setEnabled(esadmin);
+    if (!esadmin)
+    {
+        ui->label_ruta_directorio_extension->setText("");
+        ui->label_nombre_extension->setText("");
+        ui->label_advertencia_noadmin->setText(tr("Es necesario tener credenciales de administrador\npara las tareas de configuración"));
+        ui->label_version_suministrada->setText("");
+        ui->label_version_instalada->setText("");
+    }
+    else
+    {
+        ui->label_advertencia_noadmin->setText(tr(""));
     }
 }
 
@@ -307,74 +361,40 @@ bool DialogoConfiguracion::IsPostgresRunning()
             return true;
         }
         return false;
-    #else
+    #else //windows
     {
         return true;
     }
-    #endif
-        return true;
+    #endif        
 }
 
 void DialogoConfiguracion::ComprobacionesPostgres()
 {
     if (IsPostgresRunning())
     {
-        QSqlDatabase db;
-        db= QSqlDatabase::addDatabase("QPSQL");
-        QSettings settings;
-        db.setHostName(settings.value("adminrole/servidor").toString());
-        db.setPort(settings.value("adminrole/puerto").toInt());
-        db.setUserName(settings.value("adminrole/usuario").toString());
-        db.setPassword(settings.value("adminrole/password").toString());
-        db.setDatabaseName("sdmed");
-        bool esAdmin = false;
-        if (db.open())
+        if (m_dbAdmin.open())
         {
-            QSqlQuery consulta(db);
-            QString cadenacomprobacionrolsuper = "SELECT rolsuper FROM pg_authid WHERE rolname = '" + settings.value("adminrole/usuario").toString() + "'";
-            consulta.exec(cadenacomprobacionrolsuper);
+            QSqlQuery consulta(m_dbAdmin);
+            //directorio extension
+            QString consultaSharedir = "SELECT setting from pg_config WHERE name = \'SHAREDIR\'";
+            consulta.exec(consultaSharedir);
             while (consulta.next())
             {
-                esAdmin = consulta.value(0).toBool();
-                qDebug()<<"esAdmin: "<<esAdmin;
+                qDebug()<<consulta.value(0).toString();
+                ui->label_ruta_directorio_extension->setText(tr("<font color=green><b>%1</b></font>").arg(consulta.value(0).toString()+"/extension"));
             }
-            if (!esAdmin)
-            {
-                ui->label_advertencia_noadmin->setText(tr("Algunas operaciones requieren privilegios de administrador. Ingresar los datos"));
-            }
-            else
-            {
-                //directorio extension
-                QString consultaSharedir = "SELECT setting from pg_config WHERE name = \'SHAREDIR\'";
-                consulta.exec(consultaSharedir);
-                while (consulta.next())
-                {
-                    qDebug()<<consulta.value(0).toString();
-                    ui->label_ruta_directorio_extension->setText(tr("<font color=green><b>%1</b></font>").arg(consulta.value(0).toString()+"/extension"));
-                }
-                //extensiones instaladas
-                ComprobarRoleSdmed(consulta);
-                ComprobarExistenciaBBDDSdmed(consulta);
-            }
+            //extensiones instaladas
+            ComprobarRoleSdmed(consulta);
+            ComprobarExistenciaBBDDSdmed(consulta);
             ComprobarExtensionInstalada(consulta);
         }
-        else
-
-        {
-            ui->label_advertencia_noadmin->setText(tr("No hay datos de conexión o éstos son erróneos."));
-        }
-        ui->label_existe_role_sdmed->setEnabled(esAdmin);
-        ui->label_existe_bbdd_sdmed->setEnabled(esAdmin);
-        ui->boton_crear_role_sdmed->setEnabled(esAdmin);
-        ui->boton_crear_bbdd_sdmed->setEnabled(esAdmin);
+        //directorio datos
+        QString smain = m_postgres.left(m_postgres.lastIndexOf("-c")-1);
+        smain = smain.mid(m_postgres.lastIndexOf("-D")+3);
+        ui->combobox_rutas_datos->addItem(smain);
+        ComprobarExtensionSuministrada();
     }
-    //directorio datos
-    QString smain = m_postgres.left(m_postgres.lastIndexOf("-c")-1);
-    smain = smain.mid(m_postgres.lastIndexOf("-D")+3);
-    ui->combobox_rutas_datos->addItem(smain);
-    ComprobarExtensionSuministrada();
 }
-
 
 void DialogoConfiguracion::ComprobacionesPython()
 {
@@ -392,32 +412,41 @@ void DialogoConfiguracion::ComprobacionesPython()
     ui->boton_instalar_scripts->setEnabled(hayPython);
 }
 
-bool DialogoConfiguracion::ComprobarDatosAdminRole(QSqlDatabase db)
+void DialogoConfiguracion::ComprobarDatosAdminRole(QSqlDatabase db)
 {
+    m_esDBAdmin = false;//inicio a false siempre
     QSettings settings;
     QString servidor = settings.value("adminrole/servidor").toString();
-    QString puerto = settings.value("adminrole/puerto").toString();
+    int puerto = settings.value("adminrole/puerto").toInt();
     QString admin = settings.value("adminrole/usuario").toString();
     QString password = settings.value("adminrole/password").toString();
-    //QSqlDatabase db;
-    db= QSqlDatabase::addDatabase("QPSQL");
-    db.setHostName(settings.value(servidor).toString());
-    db.setPort(settings.value(puerto).toInt());
-    db.setUserName(settings.value(admin).toString());
-    db.setPassword(settings.value(password).toString());
+    qDebug()<<"datos de los cojones: "<<servidor<<"-"<<puerto<<"-"<<admin<<"-"<<password;
+    db.setHostName(servidor);
+    db.setPort(puerto);
+    db.setUserName(admin);
+    db.setPassword(password);
     db.setDatabaseName("sdmed");
-    bool esAdmin = false;
+    //bool esAdmin = false;
     if (db.open())
     {
         QSqlQuery consulta(db);
         QString cadenacomprobacionrolsuper = "SELECT rolsuper FROM pg_authid WHERE rolname = '" + settings.value("adminrole/usuario").toString() + "'";
+        qDebug()<<cadenacomprobacionrolsuper;
         consulta.exec(cadenacomprobacionrolsuper);
         while (consulta.next())
         {
-            esAdmin = consulta.value(0).toBool();
+            m_esDBAdmin = consulta.value(0).toBool();
         }
     }
-    return esAdmin;
+    else
+    {
+        qDebug()<<db.lastError();
+    }
+    ActivarLetreros(m_esDBAdmin);
+    if (m_esDBAdmin)
+    {
+        ComprobacionesPostgres();
+    }
 }
 
 void DialogoConfiguracion::ComprobarExtensionInstalada(QSqlQuery consulta)
@@ -444,7 +473,7 @@ void DialogoConfiguracion::ComprobarExtensionInstalada(QSqlQuery consulta)
     }
     else
     {
-        //ui->label_nombre_extension->setEnabled(consulta.isValid());
+        ui->label_nombre_extension->setEnabled(consulta.isValid());
         ui->label_nombre_extension->setText(tr("<font color=red><b>%1</b></font>").arg("No hay extension instalada"));
         qDebug()<<"error es "<<consulta.lastError();
     }

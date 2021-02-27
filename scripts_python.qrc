@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>python/instalador_scripts.zip</file>
+        <file>python/instalar_scripts.py</file>
+        <file>python/sdmed_scripts.zip</file>
     </qresource>
 </RCC>

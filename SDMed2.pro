@@ -151,6 +151,7 @@ FORMS    += Ui/mainwindow.ui \
     Ui/dialogocontrasenna.ui \
     Ui/dialogoabout.ui \
     Ui/dialogoconfiguracion.ui \
+    Ui/dialogocontrasenna.ui \
     Ui/dialogocredencialesconexionadmin.ui \
     Ui/dialogocreditos.ui \
     Ui/dialogogoopcionespagina.ui \
@@ -188,11 +189,11 @@ RESOURCES += \
 
 unix {
     INCLUDEPATH += /usr/include/python3.8
-    #LIBS += -L /usr/local/lib/python3.8 -lpython3.8m
+    #LIBS += -L /usr/local/lib/python3.8 -lpython3.8
     LIBS += -lpython3.8
-    #LIBS += -Wl,-Bstatic -lpython3.8m -Wl,-Bdynamic
+    #LIBS += -Wl,-Bstatic -lpython3.8 -Wl,-Bdynamic
     #LIBS += -lz
-    DEPENDPATH +=  /usr/include/python3.6m8
+    DEPENDPATH +=  /usr/include/python3.8
 
 }
 

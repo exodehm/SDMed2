@@ -7,12 +7,13 @@
 #include <QDebug>
 
 
-DialogoCredencialesConexionAdmin::DialogoCredencialesConexionAdmin(QWidget *parent) :
+DialogoCredencialesConexionAdmin::DialogoCredencialesConexionAdmin(QSqlDatabase &db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogoCredencialesConexionAdmin)
 {
     ui->setupUi(this);    
     ReadSettings();
+    m_db = &db;
     QObject::connect(ui->botonComprobar,SIGNAL(clicked(bool)),this, SLOT(ComprobarAdminRole()));
     QObject::connect(ui->lineEditServidor,SIGNAL(textChanged(const QString &)),this, SLOT(ResetearBotonComprobar(const QString &)));
     QObject::connect(ui->lineEditPuerto,SIGNAL(textChanged(const QString &)),this, SLOT(ResetearBotonComprobar(const QString &)));
@@ -57,21 +58,21 @@ DialogoCredencialesConexionAdmin::sDatosConexion DialogoCredencialesConexionAdmi
 
 bool DialogoCredencialesConexionAdmin::ComprobarAdminRole()
 {
-    QSqlDatabase m_db;
-    m_db= QSqlDatabase::addDatabase("QPSQL");
-    m_db.setHostName(ui->lineEditServidor->text());
-    m_db.setPort(ui->lineEditPuerto->text().toInt());
-    m_db.setUserName(ui->lineEditUsuario->text());
-    m_db.setPassword(ui->lineEditPassword->text());
-    m_db.setDatabaseName("sdmed");
+    //QSqlDatabase m_db;
+    //m_db= QSqlDatabase::addDatabase("QPSQL");
+    m_db->setHostName(ui->lineEditServidor->text());
+    m_db->setPort(ui->lineEditPuerto->text().toInt());
+    m_db->setUserName(ui->lineEditUsuario->text());
+    m_db->setPassword(ui->lineEditPassword->text());
+    m_db->setDatabaseName("sdmed");
     bool esSuperUser = false;
-    m_db.close();
-    if (m_db.open(ui->lineEditUsuario->text(),ui->lineEditPassword->text()))
+    m_db->close();
+    if (m_db->open(ui->lineEditUsuario->text(),ui->lineEditPassword->text()))
     {
-        qDebug()<<"Abuerto "<<m_db.databaseName();//
+        qDebug()<<"Abuerto "<<m_db->databaseName();//
         WriteSettings();
         QString cadenacomprobacionrolsuper = "SELECT rolsuper FROM pg_authid WHERE rolname = '" + ui->lineEditUsuario->text() + "'";
-        QSqlQuery consulta(cadenacomprobacionrolsuper, m_db);
+        QSqlQuery consulta(cadenacomprobacionrolsuper, *m_db);
         while (consulta.next())
         {
             esSuperUser = consulta.value(0).toBool();
@@ -96,7 +97,7 @@ bool DialogoCredencialesConexionAdmin::ComprobarAdminRole()
     }
     //ui->botonAceptar->setEnabled(esSuperUser);
     WriteSettings();
-    m_db.close();
+    m_db->close();
     return esSuperUser;
 }
 

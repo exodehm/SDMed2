@@ -42,6 +42,15 @@
                    <layout class="QHBoxLayout" name="horizontalLayout_6">
                     <item>
                      <widget class="QLabel" name="label_directorio_extensiones">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
                       <property name="text">
                        <string>Directorio extensiones:</string>
                       </property>
@@ -73,6 +82,9 @@
                    <layout class="QHBoxLayout" name="horizontalLayout_2">
                     <item>
                      <widget class="QLabel" name="label_titulo_nombre_extension">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="font">
                        <font>
                         <weight>75</weight>
@@ -110,6 +122,9 @@
                    <layout class="QHBoxLayout" name="horizontalLayout_4">
                     <item>
                      <widget class="QLabel" name="label_titulo_version_defecto">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="font">
                        <font>
                         <weight>75</weight>
@@ -147,6 +162,9 @@
                    <layout class="QHBoxLayout" name="horizontalLayout_5">
                     <item>
                      <widget class="QLabel" name="label_titulo_version_instalada">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="font">
                        <font>
                         <weight>75</weight>
@@ -184,6 +202,9 @@
                    <layout class="QHBoxLayout" name="horizontalLayout_8">
                     <item>
                      <widget class="QLabel" name="label_titulo_descripcion">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="font">
                        <font>
                         <weight>75</weight>
@@ -221,6 +242,9 @@
                    <layout class="QHBoxLayout" name="horizontalLayout_15">
                     <item>
                      <widget class="QLabel" name="label_titulo_version_suministrada">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="font">
                        <font>
                         <weight>75</weight>
@@ -241,6 +265,9 @@
                     </item>
                     <item>
                      <widget class="QPushButton" name="boton_instalar_extension">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="toolTip">
                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Intentará buscar la ubicacion donde se encuentra ubicado el directorio donde están las extensiones de PostgreSQL.&lt;/p&gt;&lt;p&gt;Si se desmarca la opción de &amp;quot;&lt;span style=&quot; font-weight:600;&quot;&gt;Búsqueda rápida&lt;/span&gt;&amp;quot; hará una búsqueda exhaustiva de todas las posibles ubicaciones en todo el disco duro, lo que se llevará más tiempo.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                       </property>
@@ -281,6 +308,9 @@
                    <layout class="QVBoxLayout" name="verticalLayout_11">
                     <item>
                      <widget class="QLabel" name="label_existe_role_sdmed">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="text">
                        <string>Existe el role sdmed</string>
                       </property>
@@ -288,6 +318,9 @@
                     </item>
                     <item>
                      <widget class="QPushButton" name="boton_crear_role_sdmed">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="text">
                        <string>Crear</string>
                       </property>
@@ -299,6 +332,9 @@
                    <layout class="QVBoxLayout" name="verticalLayout_12">
                     <item>
                      <widget class="QLabel" name="label_existe_bbdd_sdmed">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="text">
                        <string>Existe la BBDD sdmed</string>
                       </property>
@@ -306,6 +342,9 @@
                     </item>
                     <item>
                      <widget class="QPushButton" name="boton_crear_bbdd_sdmed">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="text">
                        <string>Crear</string>
                       </property>
@@ -324,6 +363,9 @@
             <layout class="QHBoxLayout" name="horizontalLayout_7">
              <item>
               <widget class="QLabel" name="label_instancias_disponibles">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>Instancias disponibles:</string>
                </property>
@@ -331,6 +373,9 @@
              </item>
              <item>
               <widget class="QComboBox" name="combobox_rutas_datos">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -347,6 +392,9 @@
              </item>
              <item>
               <widget class="QPushButton" name="boton_conectar">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="toolTip">
                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Intentará buscar la ubicacion donde se encuentra ubicado el directorio donde están las extensiones de PostgreSQL.&lt;/p&gt;&lt;p&gt;Si se desmarca la opción de &amp;quot;&lt;span style=&quot; font-weight:600;&quot;&gt;Búsqueda rápida&lt;/span&gt;&amp;quot; hará una búsqueda exhaustiva de todas las posibles ubicaciones en todo el disco duro, lo que se llevará más tiempo.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>

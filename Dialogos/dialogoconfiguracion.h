@@ -21,12 +21,13 @@ public:
     bool HayPython();
     bool IsPostgresRunning();
     void ComprobacionesPython();
-    bool ComprobarDatosAdminRole(QSqlDatabase db);
+    void ComprobarDatosAdminRole(QSqlDatabase db);
     void ComprobarRoleSdmed(QSqlQuery consulta);
     void ComprobarExistenciaBBDDSdmed(QSqlQuery consulta);
     void ComprobarExtensionSuministrada();
     void ComprobarExtensionInstalada(QSqlQuery consulta);
     void CopiarConPermisos(const QString &fichero_origen, const QString &fichero_destino, QString passw = "");
+    void ActivarLetreros(bool esadmin);
 
 public slots:
     void ComprobacionesPostgres();
@@ -47,7 +48,7 @@ private:
     bool m_instalarExtension;
 
     QSqlDatabase m_dbAdmin;
-    bool hayDBAdmin;
+    bool m_esDBAdmin;
 };
 
 #endif // DIALOGOCONFIGURACION_H

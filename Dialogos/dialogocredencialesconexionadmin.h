@@ -3,6 +3,7 @@
 
 #include <QDialog>
 
+class QSqlDatabase;
 
 namespace Ui {
 class DialogoCredencialesConexionAdmin;
@@ -20,7 +21,7 @@ class DialogoCredencialesConexionAdmin : public QDialog
     };
 
 public:
-    explicit DialogoCredencialesConexionAdmin(QWidget *parent = nullptr);
+    explicit DialogoCredencialesConexionAdmin(QSqlDatabase &db, QWidget *parent = nullptr);
     ~DialogoCredencialesConexionAdmin();
     void WriteSettings();
     void ReadSettings();
@@ -33,6 +34,7 @@ public slots:
 private:
     Ui::DialogoCredencialesConexionAdmin *ui;
     sDatosConexion m_datosConexion;
+    QSqlDatabase* m_db;
 };
 
 #endif // DIALOGODATOSCONEXION_H
