@@ -9,7 +9,7 @@
 class ImportarBC3 : public QDialog
 {
 public:
-    enum eTipoImportacion{NORMAL, SIMPLIFICADO};
+    enum eTipoImportacion{NORMAL, SIMPLIFICADO, NINGUNO};
 
     ImportarBC3(const QStringList & listadoBC3, bool& abierta);
     int crearObra(QStringList& registroC);
@@ -32,9 +32,10 @@ private:
     QSqlQuery consulta;
     //QSqlDatabase db_superuser;
     QString codigo,resumen;
-    const int TAM_MAX = 20000;
+    int TAM_MAX;
     eTipoImportacion tipoImportacion;
     QHash<QString,QString>hashtexto;
+    bool *m_abierta;
 
 };
 

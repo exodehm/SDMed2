@@ -10,8 +10,8 @@
 #include <QMessageBox>
 #include <QTemporaryDir>
 
-//#include "../Dialogos/dialogocredencialesconexionadmin.h"
 #include "../Dialogos/dialogotipoaperturabc3.h"
+#include "../Dialogos/dialogocredencialesconexionadmin.h"
 
 ImportarBC3::ImportarBC3(const QStringList &listadoBC3, bool &abierta)
 {
@@ -19,6 +19,9 @@ ImportarBC3::ImportarBC3(const QStringList &listadoBC3, bool &abierta)
     QStringList registroM;
     QStringList registroC;
     QStringList registroT;
+
+    TAM_MAX = 20000;
+    m_abierta = &abierta;
 
     foreach (QString linea, listadoBC3)
     {
@@ -60,46 +63,59 @@ ImportarBC3::ImportarBC3(const QStringList &listadoBC3, bool &abierta)
     if (res==0)
     {
         abierta = true;
+        //establecer el tipo de importacion que vamos a hacer
         if (!HayMediciones(registroM))
         {
             tipoImportacion = SIMPLIFICADO;
         }
-        else
+        else if (listadoBC3.size()>TAM_MAX)
         {
-            if (listadoBC3.size()>TAM_MAX)
+            DialogoTipoAperturaBC3 *d = new DialogoTipoAperturaBC3;
+            if (d->exec())
             {
-                DialogoTipoAperturaBC3 *d = new DialogoTipoAperturaBC3;
-                if (d->exec())
+                if (d->result() == QDialog::Accepted)
                 {
-                    if (d->result() == 1)
+                    if (d->ImportacionRapida())
                     {
-                        if (d->ImportacionRapida())
-                        {
-                            tipoImportacion = SIMPLIFICADO;
-                        }
-                        else
-                        {
-                            tipoImportacion = NORMAL;
-                        }
+                        tipoImportacion = SIMPLIFICADO;
                     }
                     else
                     {
-                        qDebug()<<"Adios";
+                        tipoImportacion = NORMAL;
                     }
+                }
+                else //si salimos del dialogo cancelando
+                {
+                    tipoImportacion = NINGUNO;
                 }
             }
         }
-        db = QSqlDatabase::addDatabase("QPSQL","admin");
-        QSettings settings;
-        db.setHostName(settings.value("adminrole/servidor").toString());
-        db.setPort(settings.value("adminrole/puerto").toInt());
-        db.setUserName(settings.value("adminrole/usuario").toString());
-        db.setPassword(settings.value("adminrole/password").toString());
-        db.setDatabaseName("sdmed");
-        if (db.open())
+        else
         {
-            qDebug()<<"Ok Db";
-
+            tipoImportacion = NORMAL;
+        }
+        qDebug()<<"El tipo de importación es: "<<tipoImportacion;
+        db = QSqlDatabase::addDatabase("QPSQL","admin");
+        if (tipoImportacion == eTipoImportacion::SIMPLIFICADO)
+        {
+            QSettings settings;
+            db.setHostName(settings.value("adminrole/servidor").toString());
+            db.setPort(settings.value("adminrole/puerto").toInt());
+            db.setUserName(settings.value("adminrole/usuario").toString());
+            db.setPassword(settings.value("adminrole/password").toString());
+            db.setDatabaseName("sdmed");
+            if (!db.open())
+            {
+                DialogoCredencialesConexionAdmin* d = new DialogoCredencialesConexionAdmin (db);
+                int res = d->exec();
+                if (res==QDialog::Rejected || !db.open())
+                {
+                    BorrarIntentoObra(tr("Se necesitan credencialesss de admin para esta acción"));
+                }
+            }
+        }
+        if ((tipoImportacion == eTipoImportacion::SIMPLIFICADO && db.open()) || tipoImportacion == eTipoImportacion::NORMAL)
+        {
             CrearHashTexto(registroT);
             if (!procesarConceptos(registroC, tipoImportacion))
             {
@@ -118,12 +134,14 @@ ImportarBC3::ImportarBC3(const QStringList &listadoBC3, bool &abierta)
         }
         else
         {
-            BorrarIntentoObra(tr("Se necesitan credenciales de admin para esta acción"));
+            BorrarIntentoObra(tr("Se cancela el proceso de importación"));
         }
     }
     else
     {
-        abierta = false;
+        QMessageBox msgBox;
+        msgBox.setText(tr("No ha sido posible crear la obra."));
+        msgBox.exec();
     }
 }
 
@@ -465,6 +483,7 @@ void ImportarBC3::BorrarIntentoObra(const QString &mensajeerror)
                          tr("Aviso"),
                          tr("No ha sido posible abrir el fichero bc3\n%1").arg(mensajeerror),
                          QMessageBox::Ok);
+    *m_abierta = false;
 }
 
 bool ImportarBC3::HayMediciones(const QStringList& registroM)

@@ -69,7 +69,6 @@ bool DialogoCredencialesConexionAdmin::ComprobarAdminRole()
     m_db->close();
     if (m_db->open(ui->lineEditUsuario->text(),ui->lineEditPassword->text()))
     {
-        qDebug()<<"Abuerto "<<m_db->databaseName();//
         WriteSettings();
         QString cadenacomprobacionrolsuper = "SELECT rolsuper FROM pg_authid WHERE rolname = '" + ui->lineEditUsuario->text() + "'";
         QSqlQuery consulta(cadenacomprobacionrolsuper, *m_db);

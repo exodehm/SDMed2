@@ -33,11 +33,7 @@ def InstalarDependencias(ruta):
 	#buscar e instalar pipreqs si no lo esta
 	pipreqs = "pipreqs"	
 	if not DependenciaInstalada(pipreqs):
-		print ("Se necesita intalar pipreqs. ¿Continuar?")
-		print ("(S/N)")
-		respuesta = input()
-		if respuesta == 'S' or respuesta == 's':
-			subprocess.check_call([sys.executable, "-m", "pip", "install", pipreqs])
+            subprocess.check_call([sys.executable, "-m", "pip", "install", pipreqs])
 	#instalar las dependencias
 	ruta_scripts = ruta + "/.sdmed/python_plugins/"
 	print ("ruta scripts " + ruta_scripts)
@@ -61,7 +57,7 @@ def DependenciaInstalada(dependencia):
 	
 def Descomprimir(ruta ,nombrearchivo=None):
 	if nombrearchivo == None:
-		nombrearchivo = "sdmed.zip"
+                nombrearchivo = "sdmed_scripts.zip"
 	archivozip = nombrearchivo
 	if not nombrearchivo.endswith ('.zip'):
 		archivozip += '.zip'

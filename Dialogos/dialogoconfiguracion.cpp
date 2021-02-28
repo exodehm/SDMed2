@@ -72,7 +72,7 @@ void DialogoConfiguracion::InstalarExtension()
     {
         QString sResourceFiles = ":/postgres-extension";
         QTextEdit htmlText(ui->label_ruta_directorio_extension->text());
-        QString ruta_extension = htmlText.toPlainText() + "/";
+        QString ruta_extension = htmlText.toPlainText() + QDir::separator();
         QDirIterator it(sResourceFiles);//, QDirIterator::Subdirectories);
         QStringList listaArchivosCopiar;
         while (it.hasNext())
@@ -159,66 +159,48 @@ void DialogoConfiguracion::InstalarScriptsPython()
     if (tempdir.isValid())
     {
         QString sResourceFiles = ":/python";
-        //QTextEdit htmlText(ui->label_ruta_directorio_extension->text());
-        //QString ruta_extension = htmlText.toPlainText() + "/";
-        QDirIterator it(sResourceFiles);//, QDirIterator::Subdirectories);
-        QStringList listaArchivosCopiar;
+        QString ruta = tempdir.path() + QDir::separator();
+        QString sArchivoComprimido;
+        QDirIterator it(sResourceFiles);
         while (it.hasNext())
         {
             it.next();
-            listaArchivosCopiar<<it.fileName();
-            qDebug()<<"Archivos: "<<tempdir.path() + "/" + it.fileName();
+            QString fOrigen = sResourceFiles + QDir::separator() + it.fileName();
+            QString fDestino = ruta + it.fileName();
+            if (QFile::exists(fDestino))
+            {
+                QFile::remove(fDestino);
+            }
+            if (fDestino.endsWith(".zip"))
+            {
+                sArchivoComprimido=fDestino;
+            }
+            bool res = QFile::copy(fOrigen, fDestino);
+            if (res == false)
+            {
+                break;
+            }
         }
+        QString m_pModulo = "instalar_scripts";
+        QString m_pFuncion = "Descomprimir";
+        QStringList pArgumentos;
+        pArgumentos<<m_rutaPython<<sArchivoComprimido;
 
-    //QString ruta = "/home/david/programacion/python/instalador/";
-    QString ruta = tempdir.path() + "/";
-    qDebug()<<ruta;
-    QString m_pModulo = "instalar_scripts";
-    QString m_pFuncion = "Descomprimir";
-    QStringList pArgumentos;
-    pArgumentos<<m_rutaPython;
-
-    QPair <int,QVariant>res = ::PyRun::loadModule(ruta, m_pModulo, m_pFuncion, pArgumentos);
-    qDebug()<<res.first;
+        QPair <int,QVariant>res = ::PyRun::loadModule(ruta, m_pModulo, m_pFuncion, pArgumentos);
+        qDebug()<<res.first;
+        if (res.first==5)
+        {
+            QMessageBox msgBox;
+            msgBox.setText(tr("Los archivos se han copiado con éxito en ") + m_rutaPython + QDir::separator() + ".sdmed");
+            msgBox.exec();
+        }
+        //ahora las dependencias
+        m_pFuncion = "InstalarDependencias";
+        pArgumentos.clear();
+        pArgumentos<<m_rutaPython;
+        QPair <int,QVariant>res2 = ::PyRun::loadModule(ruta, m_pModulo, m_pFuncion, pArgumentos);
+        qDebug()<<res2.first;
     }
-    /*QProcess process1;
-    QString s_process1 = "xfce4-terminal ";
-    QStringList argumentos;
-    argumentos<<"echo "<<"hola";
-    process1.start(s_process1,argumentos);
-    bool retval = false;
-    QByteArray buffer;
-    process1.waitForFinished(5000);
-    while ((retval = process1.waitForFinished()))
-    {
-        buffer.append(process1.readAll());
-    }
-    if (!retval)
-    {
-        qDebug() << "Process 1 error:" << process1.errorString();
-    }
-    qDebug()<<buffer;*/
-    //qDebug()<<getenv("SHELL");
-
-    //process1.start(QString("/bin/sh"), argumentos);
-    /*if (QProcess::execute(QString("/bin/sh"), argumentos) < 0)
-    {
-      qDebug() << "Failed to run";
-    }
-    else
-    {
-        qDebug()<<"Todo coresstoo";
-    }*/
-    /*QProcess process;
-    process.start("gedit", QStringList() << "/home/david/programacion/bash/hola.sh");*/
-    //system ("xfce4-terminal");
-    //system ("$TERM");
-    //system ("*bin/bash");
-    //auto pPipe = ::popen("/bin/sh", "r");
-    //popen("xfce4-terminal -m python", "r");
-    //system("echo $TERM");grep --version
-    //system("grep --version");
-
 }
 
 void DialogoConfiguracion::DatosAdmin()
