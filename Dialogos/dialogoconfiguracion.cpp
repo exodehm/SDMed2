@@ -145,7 +145,10 @@ void DialogoConfiguracion::InstalarExtension()
                 }
                 else//no hay versión instalada
                 {
-                    qDebug()<<"CREATE EXENSION sdmed";
+                    QString sconsulta = "CREATE EXTENSION sdmed";
+                    QSqlQuery consulta (m_dbAdmin);
+                    consulta.exec(sconsulta);
+                    qDebug()<<consulta.lastError();
                 }
             }
         }
@@ -198,8 +201,9 @@ void DialogoConfiguracion::InstalarScriptsPython()
         m_pFuncion = "InstalarDependencias";
         pArgumentos.clear();
         pArgumentos<<m_rutaPython;
-        QPair <int,QVariant>res2 = ::PyRun::loadModule(ruta, m_pModulo, m_pFuncion, pArgumentos);
-        qDebug()<<res2.first;
+        //QPair <int,QVariant>res2 = ::PyRun::loadModule(ruta, m_pModulo, m_pFuncion, pArgumentos);
+        res = ::PyRun::loadModule(ruta, m_pModulo, m_pFuncion, pArgumentos);
+        qDebug()<<res.first;
     }
 }
 
@@ -402,7 +406,6 @@ void DialogoConfiguracion::ComprobarDatosAdminRole(QSqlDatabase db)
     int puerto = settings.value("adminrole/puerto").toInt();
     QString admin = settings.value("adminrole/usuario").toString();
     QString password = settings.value("adminrole/password").toString();
-    qDebug()<<"datos de los cojones: "<<servidor<<"-"<<puerto<<"-"<<admin<<"-"<<password;
     db.setHostName(servidor);
     db.setPort(puerto);
     db.setUserName(admin);

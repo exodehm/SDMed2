@@ -18,6 +18,14 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT true FROM pg_roles WHERE rolname='sdmed') THEN
+      CREATE ROLE sdmed WITH LOGIN PASSWORD 'sdmed';
+    END IF;
+END
+$$;
+
 --
 -- TOC entry 8 (class 2615 OID 39238)
 -- Name: sdmed; Type: SCHEMA; Schema: -; Owner: sdmed
@@ -1322,7 +1330,7 @@ SELECT EXISTS (
    RAISE NOTICE '%',existe;
 IF existe IS FALSE THEN
    
-  CREATE TABLE "tAcero" (
+  CREATE TABLE sdmed."tAcero" (
     id integer NOT NULL PRIMARY KEY,
     area numeric,
     masa numeric,
@@ -1330,7 +1338,7 @@ IF existe IS FALSE THEN
     tamanno character varying(13)
 );
 
-CREATE SEQUENCE "tCorrugados_id_seq"
+CREATE SEQUENCE sdmed."tCorrugados_id_seq"
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -1338,7 +1346,7 @@ CREATE SEQUENCE "tCorrugados_id_seq"
     NO MAXVALUE
     CACHE 1;
 	
-	INSERT INTO "tAcero" (id, area, masa, tipo, tamanno) VALUES
+        INSERT INTO sdmed."tAcero" (id, area, masa, tipo, tamanno) VALUES
 	('44','65.30','502000','HEB','180'),
 	('45','78.10','601000','HEB','200'),
 	('46','91.00','701000','HEB','220'),
