@@ -186,15 +186,13 @@ RESOURCES += \
     iconos.qrc \
     scripts_python.qrc
 
-
 unix {
-    INCLUDEPATH += /usr/include/python3.8
-    #LIBS += -L /usr/local/lib/python3.8 -lpython3.8
-    LIBS += -lpython3.8
+    INCLUDEPATH += /usr/include/python3.6m
+    LIBS += -L /usr/lib/python3.6m -lpython3.6m
+    #LIBS += -lpython3.8
     #LIBS += -Wl,-Bstatic -lpython3.8 -Wl,-Bdynamic
     #LIBS += -lz
-    DEPENDPATH +=  /usr/include/python3.8
-
+    DEPENDPATH +=  /usr/include/python3.6m
 }
 
 win32 {

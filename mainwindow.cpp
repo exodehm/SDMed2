@@ -356,7 +356,7 @@ void MainWindow::ActionImprimir()
     //qDebug()<<"Resultado: "<<res<<" "<<QDir::home().absoluteFilePath(ruta);
     //hacer un switch/case con los posibles errores
     DialogoListadoImprimir* d = new DialogoListadoImprimir(obraActual()->LeeTabla(), db, this);
-    int res = d->exec();
+    int res = d->exec();    
 }
 
 void MainWindow::ActionCerrar(QString nombreobra)

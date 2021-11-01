@@ -68,6 +68,7 @@ public:
 public slots:
     void Previsualizar();
     void ActualizarBotonPrevisualizar();
+    void ActualizarBotonAnadir();
     void DesactivarBotones();
     void OpcionesPagina();
     void MostrarTablaOpciones();
@@ -84,6 +85,7 @@ private:
     QString m_obra;
     QString m_layout_pagina;
     QString m_listadosImpresion;
+    QString m_tituloListadoImprimir;
     QHash<QString, QString> m_lista_extensiones;
     sOpcionesPagina m_opciones_pagina;    
 };

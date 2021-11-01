@@ -25,10 +25,14 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
 {
     ui->setupUi(this);
     QSettings settings;
-    QString rutascriptpython = settings.value("rutas/ruta_python").toString();
+    QString rutascriptpython = settings.value("rutas/ruta_python").toString() + "/.sdmed/python_plugins/plugins_impresion/cargador.py";
+    qDebug()<<"rutascriptpython: "<<rutascriptpython;
     m_ruta = rutascriptpython.left(rutascriptpython.lastIndexOf("/"));
+    qDebug()<<"m_ruta: "<<m_ruta;
     m_pModulo = rutascriptpython.remove(m_ruta).remove("/").remove(".py");
+    qDebug()<<"m_pModulo: "<<m_pModulo;
     m_pFuncion = "iniciar";
+    m_tituloListadoImprimir = "";
     QDir dir_plugins(m_ruta);
     dir_plugins.setFilter(QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
     QStringList filtros;
@@ -44,7 +48,7 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
         {
             if (fichero.filePath().contains("metadata.json"))
             {
-                //qDebug()<<"fichero "<<fichero.absolutePath()<<" - "<<fichero.filePath();
+                qDebug()<<"fichero "<<fichero.absolutePath()<<" - "<<fichero.filePath();
                 sTipoListado TL;
                 if (LeerJSON(TL,fichero.filePath()))
                 {
@@ -70,7 +74,7 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
         m_botoneralayout[m_lista.at(i).tipo]->addLayout(marco);
         marco->addWidget(radio_boton);
         m_lista[i].boton = radio_boton;
-        QObject::connect(radio_boton,SIGNAL(clicked()),this, SLOT(ActualizarBotonPrevisualizar()));
+        QObject::connect(radio_boton,SIGNAL(clicked()),this, SLOT(ActualizarBotonAnadir()));
         //boton desplegable
         CustomPushButton* botonPropiedades = new CustomPushButton("+");
         botonPropiedades->setMaximumWidth(30);
@@ -88,6 +92,7 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
     QObject::connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(DesactivarBotones()));
     QObject::connect(ui->boton_opcionesPagina,SIGNAL(pressed()),this,SLOT(OpcionesPagina()));
     QObject::connect(ui->boton_anadir,SIGNAL(pressed()),this, SLOT(AnadirListadoImpresion()));
+    QObject::connect(ui->textEditListadoImpresion,SIGNAL(textChanged()),this,SLOT(ActualizarBotonPrevisualizar()));
 }
 
 DialogoListadoImprimir::~DialogoListadoImprimir()
@@ -96,6 +101,11 @@ DialogoListadoImprimir::~DialogoListadoImprimir()
 }
 
 void DialogoListadoImprimir::ActualizarBotonPrevisualizar()
+{
+    ui->boton_Previsualizar->setEnabled(!ui->textEditListadoImpresion->toPlainText().isEmpty());
+}
+
+void DialogoListadoImprimir::ActualizarBotonAnadir()
 {
     //Primero desactivar los botones de propiedades que haya visibles
     for (auto c : m_lista)
@@ -106,7 +116,7 @@ void DialogoListadoImprimir::ActualizarBotonPrevisualizar()
     CustomRadioButton* c = dynamic_cast<CustomRadioButton*>(sender());
     if (c)
     {
-        ui->boton_Previsualizar->setEnabled(c->isChecked());
+        //ui->boton_Previsualizar->setEnabled(c->isChecked()&& !m_tituloListadoImprimir.isEmpty());
         ui->boton_anadir->setEnabled(c->isChecked());
         c->botonPropiedades->setVisible(c->isChecked());
     }
@@ -114,7 +124,7 @@ void DialogoListadoImprimir::ActualizarBotonPrevisualizar()
 
 void DialogoListadoImprimir::DesactivarBotones()
 {
-    ui->boton_Previsualizar->setEnabled(false);
+    //ui->boton_Previsualizar->setEnabled(false);
     ui->boton_anadir->setEnabled(false);
     for (auto elem : m_lista)
     {
@@ -139,7 +149,7 @@ void DialogoListadoImprimir::MostrarTablaOpciones()
     {
         if (!w->d)
         {
-            w->d =  new DialogoTablaOpcionesImpresion(*w->opciones,w);
+            w->d = new DialogoTablaOpcionesImpresion(*w->opciones,w);
             w->d->move(mapToGlobal(QPoint(w->geometry().x()+w->width()*2,w->geometry().y()+w->height()*2)));
         }
         if (w->d->exec())
@@ -158,6 +168,7 @@ void DialogoListadoImprimir::AnadirListadoImpresion()
         {
             if (button->isChecked())
             {
+                qDebug()<<button->text();
                 for( int i=0; i<m_lista.count(); ++i )
                 {
                     if (m_lista.at(i).boton == button)
@@ -176,7 +187,10 @@ void DialogoListadoImprimir::AnadirListadoImpresion()
                             opciones = m_lista.at(i).opcionesSelecionadas;
                         }
                         m_listadosImpresion.append("['").append(m_lista.at(i).ruta).append("'").append(",").append(opciones).append("]");
+                        m_tituloListadoImprimir.append(m_obra).append("--").append(button->text()).append("\n");
                         qDebug()<<"Añadir al listado.... "<<m_listadosImpresion;
+                        QString listado = m_lista.at(i).opcionesSelecionadas;
+                        ui->textEditListadoImpresion->setText(m_tituloListadoImprimir);
                     }
                 }
             }
@@ -204,9 +218,9 @@ bool DialogoListadoImprimir::LeerJSON(sTipoListado& tipoL, const QString& nombre
     for(const QJsonValue val: datos_script)
     {
         QJsonObject loopObj = val.toObject();
-        //qDebug() << loopObj["nombre"].toString();
-        //qDebug() << loopObj["tipo"].toString();
-        //qDebug() << loopObj["version"].toString();
+        qDebug() << loopObj["nombre"].toString();
+        qDebug() << loopObj["tipo"].toString();
+        qDebug() << loopObj["version"].toString();
         tipoL.nombre = loopObj["nombre"].toString();
         tipoL.tipo = static_cast<eTipo>(loopObj["tipo"].toInt());
         //si el tipo por algun caso esta mal, le asignaremos el tipo general
@@ -294,8 +308,11 @@ void DialogoListadoImprimir::Previsualizar()
     }
     else //definir los mensajes de error en caso de no successful
     {
+        QString s_error = "Ha habido problemas con el script de python " + QString::number(res.first);
+        QByteArray b_error = s_error.toLocal8Bit();
+        const char* c_error = b_error.data();
         int ret = QMessageBox::warning(this, tr("Problemas al imprimir"),
-                                       tr("Ha habido problemas con el script de python"/*este mensaje* es el que hay que especificar el tipo de error*/),
+                                       tr(c_error),/*este mensaje* es el que hay que especificar el tipo de error*/
                                        QMessageBox::Ok);
         qDebug()<<"ret "<<res.first;
     }

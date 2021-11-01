@@ -1322,7 +1322,7 @@ SELECT EXISTS (
    RAISE NOTICE '%',existe;
 IF existe IS FALSE THEN
    
-  CREATE TABLE "tAcero" (
+  CREATE TABLE sdmed."tAcero" (
     id integer NOT NULL PRIMARY KEY,
     area numeric,
     masa numeric,
@@ -1338,7 +1338,7 @@ CREATE SEQUENCE "tCorrugados_id_seq"
     NO MAXVALUE
     CACHE 1;
 	
-	INSERT INTO "tAcero" (id, area, masa, tipo, tamanno) VALUES
+	INSERT INTO sdmed."tAcero" (id, area, masa, tipo, tamanno) VALUES
 	('44','65.30','502000','HEB','180'),
 	('45','78.10','601000','HEB','200'),
 	('46','91.00','701000','HEB','220'),
