@@ -60,6 +60,7 @@ ImportarBC3::ImportarBC3(const QStringList &listadoBC3, bool &abierta)
     qDebug()<<"Total lineas Registro T: "<<registroT.size();
     //empezamos con el registro C
     int res = crearObra(registroC);
+    tipoImportacion = NINGUNO;
     if (res==0)
     {
         abierta = true;
@@ -94,7 +95,6 @@ ImportarBC3::ImportarBC3(const QStringList &listadoBC3, bool &abierta)
         {
             tipoImportacion = NORMAL;
         }
-        qDebug()<<"El tipo de importación es: "<<tipoImportacion;
         db = QSqlDatabase::addDatabase("QPSQL","admin");
         if (tipoImportacion == eTipoImportacion::SIMPLIFICADO)
         {
