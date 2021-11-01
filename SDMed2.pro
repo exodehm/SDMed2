@@ -15,7 +15,9 @@ TEMPLATE = app
 SOURCES += main.cpp\
     Dialogos/dialogocontrasenna.cpp \
     Dialogos/dialogocredencialesconexionadmin.cpp \
+    Dialogos/dialogodatosconexion.cpp \
     Dialogos/dialogotipoaperturabc3.cpp \
+    Dialogos/lineeditip.cpp \
     codificacion.cpp \
     mainwindow.cpp \
     Delegados/delegadoarbol.cpp \
@@ -32,7 +34,6 @@ SOURCES += main.cpp\
     Dialogos/dialogogoopcionespagina.cpp \
     Dialogos/dialogolistadoimprimir.cpp \
     Dialogos/dialogomensajeconexioninicial.cpp \
-    Dialogos/dialogooperacionesbbdd.cpp \
     Dialogos/dialogosudo.cpp \
     Dialogos/dialogotablaopcionesimpresion.cpp \
     Dialogos/dialogoabout.cpp \
@@ -46,7 +47,6 @@ SOURCES += main.cpp\
     Dialogos/dialogoeditorformulasmedicion.cpp \
     Dialogos/dialogoajustar.cpp \
     Dialogos/dialogogestionobras.cpp \
-    Dialogos/dialogoconexionbbdd.cpp \
     Dialogos/dialogodatosgenerales.cpp \
     Ficheros/importarBC3.cpp \
     Ficheros/exportarBC3.cpp \
@@ -93,18 +93,17 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogoconfiguracion.h \
     Dialogos/dialogocontrasenna.h \
     Dialogos/dialogocredencialesconexionadmin.h \
+    Dialogos/dialogodatosconexion.h \
     Dialogos/dialogogoopcionespagina.h \
     Dialogos/dialogolicencia.h \
     Dialogos/dialogocreditos.h \
     Dialogos/dialogodatoscodigoresumen.h \
     Dialogos/dialogolistadoimprimir.h \
     Dialogos/dialogomensajeconexioninicial.h \
-    Dialogos/dialogooperacionesbbdd.h \
     Dialogos/dialogosudo.h \
     Dialogos/dialogotablaopcionesimpresion.h \
     Dialogos/dialogogestionobras.h \
     Dialogos/dialogoadvertenciaborrarbbdd.h \
-    Dialogos/dialogoconexionbbdd.h \
     Dialogos/dialogodatosgenerales.h \
     Dialogos/dialogoprecio.h \
     Dialogos/dialogosuprimirmedicion.h \
@@ -112,6 +111,7 @@ HEADERS  += mainwindow.h \
     Dialogos/dialogocertificaciones.h \
     Dialogos/dialogoeditorformulasmedicion.h \
     Dialogos/dialogotipoaperturabc3.h \
+    Dialogos/lineeditip.h \
     Ficheros/importarBC3.h \
     Ficheros/exportarBC3.h \
     codificacion.h \
@@ -148,17 +148,17 @@ HEADERS  += mainwindow.h \
 
 
 FORMS    += Ui/mainwindow.ui \
+    Ui/dialogoconfiguracion.ui \
     Ui/dialogocontrasenna.ui \
     Ui/dialogoabout.ui \
-    Ui/dialogoconfiguracion.ui \
     Ui/dialogocontrasenna.ui \
     Ui/dialogocredencialesconexionadmin.ui \
     Ui/dialogocreditos.ui \
+    Ui/dialogodatosconexion.ui \
     Ui/dialogogoopcionespagina.ui \
     Ui/dialogolicencia.ui \
     Ui/dialogolistadoimprimir.ui \
     Ui/dialogomensajeconexioninicial.ui \
-    Ui/dialogooperacionesbbdd.ui \
     Ui/dialogoprecio.ui \
     Ui/dialogosudo.ui \
     Ui/dialogosuprimirmedicion.ui \
@@ -169,10 +169,10 @@ FORMS    += Ui/mainwindow.ui \
     Ui/dialogoajustar.ui \
     Ui/dialogotablaopcionesimpresion.ui \
     Ui/dialogoeditorformulasmedicion.ui \
-    Ui/dialogoconexionbbdd.ui \
     Ui/dialogodatosgenerales.ui \
     Ui/dialogogestionobras.ui \
-    Ui/dialogotipoaperturabc3.ui
+    Ui/dialogotipoaperturabc3.ui \
+    Ui/lineeditip.ui
 
 QT += sql
 

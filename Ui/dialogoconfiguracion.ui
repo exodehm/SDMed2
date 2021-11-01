@@ -79,6 +79,46 @@
                    </layout>
                   </item>
                   <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_12">
+                    <item>
+                     <widget class="QLabel" name="label_directorio_datos">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Directorio datos: </string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_ruta_directorio_datos">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_12">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
                    <layout class="QHBoxLayout" name="horizontalLayout_2">
                     <item>
                      <widget class="QLabel" name="label_titulo_nombre_extension">
@@ -269,7 +309,7 @@
                        <bool>false</bool>
                       </property>
                       <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Intentará buscar la ubicacion donde se encuentra ubicado el directorio donde están las extensiones de PostgreSQL.&lt;/p&gt;&lt;p&gt;Si se desmarca la opción de &amp;quot;&lt;span style=&quot; font-weight:600;&quot;&gt;Búsqueda rápida&lt;/span&gt;&amp;quot; hará una búsqueda exhaustiva de todas las posibles ubicaciones en todo el disco duro, lo que se llevará más tiempo.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                       <string/>
                       </property>
                       <property name="text">
                        <string>Instalar</string>

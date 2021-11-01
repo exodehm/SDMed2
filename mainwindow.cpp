@@ -12,6 +12,7 @@
 #include "./Dialogos/dialogolistadoimprimir.h"
 #include "./Dialogos/dialogoconfiguracion.h"
 #include "./Dialogos/dialogomensajeconexioninicial.h"
+#include "./Dialogos/dialogodatosconexion.h"
 #include "./imprimir.h"
 #include "./miundostack.h"
 
@@ -26,10 +27,20 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     {
+        m_tiempoMaximoIntentoConexion = 5;
+        m_basededatos = "sdmed";
+        m_db = QSqlDatabase::addDatabase("QPSQL");
+        m_db.setConnectOptions("connect_timeout = " + QString::number(m_tiempoMaximoIntentoConexion));
+        m_d = nullptr;
+        if (!Conectar())
+        {
+            ConfigurarDatosConexion();
+        }
+
         ui->setupUi(this);
         setWindowTitle(QCoreApplication::applicationName());
         //seccion ver medicion/certificacion
-        labelVerMedCert = new QLabel("Ver:");
+        labelVerMedCert = new QLabel(tr("Ver:"));
         comboMedCert = new QComboBox;
         comboMedCert->addItem(tr("Medición"));
         comboMedCert->addItem(tr("Certificación"));
@@ -46,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->CertBar->addWidget(labelCertificacionActual[0]);
         ui->CertBar->addWidget(labelCertificacionActual[1]);
         setupActions();
-        readSettings();
+        readSettings();        
     }
 }
 
@@ -96,6 +107,50 @@ void MainWindow::readSettings()
 Instancia *MainWindow::obraActual()
 {
     return qobject_cast<Instancia*>(ui->tabPrincipal->currentWidget());
+}
+
+bool MainWindow::Conectar()
+{
+    m_db.setDatabaseName(m_basededatos);
+    m_db.setUserName(m_nombre);
+    m_db.setPort(m_puerto.toInt());
+    m_db.setPassword(m_password);
+    m_db.setHostName(m_host);
+
+    if (m_db.open())
+    {
+        qDebug()<<"<b>Exito</b>";
+        return true; //return m_db.open()
+    }
+    else
+    {
+        qDebug()<<"<b>Fracaso</b>";
+        return  false;//return m_db.open()
+    }
+}
+
+bool MainWindow::ConfigurarDatosConexion()
+{
+    if (m_d==nullptr)
+    {
+        m_d = new DialogoDatosConexion(m_db, this);
+    }
+    m_d->show();
+    if (m_d->exec())
+    {
+        QStringList l = m_d->LeeDatosConexion();
+        foreach (QString s, l )
+        {
+            qDebug()<<"Leyendo del dialogo: "<<s;
+        }
+        m_basededatos = l.at(eDatosConexion::BBDD);
+        m_nombre = l.at(eDatosConexion::NOMBRE);
+        m_puerto = l.at(eDatosConexion::PUERTO);
+        m_password = l.at(eDatosConexion::PASSWD);
+        m_host = l.at(eDatosConexion::HOST);
+        //writeSettings();
+        Conectar();
+    }
 }
 
 
@@ -522,7 +577,7 @@ void MainWindow::ActionPropiedadesObra()
 
 void MainWindow::ActionConfigurar()
 {
-    DialogoConfiguracion* d = new DialogoConfiguracion(this);
+    DialogoConfiguracion* d = new DialogoConfiguracion(m_db, this);
     if (d->exec())
     {
         qDebug()<<"Configurar";

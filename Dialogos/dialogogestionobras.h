@@ -27,7 +27,7 @@ public slots:
     void ActualizarBotones();    
 
 private slots:
-    bool ConectarBBDD();
+    //bool ConectarBBDD();
     void ExportadDB();
     void ImportarDB();
 

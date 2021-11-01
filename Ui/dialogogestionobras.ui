@@ -95,13 +95,6 @@
          </property>
         </spacer>
        </item>
-       <item>
-        <widget class="QPushButton" name="botonConectarBBDD">
-         <property name="text">
-          <string>Conectar BBDD</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>

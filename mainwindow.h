@@ -14,6 +14,7 @@ class Instancia;
 class QLabel;
 class QComboBox;
 class QPushButton;
+class DialogoDatosConexion;
 
 
 class MainWindow : public QMainWindow
@@ -21,6 +22,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    enum eDatosConexion{BBDD, NOMBRE, HOST, PUERTO, PASSWD};
+
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     QString strippedName(const QString &fullFileName);
@@ -28,6 +31,10 @@ public:
     void writeSettings();
     void readSettings();
     Instancia *obraActual();
+    bool Conectar();
+    bool ConfigurarDatosConexion();
+
+
 
 private slots:
     /*********MENU***************/
@@ -87,10 +94,10 @@ private:
     std::list<Instancia*>::iterator it;
     QString rutaarchivo;
     //menu abrir reciente
-    QStringList recentFiles;
+    /*QStringList recentFiles;
     enum { MaxRecentFiles = 5 };
     QAction *recentFileActions[MaxRecentFiles];
-    QAction *separatorAction;
+    QAction *separatorAction;*/
     //fin de menu abrir reciente
     Ui::MainWindow *ui;
 
@@ -107,5 +114,14 @@ private:
     QLabel* labelCertificacionActual[2];
 
     QDir ruta;
+
+    QString m_nombre;
+    QString m_host;
+    QString m_puerto;
+    QString m_basededatos;
+    QString m_password;
+    QSqlDatabase m_db;
+    DialogoDatosConexion *m_d;
+    quint8 m_tiempoMaximoIntentoConexion;
 };
 #endif // MAINWINDOW_H
