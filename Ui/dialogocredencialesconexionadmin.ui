@@ -105,6 +105,19 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="checkBoxGuadarDatosAdmin">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Si marca la opción de &lt;span style=&quot; font-style:italic;&quot;&gt;Guardar&lt;/span&gt; las credencialesde administrador quedarán almacenadas&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Guardar</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>

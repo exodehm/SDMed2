@@ -41,7 +41,7 @@ public slots:
     void DatosAdmin();
     bool CrearRoleContrasenna();
     bool CrearBaseDatosSdmed();
-    void SetAdmin(bool esadmin);
+    void SetAdmin(bool esadmin);    
     void Salir();
 
 private:
@@ -54,13 +54,12 @@ private:
     bool m_instalarExtension;
 
 
-    //QSqlDatabase m_dbAdmin;
     QSqlDatabase *m_dbAdmin;
     bool m_esDBAdmin;
     bool m_hayRole;
     bool m_hayExtension;
     bool m_hayBBDDSdmed;
-    DialogoCredencialesConexionAdmin* m_dialogoConfiguracionAdmin;
+    DialogoCredencialesConexionAdmin* m_dialogoConfiguracionAdmin;    
 };
 
 #endif // DIALOGOCONFIGURACION_H

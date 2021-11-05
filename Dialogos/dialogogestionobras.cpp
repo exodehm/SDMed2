@@ -1,7 +1,4 @@
 #include "dialogogestionobras.h"
-#include "./Dialogos/dialogoconexionbbdd.h"
-#include "ui_dialogogestionobras.h"
-#include "./instancia.h"
 #include <QTableWidgetItem>
 #include <QtSql/QSqlQuery>
 #include <QPushButton>
@@ -10,17 +7,23 @@
 #include <QFileDialog>
 #include <QDebug>
 
+#include "ui_dialogogestionobras.h"
+#include "./instancia.h"
+#include "../Dialogos/dialogodatosconexion.h"
+
 DialogoGestionObras::DialogoGestionObras(std::list<Instancia *> &ListaObras, QSqlDatabase& db, QWidget *parent) : m_listaobras(ListaObras),
     QDialog(parent), ui(new Ui::DialogoGestionObras)
 {   
     ui->setupUi(this);
     m_db = &db;
+    m_dialogoDatosConexion = nullptr;
     primer_elemento = ListaObras.begin();
     ultimo_elemento = ListaObras.end();
-    LlenarTabla();
+    LlenarTabla();    
     QObject::connect(this,SIGNAL(accepted()),SLOT(listaNombreObrasAbrir()));    
     QObject::connect(this->ui->botonImportarDB,SIGNAL(clicked(bool)),this,SLOT(ImportarDB()));
     QObject::connect(this->ui->botonExportarDB,SIGNAL(clicked(bool)),this,SLOT(ExportadDB()));
+    QObject::connect(this->ui->botonConfigurarDatosConexion,SIGNAL(clicked(bool)),this, SLOT(ConfigurarDatosConexion()));
 }
 
 DialogoGestionObras::~DialogoGestionObras()
@@ -165,6 +168,23 @@ void DialogoGestionObras::ActualizarBotones()
         }
     }
     ui->botonExportarDB->setEnabled(!m_listaObrasBackup.isEmpty());
+}
+
+void DialogoGestionObras::ConfigurarDatosConexion()
+{
+    if (!m_dialogoDatosConexion)
+    {
+        m_dialogoDatosConexion = new DialogoDatosConexion(*m_db,this);
+        m_dialogoDatosConexion->show();
+        if (m_dialogoDatosConexion->exec())
+        {
+            /*QStringList l = m_dialogoDatosConexion->LeeDatosConexion();
+            foreach (QString s, l )
+            {
+                qDebug()<<"Leyendo del dialogo: "<<s;
+            }*/
+        }
+    }
 }
 
 /*bool DialogoGestionObras::ConectarBBDD()

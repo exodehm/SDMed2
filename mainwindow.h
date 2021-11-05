@@ -32,7 +32,7 @@ public:
     void readSettings();
     Instancia *obraActual();
     bool Conectar();
-    bool ConfigurarDatosConexion();
+    void ConfigurarDatosConexion();
 
 
 
@@ -78,7 +78,7 @@ private slots:
 
     void ActivarDesactivarBotonesPila(int indice);
 
-    void ActivarBotonesBasicos(bool activar);
+    void ActivarBotonesBasicos(QSqlDatabase &db);
 
     void ActualizarDatosObra();
 
@@ -87,8 +87,6 @@ protected:
     void closeEvent(QCloseEvent* event);
 
 private:
-
-    QSqlDatabase db;    
     std::list<Instancia*>m_ListaObrasAbiertas;
     //std::list<Instancia*>::iterator obraActual;
     std::list<Instancia*>::iterator it;

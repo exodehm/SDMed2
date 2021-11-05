@@ -11,6 +11,8 @@ namespace Ui {
 class DialogoGestionObras;
 }
 
+class DialogoDatosConexion;
+
 class DialogoGestionObras : public QDialog
 {
     Q_OBJECT
@@ -24,7 +26,8 @@ public:
 public slots:
     QList<QStringList> listaNombreObrasAbrir();
     void Borrar();
-    void ActualizarBotones();    
+    void ActualizarBotones();
+    void ConfigurarDatosConexion();
 
 private slots:
     //bool ConectarBBDD();
@@ -47,6 +50,7 @@ private:
     QString m_schema = "sdmed";
     QString m_tooltipAnadir = "Marcar para añadir a copia de respaldo";
     QString m_tooltipQuitar = "Quitar de la copia de respaldo";
+    DialogoDatosConexion* m_dialogoDatosConexion;
 };
 
 #endif // DIALOGOTABLASLISTADOOBRAS_H

@@ -60,17 +60,14 @@ ImportarBC3::ImportarBC3(const QStringList &listadoBC3, bool &abierta)
     qDebug()<<"Total lineas Registro T: "<<registroT.size();
     //empezamos con el registro C
     int res = crearObra(registroC);
-    tipoImportacion = NINGUNO;
+    tipoImportacion = NORMAL;
     if (res==0)
     {
         abierta = true;
         //establecer el tipo de importacion que vamos a hacer
-        if (!HayMediciones(registroM))
+        if (!HayMediciones(registroM) || listadoBC3.size()>TAM_MAX)
         {
-            tipoImportacion = SIMPLIFICADO;
-        }
-        else if (listadoBC3.size()>TAM_MAX)
-        {
+            //tipoImportacion = SIMPLIFICADO;
             DialogoTipoAperturaBC3 *d = new DialogoTipoAperturaBC3;
             if (d->exec())
             {
@@ -91,29 +88,33 @@ ImportarBC3::ImportarBC3(const QStringList &listadoBC3, bool &abierta)
                 }
             }
         }
-        else
+        /*else
         {
             tipoImportacion = NORMAL;
-        }
-        db = QSqlDatabase::addDatabase("QPSQL","admin");
-        if (tipoImportacion == eTipoImportacion::SIMPLIFICADO)
+        }*/
+        if (tipoImportacion == SIMPLIFICADO)
         {
-            QSettings settings;
-            db.setHostName(settings.value("adminrole/servidor").toString());
-            db.setPort(settings.value("adminrole/puerto").toInt());
-            db.setUserName(settings.value("adminrole/usuario").toString());
-            db.setPassword(settings.value("adminrole/password").toString());
-            db.setDatabaseName("sdmed");
-            if (!db.open())
+            db = QSqlDatabase::addDatabase("QPSQL","admin");
+            if (tipoImportacion == eTipoImportacion::SIMPLIFICADO)
             {
-                DialogoCredencialesConexionAdmin* d = new DialogoCredencialesConexionAdmin (db);
-                int res = d->exec();
-                if (res==QDialog::Rejected || !db.open())
+                QSettings settings;
+                db.setHostName(settings.value("adminrole/servidor").toString());
+                db.setPort(settings.value("adminrole/puerto").toInt());
+                db.setUserName(settings.value("adminrole/usuario").toString());
+                db.setPassword(settings.value("adminrole/password").toString());
+                db.setDatabaseName("sdmed");
+                if (!db.open())
                 {
-                    BorrarIntentoObra(tr("Se necesitan credencialesss de admin para esta acción"));
+                    DialogoCredencialesConexionAdmin* d = new DialogoCredencialesConexionAdmin (db);
+                    int res = d->exec();
+                    if (res==QDialog::Rejected || !db.open())
+                    {
+                        BorrarIntentoObra(tr("Se necesitan credencialesss de admin para esta acción"));
+                    }
                 }
             }
         }
+
         if ((tipoImportacion == eTipoImportacion::SIMPLIFICADO && db.open()) || tipoImportacion == eTipoImportacion::NORMAL)
         {
             CrearHashTexto(registroT);

@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         m_db = QSqlDatabase::addDatabase("QPSQL");
         m_db.setConnectOptions("connect_timeout = " + QString::number(m_tiempoMaximoIntentoConexion));
         m_d = nullptr;
+        readSettings();
         if (!Conectar())
         {
             ConfigurarDatosConexion();
@@ -56,8 +57,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         labelCertificacionActual[1] = new QLabel(tr(""));
         ui->CertBar->addWidget(labelCertificacionActual[0]);
         ui->CertBar->addWidget(labelCertificacionActual[1]);
-        setupActions();
-        readSettings();        
+        setupActions();        
+        //ui->actionImportar->setEnabled(true);
+        ActivarBotonesBasicos(m_db);
     }
 }
 
@@ -77,31 +79,16 @@ void MainWindow::writeSettings()
 
 void MainWindow::readSettings()
 {
-    QSettings settings;
+    QSettings settings("DavidSoft", "SDMed2");
+
     resize(settings.value("mainwindow/size", QSize(800,600)).toSize());
-    bool conectar = settings.value("conexionBBDD/conexion automatica",false).toBool();
-    if (conectar)
-    {
-        db = QSqlDatabase::addDatabase(settings.value("conexionBBDD/driverdb").toString());
-        db.setHostName(settings.value("conexionBBDD/servidor").toString());
-        db.setDatabaseName(settings.value("conexionBBDD/database").toString());
-        db.setPort(settings.value("conexionBBDD/puerto").toInt());
-        db.setUserName(settings.value("conexionBBDD/usuario").toString());
-        db.setPassword(settings.value("conexionBBDD/password").toString());
-        if (db.open())
-        {            
-            ActivarBotonesBasicos(true);
-        }
-        else
-        {
-            DialogoMensajeConexionInicial mensaje(&db);
-            mensaje.exec();
-        }
-    }
-    else
-    {
-        qDebug()<<"No se esta conectado a ninguna BBDD";        
-    }
+    //settings.beginGroup("DatosConexion");
+    m_host = settings.value("DatosConexion/servidor").toString();
+    m_basededatos = settings.value("DatosConexion/basedatos").toString();
+    m_puerto = settings.value("DatosConexion/puerto").toString();
+    m_nombre = settings.value("DatosConexion/usuario").toString();
+    m_password = settings.value("DatosConexion/passwd").toString();
+    //settings.endGroup();
 }
 
 Instancia *MainWindow::obraActual()
@@ -117,7 +104,7 @@ bool MainWindow::Conectar()
     m_db.setPassword(m_password);
     m_db.setHostName(m_host);
 
-    if (m_db.open())
+    /*if (m_db.open())
     {
         qDebug()<<"<b>Exito</b>";
         return true; //return m_db.open()
@@ -126,10 +113,11 @@ bool MainWindow::Conectar()
     {
         qDebug()<<"<b>Fracaso</b>";
         return  false;//return m_db.open()
-    }
+    }*/
+    return m_db.open();
 }
 
-bool MainWindow::ConfigurarDatosConexion()
+void MainWindow::ConfigurarDatosConexion()
 {
     if (m_d==nullptr)
     {
@@ -149,7 +137,7 @@ bool MainWindow::ConfigurarDatosConexion()
         m_password = l.at(eDatosConexion::PASSWD);
         m_host = l.at(eDatosConexion::HOST);
         //writeSettings();
-        Conectar();
+        //Conectar();
     }
 }
 
@@ -272,9 +260,9 @@ bool MainWindow::ActionImportar()
 
 bool MainWindow::ActionAbrirBBDD()
 {
-    DialogoGestionObras* cuadro = new DialogoGestionObras(m_ListaObrasAbiertas, db, this);
+    DialogoGestionObras* cuadro = new DialogoGestionObras(m_ListaObrasAbiertas, m_db, this);
     QObject::connect(cuadro,SIGNAL(BorrarObra(QStringList)),this,SLOT(BorrarBBDD(QStringList)));
-    QObject::connect(cuadro,SIGNAL(ActivarBotones(bool)),this,SLOT(ActivarBotonesBasicos(bool)));
+    //QObject::connect(cuadro,SIGNAL(ActivarBotones(bool)),this,SLOT(ActivarBotonesBasicos(bool)));
     if (cuadro->exec())
     {
         foreach (QStringList l, cuadro->listaNombreObrasAbrir())
@@ -410,7 +398,7 @@ void MainWindow::ActionImprimir()
     //int res = ::PyRun::loadModule(QDir::home().absoluteFilePath(ruta),pModulo, pFuncion, pArgumentos);
     //qDebug()<<"Resultado: "<<res<<" "<<QDir::home().absoluteFilePath(ruta);
     //hacer un switch/case con los posibles errores
-    DialogoListadoImprimir* d = new DialogoListadoImprimir(obraActual()->LeeTabla(), db, this);
+    DialogoListadoImprimir* d = new DialogoListadoImprimir(obraActual()->LeeTabla(), m_db, this);
     int res = d->exec();    
 }
 
@@ -460,7 +448,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
 void MainWindow::ActionSalir()
 {
-    db.close();
+    m_db.close();
     writeSettings();
     qApp->quit();
 }
@@ -569,7 +557,7 @@ void MainWindow::ActionPropiedadesObra()
 {
     if (HayObrasAbiertas())
     {
-        DialogoDatosGenerales* d = new DialogoDatosGenerales(obraActual()->LeeTabla(),db);
+        DialogoDatosGenerales* d = new DialogoDatosGenerales(obraActual()->LeeTabla(),m_db);
         QObject::connect(d,SIGNAL(CambioCostesIndirectos()),this,SLOT(ActualizarDatosObra()));
         d->exec();
     }
@@ -714,8 +702,9 @@ void MainWindow::ActivarDesactivarBotonesPila(int indice)
     ui->actionGuardar->setEnabled(indice!=0);
 }
 
-void MainWindow::ActivarBotonesBasicos(bool activar)
+void MainWindow::ActivarBotonesBasicos(QSqlDatabase& db)
 {
+    qDebug()<<"LA base de datos esta "<<db.open();
     ui->actionNuevo->setEnabled(db.open());
     ui->actionImportar->setEnabled(db.open());
     //ui->actionExportar->setEnabled(db.open());

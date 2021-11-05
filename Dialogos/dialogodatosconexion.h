@@ -42,6 +42,7 @@ private:
     QString m_directorio_datos_conexion;
     bool m_ispostgres_running;
     LineEditIP* m_lineEditIP[4];
+    QString m_LeyendaBotonConectarServidor[2];
 };
 
 #endif // DIALOGODATOSCONEXION_H

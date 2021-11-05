@@ -1,9 +1,8 @@
-#include "./dialogoconfiguracion.h"
-#include "./dialogocontrasenna.h"
-#include "./ui_dialogoconfiguracion.h"
-#include "./dialogosudo.h"
-#include "./dialogocredencialesconexionadmin.h"
-
+#include "dialogoconfiguracion.h"
+#include "dialogocontrasenna.h"
+#include "ui_dialogoconfiguracion.h"
+#include "dialogosudo.h"
+#include "dialogocredencialesconexionadmin.h"
 
 #include <QFileDialog>
 #include <QSettings>
@@ -21,19 +20,19 @@
 DialogoConfiguracion::DialogoConfiguracion(QSqlDatabase &db, QWidget *parent) : QDialog(parent), ui(new Ui::DialogoConfiguracion)
 {
     ui->setupUi(this);
-    m_dialogoConfiguracionAdmin = nullptr;
+    m_dialogoConfiguracionAdmin = nullptr;    
     //m_dbAdmin= QSqlDatabase::addDatabase("QPSQL");
-    m_dbAdmin = &db;
+    m_dbAdmin = &db;    
     ReadSettings();
     ComprobacionesPython();
     ComprobarDatosAdminRole(*m_dbAdmin);
-    QObject::connect(ui->botonDatosAdmin,SIGNAL(clicked(bool)),this,SLOT(DatosAdmin()));
+    QObject::connect(ui->boton_datos_admin,SIGNAL(clicked(bool)),this,SLOT(DatosAdmin()));
     QObject::connect(ui->boton_ruta_python,SIGNAL(clicked(bool)),this,SLOT(DefinirRutaScripts()));
     QObject::connect(ui->boton_salir,SIGNAL(clicked(bool)),this,SLOT(Salir()));
     QObject::connect(ui->boton_instalar_extension,SIGNAL(clicked(bool)),this,SLOT(InstalarExtension()));
     QObject::connect(ui->boton_instalar_scripts,SIGNAL(clicked(bool)),this,SLOT(InstalarScriptsPython()));
     QObject::connect(ui->boton_crear_role_sdmed,SIGNAL(clicked(bool)),this,SLOT(CrearRoleContrasenna()));
-    QObject::connect(ui->boton_crear_bbdd_sdmed,SIGNAL(clicked(bool)),this,SLOT(CrearBaseDatosSdmed()));
+    QObject::connect(ui->boton_crear_bbdd_sdmed,SIGNAL(clicked(bool)),this,SLOT(CrearBaseDatosSdmed()));    
 }
 
 DialogoConfiguracion::~DialogoConfiguracion()

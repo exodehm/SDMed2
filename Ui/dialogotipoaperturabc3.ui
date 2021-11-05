@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
-    <height>136</height>
+    <width>417</width>
+    <height>266</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,9 +21,13 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>El fichero parece ser muy grande. 
+          <string>El fichero parece ser muy grande o no tener
+medicion. 
 En estos casos se recomienda marcar 
-la casilla de importación rápida.</string>
+la casilla de importación rápida.
+Esta operación necesita credenciales de administrador, 
+por lo que saldrá un cuadro de diálogo en caso de no
+tenerlas almacenadas</string>
          </property>
         </widget>
        </item>
@@ -39,6 +43,9 @@ la casilla de importación rápida.</string>
        </item>
        <item>
         <widget class="QCheckBox" name="checkBoxNoPreguntarMas">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="toolTip">
           <string/>
          </property>

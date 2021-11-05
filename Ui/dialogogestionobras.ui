@@ -83,6 +83,20 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="botonConfigurarDatosConexion">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Configurar datos
+de conexión</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>

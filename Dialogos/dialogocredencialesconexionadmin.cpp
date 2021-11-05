@@ -11,8 +11,7 @@ DialogoCredencialesConexionAdmin::DialogoCredencialesConexionAdmin(QSqlDatabase 
     QDialog(parent),
     ui(new Ui::DialogoCredencialesConexionAdmin)
 {
-    ui->setupUi(this);
-    ReadSettings();
+    ui->setupUi(this);    
     m_db = &db;
     //pongo "localhost" como servidor por defecto, puesto que la configuracion
     //hay que hacerla desde una maquina local
@@ -25,8 +24,7 @@ DialogoCredencialesConexionAdmin::DialogoCredencialesConexionAdmin(QSqlDatabase 
     QObject::connect(ui->lineEditPuerto,SIGNAL(textChanged(const QString &)),this, SLOT(ResetearBotonComprobar(const QString &)));
     QObject::connect(ui->lineEditUsuario,SIGNAL(textChanged(const QString &)),this, SLOT(ResetearBotonComprobar(const QString &)));
     QObject::connect(ui->lineEditPassword,SIGNAL(textChanged(const QString &)),this, SLOT(ResetearBotonComprobar(const QString &)));
-    QObject::connect(ui->lineEditBBDD,SIGNAL(textChanged(const QString &)),this, SLOT(ResetearBotonComprobar(const QString &)));
-    //QObject::connect(ui->lineEditServidor, &QLineEdit::textChanged, this, &DialogoCredencialesConexion::ResetearBotonComprobar);
+    QObject::connect(ui->lineEditBBDD,SIGNAL(textChanged(const QString &)),this, SLOT(ResetearBotonComprobar(const QString &)));    
 }
 
 DialogoCredencialesConexionAdmin::~DialogoCredencialesConexionAdmin()
@@ -37,28 +35,23 @@ DialogoCredencialesConexionAdmin::~DialogoCredencialesConexionAdmin()
 void DialogoCredencialesConexionAdmin::WriteSettings()
 {
     QSettings settings("DavidSoft", "SDMed2");
-    settings.beginGroup("DatosConexion");
-    //settings.setValue("usuario", ui->lineEditUsuario->text());
-    //settings.setValue("password", ui->lineEditPassword->text());
-    //settings.setValue("servidor", ui->lineEditServidor->text());
-    //settings.setValue("puerto", ui->lineEditPuerto->text());
+    settings.beginGroup("DatosConexionAdmin");
+    settings.setValue("usuario", ui->lineEditUsuario->text());
+    settings.setValue("password", ui->lineEditPassword->text());
+    settings.setValue("servidor", ui->lineEditServidor->text());
+    settings.setValue("puerto", ui->lineEditPuerto->text());
+    settings.setValue("bbdd", ui->lineEditBBDD->text());
     settings.endGroup();
 }
 
 void DialogoCredencialesConexionAdmin::ReadSettings()
 {
-    /*QSettings settings;
-    //ui->lineEditServidor->setText(settings.value("adminrole/servidor").toString());
-    ui->lineEditPuerto->setText(settings.value("DatosConexion/puerto").toString());
-    ui->lineEditUsuario->setText(settings.value("adminrole/usuario").toString());
-    ui->lineEditPassword->setText(settings.value("adminrole/password").toString());*/
     QSettings settings("DavidSoft", "SDMed2");
-    settings.beginGroup("DatosConexion");
-    //m_basededatos = settings.value("basedatos").toString();
-    //m_nombre = settings.value("usuario").toString();
+    settings.beginGroup("DatosConexionAdmin");
     ui->lineEditPuerto->setText(settings.value("puerto").toString());
-    //m_password = settings.value("passwd").toString();
-    //m_host = settings.value("hostname").toString();
+    ui->lineEditUsuario->setText(settings.value("usuario").toString());
+    ui->lineEditPassword->setText(settings.value("password").toString());
+    ui->lineEditBBDD->setText(settings.value("bbdd").toString());
     settings.endGroup();
 }
 
@@ -78,8 +71,6 @@ void DialogoCredencialesConexionAdmin::DefinirBBDD(QString nombreBBDD)
 
 bool DialogoCredencialesConexionAdmin::ComprobarAdminRole()
 {
-    //QSqlDatabase m_db;
-    //m_db= QSqlDatabase::addDatabase("QPSQL");
     m_db->setHostName(ui->lineEditServidor->text());
     m_db->setPort(ui->lineEditPuerto->text().toInt());
     m_db->setUserName(ui->lineEditUsuario->text());
@@ -99,7 +90,7 @@ bool DialogoCredencialesConexionAdmin::ComprobarAdminRole()
         if (esSuperUser)
         {
             ui->botonComprobar->setStyleSheet("background-color: rgb(0,255,0);");
-            ui->botonComprobar->setText(tr("Conectado correctamente como administrador"));
+            ui->botonComprobar->setText(tr("Conectado correctamente como administrador"));            
             //WriteSettings();
         }
         else //si se ha conectado pero las credenciales no son de admin
@@ -115,7 +106,11 @@ bool DialogoCredencialesConexionAdmin::ComprobarAdminRole()
 
     }
     //ui->botonAceptar->setEnabled(esSuperUser);
-    WriteSettings();
+    ui->checkBoxGuadarDatosAdmin->setEnabled(esSuperUser);
+    if (ui->checkBoxGuadarDatosAdmin->isChecked())
+    {
+        WriteSettings();
+    }
     m_db->close();
     emit EsAdmin(esSuperUser);
     return esSuperUser;

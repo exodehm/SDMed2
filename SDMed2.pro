@@ -150,8 +150,7 @@ HEADERS  += mainwindow.h \
 FORMS    += Ui/mainwindow.ui \
     Ui/dialogoconfiguracion.ui \
     Ui/dialogocontrasenna.ui \
-    Ui/dialogoabout.ui \
-    Ui/dialogocontrasenna.ui \
+    Ui/dialogoabout.ui \    
     Ui/dialogocredencialesconexionadmin.ui \
     Ui/dialogocreditos.ui \
     Ui/dialogodatosconexion.ui \

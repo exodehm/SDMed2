@@ -17,6 +17,9 @@ DialogoDatosConexion::DialogoDatosConexion(QSqlDatabase &db, QWidget *parent) :
     m_dialogoconfig =  nullptr;
     readSettings();
     ColocarLineEditIPs();
+    m_LeyendaBotonConectarServidor[0]=tr("Parar\nservidor");
+    m_LeyendaBotonConectarServidor[1]=tr("Arrancar\nservidor");
+    ui->botonArrancarServidor->setText(m_LeyendaBotonConectarServidor[0]);
     SincronizarCheckButtons();
     m_ispostgres_running = IsPostgresRunning();
     qDebug()<<"It´s postgres running!"<<m_ispostgres_running;
@@ -32,6 +35,7 @@ DialogoDatosConexion::DialogoDatosConexion(QSqlDatabase &db, QWidget *parent) :
 
 DialogoDatosConexion::~DialogoDatosConexion()
 {
+    writeSettings();
     delete ui;
 }
 
@@ -80,12 +84,12 @@ QStringList DialogoDatosConexion::DialogoDatosConexion::LeeDatosConexion()
     //ahora ingreso este y el resto de datos en el QStringList
     QStringList datos;
     datos<<ui->lineEditBBDD->text()<<   //nombre de la base de datos
-       ui->lineEditUsuario->text()<<    //usuario
-       host<<                           //hostname
-       ui->lineEditPuerto->text()<<     //puerto
-       ui->lineEditPasswd->text();      //contrasenna
+           ui->lineEditUsuario->text()<<    //usuario
+           host<<                           //hostname
+           ui->lineEditPuerto->text()<<     //puerto
+           ui->lineEditPasswd->text();      //contrasenna
     foreach (QString s, datos) {
-       qDebug()<<"dato; "<<s;
+        qDebug()<<"dato; "<<s;
     }
     return datos;
 }
@@ -94,21 +98,36 @@ void DialogoDatosConexion::ConfiguracionAvanzada()
 {
     if (m_dialogoconfig==nullptr)
     {
-        m_dialogoconfig = new DialogoConfiguracion(m_db);
+        m_dialogoconfig = new DialogoConfiguracion(m_db, this);
     }
     m_dialogoconfig->show();
 }
 
 void DialogoDatosConexion::writeSettings()
 {
-    QSettings settings("DavidSoft", "SDMed2");
+    if (ui->checkBoxGuardarDatosConexion->isChecked())
+    {
+        QSettings settings("DavidSoft", "SDMed2");
 
-    settings.beginGroup("DatosConexion");
-    settings.setValue("basedatos", ui->lineEditBBDD->text());
-    settings.setValue("usuario", ui->lineEditUsuario->text());
-    settings.setValue("puerto", ui->lineEditPuerto->text());
-    settings.setValue("passwd", ui->lineEditPasswd->text());
-    settings.endGroup();
+        settings.beginGroup("DatosConexion");
+        settings.setValue("basedatos", ui->lineEditBBDD->text());
+        settings.setValue("usuario", ui->lineEditUsuario->text());
+        settings.setValue("puerto", ui->lineEditPuerto->text());
+        settings.setValue("passwd", ui->lineEditPasswd->text());
+        //servidor
+        QString host;
+        if (ui->radioButtonLocalHost->isChecked())
+        {
+            host = "localhost";
+        }
+        else
+        {
+            host = ComponerIP();
+        }
+        qDebug()<<"host is "<<host;
+        settings.setValue("servidor", host);
+        settings.endGroup();
+    }
 }
 
 void DialogoDatosConexion::SincronizarCheckButtons()
@@ -135,11 +154,11 @@ void DialogoDatosConexion::ActualizarBotonServidor()
                                           && !m_directorio_datos_conexion.isNull());
     if (m_ispostgres_running/*IsPostgresRunning()*/)
     {
-        ui->botonArrancarServidor->setText(tr("Parar servidor"));
+        ui->botonArrancarServidor->setText(m_LeyendaBotonConectarServidor[0]);
     }
     else
     {
-        ui->botonArrancarServidor->setText(tr("Arrancar servidor"));
+        ui->botonArrancarServidor->setText(m_LeyendaBotonConectarServidor[1]);
     }
 }
 
