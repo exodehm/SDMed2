@@ -121,7 +121,7 @@ void MainWindow::ConfigurarDatosConexion()
 {
     if (m_d==nullptr)
     {
-        m_d = new DialogoDatosConexion(m_db, this);
+        m_d = new DialogoDatosConexion(m_db);
     }
     m_d->show();
     if (m_d->exec())

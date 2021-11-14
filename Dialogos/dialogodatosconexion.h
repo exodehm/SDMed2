@@ -33,6 +33,7 @@ public slots:
     bool Conectar();
     bool ArrancarPararServidor();
     void ColocarLineEditIPs();
+    void Cancelar();
 
 private:
     Ui::DialogoDatosConexion *ui;

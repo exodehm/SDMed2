@@ -29,7 +29,9 @@ DialogoDatosConexion::DialogoDatosConexion(QSqlDatabase &db, QWidget *parent) :
     QObject::connect(ui->botonConfiguracionAvanzada, &QPushButton::clicked, [=] () {ConfiguracionAvanzada();});
     QObject::connect(ui->botonComprobar, &QPushButton::clicked, [=] () {Conectar();});
     QObject::connect(ui->botonArrancarServidor, &QPushButton::clicked,[=](){ArrancarPararServidor();});
-    QObject::connect(ui->botonera->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &QCoreApplication::quit, Qt::QueuedConnection);
+    //QObject::connect(ui->botonera->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &QCoreApplication::quit, Qt::QueuedConnection);
+    QObject::connect(ui->botonera->button(QDialogButtonBox::Cancel), &QPushButton::clicked, [=](){Cancelar();});
+    QObject::connect(ui->botonera->button(QDialogButtonBox::Cancel),SIGNAL(clicked()), this, SLOT(Cancelar()));
     //QObject::connect(ui->botonera->button(QDialogButtonBox::Ok),SIGNAL(clicked()),this,SLOT(LeeDatosConexion()));
 }
 
@@ -280,4 +282,17 @@ void DialogoDatosConexion::ColocarLineEditIPs()
         ui->LayoutIP->addWidget(new QLabel("."));
     }
     ui->LayoutIP->addStretch();
+}
+
+void DialogoDatosConexion::Cancelar()
+{
+    if (this->parent())
+    {
+        qDebug()<<"Solo cierro la ventana: "<<this->parent();
+        this->done(0);
+    }
+    else
+    {
+        QCoreApplication::exit();//, Qt::QueuedConnection;
+    }
 }
