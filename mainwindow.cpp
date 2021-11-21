@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     {
         m_tiempoMaximoIntentoConexion = 5;
-        m_basededatos = "sdmed";
+        //m_basededatos = "sdmed";
         m_db = QSqlDatabase::addDatabase("QPSQL");
         m_db.setConnectOptions("connect_timeout = " + QString::number(m_tiempoMaximoIntentoConexion));
         m_d = nullptr;

@@ -21,6 +21,7 @@ public:
     ~DialogoDatosConexion();
     void readSettings();
     QString ComponerIP();
+    QString LeeTextoDirectorioDatosConexion();
 
 
 public slots:
