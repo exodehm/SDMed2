@@ -5,6 +5,10 @@
 
 #include "mainwindow.h"
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> fec6062a34d9afa39ccba598ecd8eb49ba21d04d
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
