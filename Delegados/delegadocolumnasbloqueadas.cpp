@@ -14,7 +14,7 @@ void DelegadoColumnasBloqueadas::paint( QPainter *painter,const QStyleOptionView
         painter->setBrush(QColor(255,255,170));
         painter->drawRect(option.rect);
         painter->setPen(Qt::gray);
-        painter->drawText(option.rect, Qt::AlignRight | Qt::AlignVCenter, index.data().toString());
+        painter->drawText(option.rect, Qt::AlignRight | Qt::AlignVCenter,displayText(index.data().toString(),m_locale));
         painter->restore();
     }
     else
@@ -23,6 +23,6 @@ void DelegadoColumnasBloqueadas::paint( QPainter *painter,const QStyleOptionView
 
 QSize DelegadoColumnasBloqueadas::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    Q_UNUSED (index);
+    Q_UNUSED (index)
     return option.rect.size();
 }

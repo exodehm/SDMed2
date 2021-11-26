@@ -5,15 +5,21 @@
 DelegadoNumerosBase::DelegadoNumerosBase(QObject *parent):DelegadoBase(parent)
 {
     rx = new QRegExp("[-]{0,1}[0-9]{0,5}[\\,\\.]{1}[0-9]{1,3}");
+    m_precision = 2;
     /*colores[color::NODEFINIDO] = QColor();
     colores[color::NORMAL] = m_color_importe_sin_descomposicion;
     colores[color::BLOQUEADO] = m_color_importe_bloqueado;
     colores[color::DESCOMPUESTO] = m_color_importe_con_descomposicion;*/
 }
 
+void DelegadoNumerosBase::setPrecision(quint8 precision)
+{
+    m_precision = precision;
+}
+
 QWidget* DelegadoNumerosBase::createEditor(QWidget * parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    const QAbstractItemModel * model = index.model();
+    const QAbstractItemModel *model = index.model();
     if (!model)
     {
         return QStyledItemDelegate::createEditor(parent,option, index);
@@ -42,14 +48,14 @@ void DelegadoNumerosBase::setModelData(QWidget * editor, QAbstractItemModel * mo
         return QStyledItemDelegate::setModelData(editor, model, index);
     }
     QString dato = mieditor->text();
-    dato.replace(",",".");
+    //dato.replace(",",".");
     model->setData(index,dato,Qt::DisplayRole);
     model->setData(index,dato,Qt::EditRole);
 }
 
 void DelegadoNumerosBase::paint( QPainter *painter,const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    /*if ((option.state & QStyle::State_Selected) && (option.state & QStyle::State_Active))
+    if ((option.state & QStyle::State_Selected) && (option.state & QStyle::State_Active))
     {
         painter->save();
         painter->setBrush(Qt::NoBrush);
@@ -60,7 +66,7 @@ void DelegadoNumerosBase::paint( QPainter *painter,const QStyleOptionViewItem &o
         painter->drawText(option.rect, Qt::AlignRight | Qt::AlignVCenter, index.data().toString());
         painter->restore();
     }
-    else*/
+    else
     {
         DelegadoBase::paint(painter, option, index);
     }
@@ -74,14 +80,12 @@ QSize DelegadoNumerosBase::sizeHint(const QStyleOptionViewItem &option, const QM
 
 QString DelegadoNumerosBase::displayText(const QVariant & value, const QLocale & locale) const
 {
-   float valor = value.toFloat();
-   if (valor==0)
+   if (value==0)
    {
        return "";
    }
    else
    {
-       return locale.toString(valor,'f',3);
-       //return QString("%1").arg(valor,5,'f',4,QLatin1Char('0'));
+       return m_locale.toString(value.toDouble(),'f',m_precision);
    }
 }

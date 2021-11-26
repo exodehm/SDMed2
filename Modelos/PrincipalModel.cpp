@@ -191,7 +191,9 @@ void PrincipalModel::PrepararCabecera()
             {
                 m_naturalezapadre = m_datos.at(0).at(i).toInt();
             }
-            QString datocabecera =m_datos.at(0).at(i).toString();
+            //QString datocabecera =m_datos.at(0).at(i).toString();
+            QString datocabecera =m_locale.toString(m_datos.at(0).at(i).toFloat(),'f',m_precision);
+            //QString SubT = m_LeyendasCabecera[i] + m_locale.toString(m_subtotal,'f',m_precision);
             datocabecera.prepend(m_LeyendasCabecera[i]);
             m_datos[0][i] = static_cast<QVariant>(datocabecera);
         }

@@ -15,6 +15,7 @@ ModeloBase::ModeloBase(const QString &tabla, const QStringList &ruta, MiUndoStac
     m_codigohijo = ruta.at(ruta.size()-1);
     m_hayFilaVacia=false;
     m_naturalezapadre = static_cast<int>(Naturaleza::CAPITULO);
+    m_precision = 2;
 }
 
 ModeloBase::~ModeloBase(){}
@@ -37,7 +38,7 @@ void ModeloBase::QuitarIndicadorFilaVacia()
 
 int ModeloBase::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
+    Q_UNUSED(parent)
     if (m_hayFilaVacia)
     {
         return m_datos.size();
@@ -168,6 +169,9 @@ bool ModeloBase::insertRows(int row, int count, const QModelIndex &parent)
 bool ModeloBase::removeRows(int filaInicial, int numFilas, const QModelIndex &parent)
 {
     qDebug()<<"Remove rows en modelo base";
+    Q_UNUSED(filaInicial)
+    Q_UNUSED(numFilas)
+    Q_UNUSED(parent)
     return false;
 }
 

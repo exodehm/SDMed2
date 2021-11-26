@@ -4,6 +4,7 @@
 #include <QModelIndex>
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
+#include <QLocale>
 
 class MiUndoStack;
 
@@ -59,6 +60,8 @@ protected:
     MiUndoStack* m_pila;
     QString m_tabla;
     QString m_codigopadre, m_codigohijo;
+    quint8 m_precision;
+    QLocale m_locale;
 };
 
 #endif // MODELOBASE_H

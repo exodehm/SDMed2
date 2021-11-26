@@ -38,7 +38,8 @@ void DelegadoNumerosTablaPrincipal::paint(QPainter *painter,const QStyleOptionVi
                 painter->fillRect(option.rect, p.color(QPalette::Inactive, QPalette::Background));
             }
         }
-        painter->drawText(option.rect, Qt::AlignRight | Qt::AlignVCenter,index.data().toString());
+        //painter->drawText(option.rect, Qt::AlignRight | Qt::AlignVCenter,index.data().toString());
+        painter->drawText(option.rect, Qt::AlignRight | Qt::AlignVCenter,displayText(index.data().toString(),m_locale));
         painter->restore();
     }
     else
@@ -46,4 +47,3 @@ void DelegadoNumerosTablaPrincipal::paint(QPainter *painter,const QStyleOptionVi
         DelegadoNumerosBase::paint(painter, option, index);
     }
 }
-

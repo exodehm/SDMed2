@@ -5,10 +5,6 @@
 
 #include "mainwindow.h"
 
-<<<<<<< HEAD
-=======
-
->>>>>>> fec6062a34d9afa39ccba598ecd8eb49ba21d04d
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -27,7 +23,7 @@ int main(int argc, char *argv[])
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
     QFont font(family,10);
     qApp->setFont(font);
-
+    QLocale::setDefault(QLocale(QLocale::Spanish, QLocale::Spain));
     MainWindow m;
     m.show();
     return a.exec();

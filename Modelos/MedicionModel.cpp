@@ -80,13 +80,14 @@ Qt::ItemFlags MedicionModel::flags(const QModelIndex &index) const
 
 void MedicionModel::PrepararCabecera(/*QList<QList<QVariant> > &datos*/)
 {    
-    QList<QVariant>cabecera;
+    QList<QVariant>cabecera;    
     for (int i=0;i<m_LeyendasCabecera.size();i++)
     {
         //qDebug()<<"cabecera: "<<static_cast<QVariant>(LeyendasCabecera[i]);
         if (i == tipoColumnaTMedCert::PARCIAL)
         {
-            QString SubT = m_LeyendasCabecera[i] + QString::number(subtotal,'f',2);
+            //QString SubT = m_LeyendasCabecera[i] + QString::number(m_subtotal,'f',2);
+            QString SubT = m_LeyendasCabecera[i] + m_locale.toString(m_subtotal,'f',m_precision);
             cabecera.append(static_cast<QVariant>(SubT));
             ++i;
             //qDebug()<<"El numero es: "<<QString::number(subtotal,'f',2);
@@ -182,7 +183,7 @@ void MedicionModel::ActualizarDatos(const QStringList &ruta)
     m_ruta = ruta;
     m_codigopadre=ruta.at(ruta.size()-2);
     m_codigohijo=ruta.at(ruta.size()-1);
-    subtotal = 0;
+    m_subtotal = 0;
     QString cadena_consulta = "SELECT * FROM ver_medcert('"+m_tabla+"','"+ m_codigopadre + "','"+ m_codigohijo+"','"+QString::number(num_cert)+"')";
     qDebug()<<cadena_consulta;
     m_consulta.exec(cadena_consulta);
@@ -194,7 +195,7 @@ void MedicionModel::ActualizarDatos(const QStringList &ruta)
             //qDebug()<<"CONSULTA.VALUE["<<i<<"] "<<consulta.value(i);
             if (m_consulta.value(i).type()==QVariant::Double)
             {
-                float numero = m_consulta.value(i).toDouble();
+                float numero = m_consulta.value(i).toFloat();
                 QString numeroletra = QString::number(numero, 'f', 2);
                 lineaDatos.append(static_cast<QVariant>(numeroletra));
             }
@@ -204,7 +205,7 @@ void MedicionModel::ActualizarDatos(const QStringList &ruta)
             }
             if (i == tipoColumnaTMedCert::PARCIAL)
             {
-                subtotal += m_consulta.value(i).toFloat();
+                m_subtotal += m_consulta.value(i).toFloat();
             }
         }
         m_datos.append(lineaDatos);

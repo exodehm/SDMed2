@@ -34,7 +34,7 @@ public:
 private:
 
     int num_cert;
-    float subtotal;
+    double m_subtotal;
     int certif_actual;
 };
 
