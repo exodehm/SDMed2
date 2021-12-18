@@ -56,25 +56,25 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
                 QString descripcion = "Editar codigo con el codigo: ";
                 m_pila->Push(m_ruta,0,new UndoEditarCodigo(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
                 return true;
-            }            
+            }
         case tipoColumnaTPrincipal::NATURALEZA:
         {
             QString descripcion = "Editar resumen con el codigo: ";
             m_pila->Push(m_ruta,0,new UndoEditarNaturaleza(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
-        }            
+        }
         case tipoColumnaTPrincipal::UD:
         {
             QString descripcion = "Editar ud con el codigo: ";
             m_pila->Push(m_ruta,0,new UndoEditarUnidad(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
-        }            
+        }
         case tipoColumnaTPrincipal::RESUMEN:
         {
-            QString descripcion = "Editar resumen con el codigo: ";            
+            QString descripcion = "Editar resumen con el codigo: ";
             m_pila->Push(m_ruta,0,new UndoEditarResumen(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
             return true;
-        }            
+        }
         case tipoColumnaTPrincipal::CANPRES:
         case tipoColumnaTPrincipal::CANCERT:
         {
@@ -106,7 +106,7 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
             }
             m_pila->Push(m_ruta,0,new UndoEditarCantidad(m_tabla, codpadre, codhijo, index.data(), value, tipoCantidad, descripcion));
             return true;
-        }            
+        }
         case tipoColumnaTPrincipal::PRPRES:
         {
             QString descripcion = "Editar precio con el codigo: ";
@@ -125,7 +125,7 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
                     return false;
                 }
                 else
-                {           
+                {
                     m_pila->Push(m_ruta,0,new UndoEditarPrecio(m_tabla, codpadre, codhijo, index.data(), value, d->Respuesta(), descripcion));
                 }
             }
@@ -134,7 +134,7 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
                 m_pila->Push(m_ruta,0,new UndoEditarPrecio(m_tabla, codpadre, codhijo, index.data(), value, precio::MODIFICAR, descripcion));
             }
             return true;
-        }            
+        }
         default:
             break;
         }
@@ -186,13 +186,20 @@ void PrincipalModel::PrepararCabecera()
     if (!m_datos.isEmpty())
     {     for(int i=0; i<m_datos.at(0).length(); i++)
         {
+            QString datocabecera;
             //leo la naturaleza del concepto padre
             if (i==tipoColumnaTPrincipal::NATURALEZA)
             {
                 m_naturalezapadre = m_datos.at(0).at(i).toInt();
             }
-            //QString datocabecera =m_datos.at(0).at(i).toString();
-            QString datocabecera =m_locale.toString(m_datos.at(0).at(i).toFloat(),'f',m_precision);
+            else if (i==tipoColumnaTPrincipal::CODIGO || i == tipoColumnaTPrincipal::RESUMEN) //columnas de texto
+            {
+                datocabecera =m_datos.at(0).at(i).toString();
+            }
+            else //columnas numericas
+            {
+                datocabecera =m_locale.toString(m_datos.at(0).at(i).toFloat(),'f',m_precision);
+            }
             datocabecera.prepend(m_LeyendasCabecera[i]);
             m_datos[0][i] = static_cast<QVariant>(datocabecera);
         }
@@ -274,7 +281,7 @@ void PrincipalModel::BloquearPrecio(const QModelIndex &index, int opcion)
 {
     QString codpadre = m_datos.at(0).at(tipoColumnaTPrincipal::CODIGO).toString();
     QString codhijo = this->index(index.row(),tipoColumnaTPrincipal::CODIGO).data().toString();
-    codpadre.remove(m_LeyendasCabecera[0]);    
+    codpadre.remove(m_LeyendasCabecera[0]);
     QVariant descripcion;
     m_pila->Push(m_ruta,0,new UndoEditarPrecio(m_tabla, codpadre, codhijo, index.data(), index.data(), opcion, descripcion));
 }

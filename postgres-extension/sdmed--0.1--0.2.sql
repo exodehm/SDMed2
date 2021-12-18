@@ -1346,11 +1346,8 @@ CREATE SEQUENCE sdmed."tCorrugados_id_seq"
     NO MAXVALUE
     CACHE 1;
 	
-<<<<<<< HEAD
-	INSERT INTO sdmed."tAcero" (id, area, masa, tipo, tamanno) VALUES
-=======
+
         INSERT INTO sdmed."tAcero" (id, area, masa, tipo, tamanno) VALUES
->>>>>>> d459e67d1ec666ae98c8094756dc16390c181e89
 	('44','65.30','502000','HEB','180'),
 	('45','78.10','601000','HEB','200'),
 	('46','91.00','701000','HEB','220'),

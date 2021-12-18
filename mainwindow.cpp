@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         }
 
         ui->setupUi(this);
-        setWindowTitle(QCoreApplication::applicationName());
+        setWindowTitle(QCoreApplication::applicationName()+ " - " +QCoreApplication::applicationVersion());
         //seccion ver medicion/certificacion
         labelVerMedCert = new QLabel(tr("Ver:"));
         comboMedCert = new QComboBox;
@@ -613,7 +613,7 @@ void MainWindow::CambiarLabelCertificacionActual(QStringList certActual)
         label.append("</b></strong>");
         label.append("(");
         label.append(certActual.at(1));
-        label.append(")");
+        label.append(")");        
     }
     labelCertificacionActual[1]->setText(label);
 }

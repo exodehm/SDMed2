@@ -15,7 +15,7 @@ ModeloBase::ModeloBase(const QString &tabla, const QStringList &ruta, MiUndoStac
     m_codigohijo = ruta.at(ruta.size()-1);
     m_hayFilaVacia=false;
     m_naturalezapadre = static_cast<int>(Naturaleza::CAPITULO);
-    m_precision = 2;
+    m_precision = 3;
 }
 
 ModeloBase::~ModeloBase(){}

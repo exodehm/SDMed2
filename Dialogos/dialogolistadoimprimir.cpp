@@ -316,5 +316,4 @@ void DialogoListadoImprimir::Previsualizar()
                                        QMessageBox::Ok);
         qDebug()<<"ret "<<res.first;
     }
-
 }

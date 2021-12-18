@@ -5,7 +5,7 @@
 DelegadoNumerosBase::DelegadoNumerosBase(QObject *parent):DelegadoBase(parent)
 {
     rx = new QRegExp("[-]{0,1}[0-9]{0,5}[\\,\\.]{1}[0-9]{1,3}");
-    m_precision = 2;
+    m_precision = 3;
     /*colores[color::NODEFINIDO] = QColor();
     colores[color::NORMAL] = m_color_importe_sin_descomposicion;
     colores[color::BLOQUEADO] = m_color_importe_bloqueado;

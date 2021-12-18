@@ -4,13 +4,15 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SDMed2
 TEMPLATE = app
 
+#CONFIG += static
 
 SOURCES += main.cpp\
     Dialogos/dialogocontrasenna.cpp \
@@ -187,11 +189,17 @@ RESOURCES += \
 
 unix {
     INCLUDEPATH += /usr/include/python3.6m
-    LIBS += -L /usr/lib/python3.6m -lpython3.6m
+    #LIBS += -L /usr/lib/python3.6m -lpython3.6m
+    LIBS += -L/usr/lib/x86_64-linux-gnu/ -lpython3.6m
     #LIBS += -lpython3.8
     #LIBS += -Wl,-Bstatic -lpython3.8 -Wl,-Bdynamic
     #LIBS += -lz
-    DEPENDPATH +=  /usr/include/python3.6m
+    #LIBS +=/usr/lib/x86_64-linux-gnu/libz.a
+    #LIBS+= -L/usr/lib -L. -ldl /usr/lib/x86_64-linux-gnu/libelf.a $(PTHREAD_LIBS) -lz
+    #DEPENDPATH +=  /usr/include/python3.6m
+    #LIBS += -BStatic -L/usr/lib/x86_64-linux-gnu/ -licudata -licui18n -licuuc
+    #LIBS += /usr/lib/x86_64-linux-gnu/libicuuc.a /usr/lib/x86_64-linux-gnu/libicudata.a /usr/lib/x86_64-linux-gnu/libicui18n.a
+    #LIBS +=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu/libpython3.6m.a
 }
 
 win32 {
