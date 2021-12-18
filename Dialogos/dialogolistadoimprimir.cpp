@@ -25,7 +25,8 @@ DialogoListadoImprimir::DialogoListadoImprimir(const QString& obra, QSqlDatabase
 {
     ui->setupUi(this);
     QSettings settings;
-    QString rutascriptpython = settings.value("rutas/ruta_python").toString() + "/.sdmed/python_plugins/plugins_impresion/cargador.py";
+    //QString rutascriptpython = settings.value("rutas/ruta_python").toString() + "/.sdmed/python_plugins/plugins_impresion/cargador.py";
+    QString rutascriptpython = QDir::homePath() + "/.sdmed/python_plugins/plugins_impresion/cargador.py";
     qDebug()<<"rutascriptpython: "<<rutascriptpython;
     m_ruta = rutascriptpython.left(rutascriptpython.lastIndexOf("/"));
     qDebug()<<"m_ruta: "<<m_ruta;
