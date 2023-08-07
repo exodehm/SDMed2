@@ -38,6 +38,8 @@
 #include <QSqlRecord>
 #include <QWidget>
 
+#include <algorithm>
+
 Instancia::Instancia(QString cod, QString res, QWidget *parent):QWidget(parent), m_tabla(cod), m_resumen(res)
 {
     m_codigopadre ="";
@@ -475,13 +477,13 @@ void Instancia::RefrescarVista()
         //separadorTablasMedCert->setVisible(m->EsPartida());//solo se ve si es partida(Nat == 7)
         m_PanelTablasMC->setVisible(m->EsPartida());//solo se ve si es partida(Nat == 7)
     }
-    //modeloArbol->ActualizarDatos(tabla);
+    //modeloArbol->ActualizarDatos(m_tabla);
     //modeloArbol->layoutChanged();
-    //arbol->expandAll();
-    /*arbol->resizeColumnToContents(tipoColumna::CODIGO);
-    arbol->resizeColumnToContents(tipoColumna::NATURALEZA);
-    arbol->resizeColumnToContents(tipoColumna::UD);
-    arbol->resizeColumnToContents(tipoColumna::RESUMEN);*/    
+    //m_arbol->expandAll();
+    //m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::CODIGO);
+    //m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::NATURALEZA);
+    //m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::UD);
+    //m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::RESUMEN);
 }
 
 void Instancia::Copiar()
@@ -500,7 +502,7 @@ void Instancia::Copiar()
                 if (!listaIndices.contains(i.row()))
                     listaIndices.append(i.row());
             }
-            qSort(listaIndices);
+            std::sort(listaIndices.begin(),listaIndices.end());
             for (auto elem:listaIndices)
                 qDebug()<<"Copiar los indices: "<<elem;
             qDebug()<<tabla->model();            
@@ -566,13 +568,16 @@ void Instancia::SincronizarArbolTablal()
     TreeItem * mi_item = static_cast<TreeItem*>(m_arbol->currentIndex().internalPointer());
     if (mi_item && mi_item->parentItem()!=nullptr)
     {
-        m_codigohijo = mi_item->data(0).toString();
+        m_codigohijo = mi_item->data(tipoColumnaTPrincipal::CODIGO).toString();
+        int nivel = mi_item->data(5).toInt();
+        QString posicion = mi_item->data(6).toString();
+        QStringList listaposicion = posicion.split( "." );
         m_ruta.clear();
         m_ruta.append(m_codigohijo);
         //evito la cabecera del arbol que no forma parte de la estructura de datos y la susituyo por una cadena nula
         if (mi_item->parentItem()->parentItem()!=nullptr)
         {
-            m_codigopadre = mi_item->parentItem()->data(0).toString();
+            m_codigopadre = mi_item->parentItem()->data(tipoColumnaTPrincipal::CODIGO).toString();
         }
         else
         {
@@ -582,7 +587,7 @@ void Instancia::SincronizarArbolTablal()
         {
             if (mi_item->parentItem()->parentItem()!=nullptr)
             {
-                m_ruta.push_front(mi_item->parentItem()->data(0).toString());
+                m_ruta.push_front(mi_item->parentItem()->data(tipoColumnaTPrincipal::CODIGO).toString());
             }
             else
             {
@@ -590,6 +595,14 @@ void Instancia::SincronizarArbolTablal()
             }
             mi_item = mi_item->parentItem();
         }
+        SubirNivel();//Subo el nivel ya que quiero que el nodo seleccionado en el arbol sea el hijo seleccionado en la tabla
+
+        //ahora activo en la tabla ese hijo seleccionado
+        //las lecturas de los registros 5 y 6 dan valores del nivel y de la posición dentro del nivel.
+        //algo como "3" y "0.1.0.1". Preguntando qué valor hay en el segundo registro en el nivel marcado por el primero, hallamos la posición
+        QModelIndex indice = tablaPrincipal->model()->index(listaposicion.at(nivel).toInt(), 0);
+        //qDebug()<<"estamos en el nivel :"<< nivel << "y en la posicion"<<listaposicion.at(nivel);
+        tablaPrincipal->setCurrentIndex(indice);
         RefrescarVista();
     }
 }
@@ -783,7 +796,7 @@ void Instancia::Certificar()
                     if (!listaIndices.contains(i.row()))
                         listaIndices.append(i.row());
                 }
-                qSort(listaIndices);
+                std::sort(listaIndices.begin(),listaIndices.end());
                 MedicionModel* modelo = qobject_cast<MedicionModel*>(tabla->model());
                 if (modelo)
                 {

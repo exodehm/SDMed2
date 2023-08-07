@@ -2,6 +2,8 @@
 #include <QEvent>
 #include <QKeyEvent>
 
+#include <algorithm>
+
 FiltroTablaBase::FiltroTablaBase(TablaBase *tabla, QObject *parent) : m_tabla(tabla),QObject(parent)
 {
 
@@ -23,10 +25,15 @@ bool FiltroTablaBase::eventFilter(QObject *obj, QEvent *event)
                 QList<int> listaIndices;
                 foreach (QModelIndex i, indices)
                 {
-                    if (!listaIndices.contains(i.row()))
+                    QString codigo = i.data().toString();
+                    //qDebug()<<"Dato en fila a borrar: "<<i.data().toString();
+                    if (!listaIndices.contains(i.row()) and !codigo.isEmpty())
                         listaIndices.prepend(i.row());//pongo prepend para borrar de atras a adelante de la lista de medicion
                 }
-                qSort(listaIndices);
+                if (!listaIndices.isEmpty())
+                {
+                    std::sort(listaIndices.begin(),listaIndices.end());
+                }
                 ModeloBase* modelo = qobject_cast<ModeloBase*>(m_tabla->model());
                 if (modelo)
                 {

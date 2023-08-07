@@ -44,8 +44,8 @@ DialogoDatosConexion::~DialogoDatosConexion()
 
 void DialogoDatosConexion::readSettings()
 {
-    QSettings settings("DavidSoft", "SDMed2");
-
+    QSettings settings;//("DavidSoft", "SDMed2");
+    qDebug()<<"LEyendoo setings";
     settings.beginGroup("DatosConexion");
     ui->lineEditBBDD->setText(settings.value("basedatos").toString());
     ui->lineEditUsuario->setText(settings.value("usuario").toString());
@@ -97,9 +97,9 @@ QStringList DialogoDatosConexion::DialogoDatosConexion::LeeDatosConexion()
            host<<                           //hostname
            ui->lineEditPuerto->text()<<     //puerto
            ui->lineEditPasswd->text();      //contrasenna
-    foreach (QString s, datos) {
+    /*foreach (QString s, datos) {
         qDebug()<<"dato; "<<s;
-    }
+    }*/
     return datos;
 }
 
@@ -116,7 +116,7 @@ void DialogoDatosConexion::writeSettings()
 {
     if (ui->checkBoxGuardarDatosConexion->isChecked())
     {
-        QSettings settings("DavidSoft", "SDMed2");
+        QSettings settings;//("DavidSoft", "SDMed2");
 
         settings.beginGroup("DatosConexion");
         settings.setValue("basedatos", ui->lineEditBBDD->text());
@@ -135,7 +135,7 @@ void DialogoDatosConexion::writeSettings()
         }
         qDebug()<<"host is "<<host;
         settings.setValue("servidor", host);
-        settings.endGroup();
+        settings.endGroup();        
     }
 }
 

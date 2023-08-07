@@ -167,7 +167,7 @@ Qt::ItemFlags PrincipalModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
     {
-        return nullptr;
+        return Qt::ItemFlags();
     }
     if (index.column()!=tipoColumnaTPrincipal::IMPPRES && index.column()!=tipoColumnaTPrincipal::IMPCERT)
     {

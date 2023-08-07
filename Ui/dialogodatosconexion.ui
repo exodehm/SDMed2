@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>477</width>
+    <width>490</width>
     <height>378</height>
    </rect>
   </property>
@@ -127,7 +127,11 @@
             </spacer>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEditBBDD"/>
+            <widget class="QLineEdit" name="lineEditBBDD">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -154,7 +158,11 @@
             </spacer>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEditUsuario"/>
+            <widget class="QLineEdit" name="lineEditUsuario">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -181,7 +189,11 @@
             </spacer>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEditPuerto"/>
+            <widget class="QLineEdit" name="lineEditPuerto">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -209,6 +221,9 @@
            </item>
            <item>
             <widget class="QLineEdit" name="lineEditPasswd">
+             <property name="text">
+              <string/>
+             </property>
              <property name="echoMode">
               <enum>QLineEdit::Password</enum>
              </property>

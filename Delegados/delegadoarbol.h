@@ -5,7 +5,7 @@
 #include <QPainter>
 #include <QDebug>
 #include "./defs.h"
-#include "./Codificacion.h"
+#include "./codificacion.h"
 
 
 class DelegadoArbol : public QStyledItemDelegate

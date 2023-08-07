@@ -8,7 +8,7 @@ UndoInsertarPartidas::UndoInsertarPartidas(QString tablaactual, QString cod_padr
     tabla(tablaactual),codigopadre(cod_padre),nuevocodigo(nuevocod.toString()),posicion(pos)
 {
     qDebug()<<"Undo insertar nueva partida en la tabla "<<tabla<<" con el código: "<<nuevocodigo<<
-              " bajo la partida: "<<codigopadre<<" en la posicion: "<<QString::number(posicion);
+              " bajo la partida: "<<codigopadre<<" en la posicion: "<<QString::number(posicion)<<" y la descripcion: "<<descripcion.toString();
 }
 
 void UndoInsertarPartidas::undo()
@@ -31,6 +31,7 @@ void UndoInsertarPartidas::redo()
 UndoBorrarPartidas::UndoBorrarPartidas(QString tablaactual, QStringList codigos, QVariant descripcion):
     tabla(tablaactual)
 {
+    Q_UNUSED(descripcion)
     codigopadre = codigos.at(0);
     codigos.pop_front();
     codigoshijos = codigos;

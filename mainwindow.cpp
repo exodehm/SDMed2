@@ -75,20 +75,28 @@ void MainWindow::writeSettings()
     settings.beginGroup("mainwindow");
     settings.setValue("size", this->size());
     settings.endGroup();
+
+    settings.beginGroup("DatosConexion");
+    settings.setValue("basedatos", m_basededatos);
+    settings.setValue("usuario", m_nombre);
+    settings.setValue("puerto", m_puerto);
+    settings.setValue("passwd", m_password);
+    settings.endGroup();
 }
 
 void MainWindow::readSettings()
 {
-    QSettings settings("DavidSoft", "SDMed2");
+    QSettings settings;//("DavidSoft", "SDMed2");
 
     resize(settings.value("mainwindow/size", QSize(800,600)).toSize());
-    //settings.beginGroup("DatosConexion");
+    settings.beginGroup("DatosConexion");
     m_host = settings.value("DatosConexion/servidor").toString();
     m_basededatos = settings.value("DatosConexion/basedatos").toString();
     m_puerto = settings.value("DatosConexion/puerto").toString();
     m_nombre = settings.value("DatosConexion/usuario").toString();
     m_password = settings.value("DatosConexion/passwd").toString();
-    //settings.endGroup();
+    settings.endGroup();
+    qDebug()<<"En settings: "<<m_host<<m_basededatos<<m_puerto<<m_nombre<<m_password;
 }
 
 Instancia *MainWindow::obraActual()
@@ -136,7 +144,7 @@ void MainWindow::ConfigurarDatosConexion()
         m_puerto = l.at(eDatosConexion::PUERTO);
         m_password = l.at(eDatosConexion::PASSWD);
         m_host = l.at(eDatosConexion::HOST);
-        //writeSettings();
+        writeSettings();
         //Conectar();
     }
 }
@@ -370,10 +378,10 @@ bool MainWindow::GuardarObra(QString nombreFichero, QString obra)
 
 void MainWindow::ActionImprimir()
 {   
-    qDebug()<<"Current path"<<QDir::currentPath();
-    /*QString pathPython = "/.sdmed/python/plugins/";
-    QString ruta = QDir::homePath()+pathPython;
-    QString pModulo = "plugin_loader";
+    QString pathPython = ".sdmed/python/plugins/";
+    QString ruta = m_ruta_scripts_python + QDir::separator() + pathPython;
+    qDebug()<<"La ruta dichosa es:"<<ruta;
+    /*QString pModulo = "plugin_loader";
     QString pFuncion = "iniciar";
     QStringList pArgumentos;*/
     //argumentos
@@ -472,6 +480,11 @@ void MainWindow::ActionCortar()
 
 }
 
+void MainWindow::GuardarRutaScriptsPython(QString ruta)
+{
+    m_ruta_scripts_python = ruta;
+}
+
 void MainWindow::ActionUndo()
 {
     if (HayObrasAbiertas())
@@ -566,9 +579,10 @@ void MainWindow::ActionPropiedadesObra()
 void MainWindow::ActionConfigurar()
 {
     DialogoConfiguracion* d = new DialogoConfiguracion(m_db, this);
+    QObject::connect(d,SIGNAL(escribirRutaPython(QString)),this,SLOT(GuardarRutaScriptsPython(QString)));
     if (d->exec())
     {
-        qDebug()<<"Configurar";
+        qDebug()<<"Configurar";        
     }
 }
 

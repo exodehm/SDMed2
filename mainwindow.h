@@ -52,6 +52,7 @@ private slots:
     void ActionCopiar();
     void ActionPegar();
     void ActionCortar();
+    void GuardarRutaScriptsPython(QString ruta);
 
     void ActionUndo();
     void ActionRedo();
@@ -118,6 +119,7 @@ private:
     QString m_puerto;
     QString m_basededatos;
     QString m_password;
+    QString m_ruta_scripts_python;
     QSqlDatabase m_db;
     DialogoDatosConexion *m_d;
     quint8 m_tiempoMaximoIntentoConexion;

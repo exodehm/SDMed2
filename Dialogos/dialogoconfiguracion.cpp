@@ -15,7 +15,7 @@
 #include <QDebug>
 #include <QIODevice>
 
-//#include "pyrun.h"
+#include "pyrun.h"
 
 DialogoConfiguracion::DialogoConfiguracion(QSqlDatabase &db, QWidget *parent) : QDialog(parent), ui(new Ui::DialogoConfiguracion)
 {
@@ -42,9 +42,19 @@ DialogoConfiguracion::~DialogoConfiguracion()
 
 void DialogoConfiguracion::ReadSettings()
 {
-    QSettings settings("DavidSoft", "SDMed2");
-    ui->lineEdit_ruta_python->setText(settings.value("rutas/ruta_python").toString());
-    m_rutaPython = settings.value("rutas/ruta_python").toString();
+    QSettings settings;//("DavidSoft", "SDMed2");
+    settings.beginGroup("rutas");
+    qDebug()<<"LA ruta dichosa: "<<settings.value("rutas/ruta_python").toString();
+    if (!settings.value("rutas/ruta_python").toString().isEmpty())
+    {
+        ui->lineEdit_ruta_python->setText(settings.value("rutas/ruta_python").toString());
+    }
+    else
+    {
+        ui->lineEdit_ruta_python->setText(QDir::homePath());
+    }
+    m_rutaPython = ui->lineEdit_ruta_python->text();
+    settings.endGroup();
 }
 
 void DialogoConfiguracion::DefinirRutaScripts()
@@ -168,7 +178,7 @@ bool DialogoConfiguracion::InstalarExtension()
             //instalar la extension en la base de datos
             if (res == true)
             {
-                qDebug()<<"Ahora viene el create extension";
+                qDebug()<<"Creamos la extension";
                 QString cadenaCrearExtension = "SELECT extversion FROM pg_extension WHERE extname ='sdmed'";
                 consulta.exec(cadenaCrearExtension);
                 if (consulta.size()>0)//si hay alguna extension instalada, si no darq 0
@@ -195,12 +205,13 @@ bool DialogoConfiguracion::InstalarExtension()
 
 void DialogoConfiguracion::InstalarScriptsPython()
 {
-    /*qDebug()<<"Instalar Scripts Python en "<<m_rutaPython;
+    qDebug()<<"Instalar Scripts Python en "<<m_rutaPython;
     QTemporaryDir tempdir;
     if (tempdir.isValid())
     {
         QString sResourceFiles = ":/python";
         QString ruta = tempdir.path() + QDir::separator();
+        qDebug()<<"la ruta completa es "<<ruta;
         QString sArchivoComprimido;
         QDirIterator it(sResourceFiles);
         while (it.hasNext())
@@ -234,6 +245,7 @@ void DialogoConfiguracion::InstalarScriptsPython()
             QMessageBox msgBox;
             msgBox.setText(tr("Los archivos se han copiado con éxito en ") + m_rutaPython + QDir::separator() + ".sdmed");
             msgBox.exec();
+            emit escribirRutaPython(m_rutaPython);
         }
         //ahora las dependencias
         m_pFuncion = "InstalarDependencias";
@@ -241,7 +253,7 @@ void DialogoConfiguracion::InstalarScriptsPython()
         pArgumentos<<m_rutaPython;
         QPair <int,QVariant>res2 = ::PyRun::loadModule(ruta, m_pModulo, m_pFuncion, pArgumentos);
         qDebug()<<res2.first;
-    }*/
+    }
 }
 
 void DialogoConfiguracion::DatosAdmin()
@@ -323,14 +335,14 @@ void DialogoConfiguracion::Salir()
 
 void DialogoConfiguracion::WriteSettings()
 {
-    QSettings settings("DavidSoft", "SDMed2");
+    QSettings settings;//("DavidSoft", "SDMed2");
     settings.beginGroup("rutas");
     settings.setValue("ruta_python", m_rutaPython);
     //si hay ruta de datos la guardo para poder usarla luego para intentar levantar y parar el servidor
-    /*if (!ui->label_ruta_directorio_datos->text().isEmpty())
+    if (!ui->label_ruta_directorio_datos->text().isEmpty())
     {
         settings.setValue("ruta_directorio_datos",ui->label_ruta_directorio_datos->text());
-    }*/
+    }
     settings.endGroup();
 }
 

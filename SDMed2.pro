@@ -188,9 +188,9 @@ RESOURCES += \
     scripts_python.qrc
 
 unix {
-    INCLUDEPATH += /usr/include/python3.6m
+    INCLUDEPATH += /usr/include/python3.10
     #LIBS += -L /usr/lib/python3.6m -lpython3.6m
-    LIBS += -L/usr/lib/x86_64-linux-gnu/ -lpython3.6m
+    LIBS += -L/usr/lib/x86_64-linux-gnu/ -lpython3.10
     #LIBS += -lpython3.8
     #LIBS += -Wl,-Bstatic -lpython3.8 -Wl,-Bdynamic
     #LIBS += -lz

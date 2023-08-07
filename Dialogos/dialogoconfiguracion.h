@@ -44,6 +44,9 @@ public slots:
     void SetAdmin(bool esadmin);    
     void Salir();
 
+signals:
+    void escribirRutaPython(QString ruta);
+
 private:
     Ui::DialogoConfiguracion *ui;
     QString m_versionPython;

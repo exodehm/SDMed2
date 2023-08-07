@@ -93,7 +93,7 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return nullptr;
+        return Qt::ItemFlags();
 
     return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
 }
@@ -117,7 +117,10 @@ void TreeModel::ActualizarDatos(const QString &tabla)
     int nivelanterior=0;
     //cabecera
     QList<QVariant> rootData;
-    rootData << tr("Código")<<tr("Nat.")<<tr("Ud.")<<tr("Resumen")<<tr("Precio");
+    rootData << tr("Código")<<tr("Nat.")<<tr("Ud.")<<tr("Resumen")<<tr("Precio");//
+    // si pongo esta cabecera sin añadir las ultimas columnas tengo un arbol en el que se pueden
+    //ver las primeras 5 columnas, sin que se vean las dos ultimas, aunque sus datos se incorporan al nodo
+    //habra que ver si no hay una forma mas correcta de hacerlo <<tr("ret_depth")<<("ret_camino");
     rootItem = new TreeItem(rootData);
     //datos
     //QString consultaArbol = "SELECT * FROM recorrer_principal ('"+tabla+"');";
@@ -132,7 +135,9 @@ void TreeModel::ActualizarDatos(const QString &tabla)
                <<consulta.value(rec.indexOf("ret_naturaleza"))\
               <<consulta.value(rec.indexOf("ret_ud"))\
              <<consulta.value(rec.indexOf("ret_resumen"))\
-            <<consulta.value(rec.indexOf("ret_preciomed"));
+            <<consulta.value(rec.indexOf("ret_preciomed"))\
+            <<consulta.value(rec.indexOf("ret_depth"))\
+            <<consulta.value(rec.indexOf("ret_camino"));
         nivelanterior = nivel;
         nivel = consulta.value(rec.indexOf("ret_depth")).toInt();
         if (nivel == 0)//primer elemento
