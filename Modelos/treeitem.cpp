@@ -12,6 +12,7 @@ TreeItem::~TreeItem()
 {
     //qDebug()<<"Borrando los treeitemes";
     qDeleteAll(m_childItems);
+    //m_parentItem = nullptr;
 }
 
 void TreeItem::appendChild(TreeItem *item)
@@ -50,4 +51,14 @@ QVariant TreeItem::data(int column) const
 TreeItem *TreeItem::parentItem()
 {
     return m_parentItem;
+}
+
+QList<TreeItem *> TreeItem::ListaHijos()
+{
+    return m_childItems;
+}
+
+void TreeItem::BorrarHijos()
+{
+    m_childItems.clear();
 }

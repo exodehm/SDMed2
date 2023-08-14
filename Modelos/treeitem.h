@@ -18,6 +18,8 @@ public:
     QVariant data(int column) const;
     int row() const;
     TreeItem *parentItem();
+    QList<TreeItem*> ListaHijos();
+    void BorrarHijos();
 
 private:
     QList<TreeItem*> m_childItems;

@@ -2,9 +2,16 @@
 
 #include <QSqlRecord>
 
-TreeModel::TreeModel(const QString &tabla, QUndoStack *p, QObject *parent):QAbstractItemModel(parent),rootItem(nullptr)
+TreeModel::TreeModel(const QString &tabla, QUndoStack *p, QObject *parent):QAbstractItemModel(parent),rootItem(nullptr),m_tabla(tabla)
 {
-    ActualizarDatos(tabla);
+    //cabecera
+    QList<QVariant> rootData;
+    rootData <<tr("Código")<<tr("Nat.")<<tr("Ud.")<<tr("Resumen")<<tr("Precio");//
+    // si pongo esta cabecera sin añadir las ultimas columnas tengo un arbol en el que se pueden
+    //ver las primeras 5 columnas, sin que se vean las dos ultimas, aunque sus datos se incorporan al nodo
+    //habra que ver si no hay una forma mas correcta de hacerlo <<tr("ret_depth")<<("ret_camino");
+    rootItem = new TreeItem(rootData);
+    ActualizarDatos(m_tabla);
 }
 
 TreeModel::~TreeModel()
@@ -108,24 +115,12 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int rol
 
 void TreeModel::ActualizarDatos(const QString &tabla)
 {
-    if (rootItem)
-    {
-        rootItem = nullptr;
-    }
-    TreeItem* itemsuperior = nullptr;
+    BorrarHijos(rootItem);
+    TreeItem* itemsuperior = rootItem;
     int nivel=0;
     int nivelanterior=0;
-    //cabecera
-    QList<QVariant> rootData;
-    rootData << tr("Código")<<tr("Nat.")<<tr("Ud.")<<tr("Resumen")<<tr("Precio");//
-    // si pongo esta cabecera sin añadir las ultimas columnas tengo un arbol en el que se pueden
-    //ver las primeras 5 columnas, sin que se vean las dos ultimas, aunque sus datos se incorporan al nodo
-    //habra que ver si no hay una forma mas correcta de hacerlo <<tr("ret_depth")<<("ret_camino");
-    rootItem = new TreeItem(rootData);
     //datos
-    //QString consultaArbol = "SELECT * FROM recorrer_principal ('"+tabla+"');";
     QString consultaArbol = "SELECT * FROM recorrercte ('"+tabla+"');";
-    qDebug()<<consultaArbol;
     consulta.exec(consultaArbol);
     QSqlRecord rec = consulta.record();
     while (consulta.next())
@@ -145,7 +140,6 @@ void TreeModel::ActualizarDatos(const QString &tabla)
             TreeItem* unItem = new TreeItem(ObraData,rootItem);
             rootItem->appendChild(unItem);
             itemsuperior = unItem;
-            nivelanterior=nivel;
         }
         else
         {
@@ -153,7 +147,10 @@ void TreeModel::ActualizarDatos(const QString &tabla)
             qDebug()<<"Subir nivel "<<subirnivel;
             for (int i=0;i<subirnivel;i++)
             {
-                itemsuperior = itemsuperior->parentItem();
+                if (itemsuperior && itemsuperior->parentItem())
+                {
+                    itemsuperior = itemsuperior->parentItem();
+                }
             }
             TreeItem* unItem = new TreeItem(ObraData,itemsuperior);
             itemsuperior->appendChild(unItem);
@@ -161,4 +158,41 @@ void TreeModel::ActualizarDatos(const QString &tabla)
             nivelanterior=nivel;
         }
     }
+}
+
+void TreeModel::BorrarHijos(TreeItem *nodo)
+{    
+    if (nodo->childCount()>0)//si tiene hijos
+    {
+        for (int i =0; i< nodo->childCount();i++)
+        {
+            qDebug()<<"Recorro el nodo: "<<nodo->ListaHijos().at(i)->data(0).toString();
+            //qDebug()<<"Borrar hijos";
+            BorrarHijos(nodo->ListaHijos().at(i));
+        }
+        if (nodo->parentItem())
+
+        {
+            qDebug()<<"Borro el nodo: "<<nodo->data(0).toString();
+            qDebug()<<"Borrar nodo";
+            //delete nodo;
+            qDebug()<<"Adios borrado";
+        }
+    }
+    else
+    {
+        if (nodo->parentItem())//si no es el raiz
+        {
+            qDebug()<<"Borro el Nodo: "<<nodo->data(0).toString();
+            qDebug()<<"Borrar Nodo";
+            //delete nodo;
+        }
+    }
+
+
+    if (!nodo->parentItem())
+    {
+        nodo->BorrarHijos();
+    }
+    qDebug()<<"Listo";
 }

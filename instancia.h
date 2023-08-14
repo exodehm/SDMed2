@@ -59,6 +59,9 @@ public slots:
     void Undo();
     void Redo();
     void RefrescarVista();
+    void RefrescarVistaTablaPrincipal();
+    void RefrescarVistaArbol();
+
 
     void Copiar();
     void Pegar();

@@ -26,11 +26,12 @@ public:
       int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
       void ActualizarDatos(const QString &tabla);
+      void BorrarHijos (TreeItem* nodo);
 
   private:
       TreeItem *rootItem;      
-      QSqlQuery consulta;     
-
+      QSqlQuery consulta;
+      QString m_tabla;
 };
 
 #endif // TREEMODEL_H

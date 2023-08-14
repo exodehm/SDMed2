@@ -67,7 +67,7 @@ void Instancia::GenerarUI()
     modeloArbol = new TreeModel(m_tabla, m_pila);
     m_arbol = new VistaArbol;
     m_arbol->setModel(modeloArbol);
-    m_arbol->setVisible(false);
+    m_arbol->setVisible(true);
     separadorTablas = new QSplitter(Qt::Vertical);
 
     const QSize BUTTON_SIZE = QSize(25, 25);
@@ -143,13 +143,15 @@ void Instancia::GenerarUI()
     lienzoGlobal->addWidget(separadorPrincipal);
 
     //vista de arbol
-    m_arbol->expandAll();
+    /*m_arbol->expandAll();
     m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::CODIGO);
     m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::NATURALEZA);
     m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::UD);
     m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::RESUMEN);
-    m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::IMPPRES);
+    m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::IMPPRES);*/
     RefrescarVista();
+    RefrescarVistaTablaPrincipal();
+    RefrescarVistaArbol();
     //tablaPrincipal->resizeColumnsToContents();
     MostrarDeSegun(0);
     m_certActual = LeerCertifActual();
@@ -163,7 +165,9 @@ void Instancia::GenerarUI()
     //QObject::connect(tablaMediciones,SIGNAL(CertificarLineasMedicion()),this,SLOT(Certificar()));
     QObject::connect(m_TabWidgetTablasMedCert,SIGNAL(currentChanged(int)),this,SLOT(ActualizarTablaMedCertActiva(int)));
     QObject::connect(m_pila,SIGNAL(indexChanged(int)),this,SLOT(ActivarDesactivarUndoRedo(int)));
-    QObject::connect(m_pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
+    //QObject::connect(m_pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVista()));
+    QObject::connect(m_pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVistaTablaPrincipal()));
+    QObject::connect(m_pila,SIGNAL(indexChanged(int)),this,SLOT(RefrescarVistaArbol()));
     QObject::connect(m_arbol,SIGNAL(clicked(QModelIndex)),this,SLOT(SincronizarArbolTablal()));
 }
 
@@ -392,7 +396,7 @@ void Instancia::Mover(int tipomovimiento)
         break;
     }
     tablaPrincipal->clearSelection();
-    RefrescarVista();
+    RefrescarVistaTablaPrincipal();
 }
 
 void Instancia::VerArbol()
@@ -456,7 +460,7 @@ void Instancia::Redo()
 void Instancia::RefrescarVista()
 {
     //qDebug()<<"Refrescar la vista con "<<m_codigopadre<<" -- "<<m_codigohijo;
-    tablaPrincipal->ActualizarDatos(m_ruta);
+    //tablaPrincipal->ActualizarDatos(m_ruta);
     for (auto it = Listadotablasmedcert.begin();it!=Listadotablasmedcert.end();++it)
     {    
         (*it)->ActualizarDatos(m_ruta);
@@ -477,13 +481,23 @@ void Instancia::RefrescarVista()
         //separadorTablasMedCert->setVisible(m->EsPartida());//solo se ve si es partida(Nat == 7)
         m_PanelTablasMC->setVisible(m->EsPartida());//solo se ve si es partida(Nat == 7)
     }
-    //modeloArbol->ActualizarDatos(m_tabla);
-    //modeloArbol->layoutChanged();
-    //m_arbol->expandAll();
-    //m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::CODIGO);
-    //m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::NATURALEZA);
-    //m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::UD);
-    //m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::RESUMEN);
+    RefrescarVistaArbol();
+}
+
+void Instancia::RefrescarVistaTablaPrincipal()
+{
+    tablaPrincipal->ActualizarDatos(m_ruta);
+}
+
+void Instancia::RefrescarVistaArbol()
+{
+    modeloArbol->ActualizarDatos(m_tabla);
+    modeloArbol->layoutChanged();
+    m_arbol->expandAll();
+    m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::CODIGO);
+    m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::NATURALEZA);
+    m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::UD);
+    m_arbol->resizeColumnToContents(tipoColumnaTPrincipal::RESUMEN);
 }
 
 void Instancia::Copiar()
@@ -565,10 +579,11 @@ void Instancia::GuardarTextoPartida()
 
 void Instancia::SincronizarArbolTablal()
 {
-    TreeItem * mi_item = static_cast<TreeItem*>(m_arbol->currentIndex().internalPointer());
-    if (mi_item && mi_item->parentItem()!=nullptr)
+    TreeItem * mi_item = static_cast<TreeItem*>(m_arbol->currentIndex().internalPointer());    
+    if (mi_item && mi_item->parentItem())
     {
         m_codigohijo = mi_item->data(tipoColumnaTPrincipal::CODIGO).toString();
+        qDebug()<<mi_item->data(0);
         int nivel = mi_item->data(5).toInt();
         QString posicion = mi_item->data(6).toString();
         QStringList listaposicion = posicion.split( "." );
@@ -595,15 +610,21 @@ void Instancia::SincronizarArbolTablal()
             }
             mi_item = mi_item->parentItem();
         }
+        foreach (const QString& s, m_ruta)
+            qDebug()<<"ruta: "<<s<<",";
         SubirNivel();//Subo el nivel ya que quiero que el nodo seleccionado en el arbol sea el hijo seleccionado en la tabla
 
         //ahora activo en la tabla ese hijo seleccionado
         //las lecturas de los registros 5 y 6 dan valores del nivel y de la posición dentro del nivel.
         //algo como "3" y "0.1.0.1". Preguntando qué valor hay en el segundo registro en el nivel marcado por el primero, hallamos la posición
         QModelIndex indice = tablaPrincipal->model()->index(listaposicion.at(nivel).toInt(), 0);
-        //qDebug()<<"estamos en el nivel :"<< nivel << "y en la posicion"<<listaposicion.at(nivel);
-        tablaPrincipal->setCurrentIndex(indice);
-        RefrescarVista();
+        qDebug()<<"estamos en el nivel :"<< nivel << "y en la posicion"<<listaposicion.at(nivel);
+        if (indice.isValid())
+        {
+            qDebug()<<"indice en tabla principal: "<<indice.data();
+            tablaPrincipal->setCurrentIndex(indice);
+        }
+        RefrescarVistaTablaPrincipal();
     }
 }
 

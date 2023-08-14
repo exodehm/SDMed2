@@ -49,14 +49,15 @@ bool PrincipalModel::setData(const QModelIndex &index, const QVariant &value, in
             {
                 QString descripcion = "Insertar nueva partida con el codigo: ";
                 m_pila->Push(m_ruta,0,new UndoInsertarPartidas(m_tabla, codpadre, value, index.row(),descripcion));
-                return true;
+                //return true;
             }
             else
             {
                 QString descripcion = "Editar codigo con el codigo: ";
                 m_pila->Push(m_ruta,0,new UndoEditarCodigo(m_tabla, codpadre, codhijo, index.data(), value, descripcion));
-                return true;
+                //return true;
             }
+            return true;
         case tipoColumnaTPrincipal::NATURALEZA:
         {
             QString descripcion = "Editar resumen con el codigo: ";
